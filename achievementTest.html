@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievement List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .achievements {
+            width: 300px;
+        }
+
+        .achievement {
+            background: #1e1e1e;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            height: 40px; /* Initial height */
+            display: flex;
+            align-items: center;
+        }
+
+        .achievement:hover {
+            height: 80px; /* Expanded height */
+            padding: 15px;
+        }
+
+        .achievement .description {
+            opacity: 0;
+            max-height: 0;
+            transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+        }
+
+        .achievement:hover .description {
+            opacity: 1;
+            max-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="achievements">
+        <div class="achievement">
+            <div>
+                <strong>First Steps</strong>
+                <div class="description">Complete your first level.</div>
+            </div>
+        </div>
+        <div class="achievement">
+            <div>
+                <strong>Treasure Hunter</strong>
+                <div class="description">Find a hidden chest.</div>
+            </div>
+        </div>
+        <div class="achievement">
+            <div>
+                <strong>Unstoppable</strong>
+                <div class="description">Win 10 battles in a row.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
