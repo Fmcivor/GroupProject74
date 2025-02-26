@@ -1,0 +1,146 @@
+.main{
+    background-image: url("../Images/BloodHand.jpg");
+    justify-content: center;
+    position: relative;
+    overflow-y: hidden;
+    align-items: center;
+}
+
+#loginForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40%;
+    gap: 2vh;
+    min-width: 300px;
+    
+}
+
+
+.input-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap:5px;
+    width: 50%;
+    margin-bottom: 5%;
+    min-width: 250px
+}
+
+input{
+    border-radius: 40px;
+    padding: 5px;
+    height: 5vh;
+    min-height: 1.5em;
+    width: 100%;
+    background-color: black;
+    font-size: 0.75em;
+    min-width: 250px;
+}
+
+
+
+/* #passwordInput{
+    padding-right: 40px;
+
+}
+
+.password-container{
+    display: flex;
+    position: relative;
+
+}
+
+#togglePassword{
+    position: absolute;
+    background-color: transparent;
+    width: fit-content;
+    height: fit-content;
+    right: 20px;
+    border: none;
+    top: 2%;
+    font-size: 1.2em;
+} */
+
+input::placeholder{
+    color: rgb(186, 186, 186);
+}
+
+label{
+    color: white;
+}
+
+form a{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    color: white;
+    
+    text-decoration: none;
+}
+
+form a:hover{
+    text-decoration: underline;
+    
+}
+
+ #loginButton{
+    width: 10vw;
+    height: 5vh;
+    padding: 5px;
+    min-height: 1.4em;
+    border-radius: 40px;  
+    color: white;
+    background-color: red; 
+    min-width: 250px;
+    border: none;
+    box-shadow: 0 2px 2px 0 rgb(136, 0, 0);
+}
+
+#BloodDrop{
+    position: absolute;
+    width: 50px;
+    height: 90px;
+    background-image: url("Images/az28h0kr3.png");
+    background-size: contain;
+    right: 10vw;
+    animation: bloodFall 5s infinite linear ;
+    top: 0;
+    z-index: 1;
+}
+
+@media(max-width:1350px){
+    #BloodDrop{
+        display: none;
+    }
+}
+    
+
+
+@keyframes bloodFall{
+
+    /* from{
+        transform: translateY(0vh);
+    }
+    to{
+        transform: translateY(85vh);
+    } */
+
+    0%{
+        transform: translateY(0vh);
+    }
+    25%{
+        transform: translateY(10vh);
+    }
+    50%{
+        transform: translateY(40vh);
+    }
+    75%{
+        transform: translateY(65vh);
+    }
+    100%{
+        transform: translateY(78vh);
+        display: none;
+    }
+}
+
+
