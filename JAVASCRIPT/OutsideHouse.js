@@ -46,8 +46,11 @@ function hideToolBar() {
     hideToolBarButton.classList.remove('visible');
     toolbar.classList.remove('toolBarExpanded');
 
-    noteBookContainer.classList.remove('noteBookExpanded');
+    setTimeout(() => {
+        noteBookContainer.classList.remove('noteBookExpanded');
     inventoryContainer.classList.remove('inventoryExpanded');
+    }, 1000);
+    
 
 }
 
