@@ -1,0 +1,238 @@
+/* lead developer - FINTAN MCIVOR */
+/* mobile design - CALLUM GILPIN */
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: white;
+
+}
+
+body{
+    overflow-x: hidden;
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background-image: url(../Images/outsideHouse.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.leftColumn {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    height: 90%;
+
+}
+
+.rightColumn {
+    position: relative;
+    width: 50%;
+    height: 90%;
+
+}
+
+.toolBar {
+    display: flex;
+    position: absolute;
+    height: 100%;
+    right: 0;
+    width: 5vw;
+    min-width: fit-content;
+    background-color: rgba(20, 19, 52, 0.8);
+    align-items: flex-start;
+    transition: width 1s ease-in-out;
+}
+
+.iconContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    height: 100%;
+    width: 5vw;
+    min-width: 3em;
+}
+
+.toolBarExpanded {
+    width: 20vw;
+}
+
+.toolBarIcon {
+    display: flex;
+    justify-content: center;
+    color: red; 
+    margin-bottom: 3vh;
+    display: block;
+    font-size: 3em;
+    color: black;
+    width: 100%;
+    height: 100%;
+}
+
+
+.toolBarIcon:hover {
+    color: rgb(255, 251, 0);
+}
+
+.hideToolBarButton {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.noteBook {
+    width: 0;
+    height: 100%;
+    background-color: green;
+    display: block;
+    transition: width 1s ease-in-out;
+}
+
+.noteBookExpanded{
+    width: 15vw;
+}
+
+.inventory {
+    width: 0;
+    height: 100%;
+    background-color: blue;
+    display: block;
+    transition: width 1s ease-in-out;
+}
+
+.inventoryExpanded{
+    width: 15vw;
+}
+
+.leftColumnContainer {
+
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.responseContainer {
+    height: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+
+p {
+    width: 95%;
+}
+
+.buttonContainer {
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 50%;
+    min-height: 50%;
+    align-items: center;
+    gap: 5%;
+    justify-content: center;
+
+}
+
+.optionButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 10%;
+    color: black;
+    background-color: red;
+    height: 15%;
+    border-radius: 30px;
+    color: white;
+}
+
+.optionButton:hover {
+    background-color: rgb(255, 251, 0);
+    color: black;
+}
+
+
+
+/* mobile responsive */
+
+@media (max-width:650px) {
+    .wrapper{
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .rightColumn{
+        flex-direction: row;
+        width: 100dvw;
+        height: 10vh;
+        min-height: fit-content;
+        align-items: flex-end;
+    }
+
+    .toolBar{
+        flex-direction: row;
+        width: 100%;
+        align-items: flex-end;
+        height: 100%;
+    }
+
+    .iconContainer{
+        flex-direction: row;
+        width: 100%;
+    }
+
+    #hideToolBarButton{
+        display: none;
+    }
+
+
+    .noteBook {
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        width: 100vw;
+        height: 0;
+        background-color: green;
+        display: block;
+        transition: height 1s ease-in-out;
+    }
+    
+    .noteBookExpanded{
+        height: 30vh;
+    }
+    
+    .inventory {
+        width: 0vw;
+        height: 100%;
+        background-color: blue;
+        display: block;
+        transition: width 1s ease-in-out;
+    }
+    
+    .inventoryExpanded{
+        width: 38vw;
+    }
+}
+
+.noTransition{
+    transition: none;
+}

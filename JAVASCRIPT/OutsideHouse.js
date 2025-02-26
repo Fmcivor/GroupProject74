@@ -1,0 +1,189 @@
+//Lead Developer = FINTAN MCIVOR
+
+//VARIABLES
+let selectedToolBarItem = null;
+
+
+//CONSTANTS
+const toolbar = document.querySelector('.toolBar');
+const inventoryButton = document.getElementById('inventoryButton');
+const noteBookButton = document.getElementById('noteBookButton');
+const hideToolBarButton = document.getElementById('hideToolBarButton');
+const noteBookContainer = document.getElementById('noteBook');
+const inventoryContainer = document.getElementById('inventory');
+
+//EVENT LISTENERS
+inventoryButton.addEventListener('click', showInventory);
+noteBookButton.addEventListener('click', showNoteBook);
+hideToolBarButton.addEventListener('click', hideToolBar);
+
+
+//Show pop out toolbar functions
+function showInventory() {
+    noteBookContainer.classList.remove('noteBookExpanded');
+    inventoryContainer.classList.add('inventoryExpanded');
+    if (selectedToolBarItem === null) {
+        toolbar.classList.add('toolBarExpanded');
+        hideToolBarButton.classList.add('visible');
+    }
+    selectedToolBarItem = 'inventory';
+
+}
+
+function showNoteBook() {
+    noteBookContainer.classList.add('noteBookExpanded');
+    inventoryContainer.classList.remove('inventoryExpanded');
+    if (selectedToolBarItem === null) {
+        toolbar.classList.add('toolBarExpanded');
+        hideToolBarButton.classList.add('visible');
+    }
+    selectedToolBarItem = 'noteBook';
+
+}
+
+function hideToolBar() {
+    selectedToolBarItem = null;
+    hideToolBarButton.classList.remove('visible');
+    toolbar.classList.remove('toolBarExpanded');
+
+    noteBookContainer.classList.remove('noteBookExpanded');
+    inventoryContainer.classList.remove('inventoryExpanded');
+
+}
+
+
+//removes transition properties to prevent transitions applying during resizing
+window.addEventListener('resize', function () {
+    //disable transitions
+    toolbar.classList.add('noTransition');
+    inventoryContainer.classList.add('noTransition');
+    noteBookContainer.classList.add('noTransition');
+
+
+    //enable transition
+    setTimeout(() => {
+        toolbar.classList.remove('noTransition');
+        inventoryContainer.classList.remove('noTransition');
+        noteBookContainer.classList.remove('noTransition');
+    }, 1000);
+});
+
+//Game interaction - front of house - side of house - shed 
+
+let frontOfHouseDoorLocked ={
+    "room": "Front of House",
+    "description": "You stand infront of a large house with a locked door infront of you and a path leading to your left",
+    "interactions": [
+        {
+            "id":0,
+            "Text": "unlock door",
+            "response":unlockDoor
+        },
+        {
+            "id":1,
+            "Text": "Follow the path to your left",
+            "response":goToSideOfHouse
+        }
+    ]
+}
+
+let frontOfHouseDoorUnlocked = {
+    "room": "Front of House",
+    "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
+    "interactions": [
+        {
+            "id":0,
+            "Text": "Enter house",
+            "response":enterHouse
+        },
+        {
+            "id":1,
+            "Text": "Follow the path to your left",
+            "response":goToSideOfHouse
+        }
+    ]
+}
+
+let sideOfHouse = {
+    "room": "Side of House",
+    "description": "You stand to the left of the house with an old building infront of you along with a very overgrown garden and a pile of rubbish to your left ",
+    "interactions": [
+        {
+            "id":0,
+            "Text": "approach building",
+            "response":approachGenerator
+        },
+        {
+            "id":1,
+            "Text": "search rubbish",
+            "response":exploreRubbish
+        },
+        {
+            "id":2,
+            "Text": "Go to the front of the house",
+            "response":goTofrontOfHouse
+        }
+
+    ]
+}
+
+let currentState = frontOfHouseDoorLocked;
+let responseId = null;
+
+function goToSideOfHouse(){
+    currentState = sideOfHouse;
+    updateState();
+}
+
+function goTofrontOfHouse(){
+    currentState = frontOfHouseDoorLocked;
+    updateState();
+}
+
+function approachGenerator(){
+
+}
+
+function  exploreRubbish(){
+
+}
+
+function unlockDoor(){
+
+}
+
+function enterHouse(){
+
+}
+
+function updateState(){
+    const roomHeader =  document.getElementById('roomHeader');
+    const description = document.getElementById('descriptionParagraph');
+    const response = document.getElementById('responseParagraph');
+    const buttonContainer = document.getElementById('buttonContainer');
+    buttonContainer.innerHTML = '';
+    roomHeader.textContent = currentState.room;
+    description.textContent = currentState.description;
+
+    
+
+    currentState.interactions.forEach(interaction => {
+        
+        const button = `<button id="${interaction.id}" class="optionButton">${interaction.Text}</button>`
+        buttonContainer.innerHTML += button;
+        const buttonElement =document.getElementById(interaction.id).addEventListener('click',buttonHandler);
+    });
+}
+
+updateState();
+
+function buttonHandler(event){
+    responseId = event.target.id;
+
+    if (typeof currentState.interactions[responseId].response === 'string') {
+        
+    }
+    else{
+        currentState.interactions[responseId].response();
+    }
+}
