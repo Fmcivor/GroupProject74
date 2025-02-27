@@ -6,11 +6,10 @@
     margin: 0;
     box-sizing: border-box;
     color: white;
-
 }
 
 body{
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .wrapper {
@@ -24,6 +23,7 @@ body{
     justify-content: center;
     align-items: center;
 }
+
 
 .leftColumn {
     display: flex;
@@ -39,6 +39,8 @@ body{
     height: 90%;
 
 }
+
+/* Right column tool bar and children styling */
 
 .toolBar {
     display: flex;
@@ -72,7 +74,6 @@ body{
     margin-bottom: 3vh;
     display: block;
     font-size: 3em;
-    color: red;
     width: 100%;
     height: fit-content;
     border-width: 5px 0 5px 5px;
@@ -107,8 +108,6 @@ body{
     height: 100%;
     background-color: rgb(13, 11, 39);
     display: flex;
-    transition: width 1s ease-in-out;
-    
 }
 
 .noteBookExpanded{
@@ -118,15 +117,20 @@ body{
 .inventory {
     width: 0;
     height: 100%;
-    background-color: rgb(13, 11, 39);
+    /* background-color: rgb(13, 11, 39); */
+    background-image: url(../Images/InventoryBackground.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
     display: flex;
-    transition: width 1s ease-in-out;
-    
 }
 
 .inventoryExpanded{
     flex:1;
 }
+
+
+/* Game interaction and options styling */
 
 .leftColumnContainer {
 
@@ -182,7 +186,8 @@ p {
 
 
 
-/* mobile responsive */
+
+/* mobile responsive design */
 
 @media (max-width:650px) {
     .wrapper{
