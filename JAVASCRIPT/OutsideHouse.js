@@ -1,4 +1,8 @@
 //Lead Developer = FINTAN MCIVOR
+//The general layout for all game pages
+// but the game logic such as the button functions and the minigames is coded by each of the lead devleoper for that page
+// we all worked and discussed the best way in which to impleemtn interaction
+// tooll bar -Fintan McIvor
 
 //VARIABLES
 let selectedToolBarItem = null;
@@ -70,6 +74,8 @@ window.addEventListener('resize', function () {
         noteBookContainer.classList.remove('noTransition');
     }, 1000);
 });
+
+
 
 //Game interaction - front of house - side of house - shed 
 
