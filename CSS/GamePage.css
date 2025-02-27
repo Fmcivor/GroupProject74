@@ -108,6 +108,7 @@ body{
     height: 100%;
     background-color: rgb(13, 11, 39);
     display: flex;
+
 }
 
 .noteBookExpanded{
@@ -117,12 +118,13 @@ body{
 .inventory {
     width: 0;
     height: 100%;
-    /* background-color: rgb(13, 11, 39); */
+
     background-image: url(../Images/InventoryBackground.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center center;
     display: flex;
+
 }
 
 .inventoryExpanded{
@@ -202,7 +204,7 @@ p {
         height: 50vh;
         min-height: fit-content;
         justify-content: flex-end;
-        align-items: flex-start;
+        align-items: flex-end;
     }
 
     .leftColumn{
@@ -210,11 +212,13 @@ p {
     }
 
     .toolBar{
+        display: flex;
         flex-direction: column;
         width: 100%;
         justify-content: flex-end;
-        height: 30vh;
-        position:relative ;
+        height: 5vh;
+        position: fixed;
+        transition: height 500ms ease-in-out;
     }
     .toolBarExpanded{
         width: 100%;
@@ -225,57 +229,64 @@ p {
         flex-direction: row;
         width: 100%;
 
+        height: 5vh;
+
     }
 
     .toolBarIcon {
         display: flex;
         justify-content: center;
-        color: red; 
-        display: block;
-        font-size: 3em;
-        color: black;
+        color: white; 
+        font-size: 1.5em;
         flex: 1;
         text-align: center;
+        width: fit-content;
+        margin: auto;
+        height: 100%;
+        border-width: 5px 5px 0 5px;
+        border-radius: 20px 20px 0 0;
+        margin: 0;
     }
 
     #hideToolBarButton{
         display: flex;
         order: 3;
+        margin-right: 6vw;
+        margin-left: 10vw;
+        /* transition: height 1s ease-in-out; */
     }
 
-    
-    .noteBook {
-        position: absolute;
-        bottom: 100%;
-        left: 0;
+    #noteBookButton{
+        margin-left: 6vw;
+        margin-right: 10vw;
+    }
+
+    .noteBook {      
         width: 100vw;
         height: 0;
         background-color: green;
         display: block;
-        transition: height 1s ease-in-out, opacity 1s ease-in-out;
-        opacity: 0;
+        transition: height 1s ease-in-out;        
+        order: 1;
+        overflow: hidden;
     }
     
     .noteBookExpanded{
-        height: 30vh;
-        opacity: 1;
+        flex: 1;       
     }
     
     .inventory {
-        position: absolute;
-        bottom: 100%;
-        left: 0;
         width: 100vw;
         height: 0;
         background-color: blue;
         display: block;
-        transition: height 1s ease-in-out, opacity 1s ease-in-out;
-        opacity: 0;
+        order: 2;
+        overflow: hidden;
     }
     
     .inventoryExpanded{
-        height: 38vw;
-        opacity: 1;
+        flex:1;
+
     }
 }
 
