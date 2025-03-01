@@ -24,25 +24,31 @@ hideToolBarButton.addEventListener('click', hideToolBar);
 
 //Show pop out toolbar functions
 function showInventory() {
-    noteBookContainer.classList.remove('noteBookExpanded');
-    inventoryContainer.classList.add('inventoryExpanded');
+
+    
+
+    noteBookContainer.classList.remove('displayNoteBook');
+    inventoryContainer.classList.add('displayInventory');
     if (selectedToolBarItem === null) {
         toolbar.classList.add('toolBarExpanded');
         hideToolBarButton.classList.add('visible');
     }
     selectedToolBarItem = 'inventory';
 
+   
+
 }
 
 function showNoteBook() {
-    noteBookContainer.classList.add('noteBookExpanded');
-    inventoryContainer.classList.remove('inventoryExpanded');
+    
+    noteBookContainer.classList.add('displayNoteBook');
+    inventoryContainer.classList.remove('displayInventory');
     if (selectedToolBarItem === null) {
         toolbar.classList.add('toolBarExpanded');
         hideToolBarButton.classList.add('visible');
     }
-    selectedToolBarItem = 'noteBook';
 
+    selectedToolBarItem = 'noteBook';
 }
 
 function hideToolBar() {
@@ -51,10 +57,10 @@ function hideToolBar() {
     toolbar.classList.remove('toolBarExpanded');
 
     setTimeout(() => {
-        noteBookContainer.classList.remove('noteBookExpanded');
-    inventoryContainer.classList.remove('inventoryExpanded');
+        noteBookContainer.classList.remove('displayNoteBook');
+        inventoryContainer.classList.remove('displayInventory');
     }, 1000);
-    
+
 
 }
 
@@ -79,19 +85,19 @@ window.addEventListener('resize', function () {
 
 //Game interaction - front of house - side of house - shed 
 
-let frontOfHouseDoorLocked ={
+let frontOfHouseDoorLocked = {
     "room": "Front of House",
     "description": "You stand infront of a large house with a locked door infront of you and a path leading to your left",
     "interactions": [
         {
-            "id":0,
+            "id": 0,
             "Text": "unlock door",
-            "response":unlockDoor
+            "response": unlockDoor
         },
         {
-            "id":1,
+            "id": 1,
             "Text": "Follow the path to your left",
-            "response":goToSideOfHouse
+            "response": goToSideOfHouse
         }
     ]
 }
@@ -101,14 +107,14 @@ let frontOfHouseDoorUnlocked = {
     "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
     "interactions": [
         {
-            "id":0,
+            "id": 0,
             "Text": "Enter house",
-            "response":enterHouse
+            "response": enterHouse
         },
         {
-            "id":1,
+            "id": 1,
             "Text": "Follow the path to your left",
-            "response":goToSideOfHouse
+            "response": goToSideOfHouse
         }
     ]
 }
@@ -118,19 +124,19 @@ let sideOfHouse = {
     "description": "You stand to the left of the house with an old building infront of you along with a very overgrown garden and a pile of rubbish to your left ",
     "interactions": [
         {
-            "id":0,
+            "id": 0,
             "Text": "approach building",
-            "response":approachGenerator
+            "response": approachGenerator
         },
         {
-            "id":1,
+            "id": 1,
             "Text": "search rubbish",
-            "response":exploreRubbish
+            "response": exploreRubbish
         },
         {
-            "id":2,
+            "id": 2,
             "Text": "Go to the front of the house",
-            "response":goTofrontOfHouse
+            "response": goTofrontOfHouse
         }
 
     ]
@@ -139,34 +145,34 @@ let sideOfHouse = {
 let currentState = frontOfHouseDoorLocked;
 let responseId = null;
 
-function goToSideOfHouse(){
+function goToSideOfHouse() {
     currentState = sideOfHouse;
     updateState();
 }
 
-function goTofrontOfHouse(){
+function goTofrontOfHouse() {
     currentState = frontOfHouseDoorLocked;
     updateState();
 }
 
-function approachGenerator(){
+function approachGenerator() {
 
 }
 
-function  exploreRubbish(){
+function exploreRubbish() {
 
 }
 
-function unlockDoor(){
+function unlockDoor() {
 
 }
 
-function enterHouse(){
+function enterHouse() {
 
 }
 
-function updateState(){
-    const roomHeader =  document.getElementById('roomHeader');
+function updateState() {
+    const roomHeader = document.getElementById('roomHeader');
     const description = document.getElementById('descriptionParagraph');
     const response = document.getElementById('responseParagraph');
     const buttonContainer = document.getElementById('buttonContainer');
@@ -174,25 +180,25 @@ function updateState(){
     roomHeader.textContent = currentState.room;
     description.textContent = currentState.description;
 
-    
+
 
     currentState.interactions.forEach(interaction => {
-        
+
         const button = `<button id="${interaction.id}" class="optionButton">${interaction.Text}</button>`
         buttonContainer.innerHTML += button;
-        const buttonElement =document.getElementById(interaction.id).addEventListener('click',buttonHandler);
+        const buttonElement = document.getElementById(interaction.id).addEventListener('click', buttonHandler);
     });
 }
 
 updateState();
 
-function buttonHandler(event){
+function buttonHandler(event) {
     responseId = event.target.id;
 
     if (typeof currentState.interactions[responseId].response === 'string') {
-        
+
     }
-    else{
+    else {
         currentState.interactions[responseId].response();
     }
 }
