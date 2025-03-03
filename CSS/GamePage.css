@@ -27,35 +27,45 @@
 
 body {
     overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+header{
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(7, 6, 20);
 }
 
 .wrapper {
     display: flex;
-    height: 100vh;
+    height: 90vh;
     width: 100vw;
-    background-image: url(../Images/outsideHouse.jpg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 100% 100%;
-    justify-content: center;
-    align-items: center;
+    
 }
 
 
 .leftColumn {
     display: flex;
     justify-content: center;
-    flex: 5;
-    height: 90%;
-
+    flex: 2;
+    height: 100%;
+    background-color: black;
 }
 
 .rightColumn {
     position: relative;
     flex: 3;
-    height: 90%;
+    height: 100%;
     display: flex;
     flex-direction: row;
+    background-image: url(../Images/outsideHouse.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
 }
 
 /* Right column tool bar and children styling */
