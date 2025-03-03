@@ -61,7 +61,6 @@ function hideToolBar() {
         inventoryContainer.classList.remove('displayInventory');
     }, 1000);
 
-
 }
 
 
