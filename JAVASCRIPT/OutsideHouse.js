@@ -60,6 +60,7 @@ function hideToolBar() {
         noteBookContainer.classList.remove('displayNoteBook');
         inventoryContainer.classList.remove('displayInventory');
     }, 1000);
+
 }
 
 

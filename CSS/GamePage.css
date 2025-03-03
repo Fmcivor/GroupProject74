@@ -27,35 +27,48 @@
 
 body {
     overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+header{
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(7, 6, 20);
 }
 
 .wrapper {
     display: flex;
-    height: 100vh;
+    height: 90vh;
     width: 100vw;
-    background-image: url(../Images/outsideHouse.jpg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 100% 100%;
-    justify-content: center;
-    align-items: center;
+    
 }
 
 
 .leftColumn {
     display: flex;
     justify-content: center;
-    flex: 5;
-    height: 90%;
-
+    flex: 2;
+    height: 100%;
+    background-color: black;
 }
 
 .rightColumn {
     position: relative;
     flex: 3;
-    height: 90%;
+
+    height: 100%;
     display: flex;
     flex-direction: row;
+    background-image: url(../Images/outsideHouse.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+
+
 }
 
 /* Right column tool bar and children styling */
@@ -138,6 +151,7 @@ body {
 
 
 .displayNoteBook {
+
     display: flex;
 }
 
@@ -193,6 +207,7 @@ body {
     height: 30%;
     width: 90%;
     background-color: pink;
+
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -226,6 +241,7 @@ body {
     background-color: red;
     overflow: hidden;
     border: none;
+
 }
 
 #useItemBtn:hover {
@@ -261,12 +277,6 @@ li {
 #suspectSection {
     border-bottom: 2px solid black;
 }
-
-
-
-
-
-
 
 
 /* Game interaction and options styling */
@@ -361,6 +371,7 @@ p {
         right: 0;
     }
 
+
     .toolBarExpanded {
         bottom: 0vh;
     }
@@ -374,6 +385,7 @@ p {
         align-items: flex-start;
         transition: right 1s ease-in-out;
     } */
+
 
     .iconContainer {
         flex-direction: row;
@@ -409,7 +421,9 @@ p {
         margin-right: 10vw;
     }
 
+
     .noteBook, .inventory {
+
         width: 100vw;
         /* height: 0; */
         background-color: green;
