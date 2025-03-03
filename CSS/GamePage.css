@@ -350,25 +350,35 @@ p {
 
     .toolBar {
         display: flex;
+        position: absolute;
         flex-direction: column;
         width: 100%;
-        justify-content: flex-end;
-        height: 5vh;
+        /* justify-content: flex-end; */
+        height: 60vh;
         position: fixed;
-        transition: height 500ms ease-in-out;
+        transition: bottom 500ms ease-in-out;
+        bottom: -55vh;
+        right: 0;
     }
 
     .toolBarExpanded {
-        width: 100%;
-        height: 60vh;
+        bottom: 0vh;
     }
+    /* .toolBar {
+        display: flex;
+        position: absolute;
+        height: 100%;
+        right: -30vw;
+        width: 35vw;
+        min-width: fit-content;
+        align-items: flex-start;
+        transition: right 1s ease-in-out;
+    } */
 
     .iconContainer {
         flex-direction: row;
         width: 100%;
-
         height: 5vh;
-
     }
 
     .toolBarIcon {
@@ -399,32 +409,20 @@ p {
         margin-right: 10vw;
     }
 
-    .noteBook {
+    .noteBook, .inventory {
         width: 100vw;
-        height: 0;
+        /* height: 0; */
         background-color: green;
         display: block;
-        transition: height 1s ease-in-out;
+        /* transition: height 1s ease-in-out; */
         order: 1;
         overflow: hidden;
-    }
-
-    .noteBookExpanded {
-        flex: 1;
-    }
-
-    .inventory {
-        width: 100vw;
         height: 0;
-        background-color: blue;
-        display: block;
-        order: 2;
-        overflow: hidden;
     }
 
-    .inventoryExpanded {
+    .displayNoteBook, .displayInventory {
         flex: 1;
-
+        height: 55vh;
     }
 }
 
