@@ -6,6 +6,10 @@
 
 //VARIABLES
 let selectedToolBarItem = null;
+let hasKey = true;
+let electricityOn = false;
+let doorUnlocked = false;
+let clue1 = false;
 
 
 //CONSTANTS
@@ -26,8 +30,6 @@ hideToolBarButton.addEventListener('click', hideToolBar);
 //Show pop out toolbar functions
 function showInventory() {
 
-    
-
     noteBookContainer.classList.remove('displayNoteBook');
     inventoryContainer.classList.add('displayInventory');
     if (selectedToolBarItem === null) {
@@ -35,8 +37,6 @@ function showInventory() {
         hideToolBarButton.classList.add('visible');
     }
     selectedToolBarItem = 'inventory';
-
-   
 
 }
 
@@ -160,10 +160,18 @@ function approachGenerator() {
 }
 
 function exploreRubbish() {
+    if (clue1) {
+        document.getElementById('responseParagraph').textContent = "There is nothing here except old waste";
 
+    }
+    else{
+        document.getElementById('responseParagraph').textContent = "There is an old note lying here you take it.It can be read in your notebook";
+        clue1 = true;
+        
+    }
 }
 
-function unlockDoor() {
+function unlockDoor() {    
 
 }
 
@@ -174,18 +182,23 @@ function enterHouse() {
 function updateState() {
     const roomHeader = document.getElementById('roomHeader');
     const description = document.getElementById('descriptionParagraph');
-    const response = document.getElementById('responseParagraph');
+    const responseParagraph = document.getElementById('responseParagraph').textContent = '';
     const buttonContainer = document.getElementById('buttonContainer');
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
     description.textContent = currentState.description;
 
-
+    
 
     currentState.interactions.forEach(interaction => {
-        const button = `<button id="${interaction.id}" class="optionButton"><i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}</button>`
-        buttonContainer.innerHTML += button;
-        const buttonElement = document.getElementById(interaction.id).addEventListener('click', buttonHandler);
+
+       let button = document.createElement('button');
+       button.classList.add('optionButton');
+       button.id = interaction.id;
+       button.innerHTML = '<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}';
+       button.addEventListener('click', buttonHandler);
+       buttonContainer.appendChild(button);
+
     });
     
 }

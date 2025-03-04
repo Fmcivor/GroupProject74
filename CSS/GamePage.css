@@ -37,14 +37,21 @@ header{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(4, 3, 28);
+    background-color: rgb(7, 6, 20);
 }
 
 .wrapper {
     display: flex;
     height: 90vh;
     width: 100vw;
-    
+
+}
+
+.wrapper {
+    display: flex;
+    height: 90vh;
+    width: 100vw;
+
 }
 
 
@@ -71,8 +78,8 @@ header{
     display: flex;
     position: absolute;
     height: 100%;
+    width:calc(30vw + 80px);
     right: -30vw;
-    width: 35vw;
     min-width: fit-content;
     align-items: flex-start;
     transition: right 1s ease-in-out;
@@ -83,8 +90,8 @@ header{
     flex-direction: column;
     align-items: center;
     height: 100%;
-    width: 5vw;
-    min-width: fit-content;
+    width: 80px;
+    
 }
 
 .toolBarExpanded {
@@ -147,10 +154,12 @@ header{
 .displayNoteBook {
 
     display: flex;
+    flex: 1;
 }
 
 .displayInventory {
     display: flex;
+    flex: 1;
 }
 
 #noteBookContentWrapper {
@@ -187,15 +196,19 @@ header{
     width: 90%;
     height: 40%;
     overflow: auto;
-
+    border-collapse: collapse;
+    border: 2px solid black;
 }
 
 .inventorySlot {
     border: 2px solid black;
     height: auto;
     width: auto;
-
+    background-color: rgb(228, 140, 68);
+    
 }
+
+
 
 .selectedCollectibleContainer {
     height: 30%;
@@ -285,6 +298,9 @@ li {
     justify-content: center;
 }
 
+
+/* Game interaction and options styling */
+
 .leftColumnContainer {
 
     width: 100%;
@@ -353,13 +369,15 @@ li {
     margin-top: 1.3vh;
     text-align: justify;
     display: flex;
+
 }
 
 
 .responseContainer {
-    height: 50%;
+    height: 40%;
     overflow-y: auto;
     overflow-x: hidden;
+
     overflow: hidden;
 
 }
@@ -372,8 +390,10 @@ p {
 .buttonContainer {
     display: flex;
     flex-direction: column;
+
     width: 90%;
     height: 50%;
+
     min-height: 50%;
     /* align-items: center; */
     /* gap: 5%; */
@@ -384,29 +404,9 @@ p {
     margin-top: 3.2vh;
     padding: 2vh;
 }
-/* .buttonRow {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 0.5vh;
-    height: 10%;
-}
-
-.buttonRow i{
-    align-self: flex-end;
-} */
 
 .optionButton {
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    height: 10%;
-    color: black;
-    background-color: red;
-    height: 15%;
-    border-radius: 30px;
-    color: white; */
+
     display: flex;
     background-color: transparent;
     border: none;
@@ -418,15 +418,13 @@ p {
     font-family: serif;
     text-align: center;
 }
-/* .optionButton::before{
-    content: ">\00a0"; 
-} */
+
 .optionButton:hover {
-    /* background-color: rgb(255, 251, 0);
-    color: black; */
+ 
     text-decoration: underline;
     font-weight: 600;
 }
+
 
 
 
