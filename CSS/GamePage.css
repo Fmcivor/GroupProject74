@@ -51,6 +51,7 @@ header{
 .leftColumn {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex: 2;
     height: 100%;
     background-color: black;
@@ -77,8 +78,8 @@ header{
     display: flex;
     position: absolute;
     height: 100%;
+    width:calc(30vw + 80px);
     right: -30vw;
-    width: 35vw;
     min-width: fit-content;
     align-items: flex-start;
     transition: right 1s ease-in-out;
@@ -89,8 +90,8 @@ header{
     flex-direction: column;
     align-items: center;
     height: 100%;
-    width: 5vw;
-    min-width: fit-content;
+    width: 80px;
+    
 }
 
 .toolBarExpanded {
@@ -151,12 +152,13 @@ header{
 
 
 .displayNoteBook {
-
     display: flex;
+    flex: 1;
 }
 
 .displayInventory {
     display: flex;
+    flex: 1;
 }
 
 #noteBookContentWrapper {
@@ -193,15 +195,19 @@ header{
     width: 90%;
     height: 40%;
     overflow: auto;
-
+    border-collapse: collapse;
+    border: 2px solid black;
 }
 
 .inventorySlot {
     border: 2px solid black;
     height: auto;
     width: auto;
-
+    background-color: rgb(228, 140, 68);
+    
 }
+
+
 
 .selectedCollectibleContainer {
     height: 30%;
@@ -279,20 +285,19 @@ li {
 }
 
 
+
+
 /* Game interaction and options styling */
 
 .leftColumnContainer {
-
     width: 80%;
-    height: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    justify-content: space-between;
 }
 
 .responseContainer {
-    height: 50%;
+    height: 30%;
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -311,7 +316,7 @@ p {
     min-height: 50%;
     align-items: center;
     gap: 5%;
-    justify-content: center;
+    justify-content: flex-start;
 
 }
 
