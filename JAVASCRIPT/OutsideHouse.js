@@ -15,6 +15,7 @@ const noteBookButton = document.getElementById('noteBookButton');
 const hideToolBarButton = document.getElementById('hideToolBarButton');
 const noteBookContainer = document.getElementById('noteBook');
 const inventoryContainer = document.getElementById('inventory');
+const promptDivider = document.getElementById('promptDivider')
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
@@ -90,7 +91,7 @@ let frontOfHouseDoorLocked = {
     "interactions": [
         {
             "id": 0,
-            "Text": "unlock door",
+            "Text": "Unlock door",
             "response": unlockDoor
         },
         {
@@ -124,12 +125,12 @@ let sideOfHouse = {
     "interactions": [
         {
             "id": 0,
-            "Text": "approach building",
+            "Text": "Approach building",
             "response": approachGenerator
         },
         {
             "id": 1,
-            "Text": "search rubbish",
+            "Text": "Search rubbish",
             "response": exploreRubbish
         },
         {
@@ -182,11 +183,11 @@ function updateState() {
 
 
     currentState.interactions.forEach(interaction => {
-
-        const button = `<button id="${interaction.id}" class="optionButton">${interaction.Text}</button>`
+        const button = `<button id="${interaction.id}" class="optionButton"><i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}</button>`
         buttonContainer.innerHTML += button;
         const buttonElement = document.getElementById(interaction.id).addEventListener('click', buttonHandler);
     });
+    
 }
 
 updateState();
@@ -194,6 +195,7 @@ updateState();
 function buttonHandler(event) {
     responseId = event.target.id;
 
+    console.log(responseId)
     if (typeof currentState.interactions[responseId].response === 'string') {
 
     }
