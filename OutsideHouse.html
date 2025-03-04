@@ -20,24 +20,26 @@
             <div class="leftColumnContainer">
                 <div class="responseContainer">
                     <h2 id="roomHeader">Front Of The house</h2>
-                    <p id="descriptionParagraph"></p>
-                    <br>
-                    <hr>
-                    <br>
-                    <p id="responseParagraph">sjhfsdjagajshgdhjasgdjhsagdjh
-                    </p>
+
+                    <div class="promptWrapper">
+                        <p id="descriptionParagraph"></p>
+                        <div class="divider" id="promptDivider"></div>
+                        <!-- <p id="responseParagraph">justify is a weird align thing but sometimes it looks okay idrk tbh
+                            now imma just test how it works when you need the scrollbar not that thats all that likely cause 
+                            this box sure does take up a good bit of text like my days ive hit save 3 times now -->
+                        </p>
+                    </div>
+
                 </div>
-
-
+                <div class="divider" id="leftDivider"></div>
                 <div id="buttonContainer" class="buttonContainer">
-
+                   
                 </div>
 
             </div>
         </div>
+
         <div class="rightColumn">
-
-
 
         </div>
         <nav class="toolBar">
@@ -66,6 +68,7 @@
                         </ul>
                     </section>
 
+
                     <section class="notebookSection" id="clueSection">
                         <h3 class="notebookSectionHeader">Clues</h3>
                         <ul class="suspectsList">
@@ -78,6 +81,7 @@
                         </ul>
                     </section>
                 </div>
+
             </div>
             <div class="inventory" id="inventory">
                 <div id="inventoryContentWrapper">
@@ -93,6 +97,7 @@
                     <div class="useItemBtnContainer">
                         <button id="useItemBtn">Use Item</button>
                     </div>
+
                 </div>
 
 
@@ -100,9 +105,11 @@
             </div>
         </nav>
 
+
     </main>
 
     <script src="JAVASCRIPT/OutsideHouse.js"></script>
+
 
 </body>
 
