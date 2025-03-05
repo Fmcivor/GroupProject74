@@ -47,16 +47,6 @@ header{
 
 }
 
-.wrapper {
-    display: flex;
-    height: 90vh;
-    width: 100vw;
-
-}
-
-
-
-
 .rightColumn {
     position: relative;
     flex: 3;
@@ -68,6 +58,8 @@ header{
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 100% 100%;
+    justify-content: center;
+    align-items: center;
 
 
 }
@@ -77,7 +69,7 @@ header{
 .toolBar {
     display: flex;
     position: absolute;
-    height: 100%;
+    height: 90vh;
     width:calc(30vw + 80px);
     right: -30vw;
     min-width: fit-content;
@@ -101,7 +93,7 @@ header{
 .toolBarIcon {
     display: block;
     text-align: center;
-    color: red;
+    color: black;
     margin-bottom: 3vh;
     display: block;
     font-size: 3em;
@@ -109,23 +101,26 @@ header{
     height: fit-content;
     border-width: 5px 0 5px 5px;
     border-style: solid;
-    border-color: rgb(13, 11, 39);
+    border-color: rgb(255, 197, 105);
     border-radius: 20px 0 0 20px;
-    background-color: rgb(13, 11, 39);
-
+    background-color: rgb(255, 197, 105);
+    transition: color 0.3s ease-in-out;
 
 }
 
 
 .toolBarIcon:hover {
-    color: rgb(255, 251, 0);
-    /* border-color: red; */
+    /* color: #F5F5DC; */
+     /* color: #444444; */
+     /* color: #F5DEB3; */
+     /* color: #D2691E; */
+     color: rgb(228, 140, 68);
 }
 
 .hideToolBarButton {
     visibility: hidden;
     opacity: 0;
-    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out,color 0.3s ease-in-out;
 }
 
 .visible {
@@ -426,6 +421,14 @@ p {
 }
 
 
+/* MiniGame styles */
+
+.gameContainer{
+    width: 70%;
+    height: 70%;
+    display: none;
+}
+
 
 
 
@@ -438,18 +441,23 @@ p {
         height: 100vh;
     }
 
+    header{
+        display: none;
+    }
+
     .rightColumn {
         display: flex;
         flex-direction: column;
         width: 100vw;
-        height: 50vh;
+        flex:1;
         min-height: fit-content;
-        justify-content: flex-end;
-        align-items: flex-end;
+        justify-content: center;
+        align-items: center;
     }
 
     .leftColumn {
         width: 100vw;
+        flex: 1;
     }
 
     .toolBar {
@@ -538,6 +546,3 @@ p {
     transition: none;
 }
 
-.hide{
-    
-}
