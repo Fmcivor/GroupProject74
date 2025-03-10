@@ -170,7 +170,7 @@ function exploreRubbish() {
         
     }
 }
-
+ 
 function unlockDoor() {    
 
 }
@@ -181,11 +181,13 @@ function enterHouse() {
 
 function updateState() {
     const roomHeader = document.getElementById('roomHeader');
+    const mobileHeader = document.getElementById('mobileHeader')
     const description = document.getElementById('descriptionParagraph');
     const responseParagraph = document.getElementById('responseParagraph').textContent = '';
     const buttonContainer = document.getElementById('buttonContainer');
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
+    mobileHeader.textContent = currentState.room;
     description.textContent = currentState.description;
 
     
@@ -195,10 +197,9 @@ function updateState() {
        let button = document.createElement('button');
        button.classList.add('optionButton');
        button.id = interaction.id;
-       button.innerHTML = '<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}';
+       button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp <p id="${interaction.id}">${interaction.Text}</p>`;
        button.addEventListener('click', buttonHandler);
        buttonContainer.appendChild(button);
-
     });
     
 }
