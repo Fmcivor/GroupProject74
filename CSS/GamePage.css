@@ -451,10 +451,6 @@ p {
         height: 93vh;
     }
 
-    header{
-        display: none;
-    }
-
     .rightColumn {
         display: flex;
         flex-direction: column;
@@ -556,10 +552,11 @@ p {
         width: 100vw;
         height: 0;
         background-color: green;
-        display: block;
+        display: flex;
         order: 1;
         overflow: hidden;
         height: 0;
+        justify-content: center;
     }
 
     .displayNoteBook, .displayInventory {

@@ -84,8 +84,7 @@ window.addEventListener('resize', function () {
 
 
 //Game interaction - front of house - side of house - shed 
-  let currentState = frontOfHouseDoorLocked;
-let responseId = null;
+
 // example layout
 let frontOfHouseDoorLocked = {
     "room": "Front of House",
@@ -103,7 +102,8 @@ let frontOfHouseDoorLocked = {
         }
     ]
 }
-
+let currentState = frontOfHouseDoorLocked;
+let responseId = null;
 
 function unlockDoor(){}
 function goToSideOfHouse(){}
