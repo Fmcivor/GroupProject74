@@ -13,3 +13,6 @@ function togglePassword() {
      confirmPassword.type = "password";
     }
  }
+ document.querySelector("form").addEventListener("submit", function() {
+    document.querySelector(".spinner").style.display = "block";
+  });

@@ -1,133 +1,162 @@
-
-
-.main{
-    justify-content: center;
-    background: url("../Images/BloodHand.jpg");
+/* General page styling */
+body {
     position: relative;
-    overflow-y: hidden;
+    background: url('../Images/outsideHouse.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    font-family: "merriweather", serif;
-font-weight: 700;
-font-style: normal;
-    
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
 }
+
+
+.titleBanner {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    background-color: rgb(11, 5, 56);
+    text-align: center;
+    height: 10vh;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    margin-top: 50px;
+}
+
 
 .registration-form {
-    padding: 30px;
+    background: rgba(10, 10, 40, 0.9);
+    border: 2px solid #333366;
     border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 30px;
+    width: 450px;
     text-align: center;
-    min-width: 350px
-    
-    
+    color: white;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
     
 }
+
+
 .registration-form h2 {
-    margin-bottom:20px;
-    font-size: 30px
-    
-    
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-family: Arial, Helvetica, sans-serif;
 }
-.registration-form form {
+
+
+.inputContainer {
+    width: 100%;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    width: 100%;
 }
-.registration-form label{
-    
-    margin-bottom: 5px;
-    text-align:left;
-    font-size: 20px;
-    color: white;
-    font-family: "merriweather", serif;
-    font-weight: 700;
-    font-style: normal;
+
+
+.registration-form label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #ccccff;
 }
+
+
 .registration-form input {
     padding: 12px;
-    font-size: 18px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-family: "merriweather", serif;
-    font-weight: 700;
-    font-style: normal;
-    background-color: black;
+    font-size: 16px;
+    border: 2px solid #444477;
+    border-radius: 6px;
+    background-color: #222244;
     color: white;
-    width: 100%; 
-    margin-bottom: 10px; 
-}
-.registration-form button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 20px;
-    background-color: red;
-    border: none;
-    border-radius:10px;
-    cursor:pointer;
-    font-family: "merriweather", serif;
-    font-weight: 700;
-    font-style: normal;
-}
-.registration-form button:hover {
-    background-color: darkred;
+    width: 100%;
+    transition: all 0.3s ease-in-out;
 }
 
-.password-container{
+.registration-form input:focus {
+    border-color: #6666ff;
+    outline: none;
+    box-shadow: 0 0 8px #6666ff;
+}
+
+
+.password-container {
     position: relative;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
+    margin-bottom: 20px;
 }
-.password-container input{
-    flex: 1;
-    padding: 12px;
-    font-size: 18px;
-    border: 1px solid #ccc;
+
+.password-container input {
+    padding-right: 50px;
+}
+
+
+.password-container button {
+    width: 7vw;
+    position: absolute;
+    right: 0px;
+    top: 45%;
+    background: #0044cc;
+    border: none;
     border-radius: 5px;
-    font-family: "merriweather", serif;
-    font-weight: 700;
-    font-style: normal;
-    background-color: black; 
-    color: white; 
-    width: 100%;
-    margin-bottom: 10px;
-    
-}
-.password-container button{
-    /* position: relative;
-    right: 10px;
-    background: none;
-    border: none;
-    cursor: pointer */
-    position: absolute;  
-    right: 10px;  
-    background: none;
-    border: none;
+    padding: 6px 10px;
     cursor: pointer;
-    font-size: 18px;
-    color: gray;
-    padding: 12px 10px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 14px;
     color: white;
-    border-radius: 5px;
-
-    
-    
-    
-    
-}
-.password-container label{
-    align-self: baseline;
+    transition: background 0.3s ease-in-out;
     
 }
 
-#togglePassword{
-    margin-left: auto;
-    margin-right: auto;
+.password-container button:hover {
+    background: #0066ff;
+    transform: scale(1.05);
+}
+
+
+.registration-form button {
+    padding: 12px 20px;
+    font-size: 18px;
+    background-color: #0044cc;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    margin-top: -5.51px;
+    height: 5.4vh;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.registration-form button:hover {
+    background-color: #0066ff;
+    transform: scale(1.05);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .registration-form {
+        width: 90%;
+        padding: 25px;
+    }
 }
