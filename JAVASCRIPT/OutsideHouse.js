@@ -12,6 +12,7 @@ let doorUnlocked = false;
 let clue1 = false;
 
 
+
 //CONSTANTS
 const toolbar = document.querySelector('.toolBar');
 const inventoryButton = document.getElementById('inventoryButton');
@@ -82,9 +83,10 @@ window.addEventListener('resize', function () {
 });
 
 
-
 //Game interaction - front of house - side of house - shed 
-
+  let currentState = frontOfHouseDoorLocked;
+let responseId = null;
+// example layout
 let frontOfHouseDoorLocked = {
     "room": "Front of House",
     "description": "You stand infront of a large house with a locked door infront of you and a path leading to your left",
@@ -102,82 +104,12 @@ let frontOfHouseDoorLocked = {
     ]
 }
 
-let frontOfHouseDoorUnlocked = {
-    "room": "Front of House",
-    "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Enter house",
-            "response": enterHouse
-        },
-        {
-            "id": 1,
-            "Text": "Follow the path to your left",
-            "response": goToSideOfHouse
-        }
-    ]
-}
 
-let sideOfHouse = {
-    "room": "Side of House",
-    "description": "You stand to the left of the house with an old building infront of you along with a very overgrown garden and a pile of rubbish to your left ",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Approach building",
-            "response": approachGenerator
-        },
-        {
-            "id": 1,
-            "Text": "Search rubbish",
-            "response": exploreRubbish
-        },
-        {
-            "id": 2,
-            "Text": "Go to the front of the house",
-            "response": goTofrontOfHouse
-        }
+function unlockDoor(){}
+function goToSideOfHouse(){}
 
-    ]
-}
 
-let currentState = frontOfHouseDoorLocked;
-let responseId = null;
 
-function goToSideOfHouse() {
-    currentState = sideOfHouse;
-    updateState();
-}
-
-function goTofrontOfHouse() {
-    currentState = frontOfHouseDoorLocked;
-    updateState();
-}
-
-function approachGenerator() {
-
-}
-
-function exploreRubbish() {
-    if (clue1) {
-        document.getElementById('responseParagraph').textContent = "There is nothing here except old waste";
-
-    }
-    else{
-        document.getElementById('responseParagraph').textContent = "There is an old note lying here you take it.It can be read in your notebook";
-        clue1 = true;
-        
-    }
-}
- 
-function unlockDoor() {    
-
-}
-
-function enterHouse() {
-
-}
 
 function updateState() {
     const roomHeader = document.getElementById('roomHeader');
@@ -217,3 +149,4 @@ function buttonHandler(event) {
         currentState.interactions[responseId].response();
     }
 }
+
