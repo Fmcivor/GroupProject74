@@ -1,0 +1,118 @@
+/* Lead - Fintan */
+/* MiniGames Styles */
+
+.gameContainer{
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    background: transparent;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    display: none;
+}
+
+.circleContainer{
+    width: 150px;
+    height: 150px;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle{
+    border-radius: 100%;
+    border:8px solid transparent;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+    
+    
+}
+
+.lineDiv{
+    position: relative;
+    width: 3px;
+    height: 80px;
+    background-color: white;
+    bottom: 40px;
+    transform-origin: bottom;
+}
+
+#repairButton{
+    width: 10vw;
+    min-width: fit-content;
+    height: 5vh;
+    background-color: red;
+    color: white;
+    border-radius: 30px;
+    display: none;
+
+}
+
+#startButton{
+    width: 10vw;
+    min-width: fit-content;
+    height: 5vh;
+    background-color: rgb(25, 12, 121);
+    color: white;
+    border-radius: 30px;
+}
+
+.minigameProgressContainer{
+    width: 50%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.repairProgressContainer{
+    height: 60%;
+    width: 80%;
+    border: 4px solid black;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+
+#GeneratorProgressBar{
+    background-color: green;
+    width: 100px;
+    height: 100%;
+    border: none;
+    transition: width 0.8s ease-in-out;
+}
+
+
+/* rubbish game */
+
+
+.rubbishContainer{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+    display: none;
+}
+
+#clue1Btn{
+    position: relative;
+    width: 45%;
+    height: 25%;
+    background-color: transparent;
+    border: none;
+    top: 70%;
+    left: 33%;
+}

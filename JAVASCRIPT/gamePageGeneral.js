@@ -5,11 +5,11 @@
 // tooll bar -Fintan McIvor
 
 //VARIABLES
-let selectedToolBarItem = null;
-let hasKey = true;
-let electricityOn = false;
-let doorUnlocked = false;
-let clue1 = false;
+// let selectedToolBarItem = null;
+// let hasKey = true;
+// let electricityOn = false;
+// let doorUnlocked = false;
+// let clue1 = false;
 
 
 
@@ -85,68 +85,50 @@ window.addEventListener('resize', function () {
 
 //Game interaction - front of house - side of house - shed 
 
-// example layout
-let frontOfHouseDoorLocked = {
-    "room": "Front of House",
-    "description": "You stand infront of a large house with a locked door infront of you and a path leading to your left",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Unlock door",
-            "response": unlockDoor
-        },
-        {
-            "id": 1,
-            "Text": "Follow the path to your left",
-            "response": goToSideOfHouse
-        }
-    ]
-}
-let currentState = frontOfHouseDoorLocked;
-let responseId = null;
 
-function unlockDoor(){}
-function goToSideOfHouse(){}
+
+// function unlockDoor(){}
+// function goToSideOfHouse(){}
 
 
 
 
-function updateState() {
-    const roomHeader = document.getElementById('roomHeader');
-    const mobileHeader = document.getElementById('mobileHeader')
-    const description = document.getElementById('descriptionParagraph');
-    const responseParagraph = document.getElementById('responseParagraph').textContent = '';
-    const buttonContainer = document.getElementById('buttonContainer');
-    buttonContainer.innerHTML = '';
-    roomHeader.textContent = currentState.room;
-    mobileHeader.textContent = currentState.room;
-    description.textContent = currentState.description;
+// function updateState() {
+//     const roomHeader = document.getElementById('roomHeader');
+//     const mobileHeader = document.getElementById('mobileHeader')
+//     const description = document.getElementById('descriptionParagraph');
+//     const responseParagraph = document.getElementById('responseParagraph').textContent = '';
+//     const buttonContainer = document.getElementById('buttonContainer');
+//     buttonContainer.innerHTML = '';
+//     roomHeader.textContent = currentState.room;
+//     mobileHeader.textContent = currentState.room;
+//     description.textContent = currentState.description;
 
     
 
-    currentState.interactions.forEach(interaction => {
+//     currentState.interactions.forEach(interaction => {
 
-       let button = document.createElement('button');
-       button.classList.add('optionButton');
-       button.id = interaction.id;
-       button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp <p id="${interaction.id}">${interaction.Text}</p>`;
-       button.addEventListener('click', buttonHandler);
-       buttonContainer.appendChild(button);
-    });
+//        let button = document.createElement('button');
+//        button.classList.add('optionButton');
+//        button.id = interaction.id;
+//        button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp <p id="${interaction.id}">${interaction.Text}</p>`;
+//        button.addEventListener('click', buttonHandler);
+//        buttonContainer.appendChild(button);
+//     });
     
-}
+// }
 
-updateState();
+// updateState();
 
-function buttonHandler(event) {
-    responseId = event.target.id;
+// function buttonHandler(event) {
+//     responseId = event.target.id;
 
-    console.log(responseId)
-    if (typeof currentState.interactions[responseId].response === 'string') {
+//     console.log(responseId)
+//     if (typeof currentState.interactions[responseId].response === 'string') {
 
-    }
-    else {
-        currentState.interactions[responseId].response();
-    }
-}
+//     }
+//     else {
+//         currentState.interactions[responseId].response();
+//     }
+// }
 
