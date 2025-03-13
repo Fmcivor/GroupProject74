@@ -18,7 +18,7 @@ const displayNameInput = document.getElementById('displayName');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirmPassword')
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-const cancelBtn = document.getElementById('cancelBtn');
+const exitBtn = document.getElementById('exitBtn');
 const messageContainer = document.getElementById('messageContainer');
 
 
@@ -57,15 +57,20 @@ document.getElementById('password').addEventListener('input', function (event) {
     }
 });
 
-cancelBtn.addEventListener('click', function () {
+
+
+exitBtn.addEventListener('click', function () {
     window.location.href = 'mainMenu.html';
 });
+
+
 saveProfileBtn.addEventListener('click', validateChanges);
 
 
 
 async function validateChanges(event) {
     event.preventDefault();
+    saveProfileBtn.setAttribute('disabled',true);
     //reset
     errorMessage = '<ul>';
 
@@ -102,6 +107,8 @@ async function validateChanges(event) {
     else {
         displayMessage(false);
     }
+
+    saveProfileBtn.removeAttribute('disabled');
 }
 
 async function validateUsername(enteredUsername) {
