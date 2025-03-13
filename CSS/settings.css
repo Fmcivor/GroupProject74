@@ -25,6 +25,8 @@ body{
     flex-direction: column;
     width: 100vw;
     height: 90vh;
+    justify-content: center;
+    align-items: center;
 }
 
 .titleBanner {
@@ -42,7 +44,6 @@ body{
 .formContainer{
     width: 100vw;
     height: 90vh;
-    top: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -172,6 +173,9 @@ form button {
     font-weight: bold;
     transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
     vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 form button:hover {
@@ -234,6 +238,17 @@ li{
     form {
         width: 100%;
         height: 90%;
+    }
+
+    .formContainer{
+        width: 100dvw;
+        height: 80dvh;
+        top: 10dvh;
+    }
+
+    .titleBanner{
+        height: 10dvh;
+
     }
 
     .wrapper{
