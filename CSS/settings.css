@@ -1,0 +1,240 @@
+html{
+    font-size: 16px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../Images/outsideHouse.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.titleBanner {
+    height: 10vh;
+    width: 100%;
+    background-color: rgb(11, 5, 56,0.8);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.formContainer{
+    width: 100vw;
+    height: 90vh;
+    top: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(10, 10, 40, 0.9);
+    border: 2px solid rgb(51, 51, 102);
+    border-radius: 10px;
+    padding: 30px;
+    width: 450px;
+    height: 75vh;
+    text-align: center;
+    color: white;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    min-height: fit-content;
+    flex-shrink: 0;
+    
+}
+
+
+form h2 {
+    margin-bottom: 20px;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.inputContainer {
+    width: 100%;
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+
+form label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #ccccff;
+}
+
+
+form input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid rgb(68, 68, 119);
+    border-radius: 6px;
+    background-color: rgb(34, 34, 68);
+    color: white;
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+form input:focus {
+    border-color: #6666ff;
+    outline: none;
+    box-shadow: 0 0 8px #6666ff;
+}
+
+.disabled{
+    background-color: #0f0f1f;
+}
+
+.invalid{
+    border: 2px solid rgb(221, 9, 9);
+}
+
+
+.password-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.password-container input {
+    padding-right: 28%;
+}
+
+
+.password-container button {
+    width: 25%;
+    position: absolute;
+    right: 1.5px;
+    top: 37%;
+    background: rgb(0, 68, 204);
+    border: none;
+    border-radius: 0 5px 5px 0;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: white;
+    transition: background 0.3s ease-in-out;
+    height: 61%;
+    min-width: fit-content;
+   
+    
+}
+
+.password-container button:hover {
+    background: rgb(0, 102, 255);
+    transform: scale(1.05);
+}
+
+
+form button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: rgb(0, 68, 204);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+    vertical-align: middle;
+}
+
+form button:hover {
+    background-color: #0066ff;
+    transform: scale(1.05);
+}
+
+#messageContainer{
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 70%;
+    height: 70%;
+    background-color: rgba(10, 10, 40, 1);
+    display: none;
+    padding: 1rem;
+    border-radius: 30px;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid white;
+    min-height: 70%;
+    overflow-y: auto;
+}
+
+#messageContent{
+    width: 90%;
+    height: 70%;
+    padding: 1rem;
+}
+
+li{
+    margin-bottom: 1rem;
+}
+
+.closeBtn{
+    width: 60%;
+    border-radius: 6px;
+    height: 10%;
+    min-height: fit-content;
+    min-width: fit-content;
+    background-color: #0044cc;
+}
+
+.functionButtonContainer{
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+}
+
+.functionButton{
+    width: 30%;
+}
+
+
+
+/* Responsive design */
+@media (max-width: 480px) {
+    form {
+        width: 100%;
+        height: 90%;
+    }
+
+    
+}
