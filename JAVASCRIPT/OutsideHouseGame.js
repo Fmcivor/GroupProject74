@@ -470,12 +470,7 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             updateState();
             document.getElementById('responseParagraph').textContent = 'You have unlocked the door now.';
             doorUnlocked = true;
-            inventory.forEach(item => {
-                if (item.itemID == keyID) {
-                    item.used = true;
-                    UpdateInventory();
-                }
-            });
+           
         }
         else {
             document.getElementById('responseParagraph').textContent = "That didn't do anything, maybe try something else.";
