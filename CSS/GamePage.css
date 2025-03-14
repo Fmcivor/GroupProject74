@@ -455,8 +455,7 @@ p {
         display: flex;
         flex-direction: column;
         width: 100vw;
-        flex:1;
-        min-height: fit-content;
+        min-height: 40%;
         justify-content: flex-end;
         align-items: flex-end;
         flex: 0.7;
@@ -465,6 +464,7 @@ p {
     .leftColumn {
         width: 100vw;
         flex:1;
+        max-height: 58%;
     }
     .leftColumnContainer{
         gap: 1vh;
