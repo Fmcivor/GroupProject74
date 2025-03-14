@@ -242,6 +242,18 @@ li{
 
     .formContainer{
         width: 100%;
+        min-height: 80vh;
+    }
+
+    form input{
+        padding: 0.5rem;
+    }
+
+    form{
+       
+        padding: 20px;
+        width: 100%;
+        height: fit-content;
     }
 
     .titleBanner{
@@ -255,7 +267,7 @@ li{
 
     body{
          width: 100vw;
-         height: 90vh;
+         height: 100vh;
     }
 
     
