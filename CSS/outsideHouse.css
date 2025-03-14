@@ -119,3 +119,25 @@ html{
     top: 70%;
     left: 33%;
 }
+
+@media (max-width:650px) {
+
+    .gameContainer{
+        gap: 10px;
+    }
+
+    .repairProgressContainer{
+        height: 30px;
+
+    }
+
+    #repairButton{
+        height: 40px;
+        width: 100px;
+    }
+
+    #startButton{
+        height: 40px;
+        width: 100px;
+    }
+}

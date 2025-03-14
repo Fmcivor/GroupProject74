@@ -50,13 +50,18 @@ function showNoteBook() {
 }
 
 function hideToolBar() {
+    noteBookButton.style.pointerEvents = 'none';
+    inventoryButton.style.pointerEvents = 'none';
     selectedToolBarItem = null;
     hideToolBarButton.classList.remove('visible');
     toolbar.classList.remove('toolBarExpanded');
+    
 
     setTimeout(() => {
         noteBookContainer.classList.remove('displayNoteBook');
         inventoryContainer.classList.remove('displayInventory');
+        noteBookButton.style.pointerEvents = 'auto';
+        inventoryButton.style.pointerEvents = 'auto';
     }, 1000);
 
 }
