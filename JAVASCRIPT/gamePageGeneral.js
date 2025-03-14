@@ -98,6 +98,7 @@ function updateState() {
 
     //typing effect
     let typingIndex = 0;
+    let totalTypingTime = currentState.description.length*20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += currentState.description[typingIndex];
@@ -106,7 +107,7 @@ function updateState() {
             clearInterval(typingInterval);
         }
 
-    }, 25);
+    }, 20);
 
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
@@ -114,6 +115,8 @@ function updateState() {
     document.querySelector('.rubbishContainer').style.display = 'none';
 
     //dynamic buttons
+
+    
     currentState.interactions.forEach(interaction => {
 
         let button = document.createElement('button');
@@ -121,9 +124,17 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
+        button.setAttribute('disabled',true);
         buttonContainer.appendChild(button);
 
     });
+
+    setTimeout(() => {
+        const optionBtns = document.querySelectorAll('.optionButton');
+        optionBtns.forEach(btn => {
+            btn.removeAttribute('disabled');
+        });
+    }, totalTypingTime);
 
 }
 
