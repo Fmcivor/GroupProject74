@@ -511,7 +511,7 @@ body{
         height: 60vh;
         position: fixed;
         transition: bottom 500ms ease-in-out;
-        bottom: -45vh;
+        bottom: -55vh;
         right: 0;
     }
 
