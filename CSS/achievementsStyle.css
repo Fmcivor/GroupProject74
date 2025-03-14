@@ -4,73 +4,139 @@
     padding: 0;
 }
 
+html{
+    font-size: 16px;
+}
+
 body {
-    text-align: center;
-    background-color: black;
-    font-size: 20px;
-    height: 100vh;
-    flex-direction: column;
-    display: flex;
-    justify-content: center;
-}
-
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: white;
-}
-
-.achievements {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1a1a1a;
     color: white;
-}
-
-.achievement-slot {
-    width: 500px;
-    background-color: #444;
-    border-radius: 20px;
+    font-family: Arial, sans-serif;
     overflow: hidden;
-    transition: all 0.3s ease-in-out;
-    height: 60px;
+    background-image: url(../Images/outsideHouse.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+}
+
+h1 {
+    position:fixed;
+    top: 0px;
+    text-align: center;
+    background-color: rgba(11, 5, 56, 0.8);
+    padding: 20px;
+    width: 100vw;
+    font-size: 3.5em;
+}
+
+.achievement-wrapper{
+    width: fit-content;
+    height: 95%;
+    overflow-y: auto;
     display: flex;
-    align-items: center;  /* Center vertically */
-    justify-content: center;  /* Center horizontally */
-    text-align: center;  /* Ensure multi-line text stays centered */
-    padding: 10px;
-    margin: 10px;
     flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    gap: 15px;
 }
 
-.achievement-slot:hover {
-    height: 100px;
+.achievements-container {
+    width: fit-content;
+    height: 55vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 10px;
+    padding: 1.1rem;
+    background-color: rgba(10, 10, 40, 0.9);
+    border: 2px solid rgb(51, 51, 102); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
-.achievement-slot .description {
-    opacity: 0;
-    max-height: 0;
-    transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+::-webkit-scrollbar {
+    width: 6px;
 }
 
-.achievement-slot:hover .description {
-    opacity: 1;
-    max-height: 40px;
-    max-height: fit-content;
-}
-
-
-.backToMenu{
-    background-color: #444;
-    color: white;
-    width: 200px;
-    padding: 20px 40px;
+::-webkit-scrollbar-thumb{
+    background-color: rgb(0, 68, 204);
     border-radius: 20px;
-    margin-top: 10px;
 }
 
-.backToMenu:hover{
-    background-color: #666;
-    transition: 0.3s;
+::-webkit-scrollbar-track{
+    background-color: transparent;
 }
 
+.achievement {
+    min-height: 5vh;
+    width: 25vw;
+    padding: 15px;
+    background-color: rgb(34, 34, 68);
+    text-align: center;
+    border-radius: 5px;
+    transition: min-height 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    flex-direction:column;
+}
+
+h2{
+    font-size: 2em;
+}
+
+span{
+    margin: 5px;
+    font-size: 1.2em;
+}
+
+.achievement:hover{
+    min-height: 7vh;
+}
+
+.achievement span {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.achievement:hover span {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.btnMainMenu{
+    position: fixed;
+    bottom: 12vh;
+    background-color: rgb(0, 68, 204);
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    width: 6vw;
+    padding: 20px;
+    height: 3vh;
+    border-radius: 20px;
+    align-content: center;
+    text-align: center;
+}
+
+.btnMainMenu:hover{
+    background-color: rgb(0, 102, 255);
+}
+
+.colors
+{
+    color: rgba(11, 5, 56, 0.8); /*Title Banner*/
+    color: rgba(10, 10, 40, 0.9); /*Container Bacground*/
+    color: rgb(51, 51, 102); /*Container Border*/
+    color: rgb(34, 34, 68); /*Input Background*/
+    color: rgb(0, 68, 204); /*Button background*/
+    color: rgb(0, 102, 255); /*button hover*/
+}
