@@ -436,6 +436,11 @@ p {
 }
 
 @media (max-width:650px) {
+body{
+    height: 90vh;
+}
+
+
     header {
         height: 7vh;
     }
@@ -450,7 +455,7 @@ p {
 
     .wrapper {
         flex-direction: column-reverse;
-        height: 93vh;
+        height: 83vh;
     }
 
     .rightColumn {
@@ -506,7 +511,7 @@ p {
         height: 60vh;
         position: fixed;
         transition: bottom 500ms ease-in-out;
-        bottom: -55vh;
+        bottom: -45vh;
         right: 0;
     }
 
