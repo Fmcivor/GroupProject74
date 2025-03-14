@@ -443,6 +443,7 @@ p {
 
     header {
         height: 7vh;
+        display: none;
     }
 
     #mobileHeader{
