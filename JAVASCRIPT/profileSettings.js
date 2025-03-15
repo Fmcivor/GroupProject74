@@ -101,8 +101,7 @@ async function validateChanges(event) {
         confirmPasswordInput.classList.add('disabled');
         confirmPasswordInput.setAttribute('disabled', true);
 
-        window.location.href = 'mainMenu.html';
-
+        
     }
     else {
         displayMessage(false);
