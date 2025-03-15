@@ -435,10 +435,12 @@ p {
 }
 
 @media (max-width:650px) {
+  
     body{
         height: 100vh;
         background-color: rgb(11, 5, 56)
     }
+
 
 
     header {
