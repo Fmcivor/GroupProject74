@@ -3,15 +3,15 @@
 
 //VARIABLES
 let selectedToolBarItem = null;
-let displayName;
+let displayName = sessionStorage.getItem('displayName');
 let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
-let doorUnlocked = JSON.parse(sessionStorage.getItem("doorUnlocked"));
-let clue1 = JSON.parse(sessionStorage.getItem("clue1"));
+let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
+let hasClue1 = JSON.parse(sessionStorage.getItem("clue1"));
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let selectedItemID = null;
 
-inventory = [];
+
 
 
 
@@ -46,15 +46,15 @@ startRepairButton.addEventListener('click', startRepair);
 
 
 //CLASS
-class item {
-    constructor(itemID, itemName, itemHREF) {
+class Item {
+    constructor(itemID, itemName, itemHREF,itemUsed) {
         this.itemID = itemID;
         this.itemName = itemName;
         this.itemHREF = itemHREF;
-        this.used = false;
+        this.itemUsed = itemUsed;
     }
 }
-let key = new item(1, "key", "Images/goldKey.png");
+let key = new Item(1, "key", "Images/goldKey.png",false);
 
 
 
@@ -159,40 +159,59 @@ const generatorBuilding = {
 
 
 
-// document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
-//     let query = "SELECT * FROM tblUser WHERE tblUser.userID =1";
+    let states = [];
+    states.push(frontOfHouseDoorLocked,frontOfHouseDoorUnlocked,sideOfHouse,generatorBuilding);
+    
+    
+    let inventorySelect = `SELECT tblGameInventory.itemID,tblItem.itemName, tblItem.itemHREF,itemUsed FROM tblGameInventory 
+    JOIN tblItem ON tblGameInventory.itemID = tblItem.itemID
+    WHERE gameID = ${sessionStorage.getItem('gameID')}`;
 
-//     dbConfig.set('query', query);
+    dbConfig.set('query',inventorySelect);
 
-//     try {
-//         let response = await fetch(dbConnectorUrl, {
-//             method: "POST",
-//             body: dbConfig
-//         });
-//         let result = await response.json();
+    try {
+        let inventoryResponse = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
 
-//         if (result.success) {
-//             let user = result.data[0];
-//             sessionStorage.setItem("username", JSON.stringify(user.username));
-//             sessionStorage.setItem("displayName", JSON.stringify(user.displayName));
-//         }
+        let inventoryResult = await inventoryResponse.json();
 
-//         console.log(sessionStorage.getItem("displayName"));
-//         displayName = JSON.parse(sessionStorage.getItem("displayName"));
+        if (inventoryResult.success) {
+            if (inventoryResult.data.length>0) {
+                inventoryResult.data.forEach(item => {
+                    let inventoryItem = new Item(item.itemID,item.itemName,item.itemHREF,item.itemUsed);
+                    inventory.push(inventoryItem);
+                    if (item.itemID == keyID) {
+                        hasKey = true;
+                    }
+                });
+            }
+            else{
+                inventory = [];
+            }
+            
+            
 
-//     } catch (error) {
-//         console.log(error);
-//     }
+            UpdateInventory();
+        }
+        else{
+            console.error("error retrieving the inventory");
+        }
+    } catch (error) {
+        console.error("Error retrieving the inventory items:", error);
+    }
+    
 
 
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    currentState = frontOfHouseDoorLocked;
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    currentState = states[currentStateID+1];
     updateState();
+
+
 })
-// })
 
 
 //GANE RESPONSE FUNCTIONS
@@ -231,7 +250,7 @@ async function checkUnderMat() {
             let result = await response.json();
 
             if (result.success && result.data.length > 0) {
-                let key = new item();
+                let key = new Item();
                 Object.assign(key, result.data[0]);
                 inventory.push(key);
                 UpdateInventory();
@@ -268,7 +287,7 @@ function searchRubbish(responseId) {
     responseParagraph.textContent = 'Click on the screen to try collect or find items in the rubbish';
 
     rubbishContainer.style.display = 'block';
-    if (clue1) {
+    if (hasClue1) {
         clue1Btn.style.display = 'none';
         rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
     }
@@ -453,7 +472,7 @@ clue1Btn.addEventListener('click', function () {
     clue.textContent = "A letter dated the 27/03/2024 by Jonathan Donaghy contains threats and accusations that his loss of money and the failure of the business is victor's fault";
     document.getElementById('clueList').appendChild(clue);
     document.getElementById('responseParagraph').textContent = 'You have found a letter check your notebook to see its content';
-    clue1 = true;
+    hasClue1 = true;
 
 
 })

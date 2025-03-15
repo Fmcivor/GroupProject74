@@ -14,14 +14,16 @@ const noteBookContainer = document.getElementById('noteBook');
 const inventoryContainer = document.getElementById('inventory');
 const promptDivider = document.getElementById('promptDivider')
 
-//VARIABLES
-let currentState;
-
-
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
+
+//VARIABLES
+let currentState;
+
+
+
 
 
 //Show pop out toolbar functions
