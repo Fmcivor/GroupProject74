@@ -349,9 +349,11 @@ function FixGenerator() {
 function startRepair() {
     startRepairButton.style.display = 'none';
     repairButton.style.display = 'block';
+    const hammer = document.getElementById('hammerIcon');
 
     generatorInterval = setInterval(() => {
         line.style.transform = `rotate(${angle}deg)`;
+        hammer.style.transform =`rotate(${angle}deg)`;
         angle++;
         if (angle > 360) {
             angle = 1;

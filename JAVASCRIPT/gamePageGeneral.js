@@ -50,13 +50,18 @@ function showNoteBook() {
 }
 
 function hideToolBar() {
+    noteBookButton.style.pointerEvents = 'none';
+    inventoryButton.style.pointerEvents = 'none';
     selectedToolBarItem = null;
     hideToolBarButton.classList.remove('visible');
     toolbar.classList.remove('toolBarExpanded');
+    
 
     setTimeout(() => {
         noteBookContainer.classList.remove('displayNoteBook');
         inventoryContainer.classList.remove('displayInventory');
+        noteBookButton.style.pointerEvents = 'auto';
+        inventoryButton.style.pointerEvents = 'auto';
     }, 1000);
 
 }
@@ -93,6 +98,7 @@ function updateState() {
 
     //typing effect
     let typingIndex = 0;
+    let totalTypingTime = currentState.description.length*20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += currentState.description[typingIndex];
@@ -101,7 +107,7 @@ function updateState() {
             clearInterval(typingInterval);
         }
 
-    }, 25);
+    }, 20);
 
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
@@ -109,6 +115,8 @@ function updateState() {
     document.querySelector('.rubbishContainer').style.display = 'none';
 
     //dynamic buttons
+
+    
     currentState.interactions.forEach(interaction => {
 
         let button = document.createElement('button');
@@ -116,9 +124,17 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
+        button.setAttribute('disabled',true);
         buttonContainer.appendChild(button);
 
     });
+
+    setTimeout(() => {
+        const optionBtns = document.querySelectorAll('.optionButton');
+        optionBtns.forEach(btn => {
+            btn.removeAttribute('disabled');
+        });
+    }, totalTypingTime);
 
 }
 
@@ -144,10 +160,10 @@ function UpdateInventory() {
             itemBtn.style.width = '100%';
             itemBtn.style.height = '100%';
             itemBtn.style.background = `url("${inventory[i].itemHREF}")`;
-            itemBtn.style.backgroundSize = "contain";  // Ensures image fits
+            itemBtn.style.backgroundSize = "120% 120%";  // Ensures image fits
             itemBtn.style.backgroundRepeat = "no-repeat";
             itemBtn.style.backgroundPosition = "center";
-            itemBtn.style.border = 'none';
+            itemBtn.style.border = '8px solid transparent';
             itemBtn.value = inventory[i].itemID;
             itemBtn.id = `item${i + 1}`;
             itemBtn.addEventListener('click', selectInventoryItem);

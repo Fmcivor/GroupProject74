@@ -71,16 +71,17 @@ html{
     border-radius: 30px;
 }
 
-.minigameProgressContainer{
+.miniGameFunctionContainer{
     width: 50%;
-    height: 10%;
+    height: 30%;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    flex-direction: column;
 }
 
 .repairProgressContainer{
-    height: 60%;
+    height: 20%;
     width: 80%;
     border: 4px solid black;
     border-radius: 30px;
@@ -118,4 +119,32 @@ html{
     border: none;
     top: 70%;
     left: 33%;
+}
+
+@media (max-width:650px) {
+
+    .gameContainer{
+        gap: 10px;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .miniGameFunctionContainer{
+        height: 80%;
+    }
+
+    .repairProgressContainer{
+        height: 30px;
+        
+    }
+
+    #repairButton{
+        height: 40px;
+        width: 100px;
+    }
+
+    #startButton{
+        height: 40px;
+        width: 100px;
+    }
 }

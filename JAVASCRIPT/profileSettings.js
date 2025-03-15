@@ -149,10 +149,10 @@ async function validateUsername(enteredUsername) {
 }
 
 function validateDisplayName(enteredDisplayName) {
-    let displayNameRegex = /^[a-zA-Z-]{1,15}$/;
+    let displayNameRegex = /^[a-zA-Z]{1,15}$/;
 
     if (displayNameRegex.test(enteredDisplayName) == false) {
-        errorMessage += '<li>The display name must not be null.</li>';
+        errorMessage += '<li>The display name must not be null and contain letters only.</li>';
         displayNameInput.classList.add('invalid');
         return false;
     }
