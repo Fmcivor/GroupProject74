@@ -2,7 +2,6 @@
 
 
 //VARIABLES
-let selectedToolBarItem = null;
 let displayName;
 let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));

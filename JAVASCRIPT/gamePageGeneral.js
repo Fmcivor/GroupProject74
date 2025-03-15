@@ -16,7 +16,7 @@ const promptDivider = document.getElementById('promptDivider')
 
 //VARIABLES
 let currentState;
-
+let selectedToolBarItem = null;
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
