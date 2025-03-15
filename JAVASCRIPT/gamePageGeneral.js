@@ -160,10 +160,10 @@ function UpdateInventory() {
             itemBtn.style.width = '100%';
             itemBtn.style.height = '100%';
             itemBtn.style.background = `url("${inventory[i].itemHREF}")`;
-            itemBtn.style.backgroundSize = "contain";  // Ensures image fits
+            itemBtn.style.backgroundSize = "120% 120%";  // Ensures image fits
             itemBtn.style.backgroundRepeat = "no-repeat";
             itemBtn.style.backgroundPosition = "center";
-            itemBtn.style.border = 'none';
+            itemBtn.style.border = '8px solid transparent';
             itemBtn.value = inventory[i].itemID;
             itemBtn.id = `item${i + 1}`;
             itemBtn.addEventListener('click', selectInventoryItem);
