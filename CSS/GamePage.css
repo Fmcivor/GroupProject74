@@ -196,8 +196,8 @@ header{
 
 .inventorySlot {
     border: 2px solid black;
-    height: auto;
-    width: auto;
+    height: 100%;
+    width: 100%;
     background-color: rgb(228, 140, 68);
     
 }
@@ -272,6 +272,19 @@ li {
 
 #suspectSection {
     border-bottom: 2px solid black;
+}
+
+.itemBtn{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 8px solid transparent;
+}
+
+.itemImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 

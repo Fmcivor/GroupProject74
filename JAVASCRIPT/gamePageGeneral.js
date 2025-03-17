@@ -22,6 +22,15 @@ hideToolBarButton.addEventListener('click', hideToolBar);
 //VARIABLES
 let currentState;
 
+//CLASS
+class Item {
+    constructor(itemID, itemName, itemHREF,itemUsed) {
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.itemHREF = itemHREF;
+        this.itemUsed = itemUsed;
+    }
+}
 
 
 
@@ -153,22 +162,25 @@ function userDecisionHandler(event) {
     }
 }
 
+
+
 function UpdateInventory() {
     for (let i = 0; i < inventory.length; i++) {
         const slot = document.getElementById(`slot${i + 1}`);
         slot.innerHTML = '';
-        if (inventory[i] != null && inventory[i].used == false) {
-            itemBtn = document.createElement('button');
-            itemBtn.style.width = '100%';
-            itemBtn.style.height = '100%';
-            itemBtn.style.background = `url("${inventory[i].itemHREF}")`;
-            itemBtn.style.backgroundSize = "120% 120%";  // Ensures image fits
-            itemBtn.style.backgroundRepeat = "no-repeat";
-            itemBtn.style.backgroundPosition = "center";
-            itemBtn.style.border = '8px solid transparent';
+        if (inventory[i] != null && inventory[i].itemUsed == false) {
+            let itemBtn = document.createElement('button');
+            itemBtn.classList.add('itemBtn');
             itemBtn.value = inventory[i].itemID;
             itemBtn.id = `item${i + 1}`;
             itemBtn.addEventListener('click', selectInventoryItem);
+
+            let itemImage = document.createElement('img');
+            itemImage.src = inventory[i].itemHREF;
+            itemImage.classList.add('itemImg');
+            itemImage.alt = inventory[i].itemName;
+            itemImage.title = inventory[i].itemName;
+            itemBtn.appendChild(itemImage);
             slot.appendChild(itemBtn);
         }
     }
@@ -187,6 +199,43 @@ function selectInventoryItem(event){
    
 
 }
+
+
+async function saveGame(){
+    let electricityOn = sessionStorage.getItem("electricityOn");
+    let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
+    let gameID = sessionStorage.getItem("gameID");
+    let currentRoom = sessionStorage.getItem("currentRoom");
+    let currentStateID = currentState.ID;
+
+    let updateQuery = `UPDATE tblGameSave SET
+                        electricityOn = ${electricityOn},
+                        frontDoorUnlocked = ${frontDoorUnlocked},
+                        currentRoom = '${currentRoom}',
+                        currentState = ${currentStateID}
+                        WHERE gameID = ${gameID}`;
+
+    dbConfig.set("query",updateQuery);
+
+    try {
+        let updateResponse = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let updateResult = await updateResponse.json();
+
+        if (updateResult.success) {
+            console.log("game successfully saved");
+        }
+        else{
+            console.error("error saving the game")
+        }
+    } catch (error) {
+        onsole.error("error saving the game")
+    }
+    
+ }
 
 
 

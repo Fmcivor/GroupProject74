@@ -3,12 +3,15 @@
 
 //VARIABLES
 let selectedToolBarItem = null;
-let displayName = sessionStorage.getItem('displayName');
+let userID = sessionStorage.getItem("userID");
+let displayName = sessionStorage.getItem("displayName");
 let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let hasClue1 = JSON.parse(sessionStorage.getItem("clue1"));
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
+
+let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
 
 
@@ -32,6 +35,7 @@ let generatorInterval;
 let remainingRepairMisses = 2;
 
 
+
 //CONSTANTS - mainly html elements to save repetition of document.getelement call
 const line = document.getElementById('line');
 const circle = document.querySelector('.circle');
@@ -45,16 +49,7 @@ const repairButton = document.getElementById('repairButton');
 startRepairButton.addEventListener('click', startRepair);
 
 
-//CLASS
-class Item {
-    constructor(itemID, itemName, itemHREF,itemUsed) {
-        this.itemID = itemID;
-        this.itemName = itemName;
-        this.itemHREF = itemHREF;
-        this.itemUsed = itemUsed;
-    }
-}
-let key = new Item(1, "key", "Images/goldKey.png",false);
+
 
 
 
@@ -62,6 +57,7 @@ let key = new Item(1, "key", "Images/goldKey.png",false);
 //GAME STATES
 
 const frontOfHouseDoorLocked = {
+    "ID":1,
     "room": "Front of House",
     "description": `${displayName}, you stand infront of a large house with a locked door infront of you and a path leading to your left`,
     "ImageHREF": "Images/outsideHouse.jpg",
@@ -85,6 +81,7 @@ const frontOfHouseDoorLocked = {
 }
 
 const frontOfHouseDoorUnlocked = {
+    "ID":2,
     "room": "Front of House",
     "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
     "ImageHREF": "Images/outsideHouse.jpg",
@@ -109,6 +106,7 @@ const frontOfHouseDoorUnlocked = {
 }
 
 const sideOfHouse = {
+    "ID":3,
     "room": "Side of House",
     "description": `You now stand in an overgrown garden with a faint streetlight illuminating it. 
                     There is  a small building beside you with a locked door, 
@@ -140,6 +138,7 @@ const sideOfHouse = {
 }
 
 const generatorBuilding = {
+    "ID":4,
     "room": "Front of House",
     "description": "There is an old generator with powerlines leading to the house. It appears to be broken.",
     "ImageHREF": "Images/Generator.jpg",
@@ -159,55 +158,61 @@ const generatorBuilding = {
 
 
 
+
 document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
     states.push(frontOfHouseDoorLocked,frontOfHouseDoorUnlocked,sideOfHouse,generatorBuilding);
     
     
-    let inventorySelect = `SELECT tblGameInventory.itemID,tblItem.itemName, tblItem.itemHREF,itemUsed FROM tblGameInventory 
-    JOIN tblItem ON tblGameInventory.itemID = tblItem.itemID
-    WHERE gameID = ${sessionStorage.getItem('gameID')}`;
+    // let inventorySelect = `SELECT tblGameInventory.itemID,tblItem.itemName, tblItem.itemHREF,itemUsed FROM tblGameInventory 
+    // JOIN tblItem ON tblGameInventory.itemID = tblItem.itemID
+    // WHERE gameID = ${sessionStorage.getItem('gameID')}`;
 
-    dbConfig.set('query',inventorySelect);
+    // dbConfig.set('query',inventorySelect);
 
-    try {
-        let inventoryResponse = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
+    // try {
+    //     let inventoryResponse = await fetch(dbConnectorUrl,{
+    //         method:"POST",
+    //         body:dbConfig
+    //     });
 
-        let inventoryResult = await inventoryResponse.json();
+    //     let inventoryResult = await inventoryResponse.json();
 
-        if (inventoryResult.success) {
-            if (inventoryResult.data.length>0) {
-                inventoryResult.data.forEach(item => {
-                    let inventoryItem = new Item(item.itemID,item.itemName,item.itemHREF,item.itemUsed);
-                    inventory.push(inventoryItem);
-                    if (item.itemID == keyID) {
-                        hasKey = true;
-                    }
-                });
-            }
-            else{
-                inventory = [];
-            }
+    //     if (inventoryResult.success) {
+    //         if (inventoryResult.data.length>0) {
+    //             inventoryResult.data.forEach(item => {
+    //                 let inventoryItem = new Item(item.itemID,item.itemName,item.itemHREF,item.itemUsed);
+    //                 inventory.push(inventoryItem);
+    //                 if (item.itemID == keyID) {
+    //                     hasKey = true;
+    //                 }
+    //             });
+    //         }
+    //         else{
+    //             inventory = [];
+    //         }
             
             
 
-            UpdateInventory();
-        }
-        else{
-            console.error("error retrieving the inventory");
-        }
-    } catch (error) {
-        console.error("Error retrieving the inventory items:", error);
-    }
-    
+    //         UpdateInventory();
+    //     }
+    //     else{
+    //         console.error("error retrieving the inventory");
+    //     }
+    // } catch (error) {
+    //     console.error("Error retrieving the inventory items:", error);
+    // }
+
 
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    currentState = states[currentStateID+1];
+    states.forEach(state => {
+        if (state.ID == currentStateID) {
+            currentState = state;
+            return;
+        }
+    });
     updateState();
 
 
@@ -252,11 +257,39 @@ async function checkUnderMat() {
             if (result.success && result.data.length > 0) {
                 let key = new Item();
                 Object.assign(key, result.data[0]);
+                key.itemUsed = false;
                 inventory.push(key);
+                inventory.push(key);
+                inventory.push(key);
+                inventory.push(key);
+                inventory.push(key);
+                inventory.push(key);
+                
                 UpdateInventory();
+
+                let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
+                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                dbConfig.set("query",saveItemQuery);
+
+                let saveItemResponse = await fetch(dbConnectorUrl,{
+                    method:"POST",
+                    body:dbConfig
+                });
+
+                let saveItemResult = await saveItemResponse.json();
+
+                if (saveItemResult.success) {
+                    console.log("Inventory Updated Successfully");
+                }
+                else{
+                    console.error("Error saving the item to the inventory");
+                }
+            }
+            else{
+                console.error("Error saving the item to the inventory");
             }
         } catch (error) {
-            console.log("Error loading the item from db");
+            console.log("Error adding the item to your inventory");
             console.log(error);
         }
 
@@ -264,7 +297,7 @@ async function checkUnderMat() {
 }
 
 function enterHouse() {
-
+    // go to next page set currentaState to 1
 }
 
 
@@ -366,6 +399,7 @@ function FixGenerator() {
 }
 
 function startRepair() {
+    noGeneratorRepairAttempts ++;
     startRepairButton.style.display = 'none';
     repairButton.style.display = 'block';
     const hammer = document.getElementById('hammerIcon');
@@ -384,7 +418,7 @@ function startRepair() {
 
 
 
-repairButton.addEventListener('click', function () {
+repairButton.addEventListener('click', async function () {
 
     let success = false;
 
@@ -408,7 +442,30 @@ repairButton.addEventListener('click', function () {
             electricityOn = true;
             generatorAudio.currentTime = 0;
             generatorAudio.play();
+            electricityOn = true;
 
+            if (remainingRepairMisses ==2 && noGeneratorRepairAttempts == 1) {
+                let awardAchievementQuery = `INSERT INTO tblUserAchievements (userID, achievementID) VALUES(${userID},2)`;
+
+                dbConfig.set("query",awardAchievementQuery);
+
+                try {
+                    let response = await fetch(dbConnectorUrl,{
+                        method:"POST",
+                        body:dbConfig
+                    });
+
+                    let result = await response.json();
+                    if (result.success) {
+                        console.log("Achievement successfully awarded");
+                    }
+                    else{
+                        console.error("Error occurred while awarding the acheivement to the user");
+                    }
+                } catch (error) {
+                    console.error("Error occurred while awarding the achievement to the user",error);
+                }
+            }
 
         }
         else {
@@ -490,7 +547,7 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
             document.getElementById('responseParagraph').textContent = 'You have unlocked the door now.';
-            doorUnlocked = true;
+            sessionStorage.setItem('frontDoorUnlocked',true);
            
         }
         else {

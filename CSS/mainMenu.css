@@ -80,6 +80,12 @@ header {
     transition: 0.3s;
 }
 
+.menu button{
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
 .menu a:hover, .menu button:hover {
     text-decoration:underline;
     transition: 0.3s;

@@ -72,7 +72,7 @@ async function checkTotalActiveGames(){
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
 
-    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"OutsideHouse.html",${1})`;
+    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"OutsideHouse.html",1)`;
     dbConfig.set('query',insertQuery);
 
     try {
@@ -88,7 +88,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             return;
         }
 
-        let selectQuery = `SELECT gameID, electricityOn, frontDoorUnlocked,currentState FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
+        let selectQuery = `SELECT gameID, electricityOn,currentRoom, frontDoorUnlocked,currentState, noGeneratorRepairAttempts FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
         dbConfig.set('query',selectQuery);
 
         let selectResponse = await fetch(dbConnectorUrl,{
@@ -103,7 +103,10 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('gameID',gameSave.gameID);
             sessionStorage.setItem('electricityOn',gameSave.electricityOn);
             sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
+            sessionStorage.setItem('currentRoom',gameSave.currentRoom);
             sessionStorage.setItem('currentState',gameSave.currentState);
+            sessionStorage.setItem('inventory',JSON.stringify([]));
+            sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
             console.log("game save id retrieved:",gameSave.gameID);
             window.location.href = 'OutsideHouse.html';
         }
