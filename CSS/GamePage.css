@@ -356,11 +356,13 @@ li {
     margin-bottom: 1.3vh;
     text-align: justify;
     display: flex;
+    flex: 1;
 }
 #responseParagraph{
     margin-top: 1.3vh;
     text-align: justify;
     display: flex;
+    flex: 1;
 
 }
 
@@ -426,6 +428,70 @@ p {
     height: 70%;
     display: none;
 }
+
+
+/* achievement pop up */
+
+.achievementContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 25vh;
+    flex-direction: row;
+    justify-content: center;
+    bottom: -25vh;
+    transition: bottom 1s ease-in-out;
+}
+.achExpanded {
+    bottom: 5vh;
+}
+
+#achievementBox {
+    display: flex;
+    /* background-image: url(../Images/InventoryBackground.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center; */
+    background-color: rgb(15, 7, 76);
+    border: white 2px solid;
+    width: 45vw;
+    justify-content: space-between;
+}
+
+#achievementIcon {
+    width: 3vw;
+    height: 3vw;
+}
+
+#achContentBox {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 1vh;
+    gap: 1vh;
+    width: 38vw;
+}
+
+#closeAchBtn {
+    position: dynamic;
+    right: 0;
+    top: 0;
+    width: 2vw;
+    height: 2vw;
+    background-color: darkred;
+    border: none;
+}
+
+#achFig {
+    display: flex;
+    flex-direction: column;
+    width: 4vw;
+    height: 4vw;
+    justify-content: center;
+    align-items: center;
+}
+
+
 
 
 

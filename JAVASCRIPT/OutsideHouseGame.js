@@ -14,7 +14,7 @@ inventory = [];
 
 
 
-let typingInterval;
+
 let generatorAudio = new Audio("Audio/GeneratorStart.mp3");
 
 
@@ -35,24 +35,15 @@ let remainingRepairMisses = 2;
 const line = document.getElementById('line');
 const circle = document.querySelector('.circle');
 const clue1Btn = document.getElementById('clue1Btn');
-const rubbishContainer = document.querySelector('.rubbishContainer');
 const generatorProgressBar = document.getElementById('GeneratorProgressBar');
 const rightColumn = document.querySelector(".rightColumn");
 const startRepairButton = document.getElementById('startButton');
 const repairButton = document.getElementById('repairButton');
-
+const rubbishContainer = document.querySelector('.rubbishContainer');
 startRepairButton.addEventListener('click', startRepair);
 
 
 //CLASS
-class item {
-    constructor(itemID, itemName, itemHREF) {
-        this.itemID = itemID;
-        this.itemName = itemName;
-        this.itemHREF = itemHREF;
-        this.used = false;
-    }
-}
 let key = new item(1, "key", "Images/goldKey.png");
 
 
@@ -453,8 +444,6 @@ clue1Btn.addEventListener('click', function () {
     document.getElementById('clueList').appendChild(clue);
     document.getElementById('responseParagraph').textContent = 'You have found a letter check your notebook to see its content';
     clue1 = true;
-
-
 })
 
 
