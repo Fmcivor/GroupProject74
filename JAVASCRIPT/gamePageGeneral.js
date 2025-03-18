@@ -18,10 +18,18 @@ const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
 const achievementDesc = document.getElementById('achDesc');
 
+const keyID = 1;
+
+
 //VARIABLES
 let currentState;
 let selectedToolBarItem = null;
 let typingInterval;
+
+let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
+let userID = sessionStorage.getItem("userID");
+let displayName = sessionStorage.getItem("displayName");
+
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
@@ -29,7 +37,7 @@ noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 
 //CLASSES
-class item {
+class Item {
     constructor(itemID, itemName, itemHREF) {
         this.itemID = itemID;
         this.itemName = itemName;
@@ -48,10 +56,6 @@ function showInventory() {
         hideToolBarButton.classList.add('visible');
     }
     selectedToolBarItem = 'inventory';
-    let achSRC = 'Images/sofaAchievementIcon.jpg';
-    let achName = "Crime Doesn't Rest, But I Do";
-    let achDesc = 'Spend far too much time relaxing on the sofa in the living room';
-    displayAchievement(achSRC, achName, achDesc);
 }
 
 function showNoteBook() {
@@ -182,21 +186,22 @@ function setResponse(responseText) {
 }
 
 function UpdateInventory() {
-    for (let i = 0; i < inventory.length; i++) {
+    for (let i =  0; i < inventory.length; i++) {
         const slot = document.getElementById(`slot${i + 1}`);
         slot.innerHTML = '';
-        if (inventory[i] != null && inventory[i].used == false) {
-            itemBtn = document.createElement('button');
-            itemBtn.style.width = '100%';
-            itemBtn.style.height = '100%';
-            itemBtn.style.background = `url("${inventory[i].itemHREF}")`;
-            itemBtn.style.backgroundSize = "120% 120%";  // Ensures image fits
-            itemBtn.style.backgroundRepeat = "no-repeat";
-            itemBtn.style.backgroundPosition = "center";
-            itemBtn.style.border = '8px solid transparent';
+        if (inventory[i] != null && inventory[i].itemUsed == false) {
+            let itemBtn = document.createElement('button');
+            itemBtn.classList.add('itemBtn');
             itemBtn.value = inventory[i].itemID;
             itemBtn.id = `item${i + 1}`;
             itemBtn.addEventListener('click', selectInventoryItem);
+
+            let itemImage = document.createElement('img');
+            itemImage.src = inventory[i].itemHREF;
+            itemImage.classList.add('itemImg');
+            itemImage.alt = inventory[i].itemName;
+            itemImage.title = inventory[i].itemName;
+            itemBtn.appendChild(itemImage);
             slot.appendChild(itemBtn);
         }
     }
@@ -204,7 +209,7 @@ function UpdateInventory() {
 }
 
 function selectInventoryItem(event){
-    const selectedItemBtn = event.target;
+    const selectedItemBtn = event.currentTarget;
     
     for (let i = 0; i < inventory.length; i++) {
         document.getElementById(`item${i+1}`).style.border = 'none';
