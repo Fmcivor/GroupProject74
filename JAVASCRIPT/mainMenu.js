@@ -35,8 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("One or more elements are missing in the DOM.");
     }
 
+
     //Fintan's work - check if available save slot
 
+    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
     checkTotalActiveGames();
     
 });
@@ -68,6 +70,8 @@ async function checkTotalActiveGames(){
         console.log(error);
     }
 }
+
+
 
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){

@@ -21,7 +21,10 @@ hideToolBarButton.addEventListener('click', hideToolBar);
 
 //VARIABLES
 let currentState;
-
+let username = sessionStorage.getItem("username");
+let displayName = sessionStorage.getItem("displayName");
+let inventory = sessionStorage.getItem("inventory");
+let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 //CLASS
 class Item {
     constructor(itemID, itemName, itemHREF,itemUsed) {
@@ -188,7 +191,7 @@ function UpdateInventory() {
 }
 
 function selectInventoryItem(event){
-    const selectedItemBtn = event.target;
+    const selectedItemBtn = event.currentTarget;
     
     for (let i = 0; i < inventory.length; i++) {
         document.getElementById(`item${i+1}`).style.border = 'none';

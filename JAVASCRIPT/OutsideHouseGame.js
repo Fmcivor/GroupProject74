@@ -213,6 +213,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
     });
+    
     updateState();
 
 
@@ -259,12 +260,8 @@ async function checkUnderMat() {
                 Object.assign(key, result.data[0]);
                 key.itemUsed = false;
                 inventory.push(key);
-                inventory.push(key);
-                inventory.push(key);
-                inventory.push(key);
-                inventory.push(key);
-                inventory.push(key);
                 
+
                 UpdateInventory();
 
                 let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
