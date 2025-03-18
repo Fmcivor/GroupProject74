@@ -2,11 +2,7 @@
 
 
 //VARIABLES
-let selectedToolBarItem = null;
-let userID = sessionStorage.getItem("userID");
-let displayName = sessionStorage.getItem("displayName");
 let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
-let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let hasClue1 = JSON.parse(sessionStorage.getItem("clue1"));
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
@@ -18,7 +14,6 @@ let selectedItemID = null;
 
 
 
-let typingInterval;
 let generatorAudio = new Audio("Audio/GeneratorStart.mp3");
 
 
@@ -49,7 +44,7 @@ startRepairButton.addEventListener('click', startRepair);
 
 
 //CLASS
-let key = new item(1, "key", "Images/goldKey.png");
+// let key = new item(1, "key", "Images/goldKey.png");
 
 
 
@@ -260,7 +255,7 @@ async function checkUnderMat() {
                 Object.assign(key, result.data[0]);
                 key.itemUsed = false;
                 inventory.push(key);
-                
+                sessionStorage.setItem("inventory",JSON.stringify(inventory));
 
                 UpdateInventory();
 
@@ -294,7 +289,8 @@ async function checkUnderMat() {
 }
 
 function enterHouse() {
-    // go to next page set currentaState to 1
+    sessionStorage.setItem("inventory",JSON.stringify(inventory));
+    window.location.href = "livingRoom.html";
 }
 
 
@@ -441,27 +437,8 @@ repairButton.addEventListener('click', async function () {
             generatorAudio.play();
             electricityOn = true;
 
-            if (remainingRepairMisses ==2 && noGeneratorRepairAttempts == 1) {
-                let awardAchievementQuery = `INSERT INTO tblUserAchievements (userID, achievementID) VALUES(${userID},2)`;
-
-                dbConfig.set("query",awardAchievementQuery);
-
-                try {
-                    let response = await fetch(dbConnectorUrl,{
-                        method:"POST",
-                        body:dbConfig
-                    });
-
-                    let result = await response.json();
-                    if (result.success) {
-                        console.log("Achievement successfully awarded");
-                    }
-                    else{
-                        console.error("Error occurred while awarding the acheivement to the user");
-                    }
-                } catch (error) {
-                    console.error("Error occurred while awarding the achievement to the user",error);
-                }
+            if (remainingRepairMisses ==2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false ) {
+                awardAchievement(2,userID,".jpg");
             }
 
         }

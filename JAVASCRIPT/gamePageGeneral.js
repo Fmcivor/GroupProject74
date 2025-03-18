@@ -18,10 +18,17 @@ const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
 const achievementDesc = document.getElementById('achDesc');
 
+const keyID = 1;
+
+
 //VARIABLES
 let currentState;
 let selectedToolBarItem = null;
 let typingInterval;
+
+let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
+let userID = sessionStorage.getItem("userID");
+let displayName = sessionStorage.getItem("displayName");
 
 
 //EVENT LISTENERS
@@ -30,7 +37,7 @@ noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 
 //CLASSES
-class item {
+class Item {
     constructor(itemID, itemName, itemHREF) {
         this.itemID = itemID;
         this.itemName = itemName;
@@ -49,10 +56,6 @@ function showInventory() {
         hideToolBarButton.classList.add('visible');
     }
     selectedToolBarItem = 'inventory';
-    let achSRC = 'Images/sofaAchievementIcon.jpg';
-    let achName = "Crime Doesn't Rest, But I Do";
-    let achDesc = 'Spend far too much time relaxing on the sofa in the living room';
-    displayAchievement(achSRC, achName, achDesc);
 }
 
 function showNoteBook() {
@@ -183,7 +186,7 @@ function setResponse(responseText) {
 }
 
 function UpdateInventory() {
-    for (let i = 0; i < inventory.length; i++) {
+    for (let i =  0; i < inventory.length; i++) {
         const slot = document.getElementById(`slot${i + 1}`);
         slot.innerHTML = '';
         if (inventory[i] != null && inventory[i].itemUsed == false) {

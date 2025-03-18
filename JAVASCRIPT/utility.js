@@ -7,4 +7,3 @@ let dbConfig = new URLSearchParams({
     database: 'CSC1034_CW_74',
 });
 
-const keyID = 1;
