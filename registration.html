@@ -6,23 +6,28 @@
     <title>Document</title>
     <link rel="stylesheet" href="CSS\registration.css">
     <link rel="stylesheet" href="CSS\GeneralStyles.css">
+    <link rel="stylesheet" href="https://use.typekit.net/jjc7mvf.css">
+
+
 </head>
 <body>
-    <div class="titleBanner">Registration</div>
+    <div class="titleBanner">Buried Secrets</div>
 
     
     <div class="form-container">
         <div class="container">
             <form class="registration-form">
+                
+            <form action="dbConnector.php" method="POST">
                 <h2>Sign Up</h2>
-            <form action="#" method="POST">
+            
                 <div class="inputContainer">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username">
                 </div>
                 <div class="inputContainer">
                     <label for="displayName">Display Name</label>
-                    <input type="text" id="displayName" name="displayName" required>
+                    <input type="text" id="displayName" name="displayName">
                 </div>
                 <div class="password-container">
                     <label for="password">Password</label>
@@ -30,10 +35,11 @@
                     <button type="button" id="togglePassword">Show</button>
                 </div>
                 <div class="inputContainer">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword">
                 </div>
-                <button type="submit">Register</button>
+                <div id="registerMessage" class="errorMessage"></div>
+                <button type="button" id="registerBtn">Register</button>
            
             </form>
             
