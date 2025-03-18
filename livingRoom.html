@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Living Room</title>
+    <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="CSS/GamePage.css">
+    <link rel="stylesheet" href="CSS/outsideHouse.css">
+</head>
+
+<body>
+    <header>
+        <h1 id="desktopHeader">Buried Secrets</h1>
+        <h2 id="mobileHeader">Front Of The house</h1>
+    </header>
+    <main class="wrapper">
+
+        <div class="leftColumn">
+            <div class="leftColumnContainer">
+                <div class="responseContainer">
+                    <h2 id="roomHeader">Front Of The house</h2>
+
+                    <div class="promptWrapper">
+                        <p id="descriptionParagraph"></p>
+                        <div class="divider" id="promptDivider"></div>
+                        <p id="responseParagraph"></p>
+                    </div>
+
+                </div>
+                <div class="divider" id="leftDivider"></div>
+                <div id="buttonContainer" class="buttonContainer">
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="rightColumn">
+            <div class="gameContainer">
+               
+            </div>
+
+           
+        </div>
+        <nav class="toolBar">
+            <div class="iconContainer">
+
+                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
+                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
+                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
+
+            </div>
+            <div class="noteBook" id="noteBook">
+                <div id="noteBookContentWrapper">
+
+
+                    <h2 class="toolBarSectionHeader">Notebook</h2>
+                    <section class="notebookSection" id="suspectSection">
+                        <h3 class="notebookSectionHeader">Suspects</h3>
+                        <ul class="notebookList">
+                            <li>Jonathan Donaghy - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
+                                hasdbjahdb hasbdjahb asdhabdjha</li>
+                            <li>Margaret - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
+                                hasdbjahdb
+                                hasbdjahb asdhabdjha</li>
+                            <li>Victor - A failed business partner of Charles ahsahs abshdajs ashdbjabdj hasdbjahdb
+                                hasbdjahb asdhabdjha</li>
+                        </ul>
+                    </section>
+
+
+                    <section class="notebookSection">
+                        <h3 class="notebookSectionHeader">Clues</h3>
+                        <ul class="notebookList" id="clueList">
+
+                        </ul>
+                    </section>
+                </div>
+
+            </div>
+            <div class="inventory" id="inventory">
+                <div id="inventoryContentWrapper">
+                    <h2 class="toolBarSectionHeader">Inventory</h2>
+                    <div class="inventoryGrid">
+                        <div class="inventorySlot" id="slot1"></div>
+                        <div class="inventorySlot" id="slot2"></div>
+                        <div class="inventorySlot" id="slot3"></div>
+                        <div class="inventorySlot" id="slot4"></div>
+                        <div class="inventorySlot" id="slot5"></div>
+                        <div class="inventorySlot" id="slot6"></div>
+                    </div>
+                    <div class="useItemBtnContainer">
+                        <button id="useItemBtn">Use Item</button>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </nav>
+
+
+    </main>
+    <div class="achievementContainer">
+        <div id="achievementBox">
+            <figure id="achFig">
+                <img id="achievementIcon" src="" alt="">
+            </figure>
+            <div id="achContentBox">
+                <h2 id="achName"></h2>
+                <p id="achDesc"></p>
+            </div>
+            <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+        </div>
+    </div>
+
+    <script src="JAVASCRIPT/utility.js"></script>
+    <script src="JAVASCRIPT/gamePageGeneral.js"></script>
+    <script src="JAVASCRIPT/livingRoomGame.js"></script>
+
+
+
+
+</body>
+
+</html>

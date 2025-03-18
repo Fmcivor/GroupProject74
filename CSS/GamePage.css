@@ -1,0 +1,667 @@
+/* lead developer - FINTAN MCIVOR */
+/* mobile design - CALLUM GILPIN */
+html{
+    font-size: 18px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: white;
+    
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    /* Adjust the width */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Change the thumb color */
+    border-radius: 20px;
+    /* Make the thumb rounded */
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    /* Track color */
+}
+
+body {
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+header{
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(7, 6, 20);
+    border-bottom: 1px solid white;
+}
+
+.wrapper {
+    display: flex;
+    height: 90vh;
+    width: 100vw;
+}
+
+.rightColumn {
+    position: relative;
+    flex: 3;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    background-image: url(../Images/outsideHouse.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+/* Right column tool bar and children styling */
+
+.toolBar {
+    display: flex;
+    position: absolute;
+    height: 90vh;
+    width:calc(30vw + 80px);
+    right: -30vw;
+    min-width: fit-content;
+    align-items: flex-start;
+    transition: right 1s ease-in-out;
+}
+
+.iconContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 80px;
+    
+}
+
+.toolBarExpanded {
+    right: 0;
+}
+
+.toolBarIcon {
+    display: block;
+    text-align: center;
+    color: black;
+    margin-bottom: 3vh;
+    display: block;
+    font-size: 3rem;
+    width: 100%;
+    height: fit-content;
+    border-width: 5px 0 5px 5px;
+    border-style: solid;
+    border-color: rgb(255, 197, 105);
+    border-radius: 20px 0 0 20px;
+    background-color: rgb(255, 197, 105);
+    transition: color 0.3s ease-in-out;
+
+}
+
+
+.toolBarIcon:hover {
+     color: rgb(228, 140, 68);
+}
+
+.hideToolBarButton {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out,color 0.3s ease-in-out;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.inventory,
+.noteBook {
+    width: 30vw;
+    height: 100%;
+    overflow-y: auto;
+    background-image: url(../Images/InventoryBackground.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.displayNoteBook {
+
+    display: flex;
+    flex: 1;
+}
+
+.displayInventory {
+    display: flex;
+    flex: 1;
+}
+
+#noteBookContentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    width: 90%;
+    overflow-y: auto;
+}
+
+#inventoryContentWrapper{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 90%;
+    align-items: center;
+    gap: 10%;
+}
+
+.toolBarSectionHeader {
+    margin-top: 10%;
+    width: fit-content;
+    text-align: center;
+    color: black;
+    font-family: 'Courier New', Courier, monospace
+}
+
+.inventoryGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    background-color: aliceblue;
+    width: 90%;
+    height: 40%;
+    overflow: auto;
+    border-collapse: collapse;
+    border: 2px solid black;
+}
+
+.inventorySlot {
+    border: 2px solid black;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(228, 140, 68);
+    
+}
+
+
+
+.selectedCollectibleContainer {
+    height: 30%;
+    width: 90%;
+    background-color: pink;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+
+
+
+.useItemBtnContainer {
+    display: flex;
+    width: 90%;
+    height: 30%;
+    justify-content: center;
+    align-items: center;
+}
+
+#useItemBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 15%;
+    min-width: fit-content;
+    text-wrap: noWrap;
+    padding: 20px;
+    border-radius: 30px;
+    background-color: rgb(228, 140, 68);
+    font-size: 1.2rem;
+    color: black;
+    overflow: hidden;
+    border: none;
+}
+
+#useItemBtn:hover {
+    color: black;
+    background-color: rgb(190, 115, 54);
+}
+
+.notebookSection {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: auto;
+    padding: 5%;
+    gap: 5%;
+}
+
+.notebookSectionHeader {
+    color: black;
+}
+
+ul {
+    width: 100%;
+    overflow: hidden;
+    list-style-position: inside;
+}
+
+li {
+    margin-bottom: 5%;
+    color: black;
+}
+
+#suspectSection {
+    border-bottom: 2px solid black;
+}
+
+.itemBtn{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: 8px solid transparent;
+}
+
+.itemImg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* Game interaction and options styling */
+
+.leftColumn {
+    display: flex;
+    justify-content: center;
+    flex: 2;
+    height: 100%;
+    background-color: rgb(6, 3, 35);
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Game interaction and options styling */
+
+.leftColumnContainer {
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(11, 5, 56);
+    border: 2vw solid rgb(6, 3, 35);
+    gap: 3vh;
+}
+
+.divider{
+    background-color: white;  
+    height: 2px;  
+    border-radius: 15px;
+    display: flex;
+    min-height: 2px;
+    width:95%;
+}
+#promptDivider{
+    position: relative;
+    left: -1.5%;
+    width: 103%;
+}
+#leftDivider{
+    height: 3px;
+    flex: 0.01;
+}
+
+
+#roomHeader {
+    display: flex;
+    text-align: center;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding: 0.7vh;
+    padding-left: 1.5vw;
+    width:90%;
+    height: 5vh;
+    align-items: center;
+    flex: 0.5;
+}
+
+.promptWrapper{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding-top: 0.7vh;
+    padding-bottom: 0.7vh;
+    width:90%;
+    height: 57.7%;
+    padding: 1.5vh;
+    scrollbar-color: white rgb(25, 12, 121);
+    scrollbar-width: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 3;
+}
+
+#descriptionParagraph{
+    margin-bottom: 1.3vh;
+    text-align: justify;
+    display: flex;
+    flex: 1;
+}
+#responseParagraph{
+    margin-top: 1.3vh;
+    text-align: justify;
+    display: flex;
+    flex: 1;
+
+}
+
+
+.responseContainer {
+    height: 40%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 3;
+    gap: 3vh;
+    margin-top: 3vh;
+}
+
+
+p {
+    width: 95%;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding: 2vh;
+    flex: 2;
+    margin-bottom: 3vh;
+}
+
+.optionButton {
+
+    display: flex;
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    padding: 0.5vw;
+    font-weight: 500;
+    height: fit-content;
+    font-family: serif;
+    text-align: left;
+}
+
+.optionButton:hover {
+    font-weight: 600;
+}
+.optionButton:hover p{
+    text-decoration: underline;
+}
+
+
+
+/* MiniGame styles */
+
+.gameContainer{
+    width: 70%;
+    height: 70%;
+    display: none;
+}
+
+
+/* achievement pop up */
+
+.achievementContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 25vh;
+    flex-direction: row;
+    justify-content: center;
+    bottom: -25vh;
+    transition: bottom 1s ease-in-out;
+}
+.achExpanded {
+    bottom: 5vh;
+}
+
+#achievementBox {
+    display: flex;
+    /* background-image: url(../Images/InventoryBackground.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center; */
+    background-color: rgb(15, 7, 76);
+    border: white 2px solid;
+    width: 45vw;
+    justify-content: space-between;
+}
+
+#achievementIcon {
+    width: 3vw;
+    height: 3vw;
+}
+
+#achContentBox {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 1vh;
+    gap: 1vh;
+    width: 38vw;
+}
+
+#closeAchBtn {
+    position: dynamic;
+    right: 0;
+    top: 0;
+    width: 2vw;
+    height: 2vw;
+    background-color: darkred;
+    border: none;
+}
+
+#achFig {
+    display: flex;
+    flex-direction: column;
+    width: 4vw;
+    height: 4vw;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+/* mobile responsive design */
+#mobileHeader {
+    display: none;
+}
+
+@media (max-width:650px) {
+  
+    body{
+        height: 100vh;
+        background-color: rgb(11, 5, 56)
+    }
+
+
+
+    header {
+        height: 7vh;
+        position: absolute;
+        z-index: 10;
+        top: 0;
+    }
+
+    #mobileHeader{
+        display: block;
+    }
+    #desktopHeader{
+        visibility: collapse;
+        width: 0px;
+    }
+
+    .wrapper {
+        flex-direction: column-reverse;
+        height: 83vh;
+    }
+
+    .rightColumn {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        min-height: 40%;
+        justify-content: flex-end;
+        align-items: center;
+        flex: 0.7;
+    }
+
+    .leftColumn {
+        width: 100vw;
+        flex:1;
+        max-height: 58%;
+    }
+    .leftColumnContainer{
+        gap: 1vh;
+        border: none;
+    }
+
+    .responseContainer {
+        gap: 2vh;
+        margin: 0;
+        flex: 1;
+    }
+    #leftDivider {
+        visibility: collapse;
+        height: 0px;
+        min-height: 0px;
+        flex: 0;
+    }
+
+    #roomHeader {
+        visibility: collapse;
+        height: 0px;
+        padding: 0;
+        flex: 0;
+    }
+
+    .buttonContainer {
+        margin-bottom: 0;
+        flex: 0.6;
+        gap: 7%;
+    }
+
+    .toolBar {
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        width: 100%;
+        height: 60vh;
+        position: fixed;
+        transition: bottom 500ms ease-in-out;
+        bottom: -55vh;
+        right: 0;
+    }
+
+
+    .toolBarExpanded {
+        bottom: 0vh;
+    }
+
+
+    .iconContainer {
+        flex-direction: row;
+        width: 100%;
+        height: 5vh;
+    }
+
+    .toolBarIcon {
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex: 1;
+        text-align: center;
+        width: fit-content;
+        margin: auto;
+        height: 100%;
+        border-width: 5px 5px 0 5px;
+        border-radius: 20px 20px 0 0;
+        margin: 0;
+    }
+
+    #hideToolBarButton {
+        display: flex;
+        order: 3;
+        margin-right: 6vw;
+        margin-left: 10vw;
+    }
+
+    #noteBookButton {
+        margin-left: 6vw;
+        margin-right: 10vw;
+    }
+
+
+    .noteBook, .inventory {
+        width: 100vw;
+        height: 0;
+        background-color: green;
+        display: flex;
+        order: 1;
+        overflow: hidden;
+        height: 0;
+        justify-content: center;
+    }
+
+    .displayNoteBook, .displayInventory {
+        flex: 1;
+        height: 55vh;
+    }
+}
+
+.noTransition {
+    transition: none;
+}
+
+
+.hide {
+    visibility: collapse;
+}
+
