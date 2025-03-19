@@ -45,6 +45,17 @@ header{
     border-bottom: 1px solid white;
 }
 
+#settingsButton{
+    font-size: 2.5rem;
+    position: absolute;
+    left: 2vw;
+    
+}
+
+#settingsButton:hover{
+    color: rgb(25, 12, 121);
+}
+
 .wrapper {
     display: flex;
     height: 90vh;
@@ -303,8 +314,7 @@ li {
 
 /* Game interaction and options styling */
 
-.leftColumnContainer {
-
+.gameInteractionContainer {
     width: 100%;
     height: 100%;
     display: flex;
@@ -343,9 +353,9 @@ li {
     padding: 0.7vh;
     padding-left: 1.5vw;
     width:90%;
-    height: 5vh;
+    height: 6vh;
     align-items: center;
-    flex: 0.5;
+   
 }
 
 .promptWrapper{
@@ -511,6 +521,48 @@ p {
 /* mobile responsive design */
 #mobileHeader {
     display: none;
+}
+
+.settingsContainer{
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+
+    align-items: center;
+    background-color: rgb(11, 5, 56);
+    border: 2vw solid rgb(6, 3, 35);
+    gap: 3vh;
+}
+
+#settingsHeader{
+    display: flex;
+    text-align: center;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding: 0.7vh;
+    padding-left: 1.5vw;
+    width:90%;
+    height: 6vh;
+    align-items: center;
+    margin-top: 3vh;
+}
+
+.settingsContent{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding-top: 0.7vh;
+    padding-bottom: 0.7vh;
+    width:90%;
+    height: 67vh;
+    padding: 1.5vh;
+    scrollbar-color: white rgb(25, 12, 121);
+    scrollbar-width: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    
 }
 
 @media (max-width:650px) {

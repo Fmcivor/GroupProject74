@@ -13,13 +13,14 @@
 
 <body>
     <header>
+        <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
         <h2 id="mobileHeader">Front Of The house</h1>
     </header>
     <main class="wrapper">
 
         <div class="leftColumn">
-            <div class="leftColumnContainer">
+            <div class="gameInteractionContainer" >
                 <div class="responseContainer">
                     <h2 id="roomHeader">Front Of The house</h2>
 
@@ -39,6 +40,13 @@
 
                 </div>
 
+            </div>
+
+            <div class="settingsContainer">
+                <h2 id="settingsHeader">Settings</h2>
+                <div class="settingsContent">
+
+                </div>
             </div>
         </div>
 
@@ -75,9 +83,9 @@
         <nav class="toolBar">
             <div class="iconContainer">
 
-                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
-                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
-                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
+                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton" title="Close Toolbar"></i>
+                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton" title="Open Notebook"></i>
+                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton" title="Open Inventory"></i>
 
             </div>
             <div class="noteBook" id="noteBook">
@@ -130,6 +138,7 @@
             </div>
         </nav>
 
+        
 
     </main>
 

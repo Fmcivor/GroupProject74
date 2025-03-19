@@ -17,6 +17,9 @@ const achievementContainer = document.querySelector('.achievementContainer');
 const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
 const achievementDesc = document.getElementById('achDesc');
+const settingsButton = document.getElementById('settingsButton');
+const settingsContainer = document.querySelector('.settingsContainer');
+const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
 
 const keyID = 1;
 
@@ -25,6 +28,8 @@ const keyID = 1;
 let currentState;
 let selectedToolBarItem = null;
 let typingInterval;
+let settingsOpen = false;
+
 
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 let userID = sessionStorage.getItem("userID");
@@ -35,6 +40,7 @@ let displayName = sessionStorage.getItem("displayName");
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
+settingsButton.addEventListener('click', toggleSettings);
 
 //CLASSES
 class Item {
@@ -75,7 +81,7 @@ function hideToolBar() {
     selectedToolBarItem = null;
     hideToolBarButton.classList.remove('visible');
     toolbar.classList.remove('toolBarExpanded');
-    
+
 
     setTimeout(() => {
         noteBookContainer.classList.remove('displayNoteBook');
@@ -85,6 +91,21 @@ function hideToolBar() {
     }, 1000);
 
 }
+
+function toggleSettings() {
+    if (settingsOpen == false) {
+        settingsOpen = true;
+        gameInteractionContainer.style.display = 'none';
+        settingsContainer.style.display = 'flex';
+    }
+    else{
+        settingsOpen = false;
+        settingsContainer.style.display = 'none';
+        gameInteractionContainer.style.display = 'flex';
+    }
+
+}
+
 
 function displayAchievement(iconSRC, achName, achDesc) {
     achievementIcon.src = iconSRC;
@@ -128,7 +149,7 @@ function updateState() {
 
     //typing effect
     let typingIndex = 0;
-    let totalTypingTime = currentState.description.length*20;
+    let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += currentState.description[typingIndex];
@@ -146,7 +167,7 @@ function updateState() {
 
     //dynamic buttons
 
-    
+
     currentState.interactions.forEach(interaction => {
 
         let button = document.createElement('button');
@@ -154,7 +175,7 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
-        button.setAttribute('disabled',true);
+        button.setAttribute('disabled', true);
         buttonContainer.appendChild(button);
 
     });
@@ -186,7 +207,7 @@ function setResponse(responseText) {
 }
 
 function UpdateInventory() {
-    for (let i =  0; i < inventory.length; i++) {
+    for (let i = 0; i < inventory.length; i++) {
         const slot = document.getElementById(`slot${i + 1}`);
         slot.innerHTML = '';
         if (inventory[i] != null && inventory[i].itemUsed == false) {
@@ -208,16 +229,16 @@ function UpdateInventory() {
 
 }
 
-function selectInventoryItem(event){
+function selectInventoryItem(event) {
     const selectedItemBtn = event.currentTarget;
-    
+
     for (let i = 0; i < inventory.length; i++) {
-        document.getElementById(`item${i+1}`).style.border = 'none';
+        document.getElementById(`item${i + 1}`).style.border = 'none';
     }
 
     selectedItemID = selectedItemBtn.value;
     selectedItemBtn.style.border = '8px solid yellow';
-   
+
 
 }
 
@@ -227,7 +248,7 @@ function addClue(clueContent) {
     document.getElementById('clueList').appendChild(clue);
 }
 
-async function awardAchievement(achievementID, userID){
+async function awardAchievement(achievementID, userID) {
     let query = `INSERT INTO tblUserAchievements (achievementID, userID) VALUES (${achievementID}, ${userID});`;
 
     dbConfig.set('query', query);
@@ -237,7 +258,7 @@ async function awardAchievement(achievementID, userID){
             method: "POST",
             body: dbConfig
         });
-        
+
     } catch (error) {
         console.log("Error setting achievement");
         console.log(error);
