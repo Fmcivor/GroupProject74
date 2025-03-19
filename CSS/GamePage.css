@@ -569,7 +569,7 @@ p {
   
     body{
         height: 100vh;
-        background-color: rgb(11, 5, 56)
+        background-color: rgb(6, 3, 35);
     }
 
 
@@ -591,7 +591,8 @@ p {
 
     .wrapper {
         flex-direction: column-reverse;
-        height: 83vh;
+        height: 89vh;
+        margin-top: 7vh;
     }
 
     .rightColumn {
