@@ -592,7 +592,7 @@ p {
     .wrapper {
         flex-direction: column-reverse;
         height: 83vh;
-        margin-top: 7vh;
+        
     }
 
     .rightColumn {
