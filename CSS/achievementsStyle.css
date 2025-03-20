@@ -14,9 +14,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #1a1a1a;
     color: white;
-    font-family: Arial, sans-serif;
     overflow: hidden;
     background-image: url(../Images/outsideHouse.jpg);
     background-repeat: no-repeat;
@@ -24,14 +22,41 @@ body {
     background-position: center center;
 }
 
-h1 {
-    position:fixed;
-    top: 0px;
-    text-align: center;
-    background-color: rgba(11, 5, 56, 0.8);
+header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
-    width: 100vw;
-    font-size: 3.5em;
+    background: rgba(11, 5, 56, 0.8);
+}
+
+.game-title {
+    font-size: clamp(1rem, 5vw, 3.5rem);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    font-size: clamp(0.5rem, 5vw, 1.5rem);
+    position: absolute;
+    right: 20px;
+}
+
+.profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 0.5rem;
+    margin: 10px;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+.profile img:hover{
+    border: 2px solid white;
+    transition: border 0.3s ease-in-out;
 }
 
 .achievement-wrapper{
@@ -61,6 +86,10 @@ h1 {
     gap: 15px;
 }
 
+h1{
+    font-size: 3rem;
+}
+
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -76,8 +105,9 @@ h1 {
 
 .achievement {
     min-height: 5vh;
-    width: 25vw;
+    width: 30vw;
     padding: 15px;
+    min-width: 300px;
     background-color: rgb(34, 34, 68);
     text-align: center;
     border-radius: 5px;
@@ -88,12 +118,12 @@ h1 {
 }
 
 h2{
-    font-size: 2em;
+    font-size: 1.8rem;
 }
 
-span{
+.achievement span{
     margin: 5px;
-    font-size: 1.2em;
+    font-size: 1.2rem;
 }
 
 .achievement:hover{
@@ -114,11 +144,12 @@ span{
 
 .btnMainMenu{
     position: fixed;
+    min-width: 120px;
     bottom: 12vh;
     background-color: rgb(0, 68, 204);
     color: white;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     width: 6vw;
     padding: 20px;
     height: 3vh;
@@ -139,4 +170,18 @@ span{
     color: rgb(34, 34, 68); /*Input Background*/
     color: rgb(0, 68, 204); /*Button background*/
     color: rgb(0, 102, 255); /*button hover*/
+}
+
+@media (max-width: 480px){
+    html{
+        font-size: 12px;
+    }
+
+    header{
+        justify-content: space-between;
+    }
+
+    .profile{
+        right: 0px;
+    }
 }
