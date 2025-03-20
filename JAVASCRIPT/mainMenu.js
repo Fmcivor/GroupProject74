@@ -1,3 +1,6 @@
+function openModal() {
+    document.getElementById("signOutModal").style.display = "flex";
+}
 /*
 const confirmNo = document.getElementById("confirmNo");
 const signOutConfirm = document.getElementById("signOutConfirm");
@@ -124,4 +127,10 @@ document.getElementById('playBtn').addEventListener('click',async function(){
 })
 
 
+function closeModal() {
+    document.getElementById("signOutModal").style.display = "none";
+}
 
+function signOut() {
+    window.location.href = "";
+}
