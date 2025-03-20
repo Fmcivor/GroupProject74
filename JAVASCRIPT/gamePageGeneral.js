@@ -12,17 +12,39 @@ const noteBookButton = document.getElementById('noteBookButton');
 const hideToolBarButton = document.getElementById('hideToolBarButton');
 const noteBookContainer = document.getElementById('noteBook');
 const inventoryContainer = document.getElementById('inventory');
-const promptDivider = document.getElementById('promptDivider')
+const promptDivider = document.getElementById('promptDivider');
+const achievementContainer = document.querySelector('.achievementContainer');
+const achievementIcon = document.getElementById('achievementIcon');
+const achievementName = document.getElementById('achName');
+const achievementDesc = document.getElementById('achDesc');
+
+const keyID = 1;
+
 
 //VARIABLES
 let currentState;
 let selectedToolBarItem = null;
+let typingInterval;
+
+let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
+let userID = sessionStorage.getItem("userID");
+let displayName = sessionStorage.getItem("displayName");
+
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 
+//CLASSES
+class Item {
+    constructor(itemID, itemName, itemHREF) {
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.itemHREF = itemHREF;
+        this.used = false;
+    }
+}
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -34,11 +56,9 @@ function showInventory() {
         hideToolBarButton.classList.add('visible');
     }
     selectedToolBarItem = 'inventory';
-
 }
 
 function showNoteBook() {
-    
     noteBookContainer.classList.add('displayNoteBook');
     inventoryContainer.classList.remove('displayInventory');
     if (selectedToolBarItem === null) {
@@ -66,6 +86,16 @@ function hideToolBar() {
 
 }
 
+function displayAchievement(iconSRC, achName, achDesc) {
+    achievementIcon.src = iconSRC;
+    achievementName.innerHTML = achName;
+    achievementDesc.innerHTML = achDesc;
+
+    achievementContainer.classList.add('achExpanded')
+}
+function hideAchievement() {
+    achievementContainer.classList.remove('achExpanded')
+}
 
 //removes transition properties to prevent transitions applying during resizing
 window.addEventListener('resize', function () {
@@ -112,7 +142,7 @@ function updateState() {
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
     document.querySelector('.gameContainer').style.display = 'none';
-    document.querySelector('.rubbishContainer').style.display = 'none';
+    // document.querySelector('.rubbishContainer').style.display = 'none';
 
     //dynamic buttons
 
@@ -151,22 +181,27 @@ function userDecisionHandler(event) {
     }
 }
 
+function setResponse(responseText) {
+    document.getElementById('responseParagraph').textContent = responseText;
+}
+
 function UpdateInventory() {
-    for (let i = 0; i < inventory.length; i++) {
+    for (let i =  0; i < inventory.length; i++) {
         const slot = document.getElementById(`slot${i + 1}`);
         slot.innerHTML = '';
-        if (inventory[i] != null && inventory[i].used == false) {
-            itemBtn = document.createElement('button');
-            itemBtn.style.width = '100%';
-            itemBtn.style.height = '100%';
-            itemBtn.style.background = `url("${inventory[i].itemHREF}")`;
-            itemBtn.style.backgroundSize = "120% 120%";  // Ensures image fits
-            itemBtn.style.backgroundRepeat = "no-repeat";
-            itemBtn.style.backgroundPosition = "center";
-            itemBtn.style.border = '8px solid transparent';
+        if (inventory[i] != null && inventory[i].itemUsed == false) {
+            let itemBtn = document.createElement('button');
+            itemBtn.classList.add('itemBtn');
             itemBtn.value = inventory[i].itemID;
             itemBtn.id = `item${i + 1}`;
             itemBtn.addEventListener('click', selectInventoryItem);
+
+            let itemImage = document.createElement('img');
+            itemImage.src = inventory[i].itemHREF;
+            itemImage.classList.add('itemImg');
+            itemImage.alt = inventory[i].itemName;
+            itemImage.title = inventory[i].itemName;
+            itemBtn.appendChild(itemImage);
             slot.appendChild(itemBtn);
         }
     }
@@ -174,7 +209,7 @@ function UpdateInventory() {
 }
 
 function selectInventoryItem(event){
-    const selectedItemBtn = event.target;
+    const selectedItemBtn = event.currentTarget;
     
     for (let i = 0; i < inventory.length; i++) {
         document.getElementById(`item${i+1}`).style.border = 'none';
@@ -186,5 +221,27 @@ function selectInventoryItem(event){
 
 }
 
+function addClue(clueContent) {
+    let clue = document.createElement("li");
+    clue.textContent = clueContent;
+    document.getElementById('clueList').appendChild(clue);
+}
+
+async function awardAchievement(achievementID, userID){
+    let query = `INSERT INTO tblUserAchievements (achievementID, userID) VALUES (${achievementID}, ${userID});`;
+
+    dbConfig.set('query', query);
+
+    try {
+        response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+        
+    } catch (error) {
+        console.log("Error setting achievement");
+        console.log(error);
+    }
+}
 
 

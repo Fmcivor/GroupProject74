@@ -2,19 +2,18 @@
 
 
 //VARIABLES
-let displayName;
 let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
-let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
-let doorUnlocked = JSON.parse(sessionStorage.getItem("doorUnlocked"));
-let clue1 = JSON.parse(sessionStorage.getItem("clue1"));
+let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
+let hasClue1 = JSON.parse(sessionStorage.getItem("clue1"));
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
+
+let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
 
-inventory = [];
 
 
 
-let typingInterval;
+
 let generatorAudio = new Audio("Audio/GeneratorStart.mp3");
 
 
@@ -31,29 +30,21 @@ let generatorInterval;
 let remainingRepairMisses = 2;
 
 
+
 //CONSTANTS - mainly html elements to save repetition of document.getelement call
 const line = document.getElementById('line');
 const circle = document.querySelector('.circle');
 const clue1Btn = document.getElementById('clue1Btn');
-const rubbishContainer = document.querySelector('.rubbishContainer');
 const generatorProgressBar = document.getElementById('GeneratorProgressBar');
 const rightColumn = document.querySelector(".rightColumn");
 const startRepairButton = document.getElementById('startButton');
 const repairButton = document.getElementById('repairButton');
-
+const rubbishContainer = document.querySelector('.rubbishContainer');
 startRepairButton.addEventListener('click', startRepair);
 
 
 //CLASS
-class item {
-    constructor(itemID, itemName, itemHREF) {
-        this.itemID = itemID;
-        this.itemName = itemName;
-        this.itemHREF = itemHREF;
-        this.used = false;
-    }
-}
-let key = new item(1, "key", "Images/goldKey.png");
+// let key = new item(1, "key", "Images/goldKey.png");
 
 
 
@@ -61,6 +52,7 @@ let key = new item(1, "key", "Images/goldKey.png");
 //GAME STATES
 
 const frontOfHouseDoorLocked = {
+    "ID":1,
     "room": "Front of House",
     "description": `${displayName}, you stand infront of a large house with a locked door infront of you and a path leading to your left`,
     "ImageHREF": "Images/outsideHouse.jpg",
@@ -84,6 +76,7 @@ const frontOfHouseDoorLocked = {
 }
 
 const frontOfHouseDoorUnlocked = {
+    "ID":2,
     "room": "Front of House",
     "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
     "ImageHREF": "Images/outsideHouse.jpg",
@@ -108,6 +101,7 @@ const frontOfHouseDoorUnlocked = {
 }
 
 const sideOfHouse = {
+    "ID":3,
     "room": "Side of House",
     "description": `You now stand in an overgrown garden with a faint streetlight illuminating it. 
                     There is  a small building beside you with a locked door, 
@@ -139,6 +133,7 @@ const sideOfHouse = {
 }
 
 const generatorBuilding = {
+    "ID":4,
     "room": "Front of House",
     "description": "There is an old generator with powerlines leading to the house. It appears to be broken.",
     "ImageHREF": "Images/Generator.jpg",
@@ -158,40 +153,66 @@ const generatorBuilding = {
 
 
 
-// document.addEventListener('DOMContentLoaded', async function () {
 
-//     let query = "SELECT * FROM tblUser WHERE tblUser.userID =1";
+document.addEventListener('DOMContentLoaded', async function () {
 
-//     dbConfig.set('query', query);
+    let states = [];
+    states.push(frontOfHouseDoorLocked,frontOfHouseDoorUnlocked,sideOfHouse,generatorBuilding);
+    
+    
+    // let inventorySelect = `SELECT tblGameInventory.itemID,tblItem.itemName, tblItem.itemHREF,itemUsed FROM tblGameInventory 
+    // JOIN tblItem ON tblGameInventory.itemID = tblItem.itemID
+    // WHERE gameID = ${sessionStorage.getItem('gameID')}`;
 
-//     try {
-//         let response = await fetch(dbConnectorUrl, {
-//             method: "POST",
-//             body: dbConfig
-//         });
-//         let result = await response.json();
+    // dbConfig.set('query',inventorySelect);
 
-//         if (result.success) {
-//             let user = result.data[0];
-//             sessionStorage.setItem("username", JSON.stringify(user.username));
-//             sessionStorage.setItem("displayName", JSON.stringify(user.displayName));
-//         }
+    // try {
+    //     let inventoryResponse = await fetch(dbConnectorUrl,{
+    //         method:"POST",
+    //         body:dbConfig
+    //     });
 
-//         console.log(sessionStorage.getItem("displayName"));
-//         displayName = JSON.parse(sessionStorage.getItem("displayName"));
+    //     let inventoryResult = await inventoryResponse.json();
 
-//     } catch (error) {
-//         console.log(error);
-//     }
+    //     if (inventoryResult.success) {
+    //         if (inventoryResult.data.length>0) {
+    //             inventoryResult.data.forEach(item => {
+    //                 let inventoryItem = new Item(item.itemID,item.itemName,item.itemHREF,item.itemUsed);
+    //                 inventory.push(inventoryItem);
+    //                 if (item.itemID == keyID) {
+    //                     hasKey = true;
+    //                 }
+    //             });
+    //         }
+    //         else{
+    //             inventory = [];
+    //         }
+            
+            
+
+    //         UpdateInventory();
+    //     }
+    //     else{
+    //         console.error("error retrieving the inventory");
+    //     }
+    // } catch (error) {
+    //     console.error("Error retrieving the inventory items:", error);
+    // }
 
 
 
-
-document.addEventListener('DOMContentLoaded', function () {
-    currentState = frontOfHouseDoorLocked;
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    states.forEach(state => {
+        if (state.ID == currentStateID) {
+            currentState = state;
+            return;
+        }
+    });
+    
     updateState();
+
+
 })
-// })
 
 
 //GANE RESPONSE FUNCTIONS
@@ -230,13 +251,37 @@ async function checkUnderMat() {
             let result = await response.json();
 
             if (result.success && result.data.length > 0) {
-                let key = new item();
+                let key = new Item();
                 Object.assign(key, result.data[0]);
+                key.itemUsed = false;
                 inventory.push(key);
+                sessionStorage.setItem("inventory",JSON.stringify(inventory));
+
                 UpdateInventory();
+
+                let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
+                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                dbConfig.set("query",saveItemQuery);
+
+                let saveItemResponse = await fetch(dbConnectorUrl,{
+                    method:"POST",
+                    body:dbConfig
+                });
+
+                let saveItemResult = await saveItemResponse.json();
+
+                if (saveItemResult.success) {
+                    console.log("Inventory Updated Successfully");
+                }
+                else{
+                    console.error("Error saving the item to the inventory");
+                }
+            }
+            else{
+                console.error("Error saving the item to the inventory");
             }
         } catch (error) {
-            console.log("Error loading the item from db");
+            console.log("Error adding the item to your inventory");
             console.log(error);
         }
 
@@ -244,7 +289,8 @@ async function checkUnderMat() {
 }
 
 function enterHouse() {
-
+    sessionStorage.setItem("inventory",JSON.stringify(inventory));
+    window.location.href = "livingRoom.html";
 }
 
 
@@ -267,7 +313,7 @@ function searchRubbish(responseId) {
     responseParagraph.textContent = 'Click on the screen to try collect or find items in the rubbish';
 
     rubbishContainer.style.display = 'block';
-    if (clue1) {
+    if (hasClue1) {
         clue1Btn.style.display = 'none';
         rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
     }
@@ -346,6 +392,7 @@ function FixGenerator() {
 }
 
 function startRepair() {
+    noGeneratorRepairAttempts ++;
     startRepairButton.style.display = 'none';
     repairButton.style.display = 'block';
     const hammer = document.getElementById('hammerIcon');
@@ -364,7 +411,7 @@ function startRepair() {
 
 
 
-repairButton.addEventListener('click', function () {
+repairButton.addEventListener('click', async function () {
 
     let success = false;
 
@@ -388,7 +435,11 @@ repairButton.addEventListener('click', function () {
             electricityOn = true;
             generatorAudio.currentTime = 0;
             generatorAudio.play();
+            electricityOn = true;
 
+            if (remainingRepairMisses ==2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false ) {
+                awardAchievement(2,userID,".jpg");
+            }
 
         }
         else {
@@ -452,7 +503,7 @@ clue1Btn.addEventListener('click', function () {
     clue.textContent = "A letter dated the 27/03/2024 by Jonathan Donaghy contains threats and accusations that his loss of money and the failure of the business is victor's fault";
     document.getElementById('clueList').appendChild(clue);
     document.getElementById('responseParagraph').textContent = 'You have found a letter check your notebook to see its content';
-    clue1 = true;
+    hasClue1 = true;
 
 
 })
@@ -470,7 +521,7 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
             document.getElementById('responseParagraph').textContent = 'You have unlocked the door now.';
-            doorUnlocked = true;
+            sessionStorage.setItem('frontDoorUnlocked',true);
            
         }
         else {
