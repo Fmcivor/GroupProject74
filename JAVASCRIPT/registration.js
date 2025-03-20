@@ -1,16 +1,9 @@
 
-const dbConnectorUrl = "https://mconnolly58.webhosting1.eeecs.qub.ac.uk/dbConnector.php";
 
-let dbConfig = new URLSearchParams({
-   hostname: 'localhost',
-   username: 'mconnolly58',
-   password: 'hRGhvYnr5D28J4kj',
-   database: 'CSC1034_CW_74',
-});
-const keyID = 1;
 
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);
+let errorMessage = '<ul>';
 
 function togglePassword() {
    const password = document.getElementById("password");
@@ -27,6 +20,7 @@ function togglePassword() {
 document.getElementById("registerBtn").addEventListener("click", async function (event) {
 
    event.preventDefault();
+   errorMessage = "<ul>";
 
    let username = document.getElementById("username").value;
    let displayName = document.getElementById('displayName').value;
@@ -37,6 +31,51 @@ document.getElementById("registerBtn").addEventListener("click", async function 
    let validDisplayName = validateDisplayName(displayName);
    let validPassword = validatePassword(password);
    let validConfirmPassword = validateConfirmPassword(password, confirmPassword);
+
+   if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
+      console.log("All validations passed. Submitting form...")
+      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName,iconHREF)
+   VALUES ('${username}', '${password}','${displayName}','placeholder')`;
+      dbConfig.set('query', insertQuery);
+      try {
+         let insertResponse = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+         });
+
+         let insertResult = await insertResponse.json();
+
+         if (insertResult.success) {
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("displayName", displayName);
+            window.location.href = "mainMenu.html";
+
+
+         } else {
+            errorMessage = '<p>Error registering user</p>';
+            document.getElementById('messageContent').innerHTML = errorMessage;
+            const headerElement = document.getElementById('messageHeader');
+            headerElement.textContent = "ERROR";
+
+            messageContainer.style.display = 'flex';
+         }
+      } catch (error) {
+         errorMessage = '<p>Error registering user</p>';
+         document.getElementById('messageContent').innerHTML = errorMessage;
+         const headerElement = document.getElementById('messageHeader');
+         headerElement.textContent = "ERROR";
+
+         messageContainer.style.display = 'flex';
+      }
+   }
+   else {
+      errorMessage += '</ul>';
+      document.getElementById('messageContent').innerHTML = errorMessage;
+      const headerElement = document.getElementById('messageHeader');
+      headerElement.textContent = "INVALID";
+
+      messageContainer.style.display = 'flex';
+   }
 });
 
 
@@ -48,7 +87,7 @@ async function validateUsername(enteredUsername) {
       return false;
    }
 
-   let selectQuery = `SELECT username FROM tblUsers WHERE username = '${enteredUsername}'`;
+   let selectQuery = `SELECT username FROM tblUser WHERE username = '${enteredUsername}'`;
    dbConfig.set('query', selectQuery);
 
    try {
@@ -61,19 +100,22 @@ async function validateUsername(enteredUsername) {
       let checkResult = await checkResponse.json();
       //username already exists in the database
       if (checkResult.success && checkResult.data.length > 0) {
-         document.getElementById("registerMessage").textContent =
-            "Username already exists.";
+         errorMessage += `<li>Username already exists.</li>`;
          return false;
       }
 
       // Username is valid and doesn't exist
-      document.getElementById("registerMessage").textContent = "Username is valid";
       return true;
 
    } catch (error) {
       console.error("Error checking for existing accounts:", error);
-      document.getElementById("registerMessage").textContent =
-         "Error checking username availability. Please try again.";
+      errorMessage = '<p></p>';
+      document.getElementById('messageContent').innerHTML = errorMessage;
+      const headerElement = document.getElementById('messageHeader');
+      headerElement.textContent = "ERROR";
+
+      messageContainer.style.display = 'flex';
+
       return false;
    }
 }
@@ -92,38 +134,69 @@ function validateDisplayName(enteredDisplayName) {
 
 function validatePassword(enteredPassword) {
    let passwordRegex = /^(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-   if (passwordRegex.test(enteredPassword) == false) {
+   
+   if (!enteredPassword) {
+      errorMessage += `<li>Password cannot be empty.</li>`;
       return false;
    }
+   if (enteredPassword.length < 8 || enteredPassword.length > 20) {
+      errorMessage += `<li>Password must be between 8 and 20 characters long.</li>`;
+      return false;
+   }
+   if (!/[A-Z]/.test(enteredPassword)) {
+      errorMessage += `<li>Password must contain at least one uppercase letter.</li>`;
+      return false;
+   }
+   if (!/[0-9]/.test(enteredPassword)) {
+      errorMessage += `<li>Password must contain at least one number.</li>`;
+      return false;
+   }
+   if (!/[!@#$%^&*]/.test(enteredPassword)) {
+      errorMessage += `<li>Password must contain at least one special character (!@#$%^&*).</li>`;
+      return false;
+   }
+
    return true;
 }
 
 function validateConfirmPassword(enteredPassword, enteredConfirmPassword) {
    if (enteredPassword !== enteredConfirmPassword) {
+      errorMessage += `<li>Passwords are not matching.</li>`
       return false;
 
    }
    return true;
 }
 
-if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
-   console.log("All validations passed. Submitting form...")
-   let insertQuery = `INSERT INTO tblUser (username, pw)
-VALUES ('${username}', '${password}')`;
-   dbConfig.set('query', insertQuery);
-   try {
-      let insertResponse = await fetch(dbConnectorUrl, {
-         method: "POST",
-         body: dbConfig
-      });
-      let insertResult = await insertResponse.json();
-      if (insertResult.success) {
-         document.getElementById("registerMessage").textContent = "Registration successful!";
-         document.getElementById("registerForm").reset();
-      } else {
-         document.getElementById("registerMessage").textContent = "Error registering user.";
-      }
-   } catch (error) {
-      console.error("Error registering user:", error);
+
+function displayMessage() {
+   let header = '';
+   let headerColor = '';
+   let message = '';
+   if (success) {
+      header = 'Success';
+      headerColor = 'white';
+      message += '<p>Your profile has successfully been updated!</p>';
+      document.getElementById('messageContent').innerHTML = message;
    }
+   else {
+      header = 'Invalid';
+      headerColor = 'red';
+
+      errorMessage += '<ul>';
+
+      document.getElementById('messageContent').innerHTML = errorMessage;
+   }
+
+
+
+
+
 }
+
+const closeBtn = document.querySelector('.closeBtn');
+closeBtn.addEventListener('click', function () {
+   messageContainer.style.display = 'none';
+});
+
+

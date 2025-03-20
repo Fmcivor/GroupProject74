@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="CSS\registration.css">
+    <link rel="stylesheet" href="CSS/settings.css">
     <link rel="stylesheet" href="CSS\GeneralStyles.css">
     <link rel="stylesheet" href="https://use.typekit.net/jjc7mvf.css">
+    <link rel="stylesheet" href="registration.css">
 
 
 </head>
@@ -14,13 +15,18 @@
     <div class="titleBanner">Buried Secrets</div>
 
     
-    <div class="form-container">
+    <div class="formContainer">
         <div class="container">
-            <form class="registration-form">
-                
-            <form action="dbConnector.php" method="POST">
-                <h2>Sign Up</h2>
             
+            <form>
+                <div id="messageContainer">
+                    <h2 id="messageHeader" style="color: red;"></h2>
+                    <div id="messageContent">
+                        
+                    </div>
+                    <button type="button" class="closeBtn">Close</button>
+                </div>
+                <h2>Sign Up</h2>
                 <div class="inputContainer">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username">
@@ -38,15 +44,16 @@
                     <label for="confirmPassword">Confirm Password</label>
                     <input type="password" id="confirmPassword" name="confirmPassword">
                 </div>
-                <div id="registerMessage" class="errorMessage"></div>
                 <button type="button" id="registerBtn">Register</button>
+                <p>Already have an account? <a href="login.html">Log in here</a></p>
            
             </form>
             
-            </form>
+            
             
         </div>
     </div> 
+    <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT\registration.js"></script>
 </body>
 </html>
