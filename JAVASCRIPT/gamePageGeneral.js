@@ -34,6 +34,9 @@ let settingsOpen = false;
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 let userID = sessionStorage.getItem("userID");
 let displayName = sessionStorage.getItem("displayName");
+let inventory = JSON.parse(sessionStorage.getItem("inventory"));
+let clueList = JSON.parse(sessionStorage.getItem("clueList"));
+UpdateInventory();
 
 
 //EVENT LISTENERS
@@ -49,6 +52,13 @@ class Item {
         this.itemName = itemName;
         this.itemHREF = itemHREF;
         this.used = false;
+    }
+}
+
+class Clue{
+    constructor(clueID,clueText){
+        this.clueID = clueID;
+        this.clueText = clueText;
     }
 }
 

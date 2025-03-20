@@ -562,6 +562,7 @@ p {
     scrollbar-width: 100px;
     overflow-y: auto;
     overflow-x: hidden;
+    align-items: center;
     
 }
 

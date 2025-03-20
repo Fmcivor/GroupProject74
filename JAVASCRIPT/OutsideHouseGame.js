@@ -2,10 +2,11 @@
 
 
 //VARIABLES
-let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
+let hasKey = false;
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let hasClue1 = JSON.parse(sessionStorage.getItem("clue1"));
-let inventory = JSON.parse(sessionStorage.getItem("inventory"));
+
+hasKey = inventory.some(item =>item.itemID == keyID);
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
