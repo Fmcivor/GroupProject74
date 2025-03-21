@@ -21,8 +21,11 @@ const settingsButton = document.getElementById('settingsButton');
 const settingsContainer = document.querySelector('.settingsContainer');
 const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
 
+// item ids
 const keyID = 1;
 
+//clue ids
+const rubbishClueID = 1;
 
 //VARIABLES
 let currentState;
@@ -31,6 +34,7 @@ let typingInterval;
 let settingsOpen = false;
 
 
+let gameID = sessionStorage.getItem("gameID");
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 let userID = sessionStorage.getItem("userID");
 let displayName = sessionStorage.getItem("displayName");
@@ -61,6 +65,7 @@ class Clue{
         this.clueText = clueText;
     }
 }
+
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -170,6 +175,7 @@ function updateState() {
 
     }, 20);
 
+
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
     document.querySelector('.gameContainer').style.display = 'none';
@@ -252,11 +258,6 @@ function selectInventoryItem(event) {
 
 }
 
-function addClue(clueContent) {
-    let clue = document.createElement("li");
-    clue.textContent = clueContent;
-    document.getElementById('clueList').appendChild(clue);
-}
 
 async function awardAchievement(achievementID, userID) {
     let query = `INSERT INTO tblUserAchievements (achievementID, userID) VALUES (${achievementID}, ${userID});`;
@@ -274,5 +275,150 @@ async function awardAchievement(achievementID, userID) {
         console.log(error);
     }
 }
+
+async function addClue(clueID){
+    let selectQuery = `SELECT * FROM tblClue WHERE clueID = ${clueID}`;
+
+    dbConfig.set('query',selectQuery);
+
+    try {
+        let response  = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length >0) {
+            let clue = result.data[0];
+            let clueToAdd = new Clue(clue.clueID,clue.clueText);
+            clueList.push(clueToAdd);
+            sessionStorage.setItem('clueList',clueList);
+            hasClue1 = true;
+            
+            let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
+
+            dbConfig.set('query',insertQuery);
+
+            let insertResponse = await fetch(dbConnectorUrl,{
+                method:"POST",
+                body:dbConfig
+            });
+
+            let insertResult = await insertResponse.json();
+            if (insertResult.success) {
+                console.log("Clue successfully added and saved");
+            }
+            else{
+                console.error("An error has occurred while recording the clue in the database");
+            }
+        }
+        else{
+            console.error("An error has occurred while retrieving the clue form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while adding the clues to the notebook",error);
+    }
+
+}
+
+function updateClueNotebook(){
+    document.getElementById('clueList').innerHTML = '';
+    for (let i = 0; i < clueList.length; i++) {
+        let clueElement = document.createElement("li");
+    clueElement.textContent = clueList[i].clueText;
+    document.getElementById('clueList').appendChild(clueElement);
+        
+    }
+}
+
+
+async function addItem(itemID) {
+    let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
+
+        dbConfig.set('query', query);
+
+        try {
+            response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success && result.data.length > 0) {
+                let newItem = new Item();
+                Object.assign(newItem, result.data[0]);
+                newItem.itemUsed = false;
+                inventory.push(newItem);
+                sessionStorage.setItem("inventory",JSON.stringify(inventory));
+                hasKey = true;
+                UpdateInventory();
+
+                let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
+                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                dbConfig.set("query",saveItemQuery);
+
+                let saveItemResponse = await fetch(dbConnectorUrl,{
+                    method:"POST",
+                    body:dbConfig
+                });
+
+                let saveItemResult = await saveItemResponse.json();
+
+                if (saveItemResult.success) {
+                    console.log("Inventory Updated Successfully");
+                }
+                else{
+                    console.error("Error saving the item to the inventory");
+                }
+            }
+            else{
+                console.error("Error saving the item to the inventory");
+            }
+        } catch (error) {
+            console.log("Error adding the item to your inventory");
+            console.log(error);
+        }
+}
+
+
+
+
+async function saveGame(){
+    let electricityOn = sessionStorage.getItem("electricityOn");
+    let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
+    let gameID = sessionStorage.getItem("gameID");
+    let currentRoom = sessionStorage.getItem("currentRoom");
+    let currentStateID = currentState.ID;
+
+    let updateQuery = `UPDATE tblGameSave SET
+                        electricityOn = ${electricityOn},
+                        frontDoorUnlocked = ${frontDoorUnlocked},
+                        currentRoom = '${currentRoom}',
+                        currentState = ${currentStateID}
+                        WHERE gameID = ${gameID}`;
+
+    dbConfig.set("query",updateQuery);
+
+    try {
+        let updateResponse = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let updateResult = await updateResponse.json();
+
+        if (updateResult.success) {
+            console.log("game successfully saved");
+        }
+        else{
+            console.error("error saving the game")
+        }
+    } catch (error) {
+        onsole.error("error saving the game")
+    }
+    
+ }
 
 

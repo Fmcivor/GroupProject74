@@ -196,7 +196,7 @@ header{
 .inventoryGrid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 50% 50%;
     background-color: aliceblue;
     width: 90%;
     height: 40%;
@@ -207,12 +207,10 @@ header{
 
 .inventorySlot {
     border: 2px solid black;
-    height: 100%;
     width: 100%;
     background-color: rgb(228, 140, 68);
     
 }
-
 
 
 .selectedCollectibleContainer {
@@ -707,6 +705,19 @@ p {
     .displayNoteBook, .displayInventory {
         flex: 1;
         height: 55vh;
+    }
+
+    #inventoryContentWrapper{
+        justify-content: flex-start;
+        gap: 0;
+    }
+
+    .inventoryGrid{
+        height: 70%;
+    }
+
+    .toolBarSectionHeader{
+        margin-top: 0;
     }
 }
 
