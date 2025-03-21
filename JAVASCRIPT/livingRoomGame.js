@@ -39,7 +39,7 @@ inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
 let shelvesExamined = false;
-let gameID = 24;
+
 
 
 //GAME STATES

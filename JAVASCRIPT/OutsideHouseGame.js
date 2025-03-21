@@ -2,10 +2,12 @@
 
 
 //VARIABLES
-let hasKey = JSON.parse(sessionStorage.getItem("hasKey"));
+let hasKey = false;
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
-let hasClue1 = JSON.parse(sessionStorage.getItem("clue1"));
-let inventory = JSON.parse(sessionStorage.getItem("inventory"));
+let hasClue1 = false;
+
+hasKey = inventory.some(item =>item.itemID == keyID);
+hasClue1 = inventory.some(clue =>clue.clueID == rubbishClueID);
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -134,7 +136,7 @@ const sideOfHouse = {
 
 const generatorBuilding = {
     "ID":4,
-    "room": "Front of House",
+    "room": "Generator Building",
     "description": "There is an old generator with powerlines leading to the house. It appears to be broken.",
     "ImageHREF": "Images/Generator.jpg",
     "interactions": [
@@ -151,7 +153,19 @@ const generatorBuilding = {
     ]
 }
 
-
+const generatorFixed = {
+    "ID":4,
+    "room": "Generator Building",
+    "description": "There is an old generator with powerlines leading to the house. You have already fixed it and it now provides elecrtricity to the house.",
+    "ImageHREF": "Images/Generator.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Climb Out",
+            "response": goToSideOfHouse
+        }
+    ]
+}
 
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -160,51 +174,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     states.push(frontOfHouseDoorLocked,frontOfHouseDoorUnlocked,sideOfHouse,generatorBuilding);
     
     
-    // let inventorySelect = `SELECT tblGameInventory.itemID,tblItem.itemName, tblItem.itemHREF,itemUsed FROM tblGameInventory 
-    // JOIN tblItem ON tblGameInventory.itemID = tblItem.itemID
-    // WHERE gameID = ${sessionStorage.getItem('gameID')}`;
-
-    // dbConfig.set('query',inventorySelect);
-
-    // try {
-    //     let inventoryResponse = await fetch(dbConnectorUrl,{
-    //         method:"POST",
-    //         body:dbConfig
-    //     });
-
-    //     let inventoryResult = await inventoryResponse.json();
-
-    //     if (inventoryResult.success) {
-    //         if (inventoryResult.data.length>0) {
-    //             inventoryResult.data.forEach(item => {
-    //                 let inventoryItem = new Item(item.itemID,item.itemName,item.itemHREF,item.itemUsed);
-    //                 inventory.push(inventoryItem);
-    //                 if (item.itemID == keyID) {
-    //                     hasKey = true;
-    //                 }
-    //             });
-    //         }
-    //         else{
-    //             inventory = [];
-    //         }
-            
-            
-
-    //         UpdateInventory();
-    //     }
-    //     else{
-    //         console.error("error retrieving the inventory");
-    //     }
-    // } catch (error) {
-    //     console.error("Error retrieving the inventory items:", error);
-    // }
-
-
-
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
         if (state.ID == currentStateID) {
+            if (state.ID == 1 && doorUnlocked) {
+                currentState = frontOfHouseDoorUnlocked;
+                currentStateID = frontOfHouseDoorUnlocked.ID;
+            }
+            else{
             currentState = state;
+            }
             return;
         }
     });
@@ -227,63 +206,17 @@ function goToSideOfHouse() {
 
 async function checkUnderMat() {
     let button = document.getElementById(responseId);
-    let responseParagraph = document.getElementById('responseParagraph');
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
     if (hasKey) {
-        responseParagraph.textContent = "There is nothing under here the key has already been taken";
+        setResponse("There is nothing under here the key has already been taken");
     }
     else {
-        responseParagraph.textContent = "There is a large golden key here and you lift it";
-        hasKey = true;
+        setResponse("There is a large golden key here and you lift it");
+        addItem(keyID);
 
-        let query = `SELECT * FROM tblItem WHERE itemID = '${keyID}'`;
-
-        dbConfig.set('query', query);
-
-        try {
-            response = await fetch(dbConnectorUrl, {
-                method: "POST",
-                body: dbConfig
-            });
-
-            let result = await response.json();
-
-            if (result.success && result.data.length > 0) {
-                let key = new Item();
-                Object.assign(key, result.data[0]);
-                key.itemUsed = false;
-                inventory.push(key);
-                sessionStorage.setItem("inventory",JSON.stringify(inventory));
-
-                UpdateInventory();
-
-                let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
-                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
-                dbConfig.set("query",saveItemQuery);
-
-                let saveItemResponse = await fetch(dbConnectorUrl,{
-                    method:"POST",
-                    body:dbConfig
-                });
-
-                let saveItemResult = await saveItemResponse.json();
-
-                if (saveItemResult.success) {
-                    console.log("Inventory Updated Successfully");
-                }
-                else{
-                    console.error("Error saving the item to the inventory");
-                }
-            }
-            else{
-                console.error("Error saving the item to the inventory");
-            }
-        } catch (error) {
-            console.log("Error adding the item to your inventory");
-            console.log(error);
-        }
+        
 
     }
 }
@@ -309,8 +242,7 @@ function goTofrontOfHouse() {
 
 function searchRubbish(responseId) {
     let button = document.getElementById(responseId);
-    let responseParagraph = document.getElementById('responseParagraph');
-    responseParagraph.textContent = 'Click on the screen to try collect or find items in the rubbish';
+    setResponse('Click on the screen to try collect or find items in the rubbish');
 
     rubbishContainer.style.display = 'block';
     if (hasClue1) {
@@ -330,20 +262,21 @@ function searchRubbish(responseId) {
 
 function exploreGarden(responseId) {
     let button = document.getElementById(responseId);
-    let responseParagraph = document.getElementById('responseParagraph');
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
 
-    responseParagraph.textContent = "You have walked through the garden and have come accross a section of uneven ground";
+    setResponse("You have walked through the garden and have come accross a section of uneven ground");
 }
 
 
 function enterGeneratorBuilding() {
-    currentState = generatorBuilding;
     updateState();
     if (electricityOn) {
-        document.getElementById('1').remove();
+        currentState = generatorFixed;
+    }
+    else{
+    currentState = generatorBuilding;
     }
 
 }
@@ -496,14 +429,14 @@ repairButton.addEventListener('click', async function () {
 })
 
 
-clue1Btn.addEventListener('click', function () {
+clue1Btn.addEventListener('click', async function () {
     rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
     clue1Btn.style.visibility = 'collapse';
-    let clue = document.createElement("li");
-    clue.textContent = "A letter dated the 27/03/2024 by Jonathan Donaghy contains threats and accusations that his loss of money and the failure of the business is victor's fault";
-    document.getElementById('clueList').appendChild(clue);
-    document.getElementById('responseParagraph').textContent = 'You have found a letter check your notebook to see its content';
-    hasClue1 = true;
+    await addClue(rubbishClueID);
+    updateClueNotebook();
+    
+    setResponse('You have found a letter check your notebook to see its content');
+    
 
 
 })
@@ -520,16 +453,16 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
         if (currentState == frontOfHouseDoorLocked && selectedItemID == keyID) {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
-            document.getElementById('responseParagraph').textContent = 'You have unlocked the door now.';
-            sessionStorage.setItem('frontDoorUnlocked',true);
+            setResponse('You have unlocked the door now.');
+            sessionStorage.setItem('frontDoorUnlocked',JSON.stringify(true));
            
         }
         else {
-            document.getElementById('responseParagraph').textContent = "That didn't do anything, maybe try something else.";
+            setResponse("That didn't do anything, maybe try something else.");
         }
     }
     else{
-        document.getElementById('responseParagraph').textContent = "You must select an item before you can use it";
+        setResponse("You must select an item before you can use it");
     }
 
 })

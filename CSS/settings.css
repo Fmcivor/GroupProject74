@@ -228,7 +228,7 @@ li{
 }
 
 .functionButton{
-    width: 30%;
+    width: fit-content;
 }
 
 
