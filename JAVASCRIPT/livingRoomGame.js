@@ -38,7 +38,6 @@ async function getSessionStorage(){
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
-let shelvesExamined = false;
 let gameID = 24;
 
 
@@ -268,18 +267,14 @@ async function updateTimesOnSofa(){
             body: dbConfig
         });
 
-        let achSRC = 'Images/sofaAchievementIcon.jpg';
-        let achName = "Crime Doesn't Rest, But I Do";
-        let achDesc = 'Spend far too much time relaxing on the sofa in the living room';
-        displayAchievement(achSRC, achName, achDesc);
-
     } catch (error) {
         console.log("Error updating tblGameSave");
         console.log(error);
     }
     
     if(timesOnSofa === 5) {
-        awardAchievement(1, 1)
+        let achSRC = 'Images/sofaAchievementIcon.jpg';
+        awardAchievement(1, 1, achSRC)
     }
 }
 

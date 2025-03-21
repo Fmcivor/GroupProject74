@@ -31,10 +31,8 @@
 
                 </div>
                 <div class="divider" id="leftDivider"></div>
-                <div id="buttonContainer" class="buttonContainer">
-
+                    <div id="buttonContainer" class="buttonContainer">
                 </div>
-
             </div>
         </div>
 
@@ -102,21 +100,25 @@
 
             </div>
         </nav>
-
-
-    </main>
-    <div class="achievementContainer">
-        <div id="achievementBox">
-            <figure id="achFig">
-                <img id="achievementIcon" src="" alt="">
-            </figure>
-            <div id="achContentBox">
-                <h2 id="achName"></h2>
-                <p id="achDesc"></p>
+        <div class="achievementContainer">
+            <div id="achievementBox">
+                <div id="achievementTop">
+                    <h2 id="achName"></h2>
+                    <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+                </div>
+                <div id="achContentBox">
+                    <figure id="achFig">
+                        <img id="achievementIcon" src="" alt="">
+                    </figure>
+                    <div id="achTextWrapper">
+                        <p id="achDesc"></p>
+                    </div>
+                </div>
+                
             </div>
-            <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
         </div>
-    </div>
+    </main>
+    
 
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>

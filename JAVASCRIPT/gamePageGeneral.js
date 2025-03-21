@@ -48,7 +48,6 @@ class Item {
 
 //Show pop out toolbar functions
 function showInventory() {
-
     noteBookContainer.classList.remove('displayNoteBook');
     inventoryContainer.classList.add('displayInventory');
     if (selectedToolBarItem === null) {
@@ -92,6 +91,7 @@ function displayAchievement(iconSRC, achName, achDesc) {
     achievementDesc.innerHTML = achDesc;
 
     achievementContainer.classList.add('achExpanded')
+    setTimeout(hideAchievement, 6500)
 }
 function hideAchievement() {
     achievementContainer.classList.remove('achExpanded')
@@ -227,17 +227,41 @@ function addClue(clueContent) {
     document.getElementById('clueList').appendChild(clue);
 }
 
-async function awardAchievement(achievementID, userID){
-    let query = `INSERT INTO tblUserAchievements (achievementID, userID) VALUES (${achievementID}, ${userID});`;
+async function awardAchievement(achievementID, userID, achievementIconAddress){
+    let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
+        VALUES (${achievementID}, ${userID});`;
 
-    dbConfig.set('query', query);
+    dbConfig.set('query', insertQuery);
 
     try {
         response = await fetch(dbConnectorUrl, {
             method: "POST",
             body: dbConfig
-        });
+        });    
         
+        
+        let selectQuery = `SELECT name, description FROM tblAchievement
+        WHERE  achievementID = 1;`;
+    
+        dbConfig.set('query', selectQuery);
+        try {
+            response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success && result.data.length > 0) {
+                let achievement = result.data[0];
+                displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+            }
+            
+        } catch (error) {
+            console.log("Error retrieving achievement data");
+            console.log(error);
+        }
+
     } catch (error) {
         console.log("Error setting achievement");
         console.log(error);
