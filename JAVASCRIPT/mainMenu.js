@@ -17,8 +17,7 @@ btnSignOut.addEventListener("click", function(){
 
 //FOR TESTING
 
-let userID = 1;
-sessionStorage.setItem('userID',1);
+let userID = sessionStorage.getItem("userID");
 
 
 document.addEventListener("DOMContentLoaded", function () {
