@@ -38,7 +38,7 @@ async function getSessionStorage(){
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
-let gameID = 24;
+
 
 
 //GAME STATES

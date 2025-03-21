@@ -45,6 +45,17 @@ header{
     border-bottom: 1px solid white;
 }
 
+#settingsButton{
+    font-size: 2.5rem;
+    position: absolute;
+    left: 2vw;
+    
+}
+
+#settingsButton:hover{
+    color: rgb(25, 12, 121);
+}
+
 .wrapper {
     display: flex;
     height: 90vh;
@@ -185,7 +196,7 @@ header{
 .inventoryGrid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 50% 50%;
     background-color: aliceblue;
     width: 90%;
     height: 40%;
@@ -196,12 +207,10 @@ header{
 
 .inventorySlot {
     border: 2px solid black;
-    height: 100%;
     width: 100%;
     background-color: rgb(228, 140, 68);
     
 }
-
 
 
 .selectedCollectibleContainer {
@@ -303,8 +312,7 @@ li {
 
 /* Game interaction and options styling */
 
-.leftColumnContainer {
-
+.gameInteractionContainer {
     width: 100%;
     height: 100%;
     display: flex;
@@ -343,9 +351,9 @@ li {
     padding: 0.7vh;
     padding-left: 1.5vw;
     width:90%;
-    height: 5vh;
+    height: 6vh;
     align-items: center;
-    flex: 0.5;
+   
 }
 
 .promptWrapper{
@@ -536,11 +544,54 @@ p {
     display: none;
 }
 
+.settingsContainer{
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+
+    align-items: center;
+    background-color: rgb(11, 5, 56);
+    border: 2vw solid rgb(6, 3, 35);
+    gap: 3vh;
+}
+
+#settingsHeader{
+    display: flex;
+    text-align: center;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding: 0.7vh;
+    padding-left: 1.5vw;
+    width:90%;
+    height: 6vh;
+    align-items: center;
+    margin-top: 3vh;
+}
+
+.settingsContent{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(15, 7, 76);
+    border-radius: 10px;
+    padding-top: 0.7vh;
+    padding-bottom: 0.7vh;
+    width:90%;
+    height: 67vh;
+    padding: 1.5vh;
+    scrollbar-color: white rgb(25, 12, 121);
+    scrollbar-width: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-items: center;
+    
+}
+
 @media (max-width:650px) {
   
     body{
         height: 100vh;
-        background-color: rgb(11, 5, 56)
+        background-color: rgb(6, 3, 35);
     }
 
 
@@ -563,6 +614,7 @@ p {
     .wrapper {
         flex-direction: column-reverse;
         height: 83vh;
+        
     }
 
     .rightColumn {
@@ -676,6 +728,19 @@ p {
     .displayNoteBook, .displayInventory {
         flex: 1;
         height: 55vh;
+    }
+
+    #inventoryContentWrapper{
+        justify-content: flex-start;
+        gap: 0;
+    }
+
+    .inventoryGrid{
+        height: 70%;
+    }
+
+    .toolBarSectionHeader{
+        margin-top: 0;
     }
 }
 

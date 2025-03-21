@@ -17,24 +17,37 @@ const achievementContainer = document.querySelector('.achievementContainer');
 const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
 const achievementDesc = document.getElementById('achDesc');
+const settingsButton = document.getElementById('settingsButton');
+const settingsContainer = document.querySelector('.settingsContainer');
+const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
 
+// item ids
 const keyID = 1;
 
+//clue ids
+const rubbishClueID = 1;
 
 //VARIABLES
 let currentState;
 let selectedToolBarItem = null;
 let typingInterval;
+let settingsOpen = false;
 
+
+let gameID = sessionStorage.getItem("gameID");
 let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
 let userID = sessionStorage.getItem("userID");
 let displayName = sessionStorage.getItem("displayName");
+let inventory = JSON.parse(sessionStorage.getItem("inventory"));
+let clueList = JSON.parse(sessionStorage.getItem("clueList"));
+UpdateInventory();
 
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
+settingsButton.addEventListener('click', toggleSettings);
 
 //CLASSES
 class Item {
@@ -45,6 +58,14 @@ class Item {
         this.used = false;
     }
 }
+
+class Clue{
+    constructor(clueID,clueText){
+        this.clueID = clueID;
+        this.clueText = clueText;
+    }
+}
+
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -74,7 +95,7 @@ function hideToolBar() {
     selectedToolBarItem = null;
     hideToolBarButton.classList.remove('visible');
     toolbar.classList.remove('toolBarExpanded');
-    
+
 
     setTimeout(() => {
         noteBookContainer.classList.remove('displayNoteBook');
@@ -84,6 +105,21 @@ function hideToolBar() {
     }, 1000);
 
 }
+
+function toggleSettings() {
+    if (settingsOpen == false) {
+        settingsOpen = true;
+        gameInteractionContainer.style.display = 'none';
+        settingsContainer.style.display = 'flex';
+    }
+    else{
+        settingsOpen = false;
+        settingsContainer.style.display = 'none';
+        gameInteractionContainer.style.display = 'flex';
+    }
+
+}
+
 
 function displayAchievement(iconSRC, achName, achDesc) {
     achievementIcon.src = iconSRC;
@@ -128,7 +164,7 @@ function updateState() {
 
     //typing effect
     let typingIndex = 0;
-    let totalTypingTime = currentState.description.length*20;
+    let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += currentState.description[typingIndex];
@@ -139,6 +175,7 @@ function updateState() {
 
     }, 20);
 
+
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
     document.querySelector('.gameContainer').style.display = 'none';
@@ -146,7 +183,7 @@ function updateState() {
 
     //dynamic buttons
 
-    
+
     currentState.interactions.forEach(interaction => {
 
         let button = document.createElement('button');
@@ -154,7 +191,7 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
-        button.setAttribute('disabled',true);
+        button.setAttribute('disabled', true);
         buttonContainer.appendChild(button);
 
     });
@@ -186,7 +223,7 @@ function setResponse(responseText) {
 }
 
 function UpdateInventory() {
-    for (let i =  0; i < inventory.length; i++) {
+    for (let i = 0; i < inventory.length; i++) {
         const slot = document.getElementById(`slot${i + 1}`);
         slot.innerHTML = '';
         if (inventory[i] != null && inventory[i].itemUsed == false) {
@@ -208,24 +245,19 @@ function UpdateInventory() {
 
 }
 
-function selectInventoryItem(event){
+function selectInventoryItem(event) {
     const selectedItemBtn = event.currentTarget;
-    
+
     for (let i = 0; i < inventory.length; i++) {
-        document.getElementById(`item${i+1}`).style.border = 'none';
+        document.getElementById(`item${i + 1}`).style.border = 'none';
     }
 
     selectedItemID = selectedItemBtn.value;
     selectedItemBtn.style.border = '8px solid yellow';
-   
+
 
 }
 
-function addClue(clueContent) {
-    let clue = document.createElement("li");
-    clue.textContent = clueContent;
-    document.getElementById('clueList').appendChild(clue);
-}
 
 async function awardAchievement(achievementID, userID, achievementIconAddress){
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
@@ -267,5 +299,150 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
         console.log(error);
     }
 }
+
+async function addClue(clueID){
+    let selectQuery = `SELECT * FROM tblClue WHERE clueID = ${clueID}`;
+
+    dbConfig.set('query',selectQuery);
+
+    try {
+        let response  = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length >0) {
+            let clue = result.data[0];
+            let clueToAdd = new Clue(clue.clueID,clue.clueText);
+            clueList.push(clueToAdd);
+            sessionStorage.setItem('clueList',clueList);
+            hasClue1 = true;
+            
+            let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
+
+            dbConfig.set('query',insertQuery);
+
+            let insertResponse = await fetch(dbConnectorUrl,{
+                method:"POST",
+                body:dbConfig
+            });
+
+            let insertResult = await insertResponse.json();
+            if (insertResult.success) {
+                console.log("Clue successfully added and saved");
+            }
+            else{
+                console.error("An error has occurred while recording the clue in the database");
+            }
+        }
+        else{
+            console.error("An error has occurred while retrieving the clue form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while adding the clues to the notebook",error);
+    }
+
+}
+
+function updateClueNotebook(){
+    document.getElementById('clueList').innerHTML = '';
+    for (let i = 0; i < clueList.length; i++) {
+        let clueElement = document.createElement("li");
+    clueElement.textContent = clueList[i].clueText;
+    document.getElementById('clueList').appendChild(clueElement);
+        
+    }
+}
+
+
+async function addItem(itemID) {
+    let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
+
+        dbConfig.set('query', query);
+
+        try {
+            response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success && result.data.length > 0) {
+                let newItem = new Item();
+                Object.assign(newItem, result.data[0]);
+                newItem.itemUsed = false;
+                inventory.push(newItem);
+                sessionStorage.setItem("inventory",JSON.stringify(inventory));
+                hasKey = true;
+                UpdateInventory();
+
+                let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
+                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                dbConfig.set("query",saveItemQuery);
+
+                let saveItemResponse = await fetch(dbConnectorUrl,{
+                    method:"POST",
+                    body:dbConfig
+                });
+
+                let saveItemResult = await saveItemResponse.json();
+
+                if (saveItemResult.success) {
+                    console.log("Inventory Updated Successfully");
+                }
+                else{
+                    console.error("Error saving the item to the inventory");
+                }
+            }
+            else{
+                console.error("Error saving the item to the inventory");
+            }
+        } catch (error) {
+            console.log("Error adding the item to your inventory");
+            console.log(error);
+        }
+}
+
+
+
+
+async function saveGame(){
+    let electricityOn = sessionStorage.getItem("electricityOn");
+    let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
+    let gameID = sessionStorage.getItem("gameID");
+    let currentRoom = sessionStorage.getItem("currentRoom");
+    let currentStateID = currentState.ID;
+
+    let updateQuery = `UPDATE tblGameSave SET
+                        electricityOn = ${electricityOn},
+                        frontDoorUnlocked = ${frontDoorUnlocked},
+                        currentRoom = '${currentRoom}',
+                        currentState = ${currentStateID}
+                        WHERE gameID = ${gameID}`;
+
+    dbConfig.set("query",updateQuery);
+
+    try {
+        let updateResponse = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let updateResult = await updateResponse.json();
+
+        if (updateResult.success) {
+            console.log("game successfully saved");
+        }
+        else{
+            console.error("error saving the game")
+        }
+    } catch (error) {
+        onsole.error("error saving the game")
+    }
+    
+ }
 
 
