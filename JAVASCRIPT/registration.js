@@ -1,5 +1,4 @@
 
-//lead developer - Matthew
 
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);

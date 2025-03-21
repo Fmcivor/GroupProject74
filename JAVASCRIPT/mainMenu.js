@@ -20,6 +20,7 @@ btnSignOut.addEventListener("click", function(){
 let userID = sessionStorage.getItem("userID");
 
 
+
 document.addEventListener("DOMContentLoaded", function () {
     const btnSignOut = document.getElementById("btnSignOut");
     const signOutConfirm = document.getElementById("signOutConfirm");
@@ -94,7 +95,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             return;
         }
 
-        let selectQuery = `SELECT gameID, electricityOn,currentRoom, frontDoorUnlocked,currentState, noGeneratorRepairAttempts FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
+        let selectQuery = `SELECT * FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
         dbConfig.set('query',selectQuery);
 
         let selectResponse = await fetch(dbConnectorUrl,{
@@ -112,7 +113,9 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('currentRoom',gameSave.currentRoom);
             sessionStorage.setItem('currentState',gameSave.currentState);
             sessionStorage.setItem('inventory',JSON.stringify([]));
+            sessionStorage.setItem('clueList',JSON.stringify([]));
             sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
+            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             console.log("game save id retrieved:",gameSave.gameID);
             window.location.href = 'OutsideHouse.html';
         }
@@ -131,5 +134,6 @@ function closeModal() {
 }
 
 function signOut() {
-    window.location.href = "";
+    sessionStorage.clear();
+    window.location.href = "login.html";
 }

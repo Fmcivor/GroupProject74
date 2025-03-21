@@ -13,13 +13,14 @@
 
 <body>
     <header>
+        <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
         <h2 id="mobileHeader">Front Of The house</h1>
     </header>
     <main class="wrapper">
 
         <div class="leftColumn">
-            <div class="leftColumnContainer">
+            <div class="gameInteractionContainer" >
                 <div class="responseContainer">
                     <h2 id="roomHeader">Front Of The house</h2>
 
@@ -40,7 +41,16 @@
                 </div>
 
             </div>
+
+            <div class="settingsContainer">
+                <h2 id="settingsHeader" style="justify-content: center;">Settings</h2>
+                <div class="settingsContent">
+                    <button class="optionButton" style="font-size: 1.5rem;" >Exit and save</button>
+
+                </div>
+            </div>
         </div>
+
 
         <div class="rightColumn">
             <div class="gameContainer" id="GeneratorGameContainer">
@@ -75,9 +85,9 @@
         <nav class="toolBar">
             <div class="iconContainer">
 
-                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
-                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
-                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
+                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton" title="Close Toolbar"></i>
+                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton" title="Open Notebook"></i>
+                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton" title="Open Inventory"></i>
 
             </div>
             <div class="noteBook" id="noteBook">
@@ -130,6 +140,19 @@
             </div>
         </nav>
 
+        <div class="achievementContainer">
+            <div id="achievementBox">
+                <figure id="achFig">
+                    <img id="achievementIcon" src="" alt="">
+                </figure>
+                <div id="achContentBox">
+                    <h2 id="achName"></h2>
+                    <p id="achDesc"></p>
+                </div>
+                <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+            </div>
+        </div>
+        
 
     </main>
 
