@@ -228,7 +228,7 @@ function enterHouse() {
 
 
 function goTofrontOfHouse() {
-    if (doorUnlocked) {
+    if (doorUnlocked == true) {
         currentState = frontOfHouseDoorUnlocked;
     }
     else {
@@ -271,14 +271,14 @@ function exploreGarden(responseId) {
 
 
 function enterGeneratorBuilding() {
-    updateState();
+    
     if (electricityOn) {
         currentState = generatorFixed;
     }
     else{
     currentState = generatorBuilding;
     }
-
+    updateState();
 }
 
 
@@ -366,6 +366,7 @@ repairButton.addEventListener('click', async function () {
         if (count == 3) {
             clearInterval(generatorInterval);
             electricityOn = true;
+            sessionStorage.setItem("electricityOn",JSON.stringify(electricityOn));
             generatorAudio.currentTime = 0;
             generatorAudio.play();
             electricityOn = true;
@@ -454,7 +455,8 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
             setResponse('You have unlocked the door now.');
-            sessionStorage.setItem('frontDoorUnlocked',JSON.stringify(true));
+            doorUnlocked = true;
+            sessionStorage.setItem('frontDoorUnlocked',JSON.stringify(doorUnlocked));
            
         }
         else {

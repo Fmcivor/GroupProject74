@@ -1,23 +1,10 @@
+let userID = sessionStorage.getItem("userID");
+
+
+
 function openModal() {
     document.getElementById("signOutModal").style.display = "flex";
 }
-/*
-const confirmNo = document.getElementById("confirmNo");
-const signOutConfirm = document.getElementById("signOutConfirm");
-const btnSignOut = document.getElementById("btnSignOut");
-
-confirmNo.addEventListener("click",function(){
-    signOutConfirm.style.visibility = "hidden";
-});
-
-btnSignOut.addEventListener("click", function(){
-    signOutConfirm.style.visibility = "visible";
-});
-*/
-
-//FOR TESTING
-
-let userID = sessionStorage.getItem("userID");
 
 
 
@@ -47,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function checkTotalActiveGames(){
+
     let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND complete = 0`;
 
     dbConfig.set('query',query);
@@ -78,7 +66,6 @@ async function checkTotalActiveGames(){
 
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
-
     let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"OutsideHouse.html",1)`;
     dbConfig.set('query',insertQuery);
 
