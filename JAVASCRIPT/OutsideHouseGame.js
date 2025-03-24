@@ -6,8 +6,11 @@ let hasKey = false;
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let hasClue1 = false;
 
-hasKey = inventory.some(item =>item.itemID == keyID);
-hasClue1 = inventory.some(clue =>clue.clueID == rubbishClueID);
+let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
+
+hasKey = inventory.some(item => item.itemID == keyID);
+hasClue1 = inventory.some(clue => clue.clueID == rubbishClueID);
+
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -54,7 +57,7 @@ startRepairButton.addEventListener('click', startRepair);
 //GAME STATES
 
 const frontOfHouseDoorLocked = {
-    "ID":1,
+    "ID": 1,
     "room": "Front of House",
     "description": `${displayName}, you stand infront of a large house with a locked door infront of you and a path leading to your left`,
     "ImageHREF": "Images/outsideHouse.jpg",
@@ -78,7 +81,7 @@ const frontOfHouseDoorLocked = {
 }
 
 const frontOfHouseDoorUnlocked = {
-    "ID":2,
+    "ID": 2,
     "room": "Front of House",
     "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
     "ImageHREF": "Images/outsideHouse.jpg",
@@ -96,14 +99,14 @@ const frontOfHouseDoorUnlocked = {
         {
             "id": 2,
             "Text": "Enter house",
-            "response": enterHouse
+            "response": goToDownStairsHall
         }
 
     ]
 }
 
 const sideOfHouse = {
-    "ID":3,
+    "ID": 3,
     "room": "Side of House",
     "description": `You now stand in an overgrown garden with a faint streetlight illuminating it. 
                     There is  a small building beside you with a locked door, 
@@ -135,7 +138,7 @@ const sideOfHouse = {
 }
 
 const generatorBuilding = {
-    "ID":4,
+    "ID": 4,
     "room": "Generator Building",
     "description": "There is an old generator with powerlines leading to the house. It appears to be broken.",
     "ImageHREF": "Images/Generator.jpg",
@@ -154,7 +157,7 @@ const generatorBuilding = {
 }
 
 const generatorFixed = {
-    "ID":4,
+    "ID": 5
     "room": "Generator Building",
     "description": "There is an old generator with powerlines leading to the house. You have already fixed it and it now provides elecrtricity to the house.",
     "ImageHREF": "Images/Generator.jpg",
@@ -168,12 +171,59 @@ const generatorFixed = {
 }
 
 
+const downStairsHall ={
+    "ID": 6,
+    "room": "Down Stairs Hall",
+    "description": `You have managed to gain access to the house now and finally you can do some proper investigating. Wait...${displayName}
+    it's too dark to see anything. This is going to be difficult to find anything if we can't even see, except the faint outline of the room.`,
+    "ImageHREF": "Images/Generator.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Exit the house",
+            "response": goTofrontOfHouse
+        },
+        {
+            "id": 1,
+            "Text": "Trace the walls of the room",
+            "response": traceHall
+        },
+        {
+            "id":2,
+            "Text": "explore the room blindly",
+            "response": exploreHall
+        }
+    ]
+}
+
+const hallWall = {
+    "ID": 7,
+    "room": "Down Stairs Hall",
+    "description": `You felt your hand just brush over something on the wall, you slowly trace your hands back and you feel it again.
+    After a closer look you recognise it to be a switch. `,
+    "ImageHREF": "Images/Generator.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Trace the wall to the door",
+            "response": goToDownStairsHall
+        },
+        {
+            "id": 1,
+            "Text": "Try the switch",
+            "response": trySwitch
+        }
+    ]
+}
+
+
+
 document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
-    states.push(frontOfHouseDoorLocked,frontOfHouseDoorUnlocked,sideOfHouse,generatorBuilding);
-    
-    
+
+    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding);
+  
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
         if (state.ID == currentStateID) {
@@ -181,13 +231,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 currentState = frontOfHouseDoorUnlocked;
                 currentStateID = frontOfHouseDoorUnlocked.ID;
             }
-            else{
-            currentState = state;
+            else {
+                currentState = state;
+
             }
             return;
         }
     });
-    
+
     updateState();
 
 
@@ -199,6 +250,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 function goToSideOfHouse() {
     currentState = sideOfHouse;
     updateState();
+    clearInterval(generatorInterval);
 
     generatorAudio.pause();
 }
@@ -216,19 +268,49 @@ async function checkUnderMat() {
         setResponse("There is a large golden key here and you lift it");
         addItem(keyID);
 
-        
-
     }
 }
 
-function enterHouse() {
-    sessionStorage.setItem("inventory",JSON.stringify(inventory));
-    window.location.href = "livingRoom.html";
+function goToDownStairsHall() {
+    
+    if (lightingOn == false) {
+        currentState = downStairsHall;
+        updateState();
+    }
 }
 
 
+
+function traceHall(){
+    currentState = hallWall;
+    updateState();
+}
+
+
+function trySwitch(){
+    if (electricityOn) {
+        lightingOn = true;
+        sessionStorage.setItem("lightingOn",JSON.stringify(lightingOn));
+        sessionStorage.setItem("currentState",1);
+        window.location.href = "livingRoom.html";
+    }
+    else{
+        setResponse("Well that didn't do anything, maybe and electrician would've got further than you.");
+    }
+}
+
+function exploreHall(){
+    setResponse(`${displayName.toUpperCase()}, you need to be more careful you can't just go around wandering aimlessly
+            in the dark knocking things over.`);
+    //if not kncokced over do above
+    //if knocked over it breaks and the police know you were invetigating
+    // don't let them explore hall again
+}
+
+
+
 function goTofrontOfHouse() {
-    if (doorUnlocked) {
+    if (doorUnlocked == true) {
         currentState = frontOfHouseDoorUnlocked;
     }
     else {
@@ -271,14 +353,15 @@ function exploreGarden(responseId) {
 
 
 function enterGeneratorBuilding() {
-    updateState();
+
+
     if (electricityOn) {
         currentState = generatorFixed;
     }
-    else{
-    currentState = generatorBuilding;
+    else {
+        currentState = generatorBuilding;
     }
-
+    updateState();
 }
 
 
@@ -287,6 +370,7 @@ function enterGeneratorBuilding() {
 function FixGenerator() {
     clearInterval(generatorInterval);
     line.style.transform = 'rotate(0deg)';
+    document.getElementById('hammerIcon').style.transform = 'rotate(0deg)';
     angle = 1;
     generatorProgressBar.style.width = '0';
     redZoneStart = Math.floor(Math.random() * 359);
@@ -294,6 +378,7 @@ function FixGenerator() {
     count = 0;
     startRepairButton.style.display = 'block';
     repairButton.style.display = 'none';
+    setResponse("You must click on the repair button when the line is in the red zone 3 times. You have 2 miss hits before you have to try again");
 
     document.getElementById('GeneratorGameContainer').style.display = 'flex';
 
@@ -325,23 +410,20 @@ function FixGenerator() {
 }
 
 function startRepair() {
-    noGeneratorRepairAttempts ++;
+    noGeneratorRepairAttempts++;
     startRepairButton.style.display = 'none';
     repairButton.style.display = 'block';
     const hammer = document.getElementById('hammerIcon');
 
     generatorInterval = setInterval(() => {
         line.style.transform = `rotate(${angle}deg)`;
-        hammer.style.transform =`rotate(${angle}deg)`;
+        hammer.style.transform = `rotate(${angle}deg)`;
         angle++;
         if (angle > 360) {
             angle = 1;
         }
     }, 7);
 }
-
-
-
 
 
 repairButton.addEventListener('click', async function () {
@@ -366,12 +448,18 @@ repairButton.addEventListener('click', async function () {
         if (count == 3) {
             clearInterval(generatorInterval);
             electricityOn = true;
+            sessionStorage.setItem("electricityOn", JSON.stringify(electricityOn));
             generatorAudio.currentTime = 0;
             generatorAudio.play();
             electricityOn = true;
+            document.getElementById('GeneratorGameContainer').style.display = 'none';
+            currentState = generatorFixed;
+            updateState();
+            setResponse("You have successfully repaired the generator.");
 
-            if (remainingRepairMisses ==2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false ) {
-                awardAchievement(2,userID,".jpg");
+            if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false) {
+                awardAchievement(2, userID, ".jpg");
+                
             }
 
         }
@@ -416,11 +504,10 @@ repairButton.addEventListener('click', async function () {
     else {
         remainingRepairMisses--;
         if (remainingRepairMisses === 0) {
-            alert("you have used up all your attempts");
+            remainingRepairMisses = 2;
             clearInterval(generatorInterval);
-
             FixGenerator();
-
+            setResponse("You missed the zone too many times. Try again.");
 
         }
     }
@@ -434,9 +521,9 @@ clue1Btn.addEventListener('click', async function () {
     clue1Btn.style.visibility = 'collapse';
     await addClue(rubbishClueID);
     updateClueNotebook();
-    
+
+
     setResponse('You have found a letter check your notebook to see its content');
-    
 
 
 })
@@ -454,14 +541,16 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
             setResponse('You have unlocked the door now.');
-            sessionStorage.setItem('frontDoorUnlocked',JSON.stringify(true));
-           
+
+            doorUnlocked = true;
+            sessionStorage.setItem('frontDoorUnlocked', JSON.stringify(doorUnlocked));
         }
         else {
             setResponse("That didn't do anything, maybe try something else.");
         }
     }
-    else{
+    else {
+
         setResponse("You must select an item before you can use it");
     }
 
