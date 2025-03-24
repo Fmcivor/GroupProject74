@@ -1,9 +1,12 @@
+let userID = sessionStorage.getItem("userID");
+
+
+
 function openModal() {
     document.getElementById("signOutModal").style.display = "flex";
 }
 
-let userID = 1;
-sessionStorage.setItem('userID',1);
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -32,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function checkTotalActiveGames(){
+
     let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND complete = 0`;
 
     dbConfig.set('query',query);
@@ -63,7 +67,6 @@ async function checkTotalActiveGames(){
 
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
-
     let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"OutsideHouse.html",1)`;
     dbConfig.set('query',insertQuery);
 
@@ -80,7 +83,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             return;
         }
 
-        let selectQuery = `SELECT gameID, electricityOn,currentRoom, frontDoorUnlocked,currentState, noGeneratorRepairAttempts FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
+        let selectQuery = `SELECT * FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
         dbConfig.set('query',selectQuery);
 
         let selectResponse = await fetch(dbConnectorUrl,{
@@ -98,7 +101,9 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('currentRoom',gameSave.currentRoom);
             sessionStorage.setItem('currentState',gameSave.currentState);
             sessionStorage.setItem('inventory',JSON.stringify([]));
+            sessionStorage.setItem('clueList',JSON.stringify([]));
             sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
+            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             console.log("game save id retrieved:",gameSave.gameID);
             window.location.href = 'OutsideHouse.html';
         }
@@ -117,5 +122,6 @@ function closeModal() {
 }
 
 function signOut() {
-    window.location.href = "../login.html";
+    sessionStorage.clear();
+    window.location.href = "login.html";
 }
