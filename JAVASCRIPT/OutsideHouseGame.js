@@ -5,10 +5,12 @@
 let hasKey = false;
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let hasClue1 = false;
+
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
 hasKey = inventory.some(item => item.itemID == keyID);
 hasClue1 = inventory.some(clue => clue.clueID == rubbishClueID);
+
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -155,7 +157,7 @@ const generatorBuilding = {
 }
 
 const generatorFixed = {
-    "ID": 5,
+    "ID": 5
     "room": "Generator Building",
     "description": "There is an old generator with powerlines leading to the house. You have already fixed it and it now provides elecrtricity to the house.",
     "ImageHREF": "Images/Generator.jpg",
@@ -167,6 +169,7 @@ const generatorFixed = {
         }
     ]
 }
+
 
 const downStairsHall ={
     "ID": 6,
@@ -214,12 +217,13 @@ const hallWall = {
 }
 
 
+
 document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
+
     states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding);
-
-
+  
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
         if (state.ID == currentStateID) {
@@ -229,6 +233,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             else {
                 currentState = state;
+
             }
             return;
         }
@@ -263,8 +268,6 @@ async function checkUnderMat() {
         setResponse("There is a large golden key here and you lift it");
         addItem(keyID);
 
-
-
     }
 }
 
@@ -282,6 +285,7 @@ function traceHall(){
     currentState = hallWall;
     updateState();
 }
+
 
 function trySwitch(){
     if (electricityOn) {
@@ -349,6 +353,7 @@ function exploreGarden(responseId) {
 
 
 function enterGeneratorBuilding() {
+
 
     if (electricityOn) {
         currentState = generatorFixed;
@@ -517,8 +522,8 @@ clue1Btn.addEventListener('click', async function () {
     await addClue(rubbishClueID);
     updateClueNotebook();
 
-    setResponse('You have found a letter check your notebook to see its content');
 
+    setResponse('You have found a letter check your notebook to see its content');
 
 
 })
@@ -536,15 +541,16 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
             setResponse('You have unlocked the door now.');
+
             doorUnlocked = true;
             sessionStorage.setItem('frontDoorUnlocked', JSON.stringify(doorUnlocked));
-
         }
         else {
             setResponse("That didn't do anything, maybe try something else.");
         }
     }
     else {
+
         setResponse("You must select an item before you can use it");
     }
 

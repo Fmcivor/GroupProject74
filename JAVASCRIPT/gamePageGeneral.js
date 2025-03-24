@@ -22,6 +22,7 @@ const settingsContainer = document.querySelector('.settingsContainer');
 const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
 const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
 
+
 // item ids
 const keyID = 1;
 
@@ -300,6 +301,7 @@ async function addClue(clueID){
             let clueToAdd = new Clue(clue.clueID,clue.clueText);
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList',JSON.stringify(clueList));
+
             hasClue1 = true;
             
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;

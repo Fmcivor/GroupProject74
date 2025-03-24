@@ -8,6 +8,7 @@ function openModal() {
 
 
 
+
 document.addEventListener("DOMContentLoaded", function () {
     const btnSignOut = document.getElementById("btnSignOut");
     const signOutConfirm = document.getElementById("signOutConfirm");
