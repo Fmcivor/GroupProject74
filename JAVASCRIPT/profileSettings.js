@@ -1,15 +1,13 @@
 //LEAD DEVELOPER - FINTAN 
 //Form styling and show button - MATTHEW
 
-sessionStorage.setItem("username", JSON.stringify("testUser"));
-sessionStorage.setItem("displayName", JSON.stringify("tester"));
-sessionStorage.setItem("userID", JSON.stringify(1));
+
 
 //^ DEVELOPMENT PURPOSES
 
-let userID = JSON.parse(sessionStorage.getItem("userID"));
-let username = JSON.parse(sessionStorage.getItem("username"));
-let displayName = JSON.parse(sessionStorage.getItem("displayName"));
+let userID = sessionStorage.getItem("userID");
+let username = sessionStorage.getItem("username");
+let displayName = sessionStorage.getItem("displayName");
 
 let errorMessage = '<ul>';
 
