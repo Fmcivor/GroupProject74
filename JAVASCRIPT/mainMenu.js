@@ -1,21 +1,6 @@
 function openModal() {
     document.getElementById("signOutModal").style.display = "flex";
 }
-/*
-const confirmNo = document.getElementById("confirmNo");
-const signOutConfirm = document.getElementById("signOutConfirm");
-const btnSignOut = document.getElementById("btnSignOut");
-
-confirmNo.addEventListener("click",function(){
-    signOutConfirm.style.visibility = "hidden";
-});
-
-btnSignOut.addEventListener("click", function(){
-    signOutConfirm.style.visibility = "visible";
-});
-*/
-
-//FOR TESTING
 
 let userID = 1;
 sessionStorage.setItem('userID',1);
@@ -24,15 +9,15 @@ sessionStorage.setItem('userID',1);
 document.addEventListener("DOMContentLoaded", function () {
     const btnSignOut = document.getElementById("btnSignOut");
     const signOutConfirm = document.getElementById("signOutConfirm");
-    const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
+    const cancelSignOut = document.getElementById("confirmNo");
 
     if (btnSignOut && signOutConfirm && cancelSignOut) {
         btnSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "flex"; // Show the confirmation (not block)
+            signOutConfirm.style.display = "flex";
         });
 
         cancelSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "none"; // Hide when cancel is clicked
+            signOutConfirm.style.display = "none";
         });
     } else {
         console.error("One or more elements are missing in the DOM.");
@@ -132,5 +117,5 @@ function closeModal() {
 }
 
 function signOut() {
-    window.location.href = "";
+    window.location.href = "../login.html";
 }
