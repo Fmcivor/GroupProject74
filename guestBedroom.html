@@ -4,26 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout</title>
+    <title>Guest Bedroom</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
-    <link rel="stylesheet" href="CSS/outsideHouse.css">
+    <link rel="stylesheet" href="CSS/outsideHouse.css"> 
+    <link rel="stylesheet" href="CSS/guestBedroom.css">
 </head>
 
 <body>
     <header>
+        <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
-        <h2 id="mobileHeader">Guest Bedroom</h1>
+        <h2 id="mobileHeader">Guest Bedroom</h2>
     </header>
-    <main class="wrapper">
 
+    <main class="wrapper">
         <div class="leftColumn">
-            <div class="leftColumnContainer">
+            <div class="gameInteractionContainer">
                 <div class="responseContainer">
                     <h2 id="roomHeader">Guest Bedroom</h2>
 
                     <div class="promptWrapper">
-                        <p id="descriptionParagraph"></p>
+                        <p id="descriptionParagraph">The guest bedroom is dimly lit, with an unmade bed and an
+                            unsettling atmosphere. You sense something was left behind.</p>
                         <div class="divider" id="promptDivider"></div>
                         <p id="responseParagraph"></p>
                     </div>
@@ -31,55 +34,46 @@
                 </div>
                 <div class="divider" id="leftDivider"></div>
                 <div id="buttonContainer" class="buttonContainer">
-
+                    
                 </div>
+            </div>
 
+            <div class="settingsContainer">
+                <h2 id="settingsHeader">Settings</h2>
+                <div class="settingsContent">
+                    <button class="optionButton">Exit and save</button>
+                </div>
             </div>
         </div>
 
         <div class="rightColumn">
-            <div class="gameContainer">
-               
-            </div>
-
-           
-        </div>
-        <nav class="toolBar">
+            <div class="gameContainer"></div>
+            <img src="">
+            <nav class="toolBar">
             <div class="iconContainer">
-
                 <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
                 <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
                 <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
-
             </div>
+
             <div class="noteBook" id="noteBook">
                 <div id="noteBookContentWrapper">
-
-
                     <h2 class="toolBarSectionHeader">Notebook</h2>
                     <section class="notebookSection" id="suspectSection">
                         <h3 class="notebookSectionHeader">Suspects</h3>
                         <ul class="notebookList">
-                            <li>Jonathan Donaghy - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
-                                hasdbjahdb hasbdjahb asdhabdjha</li>
-                            <li>Margaret - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
-                                hasdbjahdb
-                                hasbdjahb asdhabdjha</li>
-                            <li>Victor - A failed business partner of Charles ahsahs abshdajs ashdbjabdj hasdbjahdb
-                                hasbdjahb asdhabdjha</li>
+                            <li>Margaret - Charles' wife, last seen in the house before his death.</li>
                         </ul>
                     </section>
-
 
                     <section class="notebookSection">
                         <h3 class="notebookSectionHeader">Clues</h3>
                         <ul class="notebookList" id="clueList">
-
                         </ul>
                     </section>
                 </div>
-
             </div>
+
             <div class="inventory" id="inventory">
                 <div id="inventoryContentWrapper">
                     <h2 class="toolBarSectionHeader">Inventory</h2>
@@ -94,16 +88,11 @@
                     <div class="useItemBtnContainer">
                         <button id="useItemBtn">Use Item</button>
                     </div>
-
                 </div>
-
-
-
             </div>
-        </nav>
-
-
+            </nav>
     </main>
+
     <div class="achievementContainer">
         <div id="achievementBox">
             <figure id="achFig">
@@ -119,9 +108,7 @@
 
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
-
-
-
+    <script src="JAVASCRIPT/guestBedroom.js"></script>
 
 </body>
 
