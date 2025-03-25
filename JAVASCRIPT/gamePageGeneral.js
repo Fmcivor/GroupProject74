@@ -56,9 +56,6 @@ exitAndSaveBtn.addEventListener('click',async function(){
     window.location.href = "mainMenu.html";
 })
 
-
-
-
 //Show pop out toolbar functions
 function showInventory() {
 
