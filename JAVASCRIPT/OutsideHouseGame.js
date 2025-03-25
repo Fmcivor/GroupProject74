@@ -15,15 +15,7 @@ hasClue1 = inventory.some(clue => clue.clueID == rubbishClueID);
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
 
-
-
-
-
 let generatorAudio = new Audio("Audio/GeneratorStart.mp3");
-
-
-
-
 
 
 //Minigame variables 
@@ -157,7 +149,7 @@ const generatorBuilding = {
 }
 
 const generatorFixed = {
-    "ID": 5
+    "ID": 5,
     "room": "Generator Building",
     "description": "There is an old generator with powerlines leading to the house. You have already fixed it and it now provides elecrtricity to the house.",
     "ImageHREF": "Images/Generator.jpg",
@@ -222,7 +214,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
 
-    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding);
+    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding,downStairsHall,hallWall);
+
   
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
@@ -240,7 +233,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     updateState();
-
 
 })
 
@@ -521,14 +513,10 @@ clue1Btn.addEventListener('click', async function () {
     clue1Btn.style.visibility = 'collapse';
     await addClue(rubbishClueID);
     updateClueNotebook();
-
-
     setResponse('You have found a letter check your notebook to see its content');
 
 
 })
-
-
 
 
 
