@@ -157,7 +157,7 @@ const generatorBuilding = {
 }
 
 const generatorFixed = {
-    "ID": 5
+    "ID": 5,
     "room": "Generator Building",
     "description": "There is an old generator with powerlines leading to the house. You have already fixed it and it now provides elecrtricity to the house.",
     "ImageHREF": "Images/Generator.jpg",
