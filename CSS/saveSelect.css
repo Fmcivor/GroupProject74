@@ -94,7 +94,8 @@ h1{
     transition: 0.3s;
 }
 
-.saveSlot a{
+.saveSlot button{
+    background-color: transparent;
     text-decoration: none;
     font-size: clamp(2rem, 5vw, 3rem);
     color: white;

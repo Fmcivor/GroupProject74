@@ -43,6 +43,7 @@ let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 UpdateInventory();
+updateClueNotebook();
 
 
 //EVENT LISTENERS
@@ -56,22 +57,6 @@ exitAndSaveBtn.addEventListener('click',async function(){
 })
 
 
-//CLASSES
-class Item {
-    constructor(itemID, itemName, itemHREF) {
-        this.itemID = itemID;
-        this.itemName = itemName;
-        this.itemHREF = itemHREF;
-        this.used = false;
-    }
-}
-
-class Clue{
-    constructor(clueID,clueText){
-        this.clueID = clueID;
-        this.clueText = clueText;
-    }
-}
 
 
 //Show pop out toolbar functions
