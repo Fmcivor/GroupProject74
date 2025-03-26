@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
     checkTotalActiveGames();
+    getUserAchievements();
 
     // font size
     document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
@@ -196,4 +197,29 @@ async function displayGameSaves(){
         
     }
 
+}
+
+async function getUserAchievements(){
+    let query = `SELECT achievementID FROM tblUserAchievements WHERE userID = ${userID}`;
+    dbConfig.set("query",query);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+    
+        let result = await response.json();
+    
+        if (result.success) {
+            let achievementIDs = result.data;
+            sessionStorage.setItem("achievementIDs",JSON.stringify(achievementIDs));
+        }
+        else{
+            console.error("Error occurred while fetching the user achievements");
+        }
+    } catch (error) {
+        console.error("Error occurred while fetching the user achievements",error);
+    }
+    
 }

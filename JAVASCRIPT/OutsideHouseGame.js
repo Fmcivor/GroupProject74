@@ -10,7 +10,7 @@ let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
 hasKey = inventory.some(item => item.itemID == keyID);
 hasClue1 = inventory.some(clue => clue.clueID == rubbishClueID);
-
+hasGeneratorAchievement = userAchievementIDs.some(achievement =>achievement.achievementID == 2);
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -474,10 +474,11 @@ repairButton.addEventListener('click', async function () {
             currentState = generatorFixed;
             updateState();
             setResponse("You have successfully repaired the generator.");
+            
 
-            if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false) {
-                awardAchievement(2, userID, "generatorAchievement.jpg");
-                displayA
+            if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
+                awardAchievement(2, userID, "Images/generatorAchievement.jpg");
+                hasGeneratorAchievement = true;
             }
 
         }
