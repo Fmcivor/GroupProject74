@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentState = enteredLivingRoom;
     updateState();
     getSessionStorage();
+
 })
 
 async function getSessionStorage(){
@@ -31,7 +32,7 @@ async function getSessionStorage(){
 }
 
 //CONSTANTS
-
+const button = document.getElementById('burntLetter');
 
 
 //VARIABLES
@@ -242,7 +243,28 @@ function getOffSofa() {
 }
 
 function examineFireplace() {
+    button.classList.remove('hide')
+    setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it")
 
+    rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
+
+    
+
+    // rubbishContainer.style.display = 'block';
+    // if (hasClue1) {
+    //     clue1Btn.style.display = 'none';
+    //     rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
+    // }
+    // else {
+    //     clue1Btn.style.display = 'block';
+    //     rightColumn.style.backgroundImage = 'url("Images/rubbish.jpg")';
+    // }
+    // button.style.color = 'rgb(153, 153, 153)';
+    // button.querySelector('i').style.color = 'rgb(153, 153, 153)';
+}
+
+function letterClicked() {
+    button.classList.add('hide')
 }
 
 function lookAtShelves() {

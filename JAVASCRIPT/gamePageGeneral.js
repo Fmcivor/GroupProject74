@@ -20,9 +20,8 @@ const achievementDesc = document.getElementById('achDesc');
 const settingsButton = document.getElementById('settingsButton');
 const settingsContainer = document.querySelector('.settingsContainer');
 const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
+const rightColumn = document.querySelector(".rightColumn");
 const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
-
-
 // item ids
 const keyID = 1;
 
@@ -43,7 +42,6 @@ let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 UpdateInventory();
-updateClueNotebook();
 
 
 //EVENT LISTENERS
@@ -51,10 +49,10 @@ inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 settingsButton.addEventListener('click', toggleSettings);
-exitAndSaveBtn.addEventListener('click',async function(){
-    await saveGame();
-    window.location.href = "mainMenu.html";
-})
+
+//CLASSES
+
+
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -306,8 +304,7 @@ async function addClue(clueID){
             let clue = result.data[0];
             let clueToAdd = new Clue(clue.clueID,clue.clueText);
             clueList.push(clueToAdd);
-            sessionStorage.setItem('clueList',JSON.stringify(clueList));
-
+            sessionStorage.setItem('clueList',clueList);
             hasClue1 = true;
             
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
@@ -405,17 +402,12 @@ async function saveGame(){
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
-    let noGeneratorRepairAttempts = sessionStorage.getItem('noGeneratorRepairAttempts');
-    let timesOnSofa = sessionStorage.getItem('timesOnSofa');
-
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-                        currentState = ${currentStateID},
-                        noGeneratorRepairAttempts=${noGeneratorRepairAttempts},
-                        timesOnSofa = ${timesOnSofa}
+                        currentState = ${currentStateID}
                         WHERE gameID = ${gameID}`;
 
     dbConfig.set("query",updateQuery);
