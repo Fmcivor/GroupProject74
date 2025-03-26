@@ -168,7 +168,7 @@ const downStairsHall ={
     "room": "Down Stairs Hall",
     "description": `You have managed to gain access to the house now and finally you can do some proper investigating. Wait...${displayName}
     it's too dark to see anything. This is going to be difficult to find anything if we can't even see, except the faint outline of the room.`,
-    "ImageHREF": "Images/Generator.jpg",
+    "ImageHREF": "Images/lightsOffHall.jpg",
     "interactions": [
         {
             "id": 0,
@@ -193,7 +193,7 @@ const hallWall = {
     "room": "Down Stairs Hall",
     "description": `You felt your hand just brush over something on the wall, you slowly trace your hands back and you feel it again.
     After a closer look you recognise it to be a switch. `,
-    "ImageHREF": "Images/Generator.jpg",
+    "ImageHREF": "Images/lightsOffHall.jpg",
     "interactions": [
         {
             "id": 0,
@@ -204,6 +204,30 @@ const hallWall = {
             "id": 1,
             "Text": "Try the switch",
             "response": trySwitch
+        }
+    ]
+}
+
+const downStairsHallLightsOn ={
+    "ID": 8,
+    "room": "Down Stairs Hall",
+    "description": `There is lights`,
+    "ImageHREF": "Images/lightsOnHall.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Exit the house",
+            "response": goTofrontOfHouse
+        },
+        {
+            "id": 1,
+            "Text": "Trace the walls of the room",
+            "response": traceHall
+        },
+        {
+            "id":2,
+            "Text": "explore the room blindly",
+            "response": exploreHall
         }
     ]
 }
@@ -283,13 +307,17 @@ function trySwitch(){
     if (electricityOn) {
         lightingOn = true;
         sessionStorage.setItem("lightingOn",JSON.stringify(lightingOn));
-        sessionStorage.setItem("currentState",1);
-        window.location.href = "livingRoom.html";
+        currentState = downStairsHallLightsOn;
+        updateState();
+        setResponse("You have managed to turn the lights on maybe now you will finally be able to find some clues.");
+        
+       
     }
     else{
         setResponse("Well that didn't do anything, maybe and electrician would've got further than you.");
     }
 }
+
 
 function exploreHall(){
     setResponse(`${displayName.toUpperCase()}, you need to be more careful you can't just go around wandering aimlessly
@@ -298,7 +326,6 @@ function exploreHall(){
     //if knocked over it breaks and the police know you were invetigating
     // don't let them explore hall again
 }
-
 
 
 function goTofrontOfHouse() {
@@ -450,8 +477,8 @@ repairButton.addEventListener('click', async function () {
             setResponse("You have successfully repaired the generator.");
 
             if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false) {
-                awardAchievement(2, userID, ".jpg");
-                
+                awardAchievement(2, userID, "generatorAchievement.jpg");
+                displayA
             }
 
         }
