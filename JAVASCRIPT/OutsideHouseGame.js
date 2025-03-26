@@ -33,7 +33,6 @@ const line = document.getElementById('line');
 const circle = document.querySelector('.circle');
 const clue1Btn = document.getElementById('clue1Btn');
 const generatorProgressBar = document.getElementById('GeneratorProgressBar');
-const rightColumn = document.querySelector(".rightColumn");
 const startRepairButton = document.getElementById('startButton');
 const repairButton = document.getElementById('repairButton');
 const rubbishContainer = document.querySelector('.rubbishContainer');
