@@ -10,6 +10,7 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+
     const btnSignOut = document.getElementById("btnSignOut");
     const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+
     //Fintan's work - check if available save slot
 
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
@@ -34,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // font size
     document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
     
+
 });
 
 async function checkTotalActiveGames(){

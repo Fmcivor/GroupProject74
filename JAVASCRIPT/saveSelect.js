@@ -101,6 +101,7 @@ async function loadGame(gameID) {
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
     let selectQuery = `SELECT * FROM tblGameSave WHERE userID = ${userID} ORDER BY startDate DESC LIMIT 3`;
+
     dbConfig.set('query', selectQuery);
 
     try {
@@ -111,7 +112,9 @@ async function displayGameSaves() {
 
         let result = await response.json();
 
+
         if (result.success ) {
+
             let saveContainer = document.querySelector('.saveContainer');
             saveContainer.innerHTML = '<h1>Select Save</h1>';
             let latestGames = result.data;
@@ -138,3 +141,4 @@ async function displayGameSaves() {
     }
 
 }
+

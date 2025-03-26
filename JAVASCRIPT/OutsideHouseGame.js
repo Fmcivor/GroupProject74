@@ -239,6 +239,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     let states = [];
 
     states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding,downStairsHall,hallWall);
+
   
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
