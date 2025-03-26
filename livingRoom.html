@@ -8,14 +8,14 @@
     <title>Living Room</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
-    <link rel="stylesheet" href="CSS/outsideHouse.css">
+    <link rel="stylesheet" href="CSS/livingRoom.css">
 </head>
 
 <body>
     <header>
         <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
-        <h2 id="mobileHeader">Front Of The house</h1>
+        <h2 id="mobileHeader">Living Room</h1>
     </header>
     <main class="wrapper">
 
@@ -46,11 +46,13 @@
         </div>
 
         <div class="rightColumn">
-            <div class="gameContainer">
-               
+            <div class="gameContainer"></div>
+            <button id="burntLetter" class="hide" type="button" onclick="letterClicked()"></button>
+            <div id="letterContainer" onclick="" >
+                    <p>To Charles</p>    
+                    <p>content</p>
+                    <p>From Victor</p>
             </div>
-
-           
         </div>
         <nav class="toolBar">
             <div class="iconContainer">
@@ -109,28 +111,28 @@
 
             </div>
         </nav>
-
-
-    </main>
-    <div class="achievementContainer">
-        <div id="achievementBox">
-            <figure id="achFig">
-                <img id="achievementIcon" src="" alt="">
-            </figure>
-            <div id="achContentBox">
-                <h2 id="achName"></h2>
-                <p id="achDesc"></p>
+        <div class="achievementContainer">
+            <div id="achievementBox">
+                <div id="achievementTop">
+                    <h2 id="achName"></h2>
+                    <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+                </div>
+                <div id="achContentBox">
+                    <figure id="achFig">
+                        <img id="achievementIcon" src="" alt="">
+                    </figure>
+                    <div id="achTextWrapper">
+                        <p id="achDesc"></p>
+                    </div>
+                </div>
+                
             </div>
-            <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
         </div>
-    </div>
+    </main>
 
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
     <script src="JAVASCRIPT/livingRoomGame.js"></script>
-
-
-
 
 </body>
 

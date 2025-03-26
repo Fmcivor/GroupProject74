@@ -94,12 +94,15 @@ h1{
     transition: 0.3s;
 }
 
-.saveSlot a{
+.saveSlot button{
+    background-color: transparent;
     text-decoration: none;
     font-size: clamp(2rem, 5vw, 3rem);
     color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border: 2px solid transparent;
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
 }
 
 @media (max-width: 480px){

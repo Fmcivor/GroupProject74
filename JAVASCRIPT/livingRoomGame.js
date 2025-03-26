@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentState = enteredLivingRoom;
     updateState();
     getSessionStorage();
+
 })
 
 async function getSessionStorage(){
@@ -31,14 +32,13 @@ async function getSessionStorage(){
 }
 
 //CONSTANTS
-
+const button = document.getElementById('burntLetter');
 
 
 //VARIABLES
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
-let shelvesExamined = false;
 
 
 
@@ -243,7 +243,28 @@ function getOffSofa() {
 }
 
 function examineFireplace() {
+    button.classList.remove('hide')
+    setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it")
 
+    rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
+
+    
+
+    // rubbishContainer.style.display = 'block';
+    // if (hasClue1) {
+    //     clue1Btn.style.display = 'none';
+    //     rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
+    // }
+    // else {
+    //     clue1Btn.style.display = 'block';
+    //     rightColumn.style.backgroundImage = 'url("Images/rubbish.jpg")';
+    // }
+    // button.style.color = 'rgb(153, 153, 153)';
+    // button.querySelector('i').style.color = 'rgb(153, 153, 153)';
+}
+
+function letterClicked() {
+    button.classList.add('hide')
 }
 
 function lookAtShelves() {
@@ -268,18 +289,14 @@ async function updateTimesOnSofa(){
             body: dbConfig
         });
 
-        let achSRC = 'Images/sofaAchievementIcon.jpg';
-        let achName = "Crime Doesn't Rest, But I Do";
-        let achDesc = 'Spend far too much time relaxing on the sofa in the living room';
-        displayAchievement(achSRC, achName, achDesc);
-
     } catch (error) {
         console.log("Error updating tblGameSave");
         console.log(error);
     }
     
     if(timesOnSofa === 5) {
-        awardAchievement(1, 1)
+        let achSRC = 'Images/sofaAchievementIcon.jpg';
+        awardAchievement(1, 1, achSRC)
     }
 }
 

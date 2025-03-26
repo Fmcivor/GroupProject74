@@ -89,6 +89,15 @@ header {
     box-shadow: none;
 }
 
+.menu button:disabled:hover{
+    color: rgb(135, 135, 135);
+    transform: none;
+}
+
+.menu button:disabled{
+    color: rgb(135, 135, 135);
+}
+
 .menu a:hover, .menu button:hover {
     text-decoration:underline;
     transition: 0.3s;

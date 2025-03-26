@@ -10,28 +10,33 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+
     const btnSignOut = document.getElementById("btnSignOut");
-    const signOutConfirm = document.getElementById("signOutConfirm");
     const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
     if (btnSignOut && signOutConfirm && cancelSignOut) {
         btnSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "flex"; // Show the confirmation (not block)
+            signOutConfirm.style.display = "flex";
         });
 
         cancelSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "none"; // Hide when cancel is clicked
+            signOutConfirm.style.display = "none";
         });
     } else {
         console.error("One or more elements are missing in the DOM.");
     }
 
 
+
     //Fintan's work - check if available save slot
 
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
     checkTotalActiveGames();
+
+    // font size
+    document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
     
+
 });
 
 async function checkTotalActiveGames(){
@@ -105,6 +110,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('clueList',JSON.stringify([]));
             sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
             sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
+            sessionStorage.setItem('lightingOn',gameSave.lightingOn);
             console.log("game save id retrieved:",gameSave.gameID);
             window.location.href = 'guestBedroom.html';
         }
@@ -125,4 +131,70 @@ function closeModal() {
 function signOut() {
     sessionStorage.clear();
     window.location.href = "login.html";
+}
+
+async function loadGame(gameID){
+
+    let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = ${gameID}`;
+    dbConfig.set('query',selectQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length >0) {
+            let gameSave = result.data[0];
+            sessionStorage.setItem('gameID',gameSave.gameID);
+            sessionStorage.setItem('electricityOn',gameSave.electricityOn);
+            sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
+            sessionStorage.setItem('currentRoom',gameSave.currentRoom);
+            sessionStorage.setItem('currentState',gameSave.currentState);
+            sessionStorage.setItem('inventory',JSON.stringify([]));
+            sessionStorage.setItem('clueList',JSON.stringify([]));
+            sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
+            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
+            sessionStorage.setItem('lightingOn',gameSave.lightingOn);
+            console.log("game save id retrieved:",gameSave.gameID);
+            window.location.href = gameSave.currentRoom;
+        }
+        else{
+            console.error("Error loading the game save");
+        }
+
+    } catch (error) {
+        console.error("Error loading the selected gameSave");
+    }
+
+}
+
+async function displayGameSaves(){
+
+    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = 1 ORDER BY startDate DESC LIMIT 3`;
+    dbConfig.set(query,'selectQuery');
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length >0) {
+            let latestGames = result.data;
+
+            latestGames.forEach(gameSave => {
+                let saveSlot = `<div class="saveSlot">
+                                <a href="${gameSave.currentRoom}">Save Slot 1</a>
+                                </div>`;
+            });
+        }
+    } catch (error) {
+        
+    }
+
 }

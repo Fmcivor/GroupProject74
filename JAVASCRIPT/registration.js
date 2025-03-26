@@ -88,7 +88,7 @@ async function validateUsername(enteredUsername) {
       return false;
    }
 
-   let selectQuery = `SELECT username FROM tblUser WHERE username = '${enteredUsername}'`;
+   let selectQuery = `SELECT username FROM tblUser WHERE BINARY username = '${enteredUsername}'`;
    dbConfig.set('query', selectQuery);
 
    try {
