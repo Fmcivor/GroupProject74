@@ -1,92 +1,107 @@
-
-
-const guestBedroom = {
-    "ID":1,
-    "room": "Guest Bedroom",
-    "description": `${displayName}, you have now entered the guest bedroom. the bed is unmade and the room filled with an eery presence. You feel something was left behind.`,
-    "ImageHREF": "Images/guestBedroomImg.jpg",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Check under the mat",
-            "response": checkNightstand
-        },
-        {
-            "id": 1,
-            "Text": "Follow the path to your left",
-            "response": "test1"
-        },
-        {
-            "id": 2,
-            "Text": "Enter house",
-            "response": "You can't enter the house with the door being locked"
-        }
-    ]
-}
-
-
+// Page initialisation
 document.addEventListener('DOMContentLoaded', function () {
     let states = [];
     states.push(guestBedroom);
+    states.push(nightStandState); 
 
-    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    let currentStateID = Number(sessionStorage.getItem('currentState')) || guestBedroom.ID;
+
     states.forEach(state => {
-        if (state.ID == currentStateID) {
-            
+        if (state.ID === currentStateID) {
             currentState = state;
-            
             return;
         }
     });
-    
+
     updateState();
 });
 
 
+const guestBedroom = {
+   
+    "ID": 1,
+    "room": "Guest Bedroom",
+    "description": `${displayName}, you have now entered the guest bedroom. The bed is unmade and the room is filled with an eerie presence. You feel something was left behind.`,
+    "ImageHREF": "Images/guestBedroomImg.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Check nightstand",
+            "response": checkNightstand
+        },
+        {
+            "id": 1,
+            "Text": "Examine wardrobe",
+            "response": examineWardrobe
+        },
+        {
+            "id": 2,
+            "Text": "Check under bed",
+            "response": function () {
+                setResponse("You decide to check under the bed in hopes of finding a golden ticket so you can forget about this job forever. You're a delusional optimist.");
+            }
+        }
+    ]
+};
 
-async function getSessionStorage(){
-    const responseParagraph = document.getElementById("responseParagraph");
-    const clueList = document.getElementById("clueList");
-}
+// Define state for interacting with nightstand
+const nightStandState = {
+    "ID": 2,
+    "room": "Guest Bedroom",
+    "description": `You stand before the nightstand. Something catches your eye—an old letter and a nearly empty pill bottle.`,
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Read the letter",
+            "response": function () {
+                setResponse("A crumpled, half-burned letter filled with heated words. Charles' words accuse Margaret of something unforgivable.\n\n'…you always blamed me, but we both know the truth. You can’t keep running forever, Margaret.'");
+            }
+        },
+        {
+            "id": 1,
+            "Text": "Examine the pill bottle",
+            "response": function () {
+                setResponse("A prescription bottle with Margaret’s name. The label warns of serious side effects, including dizziness, confusion, and—if taken in excess—respiratory failure. It’s nearly empty.");
+            }
+        },
+        {
+            "id": 2,
+            "Text": "Go back",
+            "response": function () {
+                currentState = guestBedroom;
+                sessionStorage.setItem('currentState', guestBedroom.ID);
+                updateState();
+            }
+        }
+    ]
+};
 
-
+// Function to handle checking the nightstand
 function checkNightstand() {
-    document.getElementById("responseParagraph").innerHTML = `
-        <p>You open the nightstand. Inside, you find a pill bottle and a heated letter.</p>
-        <button onclick="readLetter()">Read Heated Letter</button>
-        <button onclick="examinePillBottle()">Examine Pill Bottle</button>
-    `;
+    currentState = nightstandState;
+    sessionStorage.setItem('currentState', nightStandState.ID);
+    updateState();
 }
 
-function readLetter() {
-    document.getElementById("responseParagraph").innerHTML += `
-        <p>The letter is from Margaret to Charles, full of frustration. It suggests she wanted to leave him.</p>
-    `;
-    addClue("Margaret's Heated Letter");
+
+
+// Function to update the UI when state changes
+function updateState() {
+    document.getElementById("room-description").innerText = currentState.description;
+    const interactionContainer = document.getElementById("interaction-buttons");
+    interactionContainer.innerHTML = ""; // Clear existing buttons
+
+    currentState.interactions.forEach(option => {
+        let button = document.createElement("button");
+        button.innerText = option.Text;
+        button.onclick = option.response;
+        interactionContainer.appendChild(button);
+    });
 }
 
-function examinePillBottle() {
-    document.getElementById("responseParagraph").innerHTML += `
-        <p>The bottle details warnings of aggression and confusion. Any other information on the bottle seems to be unreadable. </p>
-    `;
-    addClue("Medication with Side Effects");
+// Function to display response text
+function setResponse(text) {
+    document.getElementById("response-box").innerText = text;
 }
 
-function examineWardrobe() {
-    document.getElementById("responseParagraph").innerHTML = `
-        <p>You find a half-zipped suitcase with a train ticket dated a day before Charles' death.</p>
-    `;
-    addClue("Margaret's Packed Suitcase");
-}
 
-function checkUnderBed() {
-    document.getElementById("responseParagraph").innerHTML = `
-        <p>You look underneath the bed hoping to find a golden ticket so you can forget about why you chose this job. You find nothing. Keep dreaming. </p>
-    `;
-}
-
-function addClue(clue) {
-    const clueItem = document.createElement("li");
-    clueItem.textContent = clue;
-    document.getElementById("clueList").appendChild(clueItem);
-}
