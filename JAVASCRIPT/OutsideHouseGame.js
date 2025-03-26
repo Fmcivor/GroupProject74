@@ -539,8 +539,6 @@ clue1Btn.addEventListener('click', async function () {
     clue1Btn.style.visibility = 'collapse';
     await addClue(rubbishClueID);
     updateClueNotebook();
-
-
     setResponse('You have found a letter check your notebook to see its content');
 
 

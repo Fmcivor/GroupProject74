@@ -15,11 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (btnSignOut && signOutConfirm && cancelSignOut) {
         btnSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "flex"; // Show the confirmation (not block)
+            signOutConfirm.style.display = "flex";
         });
 
         cancelSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "none"; // Hide when cancel is clicked
+            signOutConfirm.style.display = "none";
         });
     } else {
         console.error("One or more elements are missing in the DOM.");

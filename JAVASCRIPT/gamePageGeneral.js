@@ -83,9 +83,6 @@ deleteAndExit.addEventListener('click', async function () {
 
 })
 
-
-
-
 //Show pop out toolbar functions
 function showInventory() {
 
