@@ -1,0 +1,22 @@
+#burntLetter {
+    position: fixed;
+    right: 24vw;
+    bottom: 17vh;
+    width: 5vh;
+    height: 5vh;
+    background-color: transparent;
+    background-image: url(../Images/crumpledLetter.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    border: none;
+}
+
+#letterContainer {
+    width: clamp(300px, 40vw, 400px);
+    aspect-ratio: 1/1.414;
+    background-image: url(../Images/readableLetter.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+}

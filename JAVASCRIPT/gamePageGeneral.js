@@ -20,6 +20,7 @@ const achievementDesc = document.getElementById('achDesc');
 const settingsButton = document.getElementById('settingsButton');
 const settingsContainer = document.querySelector('.settingsContainer');
 const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
+const rightColumn = document.querySelector(".rightColumn");
 const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
 const deleteAndExit = document.getElementById('deleteAndExit');
 
@@ -43,7 +44,6 @@ let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 UpdateInventory();
-updateClueNotebook();
 
 
 //EVENT LISTENERS
@@ -85,7 +85,6 @@ deleteAndExit.addEventListener('click', async function () {
 
 //Show pop out toolbar functions
 function showInventory() {
-
     noteBookContainer.classList.remove('displayNoteBook');
     inventoryContainer.classList.add('displayInventory');
     if (selectedToolBarItem === null) {
@@ -144,6 +143,7 @@ function displayAchievement(iconSRC, achName, achDesc) {
     achievementDesc.innerHTML = achDesc;
 
     achievementContainer.classList.add('achExpanded')
+    setTimeout(hideAchievement, 6500)
 }
 function hideAchievement() {
     achievementContainer.classList.remove('achExpanded')
@@ -275,16 +275,40 @@ function selectInventoryItem(event) {
 }
 
 
-async function awardAchievement(achievementID, userID) {
-    let query = `INSERT INTO tblUserAchievements (achievementID, userID) VALUES (${achievementID}, ${userID});`;
+async function awardAchievement(achievementID, userID, achievementIconAddress){
+    let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
+        VALUES (${achievementID}, ${userID});`;
 
-    dbConfig.set('query', query);
+    dbConfig.set('query', insertQuery);
 
     try {
         response = await fetch(dbConnectorUrl, {
             method: "POST",
             body: dbConfig
-        });
+        });    
+        
+        
+        let selectQuery = `SELECT name, description FROM tblAchievement
+        WHERE  achievementID = 1;`;
+    
+        dbConfig.set('query', selectQuery);
+        try {
+            response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success && result.data.length > 0) {
+                let achievement = result.data[0];
+                displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+            }
+            
+        } catch (error) {
+            console.log("Error retrieving achievement data");
+            console.log(error);
+        }
 
     } catch (error) {
         console.log("Error setting achievement");
@@ -408,17 +432,12 @@ async function saveGame() {
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
-    let noGeneratorRepairAttempts = sessionStorage.getItem('noGeneratorRepairAttempts');
-    let timesOnSofa = sessionStorage.getItem('timesOnSofa');
-
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-                        currentState = ${currentStateID},
-                        noGeneratorRepairAttempts=${noGeneratorRepairAttempts},
-                        timesOnSofa = ${timesOnSofa}
+                        currentState = ${currentStateID}
                         WHERE gameID = ${gameID}`;
 
     dbConfig.set("query", updateQuery);
