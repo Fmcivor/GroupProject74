@@ -11,7 +11,6 @@ function openModal() {
 
 document.addEventListener("DOMContentLoaded", function () {
     const btnSignOut = document.getElementById("btnSignOut");
-    const signOutConfirm = document.getElementById("signOutConfirm");
     const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
     if (btnSignOut && signOutConfirm && cancelSignOut) {
@@ -31,6 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
     checkTotalActiveGames();
+
+    // font size
+    document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
     
 });
 

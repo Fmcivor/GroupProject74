@@ -23,4 +23,8 @@ class Clue{
     }
 }
 
+document.addEventListener('DOMContentLoaded',function(){
+    document.documentElement.style.fontSize = `${sessionStorage.getItem('fontSize')}px`;
+})
+
 

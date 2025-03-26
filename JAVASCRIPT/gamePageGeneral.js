@@ -21,7 +21,7 @@ const settingsButton = document.getElementById('settingsButton');
 const settingsContainer = document.querySelector('.settingsContainer');
 const gameInteractionContainer = document.querySelector('.gameInteractionContainer');
 const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
-
+const deleteAndExit = document.getElementById('deleteAndExit');
 
 // item ids
 const keyID = 1;
@@ -51,9 +51,36 @@ inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 settingsButton.addEventListener('click', toggleSettings);
-exitAndSaveBtn.addEventListener('click',async function(){
+exitAndSaveBtn.addEventListener('click', async function () {
     await saveGame();
     window.location.href = "mainMenu.html";
+})
+deleteAndExit.addEventListener('click', async function () {
+    let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
+                       
+    dbConfig.set('query', deleteQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Successfully deleted game save");
+        }
+        else{
+            console.error("Error while deleting the game save");
+        }
+
+    } catch (error) {
+        console.error("Error while deleting the game save",error);
+    }
+
+    window.location.href = "mainMenu.html";
+
 })
 
 
@@ -105,7 +132,7 @@ function toggleSettings() {
         gameInteractionContainer.style.display = 'none';
         settingsContainer.style.display = 'flex';
     }
-    else{
+    else {
         settingsOpen = false;
         settingsContainer.style.display = 'none';
         gameInteractionContainer.style.display = 'flex';
@@ -268,60 +295,60 @@ async function awardAchievement(achievementID, userID) {
     }
 }
 
-async function addClue(clueID){
+async function addClue(clueID) {
     let selectQuery = `SELECT * FROM tblClue WHERE clueID = ${clueID}`;
 
-    dbConfig.set('query',selectQuery);
+    dbConfig.set('query', selectQuery);
 
     try {
-        let response  = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
         });
 
         let result = await response.json();
 
-        if (result.success && result.data.length >0) {
+        if (result.success && result.data.length > 0) {
             let clue = result.data[0];
-            let clueToAdd = new Clue(clue.clueID,clue.clueText);
+            let clueToAdd = new Clue(clue.clueID, clue.clueText);
             clueList.push(clueToAdd);
-            sessionStorage.setItem('clueList',JSON.stringify(clueList));
+            sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
             hasClue1 = true;
-            
+
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
-            dbConfig.set('query',insertQuery);
+            dbConfig.set('query', insertQuery);
 
-            let insertResponse = await fetch(dbConnectorUrl,{
-                method:"POST",
-                body:dbConfig
+            let insertResponse = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
             });
 
             let insertResult = await insertResponse.json();
             if (insertResult.success) {
                 console.log("Clue successfully added and saved");
             }
-            else{
+            else {
                 console.error("An error has occurred while recording the clue in the database");
             }
         }
-        else{
+        else {
             console.error("An error has occurred while retrieving the clue form the database");
         }
     } catch (error) {
-        console.error("An error has occurred while adding the clues to the notebook",error);
+        console.error("An error has occurred while adding the clues to the notebook", error);
     }
 
 }
 
-function updateClueNotebook(){
+function updateClueNotebook() {
     document.getElementById('clueList').innerHTML = '';
     for (let i = 0; i < clueList.length; i++) {
         let clueElement = document.createElement("li");
-    clueElement.textContent = clueList[i].clueText;
-    document.getElementById('clueList').appendChild(clueElement);
-        
+        clueElement.textContent = clueList[i].clueText;
+        document.getElementById('clueList').appendChild(clueElement);
+
     }
 }
 
@@ -329,56 +356,56 @@ function updateClueNotebook(){
 async function addItem(itemID) {
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
 
-        dbConfig.set('query', query);
+    dbConfig.set('query', query);
 
-        try {
-            response = await fetch(dbConnectorUrl, {
+    try {
+        response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            let newItem = new Item();
+            Object.assign(newItem, result.data[0]);
+            newItem.itemUsed = false;
+            inventory.push(newItem);
+            sessionStorage.setItem("inventory", JSON.stringify(inventory));
+            hasKey = true;
+            UpdateInventory();
+
+            let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
+                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+            dbConfig.set("query", saveItemQuery);
+
+            let saveItemResponse = await fetch(dbConnectorUrl, {
                 method: "POST",
                 body: dbConfig
             });
 
-            let result = await response.json();
+            let saveItemResult = await saveItemResponse.json();
 
-            if (result.success && result.data.length > 0) {
-                let newItem = new Item();
-                Object.assign(newItem, result.data[0]);
-                newItem.itemUsed = false;
-                inventory.push(newItem);
-                sessionStorage.setItem("inventory",JSON.stringify(inventory));
-                hasKey = true;
-                UpdateInventory();
-
-                let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
-                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
-                dbConfig.set("query",saveItemQuery);
-
-                let saveItemResponse = await fetch(dbConnectorUrl,{
-                    method:"POST",
-                    body:dbConfig
-                });
-
-                let saveItemResult = await saveItemResponse.json();
-
-                if (saveItemResult.success) {
-                    console.log("Inventory Updated Successfully");
-                }
-                else{
-                    console.error("Error saving the item to the inventory");
-                }
+            if (saveItemResult.success) {
+                console.log("Inventory Updated Successfully");
             }
-            else{
+            else {
                 console.error("Error saving the item to the inventory");
             }
-        } catch (error) {
-            console.log("Error adding the item to your inventory");
-            console.log(error);
         }
+        else {
+            console.error("Error saving the item to the inventory");
+        }
+    } catch (error) {
+        console.log("Error adding the item to your inventory");
+        console.log(error);
+    }
 }
 
 
 
 
-async function saveGame(){
+async function saveGame() {
     let electricityOn = sessionStorage.getItem("electricityOn");
     let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");
@@ -397,12 +424,12 @@ async function saveGame(){
                         timesOnSofa = ${timesOnSofa}
                         WHERE gameID = ${gameID}`;
 
-    dbConfig.set("query",updateQuery);
+    dbConfig.set("query", updateQuery);
 
     try {
-        let updateResponse = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let updateResponse = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
         });
 
         let updateResult = await updateResponse.json();
@@ -410,13 +437,13 @@ async function saveGame(){
         if (updateResult.success) {
             console.log("game successfully saved");
         }
-        else{
+        else {
             console.error("error saving the game")
         }
     } catch (error) {
         onsole.error("error saving the game")
     }
-    
- }
+
+}
 
 
