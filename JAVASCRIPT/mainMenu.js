@@ -10,10 +10,33 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    const btnSignOut = document.getElementById("btnSignOut");
+    const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
+
+    if (btnSignOut && signOutConfirm && cancelSignOut) {
+        btnSignOut.addEventListener("click", function () {
+            signOutConfirm.style.display = "flex";
+        });
+
+        cancelSignOut.addEventListener("click", function () {
+            signOutConfirm.style.display = "none";
+        });
+    } else {
+        console.error("One or more elements are missing in the DOM.");
+    }
+
+
+
     //Fintan's work - check if available save slot
 
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
     checkTotalActiveGames();
+
+    // font size
+    document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
+    
+
 });
 
 async function checkTotalActiveGames(){

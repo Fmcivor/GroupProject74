@@ -1,15 +1,89 @@
-html{
-    font-size: 16px;
+.tabContainer {
+    display: flex;
+    width: 100%;
+    height: 5vh;
+
 }
 
-*{
+.tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color: rgba(10, 10, 40, 0.9);
+    border: 1px solid transparent;
+    box-shadow: none;
+    font-size: 1.1rem;
+    color: white;
+}
+
+#profileTab {
+    border-radius: 10px 0 0 0;
+    border-bottom: 4px solid rgb(0, 102, 255);
+}
+
+#preferencesTab {
+    border-radius: 0 10px 0 0;
+}
+
+#preferencesForm {
+    display: none;
+    justify-content: space-between;
+}
+
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 
 }
 
-body{
+
+.slideContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    width: 40%;
+}
+
+#slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+#slider:hover {
+    opacity: 1;
+}
+
+#slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: rgb(0, 102, 255);
+    cursor: pointer;
+}
+
+#slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+
+body {
     display: flex;
     flex-direction: column;
     width: 100vw;
@@ -20,7 +94,7 @@ body{
     background-position: center center;
 }
 
-.wrapper{
+.wrapper {
     display: flex;
     flex-direction: column;
     width: 100vw;
@@ -32,7 +106,7 @@ body{
 .titleBanner {
     height: 10vh;
     width: 100%;
-    background-color: rgb(11, 5, 56,0.8);
+    background-color: rgb(11, 5, 56, 0.8);
     text-align: center;
     display: flex;
     justify-content: center;
@@ -41,15 +115,7 @@ body{
     color: white;
 }
 
-.formContainer{
-    width: 100vw;
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-form{
+.formContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,7 +123,6 @@ form{
     background: rgba(10, 10, 40, 0.9);
     border: 2px solid rgb(51, 51, 102);
     border-radius: 10px;
-    padding: 30px;
     width: 450px;
     height: 75vh;
     text-align: center;
@@ -66,7 +131,23 @@ form{
     position: relative;
     min-height: fit-content;
     flex-shrink: 0;
-    
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 0.4rem;
+    border-radius: 10px;
+    padding: 30px;
+    width: 450px;
+    height: 75vh;
+    text-align: center;
+    color: white;
+    position: relative;
+    min-height: fit-content;
+    flex-shrink: 0;
 }
 
 
@@ -97,7 +178,7 @@ form label {
 }
 
 
-form input {
+#profileForm input {
     padding: 0.75rem;
     font-size: 1rem;
     border: 2px solid rgb(68, 68, 119);
@@ -108,17 +189,17 @@ form input {
     transition: all 0.3s ease-in-out;
 }
 
-form input:focus {
+#profileForm input:focus {
     border-color: #6666ff;
     outline: none;
     box-shadow: 0 0 8px #6666ff;
 }
 
-.disabled{
+.disabled {
     background-color: #0f0f1f;
 }
 
-.invalid{
+.invalid {
     border: 2px solid rgb(221, 9, 9);
 }
 
@@ -152,8 +233,8 @@ form input:focus {
     transition: background 0.3s ease-in-out;
     height: 61%;
     min-width: fit-content;
-   
-    
+
+
 }
 
 .password-container button:hover {
@@ -183,12 +264,12 @@ form button:hover {
     transform: scale(1.05);
 }
 
-#messageContainer{
+#messageContainer {
     position: absolute;
     z-index: 10;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     width: 70%;
     height: 70%;
     background-color: rgba(10, 10, 40, 1);
@@ -202,17 +283,17 @@ form button:hover {
     overflow-y: auto;
 }
 
-#messageContent{
+#messageContent {
     width: 90%;
     height: 70%;
     padding: 1rem;
 }
 
-li{
+li {
     margin-bottom: 1rem;
 }
 
-.closeBtn{
+.closeBtn {
     width: 60%;
     border-radius: 6px;
     height: 10%;
@@ -221,23 +302,15 @@ li{
     background-color: #0044cc;
 }
 
-.functionButtonContainer{
+.functionButtonContainer {
     display: flex;
     justify-content: center;
     width: 100%;
     gap: 10%;
 }
 
-.functionButton{
+.functionButton {
     width: fit-content;
-}
-
-a:hover{
-    color: white
-}
-
-a{
-    color: rgb(0, 102, 255);
 }
 
 
@@ -249,30 +322,29 @@ a{
         height: 90%;
     }
 
-    .formContainer{
+    .formContainer {
         width: 100%;
         min-height: 80vh;
     }
 
-    form input{
+    #profileForm input {
         padding: 0.5rem;
     }
 
-   
-    .titleBanner{
+
+    .titleBanner {
         height: 10%;
     }
 
-    .wrapper{
+    .wrapper {
         width: 100%;
         height: 90%;
     }
 
-    body{
-         width: 100vw;
-         height: 100vh;
+    body {
+        width: 100vw;
+        height: 100vh;
     }
 
-    
-}
 
+}

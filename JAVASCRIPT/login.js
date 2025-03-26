@@ -40,7 +40,7 @@ async function validateLogin(event) {
     let enteredUsername = document.getElementById('username').value;
     let enteredPassword = document.getElementById('password').value;
 
-    let loginQuery = `SELECT userID, username, displayName FROM tblUser WHERE username ='${enteredUsername}' AND userPassword ='${enteredPassword}'`;
+    let loginQuery = `SELECT userID, username, displayName, fontSize FROM tblUser WHERE BINARY username ='${enteredUsername}' AND BINARY userPassword ='${enteredPassword}'`;
     dbConfig.set("query", loginQuery);
     try {
         let response = await fetch(dbConnectorUrl, {
@@ -56,6 +56,7 @@ async function validateLogin(event) {
             sessionStorage.setItem("username", user.username);
             sessionStorage.setItem("displayName", user.displayName);
             sessionStorage.setItem("userID", user.userID);
+            sessionStorage.setItem("fontSize",user.fontSize);
 
             window.location.href = "mainMenu.html";
         }
