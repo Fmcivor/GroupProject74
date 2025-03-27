@@ -127,7 +127,7 @@ async function validateUsername(enteredUsername) {
 
 
 function validateDisplayName(enteredDisplayName) {
-   let displayNameRegex = /^[a-zA-Z-]{1,15}$/;
+   let displayNameRegex = /^[a-zA-Z-\s]{1,15}$/;
    if (displayNameRegex.test(enteredDisplayName) == false) {
       return false;
    }
