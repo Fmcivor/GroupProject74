@@ -15,12 +15,14 @@ const displayNameInput = document.getElementById('displayName');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirmPassword')
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-const exitBtn = document.getElementById('exitBtn');
+const exitProfileBtn = document.getElementById('exitProfileBtn');
+const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
 const messageContainer = document.getElementById('messageContainer');
 const profileTab = document.getElementById('profileTab');
 const preferencesTab = document.getElementById('preferencesTab');
 const profileForm = document.getElementById('profileForm');
 const preferencesForm = document.getElementById('preferencesForm');
+const easyReadCheckBox = document.getElementById('easyReadCheckBox')
 
 profileTab.addEventListener("click",function(){
     profileTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
@@ -40,6 +42,8 @@ preferencesTab.addEventListener("click",function(){
     fontSlider.value = sessionStorage.getItem("fontSize");
 
 });
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -77,9 +81,15 @@ document.getElementById('password').addEventListener('input', function (event) {
 
 
 
-exitBtn.addEventListener('click', function () {
+exitProfileBtn.addEventListener('click', function () {
     window.location.href = 'mainMenu.html';
 });
+
+exitPreferencesBtn.addEventListener('click',function(){
+    window.location.href = 'mainMenu.html';
+})
+
+
 
 
 saveProfileBtn.addEventListener('click', validateChanges);
@@ -242,7 +252,8 @@ savePreferencesBtn.addEventListener('click',savePreferences);
 async function savePreferences(){
     sessionStorage.setItem("fontSize",fontSlider.value);
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
-    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value}`;
+    let easyReadOn = easyReadCheckBox.checked;
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
     dbConfig.set('query',saveQuery);
 
     try {
@@ -254,14 +265,14 @@ async function savePreferences(){
         let result = await response.json();
 
         if (result.success) {
-            console.log("Font size updated and saved");
+            console.log("Font size and easy read updated and saved");
         }
         else{
-            console.error("Error occurred while saving the font size");
+            console.error("Error occurred while saving the font size and easy read");
         }
 
     } catch (error) {
-        console.error("Error while saving the font size",error);
+        console.error("Error while saving the font size and easy read",error);
     }
     
 }
