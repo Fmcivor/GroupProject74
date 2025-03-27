@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buried Secrets - Introduction</title>
+    <link rel="stylesheet" href="CSS/introduction.css">
+</head>
+<body>
+    <div class="introContainer">
+        <div class="introBox">
+            <h1>Buried Secrets</h1>
+            <p><strong>Charles Kingston</strong> was mysteriously murdered 4 years ago after what was supposed to be a joyous celebration of success, 
+                however a build up of extreme tension finally boiled over on that one night. The case was quickly ruled as an unfortunate suicide. </p>
+            <p>Cause of death: **Suspected Overdose**</p>
+            <p>Three suspects were present in the house:</p>
+            <ul>
+                <li><strong>Margaret Kingston</strong> - The estranged wife</li>
+                <li><strong>Dr. Victor Langston</strong> - A family doctor with secrets</li>
+                <li><strong>Jonathan Donaghy</strong> - Ex Business partner on volatile terms</li>
+            </ul>
+            <p><em>You have been hired as a private investigator to finally finish this case. You have 10 minutes to search the mansion and find sufficient evidence to accuse the murderer.</em></p>
+            <button id="startGame">Start Investigation</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("startGame").addEventListener("click", function() {
+            window.location.href = "outsideHouse.html"; 
+        });
+    </script>
+</body>
+</html>

@@ -10,117 +10,117 @@
 </body>
 <script>
 
-const dbConnectorUrl = "https://fmcivor02.webhosting1.eeecs.qub.ac.uk/dbConnector.php";
+// const dbConnectorUrl = "https://fmcivor02.webhosting1.eeecs.qub.ac.uk/dbConnector.php";
 
-let dbConfig = new URLSearchParams({
-    hostname: 'localhost',
-    username: 'fmcivor02',
-    password: 'B12nJ0xSkjJ27PQV',
-    database: 'CSC1034_CW_74',
-});
+// let dbConfig = new URLSearchParams({
+//     hostname: 'localhost',
+//     username: 'fmcivor02',
+//     password: 'B12nJ0xSkjJ27PQV',
+//     database: 'CSC1034_CW_74',
+// });
 
-    document.addEventListener('DOMContentLoaded',function(){
+//     document.addEventListener('DOMContentLoaded',function(){
        
-sessionStorage.setItem("userID",11);
-sessionStorage.setItem("displayName",'Gilly');
+// sessionStorage.setItem("userID",11);
+// sessionStorage.setItem("displayName",'Gilly');
 
-load();
-    });
+// load();
+//     });
 
-    async function load() {
+//     async function load() {
         
-let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = 139`;
-dbConfig.set('query', selectQuery);
+// let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = 139`;
+// dbConfig.set('query', selectQuery);
 
-try {
-    let response = await fetch(dbConnectorUrl, {
-        method: "POST",
-        body: dbConfig
-    });
+// try {
+//     let response = await fetch(dbConnectorUrl, {
+//         method: "POST",
+//         body: dbConfig
+//     });
 
-    let result = await response.json();
+//     let result = await response.json();
 
-    if (result.success && result.data.length > 0) {
-        let gameSave = result.data[0];
-        sessionStorage.setItem('gameID', 139);
-        sessionStorage.setItem('electricityOn', gameSave.electricityOn);
-        sessionStorage.setItem('frontDoorUnlocked', gameSave.frontDoorUnlocked);
-        sessionStorage.setItem('currentRoom', 'livingRoom.html');
-        sessionStorage.setItem('currentState', gameSave.currentState);
-        sessionStorage.setItem('noGeneratorRepairAttempts', gameSave.noGeneratorRepairAttempts);
-        sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
-        sessionStorage.setItem('lightingOn', gameSave.lightingOn);
-        console.log("game save id retrieved:", gameSave.gameID);
+//     if (result.success && result.data.length > 0) {
+//         let gameSave = result.data[0];
+//         sessionStorage.setItem('gameID', 139);
+//         sessionStorage.setItem('electricityOn', gameSave.electricityOn);
+//         sessionStorage.setItem('frontDoorUnlocked', gameSave.frontDoorUnlocked);
+//         sessionStorage.setItem('currentRoom', 'livingRoom.html');
+//         sessionStorage.setItem('currentState', gameSave.currentState);
+//         sessionStorage.setItem('noGeneratorRepairAttempts', gameSave.noGeneratorRepairAttempts);
+//         sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
+//         sessionStorage.setItem('lightingOn', gameSave.lightingOn);
+//         console.log("game save id retrieved:", gameSave.gameID);
 
-        let inventoryQuery = `SELECT tblItem.itemID, tblItem.itemName, tblItem.itemHREF 
-        FROM tblGameInventory JOIN tblItem on tblGameInventory.itemID = tblItem.itemID 
-        WHERE tblGameInventory.gameID = 139`;
-        dbConfig.set("query", inventoryQuery);
+//         let inventoryQuery = `SELECT tblItem.itemID, tblItem.itemName, tblItem.itemHREF 
+//         FROM tblGameInventory JOIN tblItem on tblGameInventory.itemID = tblItem.itemID 
+//         WHERE tblGameInventory.gameID = 139`;
+//         dbConfig.set("query", inventoryQuery);
 
-        let inventoryResponse = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
-        });
+//         let inventoryResponse = await fetch(dbConnectorUrl, {
+//             method: "POST",
+//             body: dbConfig
+//         });
 
-        let inventoryResult = await inventoryResponse.json();
+//         let inventoryResult = await inventoryResponse.json();
 
-        if (inventoryResult.success) {
-            let inventoryArray = inventoryResult.data;
-            let inventory = [];
-            if (inventoryArray.length > 0) {
-                inventoryArray.forEach(item => {
-                    let existingItem = new Item(item.itemID, item.itemName, item.itemHREF);
-                    inventory.push(existingItem);
-                });
-            }
-            sessionStorage.setItem("inventory", JSON.stringify(inventory));
-        }
-        else {
-            console.error("Error loading the inventory");
-        }
+//         if (inventoryResult.success) {
+//             let inventoryArray = inventoryResult.data;
+//             let inventory = [];
+//             if (inventoryArray.length > 0) {
+//                 inventoryArray.forEach(item => {
+//                     let existingItem = new Item(item.itemID, item.itemName, item.itemHREF);
+//                     inventory.push(existingItem);
+//                 });
+//             }
+//             sessionStorage.setItem("inventory", JSON.stringify(inventory));
+//         }
+//         else {
+//             console.error("Error loading the inventory");
+//         }
 
-        let clueListQuery = `SELECT tblClue.clueID, tblClue.clueText FROM tblGameNotebook 
-        JOIN tblClue on tblGameNotebook.clueID = tblClue.clueID 
-        WHERE tblGameNotebook.gameID = 139`;
+//         let clueListQuery = `SELECT tblClue.clueID, tblClue.clueText FROM tblGameNotebook 
+//         JOIN tblClue on tblGameNotebook.clueID = tblClue.clueID 
+//         WHERE tblGameNotebook.gameID = 139`;
 
-        dbConfig.set("query", clueListQuery);
+//         dbConfig.set("query", clueListQuery);
 
-        let clueListResponse = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
-        });
+//         let clueListResponse = await fetch(dbConnectorUrl, {
+//             method: "POST",
+//             body: dbConfig
+//         });
 
-        let clueListResult = await clueListResponse.json();
+//         let clueListResult = await clueListResponse.json();
 
-        if (clueListResult.success) {
-            let clueList = [];
-            if (clueListResult.data.length > 0) {
-                let clueListArray = clueListResult.data;
+//         if (clueListResult.success) {
+//             let clueList = [];
+//             if (clueListResult.data.length > 0) {
+//                 let clueListArray = clueListResult.data;
 
-                clueListArray.forEach(clue => {
-                    let exisitingClue = new Clue(clue.clueID, clue.clueText);
-                    clueList.push(exisitingClue);
-                });
+//                 clueListArray.forEach(clue => {
+//                     let exisitingClue = new Clue(clue.clueID, clue.clueText);
+//                     clueList.push(exisitingClue);
+//                 });
 
-            }
-            sessionStorage.setItem("clueList", JSON.stringify(clueList));
-        }
-        else {
-            console.error("Error occurred while loading the clues");
-        }
+//             }
+//             sessionStorage.setItem("clueList", JSON.stringify(clueList));
+//         }
+//         else {
+//             console.error("Error occurred while loading the clues");
+//         }
 
 
 
-        window.location.href = sessionStorage.getItem("currentRoom");
-    }
-    else {
-        console.error("Error loading the game save");
-    }
+//         window.location.href = sessionStorage.getItem("currentRoom");
+//     }
+//     else {
+//         console.error("Error loading the game save");
+//     }
 
-} catch (error) {
-    console.error("Error loading the selected gameSave,inventory and clue");
-}
+// } catch (error) {
+//     console.error("Error loading the selected gameSave,inventory and clue");
+// }
 
-    }
+//     }
 </script>
 </html>
