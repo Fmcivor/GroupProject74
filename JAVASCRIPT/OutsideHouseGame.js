@@ -4,12 +4,14 @@
 //VARIABLES
 let hasKey = false;
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
-let hasClue1 = false;
+let hasRubbishClue = false;
+let hasWeddingRingClue = false;
+
 
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
 hasKey = inventory.some(item => item.itemID == keyID);
-hasClue1 = inventory.some(clue => clue.clueID == rubbishClueID);
+hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
 hasGeneratorAchievement = userAchievementIDs.some(achievement =>achievement.achievementID == 2);
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
@@ -210,7 +212,10 @@ const hallWall = {
 const downStairsHallLightsOn ={
     "ID": 8,
     "room": "Down Stairs Hall",
-    "description": `There is lights`,
+    "description": `You stand in the hall and you can see the mess of the room. 
+    A cleaner would've been more useful than a detective like you ${displayName}
+    Over to your right stands a few drawers along with papers on top of the cabinet with various
+    other items scattered along the floor.`,
     "ImageHREF": "Images/lightsOnHall.jpg",
     "interactions": [
         {
@@ -220,17 +225,52 @@ const downStairsHallLightsOn ={
         },
         {
             "id": 1,
-            "Text": "Trace the walls of the room",
-            "response": traceHall
+            "Text": "Search the drawers",
+            "response": searchDrawers
         },
         {
             "id":2,
-            "Text": "explore the room blindly",
-            "response": exploreHall
+            "Text": "Go to the back of the hall",
+            "response": goToBackOfHall
+        },
+        {
+            "id":3,
+            "Text": "Enter the living room",
+            "response": goToLivingRoom
         }
     ]
 }
 
+const BackOfHall ={
+    "ID": 9,
+    "room": "Down Stairs Hall",
+    "description": `You stand at the back of the hall and now see the mess of the house continues throughout. In front of you and to your left are 2 more
+    doors while the your right is a staircase.${displayName} it's about time we start to delve further into this mystery 
+    and I think that starts with a thorough sweep of the building.`,
+    "ImageHREF": "Images/lightsOnHall.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Enter the door infront of you",
+            "response": goToKitchen
+        },
+        {
+            "id": 1,
+            "Text": "Enter the door to your left",
+            "response": goToStudy
+        },
+        {
+            "id":2,
+            "Text": "Go up the stairs",
+            "response": goUpstairs
+        },
+        {
+            "id":3,
+            "Text": "Go to the front of the hall",
+            "response": goToDownStairsHall
+        }
+    ]
+}
 
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -292,8 +332,11 @@ function goToDownStairsHall() {
         currentState = downStairsHall;
         updateState();
     }
+    else{
+        currentState = downStairsHallLightsOn;
+        updateState();
+    }
 }
-
 
 
 function traceHall(){
@@ -326,6 +369,48 @@ function exploreHall(){
     // don't let them explore hall again
 }
 
+async function searchDrawers(){
+    if (hasWeddingRingClue) {
+        setResponse("You have already searched the drawers and papers and found the wedding ring");
+    }
+    else{
+        hasWeddingRingClue = true;
+        await addClue(3);
+        updateClueNotebook();
+        setResponse("You have found an engagement ring on the table and Victor has no known past relationships. You take note of this in your notebook as a clue");
+
+    }
+}
+
+function goToBackOfHall(){
+    currentState = BackOfHall;
+    updateState();
+}
+
+async function goToLivingRoom(){
+    sessionStorage.setItem("currentState",1);
+    sessionStorage.setItem("currentRoom","livingRoom.html");
+    await saveGame();
+    window.location.href = "livingRoom.html";
+}
+
+async function goToKitchen(){
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','kitchen.html');
+    await saveGame();
+    window.location.href = 'kitchen.html';
+}
+
+async function goUpstairs(){
+    //todo
+}
+
+async function goToStudy(){
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','study.html');
+    await saveGame();
+    window.location.href = 'study.html';
+}
 
 function goTofrontOfHouse() {
     if (doorUnlocked == true) {
@@ -334,7 +419,7 @@ function goTofrontOfHouse() {
     else {
         currentState = frontOfHouseDoorLocked;
     }
-
+    rubbishContainer.style.display = 'none';
     updateState();
 }
 
@@ -345,7 +430,7 @@ function searchRubbish(responseId) {
     setResponse('Click on the screen to try collect or find items in the rubbish');
 
     rubbishContainer.style.display = 'block';
-    if (hasClue1) {
+    if (hasRubbishClue) {
         clue1Btn.style.display = 'none';
         rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
     }
@@ -379,6 +464,8 @@ function enterGeneratorBuilding() {
     else {
         currentState = generatorBuilding;
     }
+    rubbishContainer.style.display = 'none';
+
     updateState();
 }
 
@@ -477,7 +564,7 @@ repairButton.addEventListener('click', async function () {
             
 
             if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
-                awardAchievement(2, userID, "Images/generatorAchievement.jpg");
+                awardAchievement(2, userID, "Images/generatorAchievement.png");
                 hasGeneratorAchievement = true;
             }
 

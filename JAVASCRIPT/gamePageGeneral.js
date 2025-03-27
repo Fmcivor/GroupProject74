@@ -53,9 +53,11 @@ noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 settingsButton.addEventListener('click', toggleSettings);
 exitAndSaveBtn.addEventListener('click', async function () {
+    sessionStorage.setItem("currentState",currentState.ID);
     await saveGame();
     window.location.href = "mainMenu.html";
-})
+});
+
 deleteAndExit.addEventListener('click', async function () {
     let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
                        
@@ -82,7 +84,7 @@ deleteAndExit.addEventListener('click', async function () {
 
     window.location.href = "mainMenu.html";
 
-})
+});
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -290,7 +292,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
         
         
         let selectQuery = `SELECT name, description FROM tblAchievement
-        WHERE  achievementID = 1;`;
+        WHERE  achievementID = ${achievementID};`;
     
         dbConfig.set('query', selectQuery);
         try {
@@ -336,7 +338,7 @@ async function addClue(clueID) {
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
-            hasClue1 = true;
+            hasRubbishClue = true;
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -429,16 +431,22 @@ async function addItem(itemID) {
 
 async function saveGame() {
     let electricityOn = sessionStorage.getItem("electricityOn");
-    let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
+    let frontDoorUnlocked = sessionStorage.getItem("frontDoorUnlocked");
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
-    let currentStateID = currentState.ID;
+    let lightingOn = sessionStorage.getItem("lightingOn");
+    let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
+    let timesOnSofa = sessionStorage.getItem("timesOnSofa");
+    let currentStateID = sessionStorage.getItem("currentState");
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-                        currentState = ${currentStateID}
+                        currentState = ${currentStateID},
+                        lightingOn = ${lightingOn},
+                        noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
+                        timesOnSofa = ${timesOnSofa}
                         WHERE gameID = ${gameID}`;
 
     dbConfig.set("query", updateQuery);

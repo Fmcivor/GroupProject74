@@ -142,14 +142,19 @@
 
         <div class="achievementContainer">
             <div id="achievementBox">
-                <figure id="achFig">
-                    <img id="achievementIcon" src="" alt="">
-                </figure>
-                <div id="achContentBox">
+                <div id="achievementTop">
                     <h2 id="achName"></h2>
-                    <p id="achDesc"></p>
+                    <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
                 </div>
-                <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+                <div id="achContentBox">
+                    <figure id="achFig">
+                        <img id="achievementIcon" src="" alt="">
+                    </figure>
+                    <div id="achTextWrapper">
+                        <p id="achDesc"></p>
+                    </div>
+                </div>
+                
             </div>
         </div>
         

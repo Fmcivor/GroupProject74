@@ -15,7 +15,8 @@ const displayNameInput = document.getElementById('displayName');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirmPassword')
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-const exitBtn = document.getElementById('exitBtn');
+const exitProfileBtn = document.getElementById('exitProfileBtn');
+const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
 const messageContainer = document.getElementById('messageContainer');
 const profileTab = document.getElementById('profileTab');
 const preferencesTab = document.getElementById('preferencesTab');
@@ -77,9 +78,15 @@ document.getElementById('password').addEventListener('input', function (event) {
 
 
 
-exitBtn.addEventListener('click', function () {
+exitProfileBtn.addEventListener('click', function () {
     window.location.href = 'mainMenu.html';
 });
+
+exitPreferencesBtn.addEventListener('click',function(){
+    window.location.href = 'mainMenu.html';
+})
+
+
 
 
 saveProfileBtn.addEventListener('click', validateChanges);

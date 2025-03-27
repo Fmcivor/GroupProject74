@@ -214,12 +214,15 @@ async function getUserAchievements(){
         if (result.success) {
             let achievementIDs = result.data;
             sessionStorage.setItem("achievementIDs",JSON.stringify(achievementIDs));
+            return true;
         }
         else{
             console.error("Error occurred while fetching the user achievements");
+            return false;
         }
     } catch (error) {
         console.error("Error occurred while fetching the user achievements",error);
+        return false;
     }
     
 }

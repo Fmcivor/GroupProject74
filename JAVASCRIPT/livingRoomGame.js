@@ -74,6 +74,7 @@ const template = {
 */
 
 const enteredLivingRoom = {
+    "ID":1,
     "room": "Living Room",
     "description": `You have entered a large worn living room. 
                     A large window covers the far wall illuminating the room whilst casting long shadows across it. 
@@ -106,6 +107,7 @@ const enteredLivingRoom = {
 }
 
 const satOnSofa = {
+    "ID":2,
     "room": "Living Room",
     "description": `You sit on the comfy sofa and take a brief minute to rest and evaluate your notes.`,
     "ImageHREF": "Images/livingRoom.jpg",
@@ -122,7 +124,9 @@ const satOnSofa = {
         },
     ]
 }
+
 const satOnSofaAgain = {
+    "ID":3,
     "room": "Living Room",
     "description": `You sit back down on the comfy sofa and taking another brief minute to rest and evaluate your notes.`,
     "ImageHREF": "Images/livingRoom.jpg",
@@ -141,6 +145,7 @@ const satOnSofaAgain = {
 }
 
 const standUpFromSofa = {
+    "ID":4,
     "room": "Living Room",
     "description": `You finally manage to get up from the sofa and continue investigating the room.`,
     "ImageHREF": "Images/livingRoom.jpg",
