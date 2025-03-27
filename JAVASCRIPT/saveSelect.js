@@ -9,9 +9,31 @@ async function loadGame(gameID) {
 
     if (inventoryLoaded && clueListLoaded && gameSaveDataLoaded) {
         window.location.href = sessionStorage.getItem("currentRoom");
+
+        let updateQuery = `UPDATE tblGameSave SET lastPlayedDate = CURRENT_TIMESTAMP WHERE gameID =${gameID}`;
+
+        dbConfig.set('query', updateQuery);
+
+        try {
+            let response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success) {
+                console.log("Last played time stamp updated successfully");
+            }
+            else {
+                console.error("Error occurrred while updating the last played time stamp");
+            }
+        } catch (error) {
+            console.error("Error occurrred while updating the last played time stamp", error);
+        }
     }
-    
-    
+
+
 
 }
 
@@ -93,7 +115,7 @@ async function loadClueList(gameID) {
 }
 
 
-async function loadGameSaveData(gameID){
+async function loadGameSaveData(gameID) {
     let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = ${gameID}`;
     dbConfig.set('query', selectQuery);
 
@@ -125,7 +147,7 @@ async function loadGameSaveData(gameID){
         }
 
     } catch (error) {
-        console.error("Error loading the selected gameSave,inventory and clue",error);
+        console.error("Error loading the selected gameSave,inventory and clue", error);
         return false;
     }
 }
@@ -133,7 +155,7 @@ async function loadGameSaveData(gameID){
 
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
-    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = ${userID} ORDER BY startDate DESC LIMIT 3`;
+    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = ${userID} ORDER BY lastPlayedDate DESC LIMIT 3`;
 
     dbConfig.set('query', selectQuery);
 
@@ -152,20 +174,21 @@ async function displayGameSaves() {
             saveContainer.innerHTML = '<h1>Select Save</h1>';
             let latestGames = result.data;
             let slotCounter = 1;
-            for (let i = latestGames.length-1; i >=0; i--) {
+
+            latestGames.forEach(gameSave => {
                 let saveSlotBtn = document.createElement('button');
-                saveSlotBtn.value = latestGames[i].gameID;
+                saveSlotBtn.value = gameSave.gameID;
                 saveSlotBtn.textContent = `saveSlot${slotCounter}`;
                 slotCounter++;
-                saveSlotBtn.addEventListener('click',function (event){
+                saveSlotBtn.addEventListener('click', function (event) {
                     loadGame(event.target.value);
                 });
                 let saveSlotDiv = document.createElement('div');
                 saveSlotDiv.classList.add('saveSlot');
                 saveSlotDiv.appendChild(saveSlotBtn);
                 saveContainer.appendChild(saveSlotDiv);
-            }
-            
+            });
+
         }
         else {
             console.error("Error while displaying saved games");

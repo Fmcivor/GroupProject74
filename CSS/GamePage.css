@@ -190,7 +190,7 @@ header{
     width: fit-content;
     text-align: center;
     color: black;
-    font-family: 'Courier New', Courier, monospace
+    font-family: "Lugrasimo", cursive;
 }
 
 .inventoryGrid {
@@ -262,6 +262,7 @@ header{
     height: auto;
     padding: 5%;
     gap: 5%;
+    font-family: 'Dancing Script', serif;
 }
 
 .notebookSectionHeader {
@@ -271,12 +272,23 @@ header{
 ul {
     width: 100%;
     overflow: hidden;
-    list-style-position: inside;
+}
+
+li::before{
+    content: "\f002";
+    font-family: "Font Awesome 6 free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
 }
 
 li {
     margin-bottom: 5%;
     color: black;
+    position: relative;
+    padding-left: 1.3rem;
+    
 }
 
 #suspectSection {
@@ -332,11 +344,13 @@ li {
     min-height: 2px;
     width:95%;
 }
+
 #promptDivider{
     position: relative;
     left: -1.5%;
     width: 103%;
 }
+
 #leftDivider{
     height: 3px;
     flex: 0.01;
@@ -379,6 +393,7 @@ li {
     display: flex;
     flex: 1;
 }
+
 #responseParagraph{
     margin-top: 1.3vh;
     text-align: justify;

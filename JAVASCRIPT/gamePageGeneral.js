@@ -45,6 +45,7 @@ let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
 UpdateInventory();
+updateClueNotebook();
 
 
 //EVENT LISTENERS
