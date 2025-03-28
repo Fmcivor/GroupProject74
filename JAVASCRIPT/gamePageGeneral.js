@@ -180,29 +180,30 @@ function updateState() {
     const stateImageHref = currentState.ImageHREF;
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
-    description.textContent = "";
+    document.getElementById('mobileHeader').textContent = currentState.room;
+    description.textContent = currentState.description;
 
     //typing effect
-    let typingIndex = 0;
-    let totalTypingTime = currentState.description.length * 20;
-    clearInterval(typingInterval);
-    typingInterval = setInterval(() => {
-        description.textContent += currentState.description[typingIndex];
-        typingIndex++;
-        if (typingIndex == currentState.description.length) {
-            clearInterval(typingInterval);
-        }
+    // let typingIndex = 0;
+    // let totalTypingTime = currentState.description.length * 20;
+    // clearInterval(typingInterval);
+    // typingInterval = setInterval(() => {
+    //     description.textContent += currentState.description[typingIndex];
+    //     typingIndex++;
+    //     if (typingIndex == currentState.description.length) {
+    //         clearInterval(typingInterval);
+    //     }
 
-    }, 20);
+    // }, 20);
 
 
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
-    document.querySelector('.gameContainer').style.display = 'none';
-    // document.querySelector('.rubbishContainer').style.display = 'none';
+    
+    
 
+    
     //dynamic buttons
-
 
     currentState.interactions.forEach(interaction => {
 
@@ -211,17 +212,17 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
-        button.setAttribute('disabled', true);
+        // button.setAttribute('disabled', true);
         buttonContainer.appendChild(button);
 
     });
 
-    setTimeout(() => {
-        const optionBtns = document.querySelectorAll('.optionButton');
-        optionBtns.forEach(btn => {
-            btn.removeAttribute('disabled');
-        });
-    }, totalTypingTime);
+    // setTimeout(() => {
+    //     const optionBtns = document.querySelectorAll('.optionButton');
+    //     optionBtns.forEach(btn => {
+    //         btn.removeAttribute('disabled');
+    //     });
+    // }, totalTypingTime);
 
 }
 
@@ -431,11 +432,11 @@ async function addItem(itemID) {
 
 
 async function saveGame() {
-    let electricityOn = sessionStorage.getItem("electricityOn");
-    let frontDoorUnlocked = sessionStorage.getItem("frontDoorUnlocked");
+    let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
+    let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
-    let lightingOn = sessionStorage.getItem("lightingOn");
+    let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
     let currentStateID = sessionStorage.getItem("currentState");

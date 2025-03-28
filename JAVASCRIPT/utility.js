@@ -25,6 +25,13 @@ class Clue{
 
 document.addEventListener('DOMContentLoaded',function(){
     document.documentElement.style.fontSize = `${sessionStorage.getItem('fontSize')}px`;
+    let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+    if (easyReadOn == true) {
+        document.documentElement.style.fontFamily = 'Arial, Helvetica, sans-serif'
+    }
+    else {
+        document.documentElement.style.fontFamily = '"merriweather", serif';
+    }
 })
 
 
