@@ -6,6 +6,7 @@
 
 
 let errorMessage = '<ul>';
+sessionStorage.setItem("easyReadOn",JSON.stringify(false));
 
 
 const loginBtn = document.getElementById('loginBtn');

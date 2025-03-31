@@ -1,11 +1,11 @@
 *{
-    font-family: "merriweather", serif;
     margin: 0;
     padding: 0;
 }
 
 html{
     font-size: 16px;
+    font-family: "merriweather", serif;
 }
 
 body {
@@ -170,6 +170,12 @@ h2{
     color: rgb(34, 34, 68); /*Input Background*/
     color: rgb(0, 68, 204); /*Button background*/
     color: rgb(0, 102, 255); /*button hover*/
+}
+
+.unlocked {
+    background-color: #d4edda; /* Light green background */
+    border: 2px solid #28a745; /* Green border */
+    color: #155724; /* Dark green text */
 }
 
 @media (max-width: 480px){

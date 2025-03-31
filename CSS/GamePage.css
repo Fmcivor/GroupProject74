@@ -1,7 +1,8 @@
 /* lead developer - FINTAN MCIVOR */
 /* mobile design - CALLUM GILPIN */
 html{
-    font-size: 18px;
+    font-size: 16px;
+    font-family: "merriweather", serif;
 }
 
 * {
@@ -45,6 +46,9 @@ header{
     border-bottom: 1px solid white;
 }
 
+
+/* Settings */
+
 #settingsButton{
     font-size: 2.5rem;
     position: absolute;
@@ -55,6 +59,138 @@ header{
 #settingsButton:hover{
     color: rgb(25, 12, 121);
 }
+
+
+.slideContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 70%;
+    gap: 20px;
+}
+
+#slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+#slider:hover {
+    opacity: 1;
+}
+
+#slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: rgb(0, 102, 255);
+    cursor: pointer;
+}
+
+#slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+#easyReadCheckBox{
+    -webkit-appearance: none;
+    position: relative;
+    width: 50px;
+    height: 30px;
+    border-radius: 25px;
+    background-color: lightgray;
+    transition: background-color .3s;
+    outline: none;
+    margin:0 auto 0 auto
+}
+
+#easyReadCheckBox::after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    height: 1.25rem;
+    width: 1.25rem;
+    background-color: white;
+    transition: left .3s;
+}
+
+#easyReadCheckBox:checked{
+    background-color: green;
+}
+
+#easyReadCheckBox:checked::after{
+    left: 70%;
+}
+
+.sampleTextContainer{
+    width: 80%;
+    height: 15%;
+}
+
+
+.easyReadContainer{
+    width: 50%;
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    gap: 6px;
+}
+
+#savePreferencesBtn{
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: rgb(0, 68, 204);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: inherit;
+    width: fit-content;
+}
+
+#savePreferencesBtn:hover{
+    background-color: #0066ff;
+    transform: scale(1.05);
+}
+
+#sampleText{
+    height: auto;
+    text-align: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 60%;
+}
+
+
+
 
 .wrapper {
     display: flex;
@@ -89,6 +225,7 @@ header{
     min-width: fit-content;
     align-items: flex-start;
     transition: right 1s ease-in-out;
+    font-family: "Lugrasimo", cursive;
 }
 
 .iconContainer {
@@ -174,6 +311,7 @@ header{
     height: 90%;
     width: 90%;
     overflow-y: auto;
+    font-family: inherit;
 }
 
 #inventoryContentWrapper{
@@ -183,6 +321,7 @@ header{
     height: 90%;
     align-items: center;
     gap: 10%;
+    font-family: inherit;
 }
 
 .toolBarSectionHeader {
@@ -190,7 +329,7 @@ header{
     width: fit-content;
     text-align: center;
     color: black;
-    font-family: 'Courier New', Courier, monospace
+    font-family: inherit;
 }
 
 .inventoryGrid {
@@ -262,6 +401,7 @@ header{
     height: auto;
     padding: 5%;
     gap: 5%;
+    font-family: inherit;
 }
 
 .notebookSectionHeader {
@@ -271,12 +411,23 @@ header{
 ul {
     width: 100%;
     overflow: hidden;
-    list-style-position: inside;
+}
+
+li::before{
+    content: "\f002";
+    font-family: "Font Awesome 6 free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
 }
 
 li {
     margin-bottom: 5%;
     color: black;
+    position: relative;
+    padding-left: 1.3rem;
+    
 }
 
 #suspectSection {
@@ -332,11 +483,13 @@ li {
     min-height: 2px;
     width:95%;
 }
+
 #promptDivider{
     position: relative;
     left: -1.5%;
     width: 103%;
 }
+
 #leftDivider{
     height: 3px;
     flex: 0.01;
@@ -379,6 +532,7 @@ li {
     display: flex;
     flex: 1;
 }
+
 #responseParagraph{
     margin-top: 1.3vh;
     text-align: justify;

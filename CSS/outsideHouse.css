@@ -1,8 +1,6 @@
 /* Lead - Fintan */
 /* MiniGames Styles */
-html{
-    font-size: 18px;
-}
+
 
 .gameContainer{
     width: 80%;
@@ -38,8 +36,19 @@ html{
     justify-content: center;
     align-items: center;
     transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
-    
-    
+}
+
+.circleImg{
+    width:92%;
+    height: 92%;
+    border-radius: 100%;
+    background-image: url(../Images/gear.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .lineDiv{
@@ -148,3 +157,5 @@ html{
         width: 100px;
     }
 }
+
+

@@ -8,6 +8,8 @@
 let userID = sessionStorage.getItem("userID");
 let username = sessionStorage.getItem("username");
 let displayName = sessionStorage.getItem("displayName");
+let fontSize = sessionStorage.getItem("fontSize");
+let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
 
 let errorMessage = '<ul>';
 
@@ -15,35 +17,46 @@ const displayNameInput = document.getElementById('displayName');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirmPassword')
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-const exitBtn = document.getElementById('exitBtn');
+const exitProfileBtn = document.getElementById('exitProfileBtn');
+const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
 const messageContainer = document.getElementById('messageContainer');
 const profileTab = document.getElementById('profileTab');
 const preferencesTab = document.getElementById('preferencesTab');
 const profileForm = document.getElementById('profileForm');
 const preferencesForm = document.getElementById('preferencesForm');
+const easyReadCheckBox = document.getElementById('easyReadCheckBox')
 
-profileTab.addEventListener("click",function(){
+profileTab.addEventListener("click", function () {
     profileTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     preferencesTab.style.borderBottom = '4px solid transparent';
 
     profileForm.style.display = 'flex'
     preferencesForm.style.display = 'none';
+
+    displayNameInput.value = displayName
 });
 
-preferencesTab.addEventListener("click",function(){
+preferencesTab.addEventListener("click", function () {
     preferencesTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     profileTab.style.borderBottom = '4px solid transparent';
 
     preferencesForm.style.display = 'flex'
     profileForm.style.display = 'none';
 
-    fontSlider.value = sessionStorage.getItem("fontSize");
+    fontSlider.value = fontSize;
+    let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn")) === true;
+    easyReadCheckBox.checked = easyReadOn;
 
 });
 
+
+
 document.addEventListener('DOMContentLoaded', function () {
+    checkLogin();
 
     displayNameInput.value = displayName
+    fontSlider.value = fontSize;
+    easyReadCheckBox.checked = easyReadOn;
 });
 
 const showButton = document.getElementById('togglePassword');
@@ -77,9 +90,16 @@ document.getElementById('password').addEventListener('input', function (event) {
 
 
 
-exitBtn.addEventListener('click', function () {
+exitProfileBtn.addEventListener('click', function () {
     window.location.href = 'mainMenu.html';
 });
+
+exitPreferencesBtn.addEventListener('click', function () {
+
+    window.location.href = 'mainMenu.html';
+})
+
+
 
 
 saveProfileBtn.addEventListener('click', validateChanges);
@@ -88,7 +108,7 @@ saveProfileBtn.addEventListener('click', validateChanges);
 
 async function validateChanges(event) {
     event.preventDefault();
-    saveProfileBtn.setAttribute('disabled',true);
+    saveProfileBtn.setAttribute('disabled', true);
     //reset
     errorMessage = '<ul>';
 
@@ -116,7 +136,7 @@ async function validateChanges(event) {
         confirmPasswordInput.classList.add('disabled');
         confirmPasswordInput.setAttribute('disabled', true);
 
-        
+
     }
     else {
         displayMessage(false);
@@ -182,7 +202,7 @@ async function updateProfile(enteredDisplayName, enteredPassword) {
 
         let result = await response.json();
 
-        if (result.success && result.affected_rows ==1) {
+        if (result.success && result.affected_rows == 1) {
             displayMessage(true);
             sessionStorage.setItem("displayName", enteredDisplayName);
         }
@@ -233,37 +253,54 @@ closeBtn.addEventListener('click', function () {
 const fontSlider = document.getElementById('slider');
 const savePreferencesBtn = document.getElementById('savePreferencesBtn');
 
-fontSlider.oninput = function(){
-    document.getElementById('fontSizeLabel').style.fontSize = `${fontSlider.value}px`; 
+fontSlider.oninput = function () {
+    document.getElementById('sampleText').style.fontSize = `${fontSlider.value}px`;
 }
 
-savePreferencesBtn.addEventListener('click',savePreferences);
+savePreferencesBtn.addEventListener('click', savePreferences);
 
-async function savePreferences(){
-    sessionStorage.setItem("fontSize",fontSlider.value);
+
+
+async function savePreferences() {
+    let easyReadOn = easyReadCheckBox.checked;
+    sessionStorage.setItem("fontSize", fontSlider.value);
+    sessionStorage.setItem("easyReadOn", easyReadOn);
+    if (easyReadOn == true) {
+        document.documentElement.style.fontFamily = 'Arial, Helvetica, sans-serif'
+    }
+    else {
+        document.documentElement.style.fontFamily = '"merriweather", serif';
+    }
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
-    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value}`;
-    dbConfig.set('query',saveQuery);
+
+
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
+    dbConfig.set('query', saveQuery);
+
 
     try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
         });
 
         let result = await response.json();
 
         if (result.success) {
-            console.log("Font size updated and saved");
+            console.log("Font size and easy read updated and saved");
         }
-        else{
-            console.error("Error occurred while saving the font size");
+
+        else {
+
+            console.error("Error occurred while saving the font size and easy read");
         }
 
     } catch (error) {
-        console.error("Error while saving the font size",error);
+
+        console.error("Error while saving the font size and easy read", error);
+
     }
-    
+
 }
 
 

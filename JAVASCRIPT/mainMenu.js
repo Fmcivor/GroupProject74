@@ -10,7 +10,7 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-
+    checkLogin();
     const btnSignOut = document.getElementById("btnSignOut");
     const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
@@ -29,9 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     //Fintan's work - check if available save slot
-
-    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
+    getUserAchievements();
+    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
     checkTotalActiveGames();
+    getUserAchievements();
 
     // font size
     document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
@@ -58,9 +59,10 @@ async function checkTotalActiveGames(){
             if (activeGameCount <3) {
                 document.getElementById('playBtn').removeAttribute('disabled');
             }
-            else{
+            else if(activeGameCount){
                 document.getElementById('playBtn').setAttribute('disabled',true);
             }
+
         }
     } catch (error) {
         console.log('error with checking the number of active games this user has');
@@ -72,7 +74,8 @@ async function checkTotalActiveGames(){
 
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
-    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"OutsideHouse.html",1)`;
+
+    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"guestBedroom.html",1)`;
     dbConfig.set('query',insertQuery);
 
     try {
@@ -111,7 +114,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn',gameSave.lightingOn);
             console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = 'OutsideHouse.html';
+            window.location.href = 'guestBedroom.html';
         }
         else{
             console.error("failed to retrieve latest game save ID:",selectResult)
@@ -132,68 +135,33 @@ function signOut() {
     window.location.href = "login.html";
 }
 
-async function loadGame(gameID){
 
-    let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = ${gameID}`;
-    dbConfig.set('query',selectQuery);
+
+async function getUserAchievements(){
+    let query = `SELECT achievementID FROM tblUserAchievements WHERE userID = ${userID}`;
+    dbConfig.set("query",query);
 
     try {
         let response = await fetch(dbConnectorUrl,{
             method:"POST",
             body:dbConfig
         });
-
+    
         let result = await response.json();
-
-        if (result.success && result.data.length >0) {
-            let gameSave = result.data[0];
-            sessionStorage.setItem('gameID',gameSave.gameID);
-            sessionStorage.setItem('electricityOn',gameSave.electricityOn);
-            sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
-            sessionStorage.setItem('currentRoom',gameSave.currentRoom);
-            sessionStorage.setItem('currentState',gameSave.currentState);
-            sessionStorage.setItem('inventory',JSON.stringify([]));
-            sessionStorage.setItem('clueList',JSON.stringify([]));
-            sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
-            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
-            sessionStorage.setItem('lightingOn',gameSave.lightingOn);
-            console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = gameSave.currentRoom;
+    
+        if (result.success) {
+            let achievementIDs = result.data;
+            sessionStorage.setItem("achievementIDs",JSON.stringify(achievementIDs));
+            return true;
         }
         else{
-            console.error("Error loading the game save");
-        }
-
-    } catch (error) {
-        console.error("Error loading the selected gameSave");
-    }
-
-}
-
-async function displayGameSaves(){
-
-    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = 1 ORDER BY startDate DESC LIMIT 3`;
-    dbConfig.set(query,'selectQuery');
-
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success && result.data.length >0) {
-            let latestGames = result.data;
-
-            latestGames.forEach(gameSave => {
-                let saveSlot = `<div class="saveSlot">
-                                <a href="${gameSave.currentRoom}">Save Slot 1</a>
-                                </div>`;
-            });
+            console.error("Error occurred while fetching the user achievements");
+            return false;
         }
     } catch (error) {
-        
+        console.error("Error occurred while fetching the user achievements",error);
+        return false;
     }
 
+    
 }
