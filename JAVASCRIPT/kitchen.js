@@ -104,11 +104,11 @@ function examineGlass(){
 }
 
 function enterLivingRoom(){
-    window.location.href = 'livingRoom.html'
+    window.location.replace('livingRoom.html');
     sessionStorage.setItem('currentState', 1);
 }
 
 function enterHallway(){
-    window.location.href = 'hallway.html'
+    window.location.replace('hallway.html');
     sessionStorage.setItem('currentState', 4);
 }

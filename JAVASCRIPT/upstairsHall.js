@@ -42,19 +42,19 @@ const upstairsHall = {
 
 //STATE FUNCTIONS
 function goToAttic() {
-    // window.location.href = '';
+    // window.location.replace( '';
 }
 
 function goToMasterBedroom() {
     sessionStorage.setItem('currentState', 1);
-    window.location.href = 'masterBedroom.html'
+    window.location.replace('masterBedroom.html');
 }
 
 function goToGuestBedroom() {
-    //window.location.href = '';
+    //window.location.replace( '';
 }
 
 function goToDownStairs() {
     sessionStorage.setItem('currentState', 4);
-    window.location.href = 'downStairsHall.html';
+    window.location.replace('downStairsHall.html');
 }
