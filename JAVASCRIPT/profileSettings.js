@@ -52,6 +52,7 @@ preferencesTab.addEventListener("click", function () {
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    checkLogin();
 
     displayNameInput.value = displayName
     fontSlider.value = fontSize;
@@ -252,10 +253,12 @@ const fontSlider = document.getElementById('slider');
 const savePreferencesBtn = document.getElementById('savePreferencesBtn');
 
 fontSlider.oninput = function () {
-    document.getElementById('fontSizeLabel').style.fontSize = `${fontSlider.value}px`;
+    document.getElementById('sampleText').style.fontSize = `${fontSlider.value}px`;
 }
 
 savePreferencesBtn.addEventListener('click', savePreferences);
+
+
 
 async function savePreferences() {
     let easyReadOn = easyReadCheckBox.checked;

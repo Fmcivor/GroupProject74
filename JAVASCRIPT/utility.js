@@ -27,12 +27,45 @@ document.addEventListener('DOMContentLoaded',function(){
     document.documentElement.style.fontSize = `${sessionStorage.getItem('fontSize')}px`;
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
     if (easyReadOn == true) {
-        document.documentElement.style.fontFamily = 'Arial, Helvetica, sans-serif'
+        document.documentElement.style.fontFamily = 'Arial, Helvetica, sans-serif';
     }
     else {
         document.documentElement.style.fontFamily = '"merriweather", serif';
     }
-})
+});
 
+function checkLogin(){
+    if (!sessionStorage.getItem('userID')) {
+        window.location.href = 'login.html';
+        return;
+    }
+}
+
+
+async function deleteSave(gameID){
+    let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
+                       
+    dbConfig.set('query', deleteQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Successfully deleted game save");
+        }
+        else{
+            console.error("Error while deleting the game save");
+        }
+
+    } catch (error) {
+        console.error("Error while deleting the game save",error);
+    }
+
+}
 
 

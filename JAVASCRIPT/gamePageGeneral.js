@@ -44,8 +44,7 @@ let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
-UpdateInventory();
-updateClueNotebook();
+
 
 
 //EVENT LISTENERS
@@ -58,34 +57,29 @@ exitAndSaveBtn.addEventListener('click', async function () {
     await saveGame();
     window.location.href = "mainMenu.html";
 });
-
 deleteAndExit.addEventListener('click', async function () {
-    let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
-                       
-    dbConfig.set('query', deleteQuery);
-
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success) {
-            console.log("Successfully deleted game save");
-        }
-        else{
-            console.error("Error while deleting the game save");
-        }
-
-    } catch (error) {
-        console.error("Error while deleting the game save",error);
-    }
-
+    deleteSave(gameID);
     window.location.href = "mainMenu.html";
 
 });
+
+document.addEventListener('DOMContentLoaded', function(){
+    checkLogin();
+
+    let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+    if (easyReadOn == true) {
+        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+    }
+    else {
+        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+    }
+
+    UpdateInventory();
+    updateClueNotebook();
+})
+
+
+
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -340,7 +334,7 @@ async function addClue(clueID) {
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
-            hasRubbishClue = true;
+            
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -366,6 +360,24 @@ async function addClue(clueID) {
         console.error("An error has occurred while adding the clues to the notebook", error);
     }
 
+    let alternateColour = false;
+    let notificationTimer = setInterval(() => {
+        if (alternateColour == false) {
+            noteBookButton.style.color = 'rgb(228, 140, 68)';
+            alternateColour = true;
+        }
+        else{
+            noteBookButton.style.color = 'black';
+            alternateColour = false
+        }
+    }, 400);
+    
+
+    setTimeout(() => {
+        clearInterval(notificationTimer);
+        noteBookButton.style.color = 'black';
+    }, 2400);
+
 }
 
 function updateClueNotebook() {
@@ -374,7 +386,6 @@ function updateClueNotebook() {
         let clueElement = document.createElement("li");
         clueElement.textContent = clueList[i].clueText;
         document.getElementById('clueList').appendChild(clueElement);
-
     }
 }
 
@@ -398,7 +409,6 @@ async function addItem(itemID) {
             newItem.itemUsed = false;
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
-            hasKey = true;
             UpdateInventory();
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
@@ -426,6 +436,24 @@ async function addItem(itemID) {
         console.log("Error adding the item to your inventory");
         console.log(error);
     }
+
+    let alternateColour = false;
+    let notificationTimer = setInterval(() => {
+        if (alternateColour == false) {
+            inventoryButton.style.color = 'rgb(228, 140, 68)';
+            alternateColour = true;
+        }
+        else{
+            inventoryButton.style.color = 'black';
+            alternateColour = false
+        }
+    }, 400);
+    
+
+    setTimeout(() => {
+        clearInterval(notificationTimer);
+        inventoryButton.style.color = 'black';
+    }, 2400);
 }
 
 
@@ -469,6 +497,55 @@ async function saveGame() {
         }
     } catch (error) {
         onsole.error("error saving the game")
+    }
+
+}
+
+
+
+//preferences and settings
+
+const fontSlider = document.getElementById('slider');
+const savePreferencesBtn = document.getElementById('savePreferencesBtn');
+
+fontSlider.oninput = function () {
+    document.getElementById('sampleText').style.fontSize = `${fontSlider.value}px`;
+}
+
+savePreferencesBtn.addEventListener('click', savePreferences);
+
+async function savePreferences() {
+    let easyReadOn = easyReadCheckBox.checked;
+    sessionStorage.setItem("fontSize", fontSlider.value);
+    sessionStorage.setItem("easyReadOn", easyReadOn);
+    if (easyReadOn == true) {
+        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+    }
+    else {
+        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+    }
+    document.documentElement.style.fontSize = `${fontSlider.value}px`;
+
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
+    dbConfig.set('query', saveQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Font size and easy read updated and saved");
+        }
+        else {
+            console.error("Error occurred while saving the font size and easy read");
+        }
+
+    } catch (error) {
+        console.error("Error while saving the font size and easy read", error);
     }
 
 }

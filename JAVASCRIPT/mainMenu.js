@@ -10,7 +10,7 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-
+    checkLogin();
     const btnSignOut = document.getElementById("btnSignOut");
     const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
@@ -59,9 +59,10 @@ async function checkTotalActiveGames(){
             if (activeGameCount <3) {
                 document.getElementById('playBtn').removeAttribute('disabled');
             }
-            else{
+            else if(activeGameCount){
                 document.getElementById('playBtn').setAttribute('disabled',true);
             }
+
         }
     } catch (error) {
         console.log('error with checking the number of active games this user has');
@@ -133,71 +134,7 @@ function signOut() {
     window.location.href = "login.html";
 }
 
-async function loadGame(gameID){
 
-    let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = ${gameID}`;
-    dbConfig.set('query',selectQuery);
-
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success && result.data.length >0) {
-            let gameSave = result.data[0];
-            sessionStorage.setItem('gameID',gameSave.gameID);
-            sessionStorage.setItem('electricityOn',gameSave.electricityOn);
-            sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
-            sessionStorage.setItem('currentRoom',gameSave.currentRoom);
-            sessionStorage.setItem('currentState',gameSave.currentState);
-            sessionStorage.setItem('inventory',JSON.stringify([]));
-            sessionStorage.setItem('clueList',JSON.stringify([]));
-            sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
-            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
-            sessionStorage.setItem('lightingOn',gameSave.lightingOn);
-            console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = gameSave.currentRoom;
-        }
-        else{
-            console.error("Error loading the game save");
-        }
-
-    } catch (error) {
-        console.error("Error loading the selected gameSave");
-    }
-
-}
-
-async function displayGameSaves(){
-
-    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = 1 ORDER BY startDate DESC LIMIT 3`;
-    dbConfig.set(query,'selectQuery');
-
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success && result.data.length >0) {
-            let latestGames = result.data;
-
-            latestGames.forEach(gameSave => {
-                let saveSlot = `<div class="saveSlot">
-                                <a href="${gameSave.currentRoom}">Save Slot 1</a>
-                                </div>`;
-            });
-        }
-    } catch (error) {
-        
-    }
-
-}
 
 async function getUserAchievements(){
     let query = `SELECT achievementID FROM tblUserAchievements WHERE userID = ${userID}`;

@@ -71,7 +71,7 @@ const frontOfHouseDoorLocked = {
 const frontOfHouseDoorUnlocked = {
     "ID": 2,
     "room": "Front of House",
-    "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
+    "description": "You stand infront of a large house with an unlocked door infront of you and a path leading to your left",
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
         {
@@ -208,6 +208,7 @@ async function checkUnderMat() {
     else {
         setResponse("There is a large golden key here and you lift it");
         addItem(keyID);
+        hasKey = true;
 
     }
 }
@@ -237,11 +238,6 @@ async function enterHouse(){
     await saveGame();
     window.location.href = 'downStairsHall.html';
 }
-
-
-
-
-
 
 
 
@@ -391,9 +387,10 @@ repairButton.addEventListener('click', async function () {
             generatorAudio.play();
             electricityOn = true;
             document.getElementById('GeneratorGameContainer').style.display = 'none';
-            currentState = generatorFixed;
+            generatorBuilding.interactions.pop();
             updateState();
             setResponse("You have successfully repaired the generator.");
+
             
 
             if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
@@ -458,6 +455,7 @@ repairButton.addEventListener('click', async function () {
 clue1Btn.addEventListener('click', async function () {
     rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
     clue1Btn.style.visibility = 'collapse';
+    hasRubbishClue = true;
     await addClue(rubbishClueID);
     updateClueNotebook();
     setResponse('You have found a letter check your notebook to see its content');

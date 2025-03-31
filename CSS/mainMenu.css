@@ -96,9 +96,11 @@ header {
     transform: none;
 }
 
-.menu button:disabled{
+.menu button:disabled, .menu a:disabled{
     color: rgb(135, 135, 135);
 }
+
+
 
 .menu a:hover, .menu button:hover {
     text-decoration:underline;

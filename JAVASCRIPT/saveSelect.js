@@ -1,5 +1,8 @@
 
-document.addEventListener('DOMContentLoaded', displayGameSaves);
+document.addEventListener('DOMContentLoaded', async function(){
+    checkLogin();
+    await displayGameSaves();
+});
 
 async function loadGame(gameID) {
 
@@ -174,18 +177,33 @@ async function displayGameSaves() {
             saveContainer.innerHTML = '<h1>Select Save</h1>';
             let latestGames = result.data;
             let slotCounter = 1;
+            
 
             latestGames.forEach(gameSave => {
                 let saveSlotBtn = document.createElement('button');
                 saveSlotBtn.value = gameSave.gameID;
-                saveSlotBtn.textContent = `saveSlot${slotCounter}`;
+                saveSlotBtn.textContent = `bjhgjhgjhgjhghsaveSlot${slotCounter}`;
                 slotCounter++;
                 saveSlotBtn.addEventListener('click', function (event) {
                     loadGame(event.target.value);
                 });
+
+                let deleteSaveBtn = document.createElement('i');
+                deleteSaveBtn.classList.add('fa-solid');
+                deleteSaveBtn.classList.add('fa-trash');
+                deleteSaveBtn.classList.add('deleteSaveBtn');
+                deleteSaveBtn.style.color = 'red';
+                deleteSaveBtn.value = gameSave.gameID;
+                deleteSaveBtn.addEventListener('click', async function(event){
+                    await deleteSave(event.target.value);
+                    await displayGameSaves();
+                });
+
+
                 let saveSlotDiv = document.createElement('div');
                 saveSlotDiv.classList.add('saveSlot');
                 saveSlotDiv.appendChild(saveSlotBtn);
+                saveSlotDiv.appendChild(deleteSaveBtn);
                 saveContainer.appendChild(saveSlotDiv);
             });
 
