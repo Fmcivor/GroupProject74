@@ -1,0 +1,103 @@
+#safeGameContainer {
+    background-color: greenyellow;
+    width: clamp(280px, 40vw, 400px);
+    height: 80%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#safeTop {
+    height: 20%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 20%;
+    align-items: end;
+    flex-direction: row;
+}
+
+#inputCodeDisplay {
+    width: 35%;
+    height: 65%;
+    background-color: chocolate;
+    display: flex;
+    flex-direction: row;
+}
+
+#safeHandle {
+    width: 30%;
+    height: 65%;
+    background-color: firebrick;
+}
+
+#safeHandleButton {
+    background-color: pink;
+    width: 100%;
+    height: 100%;
+}
+
+#safeInputContainer {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.inputNumberDisplay {
+    text-align: center;
+    color: black;
+    margin: auto;
+    font-size: 45px;
+    font-weight: 600;;
+}
+
+
+.safeDial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background-color: lightblue;
+    position: absolute;
+}
+
+#dial1 {
+    background-color: magenta;
+    width: 80%;
+}
+
+#dial2 {
+    background-color: aqua;
+    width: 80%;
+}
+
+#dial3 {
+    background-color: blueviolet;
+    width: 75%;
+}
+
+#dial4 {
+    background-color: crimson;
+    width: 67%;
+}
+
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    rotate: 86deg;
+}
+
+.dialNums {
+    font-weight: bold;
+    font-size: 1em;
+}

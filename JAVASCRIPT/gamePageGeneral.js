@@ -47,7 +47,6 @@ let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
 
 
-
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
@@ -175,23 +174,31 @@ function updateState() {
     const responseParagraph = document.getElementById('responseParagraph').textContent = '';
     const buttonContainer = document.getElementById('buttonContainer');
     const stateImageHref = currentState.ImageHREF;
+    const descText = currentState.description;
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
     document.getElementById('mobileHeader').textContent = currentState.room;
     description.textContent = currentState.description;
 
-    //typing effect
-    // let typingIndex = 0;
-    // let totalTypingTime = currentState.description.length * 20;
-    // clearInterval(typingInterval);
-    // typingInterval = setInterval(() => {
-    //     description.textContent += currentState.description[typingIndex];
-    //     typingIndex++;
-    //     if (typingIndex == currentState.description.length) {
-    //         clearInterval(typingInterval);
-    //     }
 
-    // }, 20);
+    //typing effect
+    const descLength = descText.length;
+    let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(5500, totalTime);
+    let intervalTime = totalTime/descLength;
+    intervalTime.toFixed(1);
+    let typingIndex = 0;
+    // let totalTypingTime = currentState.description.length * 20;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        description.textContent += descText[typingIndex];
+        typingIndex++;
+        if (typingIndex == currentState.description.length) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
+
 
 
     //background image
@@ -214,13 +221,6 @@ function updateState() {
 
     });
 
-    // setTimeout(() => {
-    //     const optionBtns = document.querySelectorAll('.optionButton');
-    //     optionBtns.forEach(btn => {
-    //         btn.removeAttribute('disabled');
-    //     });
-    // }, totalTypingTime);
-
 }
 
 
@@ -229,16 +229,82 @@ function userDecisionHandler(event) {
 
 
     if (typeof currentState.interactions[responseId].response === 'string') {
-        document.getElementById('responseParagraph').textContent = currentState.interactions[responseId].response;
+        setResponse(currentState.interactions[responseId].response);
+        document.getElementById('descriptionParagraph').textContent = currentState.description;
+
     }
     else {
         currentState.interactions[responseId].response(responseId);
     }
 }
 
+
 function setResponse(responseText) {
-    document.getElementById('responseParagraph').textContent = responseText;
+    const responseBox = document.getElementById('responseParagraph');
+    responseBox.textContent = "";
+    const responseLength = responseText.length;
+    let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(6000, totalTime)
+    let intervalTime = totalTime/responseLength;
+    intervalTime = Math.max(20, intervalTime)
+    
+    let typingIndex = 0;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        responseBox.textContent += responseText[typingIndex];
+        typingIndex++;
+        if (typingIndex == responseLength) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
 }
+
+function setDescriptionAndResponse(responseText) {
+    const description = document.getElementById('descriptionParagraph');
+    const descText = currentState.description;
+    description.textContent = "";
+
+    //typing effect
+    const descLength = descText.length;
+    let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(5500, totalTime);
+    let intervalTime = totalTime/descLength;
+    intervalTime.toFixed(1);
+    let typingIndex = 0;
+    // let totalTypingTime = currentState.description.length * 20;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        description.textContent += descText[typingIndex];
+        typingIndex++;
+        if (typingIndex == currentState.description.length) {
+            clearInterval(typingInterval);
+            setResponseAfterDescription(responseText);
+        }
+
+    }, intervalTime);
+}
+
+function setResponseAfterDescription(responseText) {
+    const responseBox = document.getElementById('responseParagraph');
+    responseBox.textContent = "";
+    const responseLength = responseText.length;
+    let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(6000, totalTime)
+    let intervalTime = totalTime/responseLength;
+    intervalTime = Math.max(20, intervalTime)
+    
+    let typingIndex = 0;
+    typingInterval = setInterval(() => {
+        responseBox.textContent += responseText[typingIndex];
+        typingIndex++;
+        if (typingIndex == responseLength) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
+}
+
 
 function UpdateInventory() {
     for (let i = 0; i < inventory.length; i++) {
@@ -291,7 +357,9 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
         
         
         let selectQuery = `SELECT name, description FROM tblAchievement
+
         WHERE  achievementID = ${achievementID};`;
+
     
         dbConfig.set('query', selectQuery);
         try {
@@ -414,7 +482,7 @@ async function addItem(itemID) {
             UpdateInventory();
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
-                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                                VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
             dbConfig.set("query", saveItemQuery);
 
             let saveItemResponse = await fetch(dbConnectorUrl, {
@@ -467,19 +535,24 @@ async function saveGame() {
     let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
+    let currentStateID = currentState.ID;
+
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-    let currentStateID = sessionStorage.getItem("currentState");
+  
+
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
+
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa}
+
                         WHERE gameID = ${gameID}`;
 
     dbConfig.set("query", updateQuery);
