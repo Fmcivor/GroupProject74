@@ -61,7 +61,7 @@ const leftKitchen = {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-
+    
     let states = [];
 
     states.push(kitchenDefault,leftKitchen);

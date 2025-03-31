@@ -1,6 +1,9 @@
+
+document.addEventListener("DOMContentLoaded", function () {
+    checkLogin();
+
 let userID = sessionStorage.getItem("userID");
 
-document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
 
     // Highlight unlocked achievements
