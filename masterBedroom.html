@@ -4,23 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout</title>
+
+    <title>Master Bedroom</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
-    <link rel="stylesheet" href="CSS/outsideHouse.css">
+    <link rel="stylesheet" href="CSS/masterBedroom.css">
+
 </head>
 
 <body>
     <header>
+
+        <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
-        <h2 id="mobileHeader">Front Of The house</h1>
+        <h2 id="mobileHeader">Master Bedroom</h1>
+
     </header>
     <main class="wrapper">
 
         <div class="leftColumn">
             <div class="gameInteractionContainer">
                 <div class="responseContainer">
-                    <h2 id="roomHeader">Front Of The house</h2>
+
+                    <h2 id="roomHeader">Master Bedroom</h2>
+
 
                     <div class="promptWrapper">
                         <p id="descriptionParagraph"></p>
@@ -33,14 +40,91 @@
                     <div id="buttonContainer" class="buttonContainer">
                 </div>
             </div>
+
+
+            <div class="settingsContainer">
+                <h2 id="settingsHeader" style="justify-content: center;">Settings</h2>
+                <div class="settingsContent">
+                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;" >Save and Exit</button>
+                    <button class="optionButton" id="deleteAndExit" style="font-size: 1.5rem;" > Delete and Exit</button>
+                </div>
+            </div>
         </div>
 
         <div class="rightColumn">
-            <div class="gameContainer">
-               
-            </div>
+            <div id="safeGameContainer" class="gameContainer">
+                <div id="safeTop">
+                    <div id="inputCodeDisplay">
+                        <p id="d1Display" class="inputNumberDisplay">0</p>
+                        <p id="d2Display" class="inputNumberDisplay">0</p>
+                        <p id="d3Display" class="inputNumberDisplay">0</p>
+                        <p id="d4Display" class="inputNumberDisplay">0</p>
+                    </div>
+                    <div id="safeHandle">
+                        <button id="safeHandleButton">OPEN</button>
+                    </div>
+                </div>
+                <div id="safeInputContainer">
+                    <div id="dial1" class="safeDial">
+                        <svg class="svg" id="d1SVG" viewBox="0 0 200 200">
+                            <defs>
+                                <path id="dial1Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                            </defs>
+                            <text class="dialNums">
+                                <textPath href="#dial1Path" startOffset="0%" spacing="auto" textLength="465">
+                                    0123456789 
+                                </textPath>
+                            </text>
+                        </svg>    
 
-           
+                        <div id="dial2" class="safeDial">
+                            <svg class="svg" id="d2SVG" viewBox="0 0 200 200">
+                                <defs>
+                                    <path id="dial2Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                </defs>
+                                <text class="dialNums">
+                                    <textPath href="#dial2Path" startOffset="0%" spacing="auto" textLength="465">
+                                        0123456789 
+                                    </textPath>
+                                </text>
+                            </svg>
+
+                            <div id="dial3" class="safeDial">
+                                <svg class="svg" id="d3SVG" viewBox="0 0 200 200">
+                                    <defs>
+                                        <path id="dial3Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                    </defs>
+                                    <text class="dialNums">
+                                        <textPath href="#dial3Path" startOffset="0%" spacing="auto" textLength="465">
+                                            0123456789 
+                                        </textPath>
+                                    </text>
+                                </svg>
+
+                                <div id="dial4" class="safeDial">
+                                    <svg class="svg" id="d4SVG" viewBox="0 0 200 200">
+                                        <defs>
+                                            <path id="dial4Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                        </defs>
+                                        <text class="dialNums">
+                                            <textPath href="#dial4Path" startOffset="0%" spacing="auto" textLength="465">
+                                                0123456789 
+                                            </textPath>
+                                        </text>
+                                    </svg>
+            
+                                </div> 
+        
+                            </div>  
+
+                        </div>
+
+                    </div> 
+                    
+                </div>  
+            </div>                        
+         
+
         </div>
         <nav class="toolBar">
             <div class="iconContainer">
@@ -121,3 +205,6 @@
 
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="JAVASCRIPT/masterBedroom.js"></script>
+
