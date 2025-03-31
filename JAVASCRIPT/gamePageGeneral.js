@@ -46,7 +46,6 @@ let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
 
-
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
@@ -181,6 +180,7 @@ function updateState() {
     description.textContent = '';
 
 
+
     //typing effect
     const descLength = descText.length;
     let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
@@ -198,7 +198,6 @@ function updateState() {
         }
 
     }, intervalTime);
-
 
 
     //background image
@@ -220,7 +219,6 @@ function updateState() {
         buttonContainer.appendChild(button);
 
     });
-
 }
 
 
@@ -537,9 +535,13 @@ async function saveGame() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
+    
+
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
+  
+
   
 
 
@@ -548,10 +550,12 @@ async function saveGame() {
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
 
+
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa}
+
 
                         WHERE gameID = ${gameID}`;
 

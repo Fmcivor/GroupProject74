@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 })
 
 function leaveStudy(){
-    window.location.href = 'OutsideHouse.html';
-    sessionStorage.currentState = 4;
+    window.location.href = 'downStairsHall.html';
+    sessionStorage.setItem('currentState', 4);
 }
 
 function checkPictureFrame(){
