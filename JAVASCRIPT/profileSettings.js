@@ -95,6 +95,7 @@ exitProfileBtn.addEventListener('click', function () {
 });
 
 exitPreferencesBtn.addEventListener('click', function () {
+
     window.location.href = 'mainMenu.html';
 })
 
@@ -272,8 +273,10 @@ async function savePreferences() {
     }
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
 
+
     let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
     dbConfig.set('query', saveQuery);
+
 
     try {
         let response = await fetch(dbConnectorUrl, {
@@ -286,12 +289,16 @@ async function savePreferences() {
         if (result.success) {
             console.log("Font size and easy read updated and saved");
         }
+
         else {
+
             console.error("Error occurred while saving the font size and easy read");
         }
 
     } catch (error) {
+
         console.error("Error while saving the font size and easy read", error);
+
     }
 
 }

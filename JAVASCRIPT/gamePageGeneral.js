@@ -26,6 +26,7 @@ const deleteAndExit = document.getElementById('deleteAndExit');
 
 // item ids
 const keyID = 1;
+const lockpickID = 2;
 
 //clue ids
 const rubbishClueID = 1;
@@ -57,6 +58,7 @@ exitAndSaveBtn.addEventListener('click', async function () {
     await saveGame();
     window.location.href = "mainMenu.html";
 });
+
 deleteAndExit.addEventListener('click', async function () {
     deleteSave(gameID);
     window.location.href = "mainMenu.html";
@@ -77,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function(){
     UpdateInventory();
     updateClueNotebook();
 })
+
 
 
 
@@ -334,7 +337,6 @@ async function addClue(clueID) {
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
-            
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -460,6 +462,7 @@ async function addItem(itemID) {
 
 
 async function saveGame() {
+
     let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
     let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");

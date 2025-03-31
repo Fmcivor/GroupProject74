@@ -1,6 +1,5 @@
 
 
-
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);
 let errorMessage = '<ul>';
@@ -127,8 +126,12 @@ async function validateUsername(enteredUsername) {
 
 
 function validateDisplayName(enteredDisplayName) {
+
+
    let displayNameRegex = /^[a-zA-Z-\s]{1,15}$/;
-   if (displayNameRegex.test(enteredDisplayName) == false) {
+   if (!enteredDisplayName) {
+      errorMessage +=`<li>Display name cannot be blank.</li>`;
+
       return false;
    }
    return true;

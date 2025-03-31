@@ -3,11 +3,14 @@
 
 //VARIABLES
 
+
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
+
 let hasKey = inventory.some(item => item.itemID == keyID);
 let hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
 let hasGeneratorAchievement = userAchievementIDs.some(achievement =>achievement.achievementID == 2);
+
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -209,7 +212,6 @@ async function checkUnderMat() {
         setResponse("There is a large golden key here and you lift it");
         addItem(keyID);
         hasKey = true;
-
     }
 }
 
@@ -239,6 +241,48 @@ async function enterHouse(){
     window.location.href = 'downStairsHall.html';
 }
 
+async function searchDrawers(){
+    if (hasWeddingRingClue) {
+        setResponse("You have already searched the drawers and papers and found the wedding ring");
+    }
+    else{
+        hasWeddingRingClue = true;
+        await addClue(3);
+        updateClueNotebook();
+        setResponse("You have found an engagement ring on the table and Victor has no known past relationships. You take note of this in your notebook as a clue");
+
+    }
+}
+
+function goToBackOfHall(){
+    currentState = BackOfHall;
+    updateState();
+}
+
+async function goToLivingRoom(){
+    sessionStorage.setItem("currentState",1);
+    sessionStorage.setItem("currentRoom","livingRoom.html");
+    await saveGame();
+    window.location.href = "livingRoom.html";
+}
+
+async function goToKitchen(){
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','kitchen.html');
+    await saveGame();
+    window.location.href = 'kitchen.html';
+}
+
+async function goUpstairs(){
+    //todo
+}
+
+async function goToStudy(){
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','study.html');
+    await saveGame();
+    window.location.href = 'study.html';
+}
 
 
 function goTofrontOfHouse() {
@@ -390,9 +434,7 @@ repairButton.addEventListener('click', async function () {
             generatorBuilding.interactions.pop();
             updateState();
             setResponse("You have successfully repaired the generator.");
-
             
-
             if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
                 awardAchievement(2, userID, "Images/generatorAchievement.png");
                 hasGeneratorAchievement = true;

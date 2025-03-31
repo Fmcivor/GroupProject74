@@ -88,7 +88,6 @@ h1{
     justify-content: space-evenly;
     transition: 0.3s;
     min-height: fit-content;
-    
 }
 
 .saveSlot:hover{
