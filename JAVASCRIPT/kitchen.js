@@ -120,6 +120,4 @@ function enterLivingRoom(){
 function enterHallway(){
     window.location.replace('hallway.html');
     sessionStorage.setItem('currentState', 4);
-    window.location.replace('hallway.html');
-    
 }

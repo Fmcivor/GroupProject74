@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    
+    overflow: hidden;
 }
 
 html{
@@ -10,29 +10,18 @@ html{
 }
 
 body {
+    overflow: hidden;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    position: relative;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("../Images/outsideHouse.jpg");
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    color: white;
+    background-image: url(../Images/outsideHouse.jpg);
     background-repeat: no-repeat;
+    background-size: 100% 100%;
     background-position: center center;
-    background-attachment: fixed;
-    background-size: cover;
-    filter: blur(8px); 
-    z-index: -1;
 }
 
 header {
@@ -45,7 +34,6 @@ header {
     align-items: center;
     padding: 20px;
     background: rgba(11, 5, 56, 0.8);
-    color: white;
 }
 
 .game-title {
@@ -81,11 +69,10 @@ header {
     gap: 15px;
     background-color: rgba(10, 10, 40, 0.9);
     width: clamp(300px, 50vw, 600px);
-    height: clamp(500px, 50vh, 600px);
+    height: clamp(500px, 50vh, 1000px);
     border-radius: 20px;
     justify-content: center;
     border: 2px solid rgb(51, 51, 102);
-    margin-top: 175px;
 }
 
 .menu a, .menu button {
