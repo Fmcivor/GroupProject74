@@ -139,6 +139,7 @@ async function examinePillBottle(){
 
     } else {
         setResponse("You examine the nearly empty pill bottle. The label is partially torn, but you can still read:\n\n'including dizziness, confusion, and—if taken in excess—respiratory failure.'\n\nDo you want to take it?");
-        // addItem( id of item in database)
+        addItem(pillBottleID);
+        hasPillBottle = true;
     }
 }
