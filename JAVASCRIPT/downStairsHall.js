@@ -184,35 +184,35 @@ async function goToLivingRoom(){
     sessionStorage.setItem("currentState",1);
     sessionStorage.setItem("currentRoom","livingRoom.html");
     await saveGame();
-    window.location.href = "livingRoom.html";
+    window.location.replace("livingRoom.html");
 }
 
 async function goToKitchen(){
     sessionStorage.setItem('currentState',1);
     sessionStorage.setItem('currentRoom','kitchen.html');
     await saveGame();
-    window.location.href = 'kitchen.html';
+    window.location.replace('kitchen.html');
 }
 
 async function goUpstairs(){
     sessionStorage.setItem('currentState',1);
     sessionStorage.setItem('currentRoom','upstairsHall.html');
     await saveGame();
-    window.location.href = 'upstairsHall.html';
+    window.location.replace('upstairsHall.html');
 }
 
 async function goToStudy(){
     sessionStorage.setItem('currentState',1);
     sessionStorage.setItem('currentRoom','study.html');
     await saveGame();
-    window.location.href = 'study.html';
+    window.location.replace('study.html');
 }
 
 async function GoOutside(){
     sessionStorage.setItem("currentState",1);
     sessionStorage.setItem('currentRoom','OutsideHouse.html');
     await saveGame();
-    window.location.href = 'OutsideHouse.html';
+    window.location.replace('OutsideHouse.html');
 }
 
 

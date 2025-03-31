@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 })
 
 function leaveStudy(){
-    window.location.href = 'downStairsHall.html';
+    window.location.replace('downStairsHall.html');
     sessionStorage.setItem('currentState', 4);
 }
 
