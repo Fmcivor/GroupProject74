@@ -10,10 +10,34 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    const btnSignOut = document.getElementById("btnSignOut");
+    const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
+
+    if (btnSignOut && signOutConfirm && cancelSignOut) {
+        btnSignOut.addEventListener("click", function () {
+            signOutConfirm.style.display = "flex";
+        });
+
+        cancelSignOut.addEventListener("click", function () {
+            signOutConfirm.style.display = "none";
+        });
+    } else {
+        console.error("One or more elements are missing in the DOM.");
+    }
+
+
+
     //Fintan's work - check if available save slot
     getUserAchievements();
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
     checkTotalActiveGames();
+    getUserAchievements();
+
+    // font size
+    document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
+    
+
 });
 
 async function checkTotalActiveGames(){
@@ -49,7 +73,8 @@ async function checkTotalActiveGames(){
 
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
-    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"OutsideHouse.html",1)`;
+
+    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"guestBedroom.html",1)`;
     dbConfig.set('query',insertQuery);
 
     try {
@@ -88,7 +113,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn',gameSave.lightingOn);
             console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = 'OutsideHouse.html';
+            window.location.href = 'guestBedroom.html';
         }
         else{
             console.error("failed to retrieve latest game save ID:",selectResult)

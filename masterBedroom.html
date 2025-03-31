@@ -1,96 +1,53 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outside House</title>
+    <title>Layout</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/GamePage.css">
     <link rel="stylesheet" href="CSS/outsideHouse.css">
 </head>
 
 <body>
     <header>
-        <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
         <h2 id="mobileHeader">Front Of The house</h1>
     </header>
-
-
     <main class="wrapper">
 
         <div class="leftColumn">
-            <div class="gameInteractionContainer" >
+            <div class="gameInteractionContainer">
                 <div class="responseContainer">
                     <h2 id="roomHeader">Front Of The house</h2>
 
                     <div class="promptWrapper">
                         <p id="descriptionParagraph"></p>
                         <div class="divider" id="promptDivider"></div>
-                        <p id="responseParagraph">
-                        </p>
+                        <p id="responseParagraph"></p>
                     </div>
 
                 </div>
                 <div class="divider" id="leftDivider"></div>
-                <div id="buttonContainer" class="buttonContainer">
-
-                </div>
-
-            </div>
-
-            <div class="settingsContainer">
-                <h2 id="settingsHeader" style="justify-content: center;">Settings</h2>
-                <div class="settingsContent">
-                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;" >Save and Exit</button>
-                    <button class="optionButton" id="deleteAndExit" style="font-size: 1.5rem;" > Delete and Exit</button>
+                    <div id="buttonContainer" class="buttonContainer">
                 </div>
             </div>
         </div>
-
 
         <div class="rightColumn">
-            <div class="gameContainer" id="GeneratorGameContainer">
-                <div class="circleContainer">
-                    <div class="circle">
-                        <div class="lineDiv" id="line">
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="miniGameFunctionContainer">
-                    <i class="fa-solid fa-hammer" id="hammerIcon"></i>
-                    <div class="repairProgressContainer">
-                        <div id="GeneratorProgressBar"></div>
-                    </div>
-
-                    <button id="repairButton">
-                        Repair
-                    </button>
-                    <button id="startButton">Start
-                    </button>
-                </div>
+            <div class="gameContainer">
+               
             </div>
 
-            <div class="rubbishContainer">
-                <button id="clue1Btn">
-
-                </button>
-            </div>
+           
         </div>
-
         <nav class="toolBar">
             <div class="iconContainer">
 
-                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton" title="Close Toolbar"></i>
-                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton" title="Open Notebook"></i>
-                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton" title="Open Inventory"></i>
+                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
+                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
+                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
 
             </div>
             <div class="noteBook" id="noteBook">
@@ -101,7 +58,7 @@
                     <section class="notebookSection" id="suspectSection">
                         <h3 class="notebookSectionHeader">Suspects</h3>
                         <ul class="notebookList">
-                            <li>Jonathan - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
+                            <li>Jonathan Donaghy - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
                                 hasdbjahdb hasbdjahb asdhabdjha</li>
                             <li>Margaret - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
                                 hasdbjahdb
@@ -142,7 +99,6 @@
 
             </div>
         </nav>
-
         <div class="achievementContainer">
             <div id="achievementBox">
                 <div id="achievementTop">
@@ -160,16 +116,8 @@
                 
             </div>
         </div>
-        
-
     </main>
-
-
+    
 
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
-    <script src="JAVASCRIPT/OutsideHouseGame.js"></script>
-    
-</body>
-
-</html>

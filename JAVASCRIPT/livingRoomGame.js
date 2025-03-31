@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentState = enteredLivingRoom;
     updateState();
     getSessionStorage();
+
 })
 
 async function getSessionStorage(){
@@ -31,14 +32,13 @@ async function getSessionStorage(){
 }
 
 //CONSTANTS
-
+const button = document.getElementById('burntLetter');
 
 
 //VARIABLES
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
-let shelvesExamined = false;
 
 
 
@@ -74,6 +74,7 @@ const template = {
 */
 
 const enteredLivingRoom = {
+    "ID":1,
     "room": "Living Room",
     "description": `You have entered a large worn living room. 
                     A large window covers the far wall illuminating the room whilst casting long shadows across it. 
@@ -106,6 +107,7 @@ const enteredLivingRoom = {
 }
 
 const satOnSofa = {
+    "ID":2,
     "room": "Living Room",
     "description": `You sit on the comfy sofa and take a brief minute to rest and evaluate your notes.`,
     "ImageHREF": "Images/livingRoom.jpg",
@@ -122,7 +124,9 @@ const satOnSofa = {
         },
     ]
 }
+
 const satOnSofaAgain = {
+    "ID":3,
     "room": "Living Room",
     "description": `You sit back down on the comfy sofa and taking another brief minute to rest and evaluate your notes.`,
     "ImageHREF": "Images/livingRoom.jpg",
@@ -141,6 +145,7 @@ const satOnSofaAgain = {
 }
 
 const standUpFromSofa = {
+    "ID":4,
     "room": "Living Room",
     "description": `You finally manage to get up from the sofa and continue investigating the room.`,
     "ImageHREF": "Images/livingRoom.jpg",
@@ -243,7 +248,28 @@ function getOffSofa() {
 }
 
 function examineFireplace() {
+    button.classList.remove('hide')
+    setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it")
 
+    rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
+
+    
+
+    // rubbishContainer.style.display = 'block';
+    // if (hasClue1) {
+    //     clue1Btn.style.display = 'none';
+    //     rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
+    // }
+    // else {
+    //     clue1Btn.style.display = 'block';
+    //     rightColumn.style.backgroundImage = 'url("Images/rubbish.jpg")';
+    // }
+    // button.style.color = 'rgb(153, 153, 153)';
+    // button.querySelector('i').style.color = 'rgb(153, 153, 153)';
+}
+
+function letterClicked() {
+    button.classList.add('hide')
 }
 
 function lookAtShelves() {
@@ -268,18 +294,14 @@ async function updateTimesOnSofa(){
             body: dbConfig
         });
 
-        let achSRC = 'Images/sofaAchievementIcon.jpg';
-        let achName = "Crime Doesn't Rest, But I Do";
-        let achDesc = 'Spend far too much time relaxing on the sofa in the living room';
-        displayAchievement(achSRC, achName, achDesc);
-
     } catch (error) {
         console.log("Error updating tblGameSave");
         console.log(error);
     }
     
     if(timesOnSofa === 5) {
-        awardAchievement(1, 1)
+        let achSRC = 'Images/sofaAchievementIcon.jpg';
+        awardAchievement(1, 1, achSRC)
     }
 }
 

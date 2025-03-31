@@ -11,18 +11,42 @@ let displayName = sessionStorage.getItem("displayName");
 
 let errorMessage = '<ul>';
 
-const usernameInput = document.getElementById('username');
 const displayNameInput = document.getElementById('displayName');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirmPassword')
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-const exitBtn = document.getElementById('exitBtn');
+const exitProfileBtn = document.getElementById('exitProfileBtn');
+const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
 const messageContainer = document.getElementById('messageContainer');
+const profileTab = document.getElementById('profileTab');
+const preferencesTab = document.getElementById('preferencesTab');
+const profileForm = document.getElementById('profileForm');
+const preferencesForm = document.getElementById('preferencesForm');
+const easyReadCheckBox = document.getElementById('easyReadCheckBox')
+
+profileTab.addEventListener("click",function(){
+    profileTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
+    preferencesTab.style.borderBottom = '4px solid transparent';
+
+    profileForm.style.display = 'flex'
+    preferencesForm.style.display = 'none';
+});
+
+preferencesTab.addEventListener("click",function(){
+    preferencesTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
+    profileTab.style.borderBottom = '4px solid transparent';
+
+    preferencesForm.style.display = 'flex'
+    profileForm.style.display = 'none';
+
+    fontSlider.value = sessionStorage.getItem("fontSize");
+
+});
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    usernameInput.value = username;
     displayNameInput.value = displayName
 });
 
@@ -57,9 +81,15 @@ document.getElementById('password').addEventListener('input', function (event) {
 
 
 
-exitBtn.addEventListener('click', function () {
+exitProfileBtn.addEventListener('click', function () {
     window.location.href = 'mainMenu.html';
 });
+
+exitPreferencesBtn.addEventListener('click',function(){
+    window.location.href = 'mainMenu.html';
+})
+
+
 
 
 saveProfileBtn.addEventListener('click', validateChanges);
@@ -72,12 +102,10 @@ async function validateChanges(event) {
     //reset
     errorMessage = '<ul>';
 
-    let enteredUsername = usernameInput.value;
     let enteredDisplayName = displayNameInput.value;
     let enteredPassword = passwordInput.value;
     let enteredConfirmPassword = confirmPasswordInput.value;
 
-    let validUsername = await validateUsername(enteredUsername);
     let validDisplayName = validateDisplayName(enteredDisplayName);
     let validPassword = true;
     let validConfirmPassword = true;
@@ -87,12 +115,11 @@ async function validateChanges(event) {
     }
 
 
-    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
-        await updateProfile(enteredUsername, enteredDisplayName, enteredPassword);
-        usernameInput.classList.remove('invalid')
-        displayNameInput.classList.remove('invalid')
-        passwordInput.classList.remove('invalid')
-        confirmPasswordInput.classList.remove('invalid')
+    if (validDisplayName && validPassword && validConfirmPassword) {
+        await updateProfile(enteredDisplayName, enteredPassword);
+        displayNameInput.classList.remove('invalid');
+        passwordInput.classList.remove('invalid');
+        confirmPasswordInput.classList.remove('invalid');
 
         passwordInput.value = '';
         confirmPasswordInput.value = '';
@@ -108,42 +135,7 @@ async function validateChanges(event) {
     saveProfileBtn.removeAttribute('disabled');
 }
 
-async function validateUsername(enteredUsername) {
-    let usernameRegex = /^[a-zA-Z0-9.]{5,20}$/;
-    if (usernameRegex.test(enteredUsername) == false) {
-        errorMessage += '<li>The username must be bewtween 5 and 20 characters and consist of letters and numbers only.</li>';
-        usernameInput.classList.add('invalid');
-        return false;
-    }
 
-    let query = `SELECT userID FROM tblUser WHERE username = '${enteredUsername}' AND userID != '${userID}' `;
-    dbConfig.set('query', query);
-
-    try {
-        let response = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success) {
-            if (result.data.length > 0) {
-                errorMessage += '<li>The username is already in use</li>';
-                usernameInput.classList.add('invalid');
-                return false;
-            }
-        }
-    } catch (error) {
-        alert('error checking if username is taken');
-        console.log(error);
-        usernameInput.classList.add('invalid');
-        return false;
-    }
-
-    usernameInput.classList.remove('invalid');
-    return true;
-}
 
 function validateDisplayName(enteredDisplayName) {
     let displayNameRegex = /^[a-zA-Z]{1,15}$/;
@@ -182,13 +174,13 @@ function validateConfirmPassword(enteredPassword, enteredConfirmPassword) {
 }
 
 
-async function updateProfile(enteredUsername, enteredDisplayName, enteredPassword) {
+async function updateProfile(enteredDisplayName, enteredPassword) {
     let query;
     if (enteredPassword == '') {
-        query = `UPDATE tblUser SET username = '${enteredUsername}', displayName ='${enteredDisplayName}' WHERE userID =${userID}`;
+        query = `UPDATE tblUser SET displayName ='${enteredDisplayName}' WHERE userID =${userID}`;
     }
     else {
-        query = `UPDATE tblUser SET username = '${enteredUsername}', displayName ='${enteredDisplayName}', userPassword = '${enteredPassword}' WHERE userID =${userID}`;
+        query = `UPDATE tblUser SET displayName ='${enteredDisplayName}', userPassword = '${enteredPassword}' WHERE userID =${userID}`;
     }
     dbConfig.set('query', query);
 
@@ -202,7 +194,6 @@ async function updateProfile(enteredUsername, enteredDisplayName, enteredPasswor
 
         if (result.success && result.affected_rows ==1) {
             displayMessage(true);
-            sessionStorage.setItem("username", enteredUsername);
             sessionStorage.setItem("displayName", enteredDisplayName);
         }
     } catch (error) {
@@ -245,3 +236,45 @@ const closeBtn = document.querySelector('.closeBtn');
 closeBtn.addEventListener('click', function () {
     messageContainer.style.display = 'none';
 });
+
+
+//preferences
+
+const fontSlider = document.getElementById('slider');
+const savePreferencesBtn = document.getElementById('savePreferencesBtn');
+
+fontSlider.oninput = function(){
+    document.getElementById('fontSizeLabel').style.fontSize = `${fontSlider.value}px`; 
+}
+
+savePreferencesBtn.addEventListener('click',savePreferences);
+
+async function savePreferences(){
+    sessionStorage.setItem("fontSize",fontSlider.value);
+    document.documentElement.style.fontSize = `${fontSlider.value}px`;
+    let easyReadOn = easyReadCheckBox.checked;
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
+    dbConfig.set('query',saveQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Font size and easy read updated and saved");
+        }
+        else{
+            console.error("Error occurred while saving the font size and easy read");
+        }
+
+    } catch (error) {
+        console.error("Error while saving the font size and easy read",error);
+    }
+    
+}
+
+

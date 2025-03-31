@@ -1,6 +1,5 @@
 
 
-
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);
 let errorMessage = '<ul>';
@@ -89,7 +88,7 @@ async function validateUsername(enteredUsername) {
       return false;
    }
 
-   let selectQuery = `SELECT username FROM tblUser WHERE username = '${enteredUsername}'`;
+   let selectQuery = `SELECT username FROM tblUser WHERE BINARY username = '${enteredUsername}'`;
    dbConfig.set('query', selectQuery);
 
    try {
@@ -127,8 +126,11 @@ async function validateUsername(enteredUsername) {
 
 
 function validateDisplayName(enteredDisplayName) {
-   let displayNameRegex = /^[a-zA-Z-]{1,15}$/;
-   if (displayNameRegex.test(enteredDisplayName) == false) {
+
+   let displayNameRegex = /^[a-zA-Z-\s]{1,15}$/;
+   if (!enteredDisplayName) {
+      errorMessage +=`<li>Display name cannot be blank.</li>`;
+
       return false;
    }
    return true;

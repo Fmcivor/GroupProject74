@@ -3,59 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="CSS/settings.css">
+    <title>Settings</title>
+    <link rel="stylesheet" href="CSS/tabs.css">
 </head>
 <body>
     <header class="titleBanner">
         <h1>Buried Secrets</h1>
     </header>
     <main class="wrapper">
-        <div class="formContainer">
-           
-            <form id="profileForm">
-                <div id="messageContainer">
-                    <h2 id="messageHeader"></h2>
-                    <div id="messageContent">
-                        
+    
+            <div class="formContainer">
+                <div class="tabContainer">
+                    <button class="tab" id="profileTab">Profile</button>
+                    <button class="tab" id="preferencesTab">preferences</button>
+               </div>
+                <form id="profileForm">
+                    <div id="messageContainer">
+                        <h2 id="messageHeader"></h2>
+                        <div id="messageContent">
+                            
+                        </div>
+                        <button type="button" class="closeBtn">Close</button>
                     </div>
-                    <button type="button" class="closeBtn">Close</button>
-                </div>
-                <h2>Profile</h2>
-                <div class="inputContainer">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" >
-                </div>
-                <div class="inputContainer">
-                    <label for="displayName">Display Name</label>
-                    <input type="text" id="displayName" name="displayName" >
-                </div>
-                <div class="password-container">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password">
-                    <button type="button" id="togglePassword">Show</button>
-                </div>
-                <div class="inputContainer">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input class="disabled" type="password" id="confirmPassword" disabled name="confirm-password" >
-                </div>
-                <div class="functionButtonContainer">
-                    <button type="button" class="functionButton" id="exitBtn">Exit</button>
-                    <button type="button" class="functionButton" id="saveProfileBtn">Save</button>
-                </div>
-                
-                
-                
-            </form>
-            
-            
-        </div>
+                    <h2>Profile</h2>
+                    <!-- <div class="inputContainer">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" >
+                    </div> -->
+                    <div class="inputContainer">
+                        <label for="displayName">Display Name</label>
+                        <input type="text" id="displayName" name="displayName" >
+                    </div>
+                    <div class="password-container">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password">
+                        <button type="button" id="togglePassword">Show</button>
+                    </div>
+                    <div class="inputContainer">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input class="disabled" type="password" id="confirmPassword" disabled name="confirm-password" >
+                    </div>
+                    <div class="functionButtonContainer">
+                        <button type="button" class="functionButton" id="exitProfileBtn">Exit</button>
+                        <button type="button" class="functionButton" id="saveProfileBtn">Save</button>
+                    </div>
+                    
+                    
+                    
+                </form>
+                <form id="preferencesForm">
+                    <h2>Preferences</h2>
+                    <div class="slideContainer">
+                        <label for="fontSize" id="fontSizeLabel">Font Size</label>
+                        <input type="range" id="slider" min="12" max="24">
+                    </div>
+                    <div class="inputContainer">
+                        <label for="">Easy-to-read text</label>
+                        <input type="checkbox" id="easyReadCheckBox">
+                    </div>
+                    
+                    <div class="functionButtonContainer">
+                        <button type="button" class="functionButton" id="exitPreferencesBtn">Exit</button>
+                        <button type="button" class="functionButton" id="savePreferencesBtn">Save</button>
+                    </div>
+                </form>
+            </div>
        
     </main>
 
     <script src="JAVASCRIPT/profileSettings.js"></script>
     <script src="JAVASCRIPT/utility.js"></script>
 </body>
-
-     
 </html>
