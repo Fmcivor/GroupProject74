@@ -26,6 +26,8 @@ const deleteAndExit = document.getElementById('deleteAndExit');
 
 // item ids
 const keyID = 1;
+const lockpickID = 2;
+const batteriesID = 3;
 
 //clue ids
 const rubbishClueID = 1;
@@ -44,9 +46,6 @@ let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
-UpdateInventory();
-updateClueNotebook();
-
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
@@ -60,32 +59,29 @@ exitAndSaveBtn.addEventListener('click', async function () {
 });
 
 deleteAndExit.addEventListener('click', async function () {
-    let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
-                       
-    dbConfig.set('query', deleteQuery);
-
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success) {
-            console.log("Successfully deleted game save");
-        }
-        else{
-            console.error("Error while deleting the game save");
-        }
-
-    } catch (error) {
-        console.error("Error while deleting the game save",error);
-    }
-
+    deleteSave(gameID);
     window.location.href = "mainMenu.html";
 
 });
+
+document.addEventListener('DOMContentLoaded', function(){
+    checkLogin();
+
+    let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+    if (easyReadOn == true) {
+        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+    }
+    else {
+        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+    }
+
+    UpdateInventory();
+    updateClueNotebook();
+})
+
+
+
+
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -178,31 +174,40 @@ function updateState() {
     const responseParagraph = document.getElementById('responseParagraph').textContent = '';
     const buttonContainer = document.getElementById('buttonContainer');
     const stateImageHref = currentState.ImageHREF;
+    const descText = currentState.description;
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
-    description.textContent = "";
+    document.getElementById('mobileHeader').textContent = currentState.room;
+    description.textContent = '';
+
+
 
     //typing effect
+    const descLength = descText.length;
+    let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(5500, totalTime);
+    let intervalTime = totalTime/descLength;
+    intervalTime.toFixed(1);
     let typingIndex = 0;
-    let totalTypingTime = currentState.description.length * 20;
+    // let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
-        description.textContent += currentState.description[typingIndex];
+        description.textContent += descText[typingIndex];
         typingIndex++;
         if (typingIndex == currentState.description.length) {
             clearInterval(typingInterval);
         }
 
-    }, 20);
+    }, intervalTime);
 
 
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
-    document.querySelector('.gameContainer').style.display = 'none';
-    // document.querySelector('.rubbishContainer').style.display = 'none';
+    
+    
 
+    
     //dynamic buttons
-
 
     currentState.interactions.forEach(interaction => {
 
@@ -211,18 +216,10 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
-        button.setAttribute('disabled', true);
+        // button.setAttribute('disabled', true);
         buttonContainer.appendChild(button);
 
     });
-
-    setTimeout(() => {
-        const optionBtns = document.querySelectorAll('.optionButton');
-        optionBtns.forEach(btn => {
-            btn.removeAttribute('disabled');
-        });
-    }, totalTypingTime);
-
 }
 
 
@@ -231,16 +228,82 @@ function userDecisionHandler(event) {
 
 
     if (typeof currentState.interactions[responseId].response === 'string') {
-        document.getElementById('responseParagraph').textContent = currentState.interactions[responseId].response;
+        setResponse(currentState.interactions[responseId].response);
+        document.getElementById('descriptionParagraph').textContent = currentState.description;
+
     }
     else {
         currentState.interactions[responseId].response(responseId);
     }
 }
 
+
 function setResponse(responseText) {
-    document.getElementById('responseParagraph').textContent = responseText;
+    const responseBox = document.getElementById('responseParagraph');
+    responseBox.textContent = "";
+    const responseLength = responseText.length;
+    let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(6000, totalTime)
+    let intervalTime = totalTime/responseLength;
+    intervalTime = Math.max(20, intervalTime)
+    
+    let typingIndex = 0;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        responseBox.textContent += responseText[typingIndex];
+        typingIndex++;
+        if (typingIndex == responseLength) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
 }
+
+function setDescriptionAndResponse(responseText) {
+    const description = document.getElementById('descriptionParagraph');
+    const descText = currentState.description;
+    description.textContent = "";
+
+    //typing effect
+    const descLength = descText.length;
+    let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(5500, totalTime);
+    let intervalTime = totalTime/descLength;
+    intervalTime.toFixed(1);
+    let typingIndex = 0;
+    // let totalTypingTime = currentState.description.length * 20;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        description.textContent += descText[typingIndex];
+        typingIndex++;
+        if (typingIndex == currentState.description.length) {
+            clearInterval(typingInterval);
+            setResponseAfterDescription(responseText);
+        }
+
+    }, intervalTime);
+}
+
+function setResponseAfterDescription(responseText) {
+    const responseBox = document.getElementById('responseParagraph');
+    responseBox.textContent = "";
+    const responseLength = responseText.length;
+    let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(6000, totalTime)
+    let intervalTime = totalTime/responseLength;
+    intervalTime = Math.max(20, intervalTime)
+    
+    let typingIndex = 0;
+    typingInterval = setInterval(() => {
+        responseBox.textContent += responseText[typingIndex];
+        typingIndex++;
+        if (typingIndex == responseLength) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
+}
+
 
 function UpdateInventory() {
     for (let i = 0; i < inventory.length; i++) {
@@ -293,7 +356,9 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
         
         
         let selectQuery = `SELECT name, description FROM tblAchievement
+
         WHERE  achievementID = ${achievementID};`;
+
     
         dbConfig.set('query', selectQuery);
         try {
@@ -339,7 +404,6 @@ async function addClue(clueID) {
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
-            hasRubbishClue = true;
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -365,6 +429,24 @@ async function addClue(clueID) {
         console.error("An error has occurred while adding the clues to the notebook", error);
     }
 
+    let alternateColour = false;
+    let notificationTimer = setInterval(() => {
+        if (alternateColour == false) {
+            noteBookButton.style.color = 'rgb(228, 140, 68)';
+            alternateColour = true;
+        }
+        else{
+            noteBookButton.style.color = 'black';
+            alternateColour = false
+        }
+    }, 400);
+    
+
+    setTimeout(() => {
+        clearInterval(notificationTimer);
+        noteBookButton.style.color = 'black';
+    }, 2400);
+
 }
 
 function updateClueNotebook() {
@@ -373,7 +455,6 @@ function updateClueNotebook() {
         let clueElement = document.createElement("li");
         clueElement.textContent = clueList[i].clueText;
         document.getElementById('clueList').appendChild(clueElement);
-
     }
 }
 
@@ -397,11 +478,10 @@ async function addItem(itemID) {
             newItem.itemUsed = false;
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
-            hasKey = true;
             UpdateInventory();
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
-                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                                VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
             dbConfig.set("query", saveItemQuery);
 
             let saveItemResponse = await fetch(dbConnectorUrl, {
@@ -425,29 +505,59 @@ async function addItem(itemID) {
         console.log("Error adding the item to your inventory");
         console.log(error);
     }
+
+    let alternateColour = false;
+    let notificationTimer = setInterval(() => {
+        if (alternateColour == false) {
+            inventoryButton.style.color = 'rgb(228, 140, 68)';
+            alternateColour = true;
+        }
+        else{
+            inventoryButton.style.color = 'black';
+            alternateColour = false
+        }
+    }, 400);
+    
+
+    setTimeout(() => {
+        clearInterval(notificationTimer);
+        inventoryButton.style.color = 'black';
+    }, 2400);
 }
 
 
 
 
 async function saveGame() {
-    let electricityOn = sessionStorage.getItem("electricityOn");
-    let frontDoorUnlocked = sessionStorage.getItem("frontDoorUnlocked");
+
+    let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
+    let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
-    let lightingOn = sessionStorage.getItem("lightingOn");
+    let currentStateID = currentState.ID;
+
+    
+
+    let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-    let currentStateID = sessionStorage.getItem("currentState");
+  
+
+  
+
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
+
+
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa}
+
+
                         WHERE gameID = ${gameID}`;
 
     dbConfig.set("query", updateQuery);
@@ -468,6 +578,55 @@ async function saveGame() {
         }
     } catch (error) {
         onsole.error("error saving the game")
+    }
+
+}
+
+
+
+//preferences and settings
+
+const fontSlider = document.getElementById('slider');
+const savePreferencesBtn = document.getElementById('savePreferencesBtn');
+
+fontSlider.oninput = function () {
+    document.getElementById('sampleText').style.fontSize = `${fontSlider.value}px`;
+}
+
+savePreferencesBtn.addEventListener('click', savePreferences);
+
+async function savePreferences() {
+    let easyReadOn = easyReadCheckBox.checked;
+    sessionStorage.setItem("fontSize", fontSlider.value);
+    sessionStorage.setItem("easyReadOn", easyReadOn);
+    if (easyReadOn == true) {
+        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+    }
+    else {
+        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+    }
+    document.documentElement.style.fontSize = `${fontSlider.value}px`;
+
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
+    dbConfig.set('query', saveQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Font size and easy read updated and saved");
+        }
+        else {
+            console.error("Error occurred while saving the font size and easy read");
+        }
+
+    } catch (error) {
+        console.error("Error while saving the font size and easy read", error);
     }
 
 }

@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout</title>
+    <title>Upstairs Hall</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
 </head>
@@ -14,14 +13,14 @@
     <header>
         <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
-        <h2 id="mobileHeader">Front Of The house</h1>
+        <h2 id="mobileHeader">Upstairs Hall</h1>
     </header>
     <main class="wrapper">
 
         <div class="leftColumn">
             <div class="gameInteractionContainer">
                 <div class="responseContainer">
-                    <h2 id="roomHeader">Front Of The house</h2>
+                    <h2 id="roomHeader">Upstairs Hall</h2>
 
                     <div class="promptWrapper">
                         <p id="descriptionParagraph"></p>
@@ -33,15 +32,35 @@
                 <div class="divider" id="leftDivider"></div>
                     <div id="buttonContainer" class="buttonContainer">
                 </div>
-
-
             </div>
 
             <div class="settingsContainer">
                 <h2 id="settingsHeader" style="justify-content: center;">Settings</h2>
                 <div class="settingsContent">
-                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;" >Save and Exit</button>
-                    <button class="optionButton" id="deleteAndExit" style="font-size: 1.5rem;" > Delete and Exit</button>
+                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;">Save and Exit</button>
+                    <button class="optionButton" id="deleteAndExit" style="font-size: 1.5rem;"> Delete and Exit</button>
+                    <br>
+                    <div class="divider"></div>
+                    <br>
+                    <form>
+                        <h2>Preferences</h2>
+                        
+                        <div class="slideContainer">
+                            <label for="fontSize" id="fontSizeLabel">Font Size</label>
+                            <input type="range" id="slider" min="12" max="24">
+                            <div class="sampleTextContainer">
+                                <p id="sampleText" style="font-size: 1rem;">This text is an example of the base text
+                                    size </p>
+                            </div>
+                        </div>
+
+                        <div class="easyReadContainer" style="align-items: center;">
+                            <label for="">Easy-to-read text</label>
+                            <input type="checkbox" id="easyReadCheckBox">
+                        </div>
+                        <button type="button" class="functionButton" id="savePreferencesBtn">Save Preferences</button>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -117,10 +136,9 @@
         </div>
     </main>
     
-
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
-
+    <script src="JAVASCRIPT/upstairsHall.js"></script>
 </body>
 
 </html>

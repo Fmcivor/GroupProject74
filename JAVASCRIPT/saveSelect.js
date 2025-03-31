@@ -1,5 +1,8 @@
 
-document.addEventListener('DOMContentLoaded', displayGameSaves);
+document.addEventListener('DOMContentLoaded', async function(){
+    checkLogin();
+    await displayGameSaves();
+});
 
 async function loadGame(gameID) {
 
@@ -10,9 +13,11 @@ async function loadGame(gameID) {
     if (inventoryLoaded && clueListLoaded && gameSaveDataLoaded) {
         window.location.href = sessionStorage.getItem("currentRoom");
 
+
         let updateQuery = `UPDATE tblGameSave SET lastPlayedDate = CURRENT_TIMESTAMP WHERE gameID =${gameID}`;
 
         dbConfig.set('query', updateQuery);
+
 
         try {
             let response = await fetch(dbConnectorUrl, {
@@ -27,6 +32,7 @@ async function loadGame(gameID) {
             }
             else {
                 console.error("Error occurrred while updating the last played time stamp");
+
             }
         } catch (error) {
             console.error("Error occurrred while updating the last played time stamp", error);
@@ -83,6 +89,7 @@ async function loadClueList(gameID) {
 
     try {
 
+
         let clueListResponse = await fetch(dbConnectorUrl, {
             method: "POST",
             body: dbConfig
@@ -94,6 +101,7 @@ async function loadClueList(gameID) {
             let clueList = [];
             if (clueListResult.data.length > 0) {
                 let clueListArray = clueListResult.data;
+
 
                 clueListArray.forEach(clue => {
                     let exisitingClue = new Clue(clue.clueID, clue.clueText);
@@ -113,6 +121,7 @@ async function loadClueList(gameID) {
         return false;
     }
 }
+
 
 
 async function loadGameSaveData(gameID) {
@@ -138,6 +147,7 @@ async function loadGameSaveData(gameID) {
             sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn', gameSave.lightingOn);
             console.log("game save id retrieved:", gameSave.gameID);
+
 
             return true;
         }
@@ -175,17 +185,33 @@ async function displayGameSaves() {
             let latestGames = result.data;
             let slotCounter = 1;
 
+
             latestGames.forEach(gameSave => {
                 let saveSlotBtn = document.createElement('button');
                 saveSlotBtn.value = gameSave.gameID;
-                saveSlotBtn.textContent = `saveSlot${slotCounter}`;
+                saveSlotBtn.textContent = `bjhgjhgjhgjhghsaveSlot${slotCounter}`;
                 slotCounter++;
                 saveSlotBtn.addEventListener('click', function (event) {
                     loadGame(event.target.value);
                 });
+
+
+                let deleteSaveBtn = document.createElement('i');
+                deleteSaveBtn.classList.add('fa-solid');
+                deleteSaveBtn.classList.add('fa-trash');
+                deleteSaveBtn.classList.add('deleteSaveBtn');
+                deleteSaveBtn.style.color = 'red';
+                deleteSaveBtn.value = gameSave.gameID;
+                deleteSaveBtn.addEventListener('click', async function(event){
+                    await deleteSave(event.target.value);
+                    await displayGameSaves();
+                });
+
+
                 let saveSlotDiv = document.createElement('div');
                 saveSlotDiv.classList.add('saveSlot');
                 saveSlotDiv.appendChild(saveSlotBtn);
+                saveSlotDiv.appendChild(deleteSaveBtn);
                 saveContainer.appendChild(saveSlotDiv);
             });
 

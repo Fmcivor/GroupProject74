@@ -127,6 +127,7 @@ async function validateUsername(enteredUsername) {
 
 function validateDisplayName(enteredDisplayName) {
 
+
    let displayNameRegex = /^[a-zA-Z-\s]{1,15}$/;
    if (!enteredDisplayName) {
       errorMessage +=`<li>Display name cannot be blank.</li>`;
