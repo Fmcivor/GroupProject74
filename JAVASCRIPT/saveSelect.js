@@ -4,6 +4,21 @@ document.addEventListener('DOMContentLoaded', async function(){
     await displayGameSaves();
 });
 
+document.getElementById('noBtn').addEventListener('click',function(){
+    document.getElementById('deletePopUp').style.display = 'none';
+    document.getElementById('yesBtn').value = null;
+});
+
+document.getElementById('yesBtn').addEventListener('click',async function(event){
+    let gameSaveID = event.target.value;
+    await deleteSave(gameSaveID);
+    await displayGameSaves();
+    document.getElementById('yesBtn').value = null;
+    document.getElementById('deletePopUp').style.display = 'none';
+
+});
+
+
 async function loadGame(gameID) {
 
     let inventoryLoaded = await loadInventory(gameID);
@@ -203,8 +218,9 @@ async function displayGameSaves() {
                 deleteSaveBtn.style.color = 'red';
                 deleteSaveBtn.value = gameSave.gameID;
                 deleteSaveBtn.addEventListener('click', async function(event){
-                    await deleteSave(event.target.value);
-                    await displayGameSaves();
+                    document.getElementById('confirmationMessage').textContent = 'Are you sure you ewant to delete this save slot';
+                    document.getElementById('yesBtn').value = event.target.value;
+                    document.getElementById('deletePopUp').style.display = 'flex';                    
                 });
 
 
