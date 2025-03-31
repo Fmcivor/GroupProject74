@@ -85,7 +85,7 @@ async function loadGame(gameID) {
 
 
 
-            window.location.href = gameSave.currentRoom;
+            window.location.href = 'kitchen.html';
         }
         else {
             console.error("Error loading the game save");

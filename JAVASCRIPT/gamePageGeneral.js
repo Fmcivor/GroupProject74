@@ -25,6 +25,7 @@ const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
 
 // item ids
 const keyID = 1;
+const lockpickID = 2;
 
 //clue ids
 const rubbishClueID = 1;
@@ -42,6 +43,7 @@ let userID = sessionStorage.getItem("userID");
 let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
+let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
 UpdateInventory();
 updateClueNotebook();
 

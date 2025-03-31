@@ -259,7 +259,6 @@ async function checkUnderMat() {
     else {
         setResponse("There is a large golden key here and you lift it");
         addItem(keyID);
-
     }
 }
 
