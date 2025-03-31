@@ -1,3 +1,5 @@
+let hasBatteries = inventory.some(item => item.itemID == batteriesID);
+
 const kitchenDefault = {
     "ID": 1,
     "room": "Kitchen",
@@ -93,7 +95,14 @@ function searchDrawers(){
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-    setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. In the back of one drawer, your fingers brush against some small batteries, maybe for a torch? You take them.")
+    if(hasBatteries){
+        setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. You find nothing of interest.")
+    }
+    else{
+        setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. In the back of one drawer, your fingers brush against some small batteries, maybe for a torch? You take them.")
+        hasBatteries = true;
+        addItem(batteriesID);
+    }
 }
 
 function examineGlass(){
@@ -111,4 +120,6 @@ function enterLivingRoom(){
 function enterHallway(){
     window.location.replace('hallway.html');
     sessionStorage.setItem('currentState', 4);
+    window.location.replace('hallway.html');
+    
 }

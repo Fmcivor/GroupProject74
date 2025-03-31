@@ -27,6 +27,7 @@ const deleteAndExit = document.getElementById('deleteAndExit');
 // item ids
 const keyID = 1;
 const lockpickID = 2;
+const batteriesID = 3;
 
 //clue ids
 const rubbishClueID = 1;
