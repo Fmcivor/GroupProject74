@@ -264,6 +264,10 @@ form{
      color: rgb(228, 140, 68);
 }
 
+.toolBarIconNotification{
+    color: #f5c518;
+}
+
 .hideToolBarButton {
     visibility: hidden;
     opacity: 0;
@@ -747,7 +751,6 @@ p {
         height: 100vh;
         background-color: rgb(6, 3, 35);
     }
-
 
 
     header {

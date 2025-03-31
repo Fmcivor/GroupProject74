@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    
+    overflow: hidden;
 }
 
 html{
@@ -155,7 +155,7 @@ header {
 .buttons {
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.8rem;
 }
 
@@ -167,7 +167,7 @@ header {
     font-size: 1.2rem;
     font-weight: bold;
     transition: 0.3s ease;
-    width: 100%;
+    width: 48%;
     background-color: #999;
 }
 
@@ -175,12 +175,12 @@ header {
     background-color: #777;
 }
 
-@media (min-width: 480px) {
+@media (max-width: 480px) {
     .buttons {
-        flex-direction: row;
+        flex-direction: column;
     }
 
     .btn {
-        width: 48%;
+        width: 100%;
     }
 }

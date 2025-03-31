@@ -215,17 +215,7 @@ async function checkUnderMat() {
     }
 }
 
-function goToDownStairsHall() {
-    
-    if (lightingOn == false) {
-        currentState = downStairsHall;
-        updateState();
-    }
-    else{
-        currentState = downStairsHallLightsOn;
-        updateState();
-    }
-}
+
 
 async function enterHouse(){
     if (lightingOn == false) {
@@ -238,52 +228,8 @@ async function enterHouse(){
     }
 
     await saveGame();
-    window.location.href = 'downStairsHall.html';
+    window.location.replace('downStairsHall.html');
 }
-
-async function searchDrawers(){
-    if (hasWeddingRingClue) {
-        setResponse("You have already searched the drawers and papers and found the wedding ring");
-    }
-    else{
-        hasWeddingRingClue = true;
-        await addClue(3);
-        updateClueNotebook();
-        setResponse("You have found an engagement ring on the table and Victor has no known past relationships. You take note of this in your notebook as a clue");
-
-    }
-}
-
-function goToBackOfHall(){
-    currentState = BackOfHall;
-    updateState();
-}
-
-async function goToLivingRoom(){
-    sessionStorage.setItem("currentState",1);
-    sessionStorage.setItem("currentRoom","livingRoom.html");
-    await saveGame();
-    window.location.href = "livingRoom.html";
-}
-
-async function goToKitchen(){
-    sessionStorage.setItem('currentState',1);
-    sessionStorage.setItem('currentRoom','kitchen.html');
-    await saveGame();
-    window.location.href = 'kitchen.html';
-}
-
-async function goUpstairs(){
-    //todo
-}
-
-async function goToStudy(){
-    sessionStorage.setItem('currentState',1);
-    sessionStorage.setItem('currentRoom','study.html');
-    await saveGame();
-    window.location.href = 'study.html';
-}
-
 
 function goTofrontOfHouse() {
     if (doorUnlocked == true) {

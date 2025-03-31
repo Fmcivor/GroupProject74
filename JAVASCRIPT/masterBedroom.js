@@ -359,7 +359,8 @@ const openingSafe = {
 
 //STATE FUNCTIONS
 function goToHall() {
-    window.location.href = 'upstairsHall.html';
+    sessionStorage.setItem('currentState',1);
+    window.location.replace('upstairsHall.html');
 }
 
 function hideSafe() {
