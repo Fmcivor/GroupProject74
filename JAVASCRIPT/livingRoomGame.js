@@ -291,6 +291,6 @@ async function updateTimesOnSofa(){
 
 function goToHall() {
     sessionStorage.setItem('currentState', 3);
-    window.location.href = 'downStairsHall.html';
+    window.location.replace('downStairsHall.html');
 }
 
