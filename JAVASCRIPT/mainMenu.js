@@ -74,6 +74,7 @@ async function checkTotalActiveGames(){
 
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
+    window.location.href = "introduction.html";
 
     let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"outsideHouse.html",1)`;
     dbConfig.set('query',insertQuery);
