@@ -75,7 +75,7 @@ async function checkTotalActiveGames(){
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
 
-    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"guestBedroom.html",1)`;
+    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"outsideHouse.html",1)`;
     dbConfig.set('query',insertQuery);
 
     try {
@@ -114,7 +114,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn',gameSave.lightingOn);
             console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = 'guestBedroom.html';
+            window.location.href = 'OutsideHouse.html';
         }
         else{
             console.error("failed to retrieve latest game save ID:",selectResult)
