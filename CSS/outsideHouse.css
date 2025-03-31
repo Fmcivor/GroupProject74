@@ -42,9 +42,7 @@
     width:92%;
     height: 92%;
     border-radius: 100%;
-    background-image: url(../Images/gear.png);
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-color: green;
     position: relative;
     display: flex;
     justify-content: center;
@@ -58,6 +56,20 @@
     background-color: white;
     bottom: 40px;
     transform-origin: bottom;
+}
+
+.notch{
+    width: 4px;
+    height: 20px;
+    background-color: blue;
+    position: absolute;
+}
+
+.smallNotch{
+    width: 4px;
+    height: 10px;
+    background-color: blue;
+    position: absolute;
 }
 
 #repairButton{

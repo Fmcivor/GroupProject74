@@ -196,10 +196,17 @@ h1{
     font-size: 1.2rem;
     font-weight: bold;
     transition: 0.3s ease;
-    width: 100%;
+    width: 48%;
     background-color: #999;
 }
 
 .btn:hover{
     background-color: #777;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.8rem;
 }

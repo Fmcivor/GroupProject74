@@ -150,7 +150,7 @@ function trySwitch(){
         sessionStorage.setItem("lightingOn",JSON.stringify(lightingOn));
         currentState = downStairsHallLightsOn;
         updateState();
-        setResponse("You have managed to turn the lights on maybe now you will finally be able to find some clues.");
+        setDescriptionAndResponse("You have managed to turn the lights on maybe now you will finally be able to find some clues.");
     }
     else{
         setResponse("Well that didn't do anything, maybe and electrician would've got further than you.");
