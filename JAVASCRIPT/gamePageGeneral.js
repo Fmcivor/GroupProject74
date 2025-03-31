@@ -260,6 +260,7 @@ function setResponse(responseText) {
     }, intervalTime);
 }
 
+
 function setDescriptionAndResponse(responseText) {
     const description = document.getElementById('descriptionParagraph');
     const descText = currentState.description;
@@ -337,7 +338,7 @@ function selectInventoryItem(event) {
     }
 
     selectedItemID = selectedItemBtn.value;
-    selectedItemBtn.style.border = '8px solid yellow';
+    selectedItemBtn.style.border = '8px solid #f5c518';
 
 
 }
@@ -433,8 +434,7 @@ async function addClue(clueID) {
     let alternateColour = false;
     let notificationTimer = setInterval(() => {
         if (alternateColour == false) {
-            noteBookButton.style.color = 'rgb(228, 140, 68)';
-            alternateColour = true;
+            noteBookButton.classList.toggle('toolBarIconNotification');
         }
         else{
             noteBookButton.style.color = 'black';
@@ -445,7 +445,7 @@ async function addClue(clueID) {
 
     setTimeout(() => {
         clearInterval(notificationTimer);
-        noteBookButton.style.color = 'black';
+        noteBookButton.classList.remove('toolBarIconNotification');
     }, 2400);
 
 }
@@ -509,20 +509,13 @@ async function addItem(itemID) {
 
     let alternateColour = false;
     let notificationTimer = setInterval(() => {
-        if (alternateColour == false) {
-            inventoryButton.style.color = 'rgb(228, 140, 68)';
-            alternateColour = true;
-        }
-        else{
-            inventoryButton.style.color = 'black';
-            alternateColour = false
-        }
+        inventoryButton.classList.toggle('toolBarIconNotification');
     }, 400);
     
 
     setTimeout(() => {
         clearInterval(notificationTimer);
-        inventoryButton.style.color = 'black';
+        inventoryButton.classList.remove('toolBarIconNotification');
     }, 2400);
 }
 
