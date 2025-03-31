@@ -180,6 +180,7 @@ function updateState() {
     description.textContent = currentState.description;
 
 
+
     //typing effect
     const descLength = descText.length;
     let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
@@ -534,9 +535,13 @@ async function saveGame() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
+    let currentStateID = currentState.ID;
+
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
+  
+
   
 
 
@@ -545,10 +550,12 @@ async function saveGame() {
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
 
+
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa}
+
 
                         WHERE gameID = ${gameID}`;
 
