@@ -123,11 +123,7 @@ async function loadClueList(gameID) {
 }
 
 
-    try {
-        let response = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
-        });
+    
 
 
 async function loadGameSaveData(gameID) {
