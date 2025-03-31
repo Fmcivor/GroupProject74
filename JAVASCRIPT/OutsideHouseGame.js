@@ -2,14 +2,14 @@
 
 
 //VARIABLES
-let hasKey = false;
-let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
-let hasClue1 = false;
 
+
+let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
-hasKey = inventory.some(item => item.itemID == keyID);
-hasClue1 = inventory.some(clue => clue.clueID == rubbishClueID);
+let hasKey = inventory.some(item => item.itemID == keyID);
+let hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
+let hasGeneratorAchievement = userAchievementIDs.some(achievement =>achievement.achievementID == 2);
 
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
@@ -26,7 +26,7 @@ let angle = 1;
 let generatorInterval;
 let remainingRepairMisses = 2;
 
-
+document.querySelector('.gameContainer').style.display = 'none';
 
 //CONSTANTS - mainly html elements to save repetition of document.getelement call
 const line = document.getElementById('line');
@@ -74,7 +74,7 @@ const frontOfHouseDoorLocked = {
 const frontOfHouseDoorUnlocked = {
     "ID": 2,
     "room": "Front of House",
-    "description": "You stand infront of a large house with a now unlocked door infront of you and a path leading to your left",
+    "description": "You stand infront of a large house with an unlocked door infront of you and a path leading to your left",
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
         {
@@ -90,7 +90,7 @@ const frontOfHouseDoorUnlocked = {
         {
             "id": 2,
             "Text": "Enter house",
-            "response": goToDownStairsHall
+            "response": enterHouse
         }
 
     ]
@@ -162,82 +162,11 @@ const generatorFixed = {
 }
 
 
-const downStairsHall ={
-    "ID": 6,
-    "room": "Down Stairs Hall",
-    "description": `You have managed to gain access to the house now and finally you can do some proper investigating. Wait...${displayName}
-    it's too dark to see anything. This is going to be difficult to find anything if we can't even see, except the faint outline of the room.`,
-    "ImageHREF": "Images/lightsOffHall.jpg",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Exit the house",
-            "response": goTofrontOfHouse
-        },
-        {
-            "id": 1,
-            "Text": "Trace the walls of the room",
-            "response": traceHall
-        },
-        {
-            "id":2,
-            "Text": "explore the room blindly",
-            "response": exploreHall
-        }
-    ]
-}
-
-const hallWall = {
-    "ID": 7,
-    "room": "Down Stairs Hall",
-    "description": `You felt your hand just brush over something on the wall, you slowly trace your hands back and you feel it again.
-    After a closer look you recognise it to be a switch. `,
-    "ImageHREF": "Images/lightsOffHall.jpg",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Trace the wall to the door",
-            "response": goToDownStairsHall
-        },
-        {
-            "id": 1,
-            "Text": "Try the switch",
-            "response": trySwitch
-        }
-    ]
-}
-
-const downStairsHallLightsOn ={
-    "ID": 8,
-    "room": "Down Stairs Hall",
-    "description": `There is lights`,
-    "ImageHREF": "Images/lightsOnHall.jpg",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "Exit the house",
-            "response": goTofrontOfHouse
-        },
-        {
-            "id": 1,
-            "Text": "Trace the walls of the room",
-            "response": traceHall
-        },
-        {
-            "id":2,
-            "Text": "explore the room blindly",
-            "response": exploreHall
-        }
-    ]
-}
-
-
-
 document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
 
-    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding,downStairsHall,hallWall);
+    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding);
 
   
     let currentStateID = Number(sessionStorage.getItem('currentState'));
@@ -282,7 +211,7 @@ async function checkUnderMat() {
     else {
         setResponse("There is a large golden key here and you lift it");
         addItem(keyID);
-
+        hasKey = true;
     }
 }
 
@@ -292,38 +221,67 @@ function goToDownStairsHall() {
         currentState = downStairsHall;
         updateState();
     }
+    else{
+        currentState = downStairsHallLightsOn;
+        updateState();
+    }
 }
 
+async function enterHouse(){
+    if (lightingOn == false) {
+        sessionStorage.setItem('currentState',1);
+        sessionStorage.setItem('currentRoom','downStairsHall.html');
+    }
+    else{
+        sessionStorage.setItem('currentState',3);
+        sessionStorage.setItem('currentRoom','downStairsHall.html');
+    }
 
+    await saveGame();
+    window.location.href = 'downStairsHall.html';
+}
 
-function traceHall(){
-    currentState = hallWall;
+async function searchDrawers(){
+    if (hasWeddingRingClue) {
+        setResponse("You have already searched the drawers and papers and found the wedding ring");
+    }
+    else{
+        hasWeddingRingClue = true;
+        await addClue(3);
+        updateClueNotebook();
+        setResponse("You have found an engagement ring on the table and Victor has no known past relationships. You take note of this in your notebook as a clue");
+
+    }
+}
+
+function goToBackOfHall(){
+    currentState = BackOfHall;
     updateState();
 }
 
-
-function trySwitch(){
-    if (electricityOn) {
-        lightingOn = true;
-        sessionStorage.setItem("lightingOn",JSON.stringify(lightingOn));
-        currentState = downStairsHallLightsOn;
-        updateState();
-        setResponse("You have managed to turn the lights on maybe now you will finally be able to find some clues.");
-        
-       
-    }
-    else{
-        setResponse("Well that didn't do anything, maybe and electrician would've got further than you.");
-    }
+async function goToLivingRoom(){
+    sessionStorage.setItem("currentState",1);
+    sessionStorage.setItem("currentRoom","livingRoom.html");
+    await saveGame();
+    window.location.href = "livingRoom.html";
 }
 
+async function goToKitchen(){
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','kitchen.html');
+    await saveGame();
+    window.location.href = 'kitchen.html';
+}
 
-function exploreHall(){
-    setResponse(`${displayName.toUpperCase()}, you need to be more careful you can't just go around wandering aimlessly
-            in the dark knocking things over.`);
-    //if not kncokced over do above
-    //if knocked over it breaks and the police know you were invetigating
-    // don't let them explore hall again
+async function goUpstairs(){
+    //todo
+}
+
+async function goToStudy(){
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','study.html');
+    await saveGame();
+    window.location.href = 'study.html';
 }
 
 
@@ -334,7 +292,7 @@ function goTofrontOfHouse() {
     else {
         currentState = frontOfHouseDoorLocked;
     }
-
+    rubbishContainer.style.display = 'none';
     updateState();
 }
 
@@ -345,7 +303,7 @@ function searchRubbish(responseId) {
     setResponse('Click on the screen to try collect or find items in the rubbish');
 
     rubbishContainer.style.display = 'block';
-    if (hasClue1) {
+    if (hasRubbishClue) {
         clue1Btn.style.display = 'none';
         rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
     }
@@ -379,6 +337,8 @@ function enterGeneratorBuilding() {
     else {
         currentState = generatorBuilding;
     }
+    rubbishContainer.style.display = 'none';
+
     updateState();
 }
 
@@ -449,12 +409,12 @@ repairButton.addEventListener('click', async function () {
     let success = false;
 
     if (redZoneEnd > 360) {
-        if (angle > redZoneStart && angle < 360 || angle > 0 && angle < redZoneEnd - 360) {
+        if (angle >= redZoneStart && angle <= 360 || angle >= 0 && angle <= redZoneEnd - 360) {
             success = true;
         }
     }
     else {
-        if (angle > redZoneStart && angle < redZoneEnd) {
+        if (angle >= redZoneStart && angle <= redZoneEnd) {
             success = true;
         }
     }
@@ -471,13 +431,13 @@ repairButton.addEventListener('click', async function () {
             generatorAudio.play();
             electricityOn = true;
             document.getElementById('GeneratorGameContainer').style.display = 'none';
-            currentState = generatorFixed;
+            generatorBuilding.interactions.pop();
             updateState();
             setResponse("You have successfully repaired the generator.");
-
-            if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasAchievement2 == false) {
-                awardAchievement(2, userID, "generatorAchievement.jpg");
-                displayA
+            
+            if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
+                awardAchievement(2, userID, "Images/generatorAchievement.png");
+                hasGeneratorAchievement = true;
             }
 
         }
@@ -537,6 +497,7 @@ repairButton.addEventListener('click', async function () {
 clue1Btn.addEventListener('click', async function () {
     rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
     clue1Btn.style.visibility = 'collapse';
+    hasRubbishClue = true;
     await addClue(rubbishClueID);
     updateClueNotebook();
     setResponse('You have found a letter check your notebook to see its content');

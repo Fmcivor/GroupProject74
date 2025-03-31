@@ -19,6 +19,7 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 100% 100%;
+
     display: flex;
     flex-direction: column;
     padding: 8vh 1.5vw 2vh 2.5vw;
@@ -37,4 +38,5 @@
 #fromLetterLine {
     text-align: right;
     padding-right: 2vw;
+
 }

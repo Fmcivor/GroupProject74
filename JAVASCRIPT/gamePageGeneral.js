@@ -44,8 +44,8 @@ let userID = sessionStorage.getItem("userID");
 let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
-UpdateInventory();
-updateClueNotebook();
+let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
+
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
@@ -53,36 +53,35 @@ noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 settingsButton.addEventListener('click', toggleSettings);
 exitAndSaveBtn.addEventListener('click', async function () {
+    sessionStorage.setItem("currentState",currentState.ID);
     await saveGame();
     window.location.href = "mainMenu.html";
-})
+});
+
 deleteAndExit.addEventListener('click', async function () {
-    let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
-                       
-    dbConfig.set('query', deleteQuery);
-
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let result = await response.json();
-
-        if (result.success) {
-            console.log("Successfully deleted game save");
-        }
-        else{
-            console.error("Error while deleting the game save");
-        }
-
-    } catch (error) {
-        console.error("Error while deleting the game save",error);
-    }
-
+    deleteSave(gameID);
     window.location.href = "mainMenu.html";
 
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+    checkLogin();
+
+    let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+    if (easyReadOn == true) {
+        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+    }
+    else {
+        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+    }
+
+    UpdateInventory();
+    updateClueNotebook();
 })
+
+
+
+
 
 //Show pop out toolbar functions
 function showInventory() {
@@ -178,7 +177,9 @@ function updateState() {
     const descText = currentState.description;
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
-    description.textContent = "";
+    document.getElementById('mobileHeader').textContent = currentState.room;
+    description.textContent = currentState.description;
+
 
     //typing effect
     const descLength = descText.length;
@@ -199,13 +200,14 @@ function updateState() {
     }, intervalTime);
 
 
+
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
-    document.querySelector('.gameContainer').style.display = 'none';
-    // document.querySelector('.rubbishContainer').style.display = 'none';
+    
+    
 
+    
     //dynamic buttons
-
 
     currentState.interactions.forEach(interaction => {
 
@@ -218,6 +220,7 @@ function updateState() {
         buttonContainer.appendChild(button);
 
     });
+
 }
 
 
@@ -354,7 +357,9 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
         
         
         let selectQuery = `SELECT name, description FROM tblAchievement
-        WHERE  achievementID = 1;`;
+
+        WHERE  achievementID = ${achievementID};`;
+
     
         dbConfig.set('query', selectQuery);
         try {
@@ -400,7 +405,6 @@ async function addClue(clueID) {
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
-            hasClue1 = true;
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -425,6 +429,24 @@ async function addClue(clueID) {
     } catch (error) {
         console.error("An error has occurred while adding the clues to the notebook", error);
     }
+
+    let alternateColour = false;
+    let notificationTimer = setInterval(() => {
+        if (alternateColour == false) {
+            noteBookButton.style.color = 'rgb(228, 140, 68)';
+            alternateColour = true;
+        }
+        else{
+            noteBookButton.style.color = 'black';
+            alternateColour = false
+        }
+    }, 400);
+    
+
+    setTimeout(() => {
+        clearInterval(notificationTimer);
+        noteBookButton.style.color = 'black';
+    }, 2400);
 
 }
 
@@ -457,7 +479,6 @@ async function addItem(itemID) {
             newItem.itemUsed = false;
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
-            hasKey = true;
             UpdateInventory();
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
@@ -485,23 +506,53 @@ async function addItem(itemID) {
         console.log("Error adding the item to your inventory");
         console.log(error);
     }
+
+    let alternateColour = false;
+    let notificationTimer = setInterval(() => {
+        if (alternateColour == false) {
+            inventoryButton.style.color = 'rgb(228, 140, 68)';
+            alternateColour = true;
+        }
+        else{
+            inventoryButton.style.color = 'black';
+            alternateColour = false
+        }
+    }, 400);
+    
+
+    setTimeout(() => {
+        clearInterval(notificationTimer);
+        inventoryButton.style.color = 'black';
+    }, 2400);
 }
 
 
 
 
 async function saveGame() {
-    let electricityOn = sessionStorage.getItem("electricityOn");
+
+    let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
     let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
+    let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
+    let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
+    let timesOnSofa = sessionStorage.getItem("timesOnSofa");
+  
+
+
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-                        currentState = ${currentStateID}
+
+                        currentState = ${currentStateID},
+                        lightingOn = ${lightingOn},
+                        noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
+                        timesOnSofa = ${timesOnSofa}
+
                         WHERE gameID = ${gameID}`;
 
     dbConfig.set("query", updateQuery);
@@ -522,6 +573,55 @@ async function saveGame() {
         }
     } catch (error) {
         onsole.error("error saving the game")
+    }
+
+}
+
+
+
+//preferences and settings
+
+const fontSlider = document.getElementById('slider');
+const savePreferencesBtn = document.getElementById('savePreferencesBtn');
+
+fontSlider.oninput = function () {
+    document.getElementById('sampleText').style.fontSize = `${fontSlider.value}px`;
+}
+
+savePreferencesBtn.addEventListener('click', savePreferences);
+
+async function savePreferences() {
+    let easyReadOn = easyReadCheckBox.checked;
+    sessionStorage.setItem("fontSize", fontSlider.value);
+    sessionStorage.setItem("easyReadOn", easyReadOn);
+    if (easyReadOn == true) {
+        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+    }
+    else {
+        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+    }
+    document.documentElement.style.fontSize = `${fontSlider.value}px`;
+
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
+    dbConfig.set('query', saveQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Font size and easy read updated and saved");
+        }
+        else {
+            console.error("Error occurred while saving the font size and easy read");
+        }
+
+    } catch (error) {
+        console.error("Error while saving the font size and easy read", error);
     }
 
 }
