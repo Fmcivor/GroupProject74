@@ -177,7 +177,7 @@ function updateState() {
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
     document.getElementById('mobileHeader').textContent = currentState.room;
-    description.textContent = currentState.description;
+    description.textContent = '';
 
 
 
@@ -535,7 +535,7 @@ async function saveGame() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
-    let currentStateID = currentState.ID;
+    
 
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
