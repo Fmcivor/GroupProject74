@@ -9,6 +9,11 @@
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
     <link rel="stylesheet" href="CSS/livingRoom.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -47,11 +52,17 @@
 
         <div class="rightColumn">
             <div class="gameContainer"></div>
-            <button id="burntLetter" class="hide" type="button" onclick="letterClicked()"></button>
-            <div id="letterContainer" onclick="" >
-                    <p>To Charles</p>    
-                    <p>content</p>
-                    <p>From Victor</p>
+            <button id="burntLetter" class="hide" type="button" onclick="pickUpLetter()"></button>
+            <div id="letterContainer" class="hide" onclick="" >
+                    <h3>Dear Charles Kingston</h3>    
+                    <p>
+                        I just found out you bribed that junior doctor to perjure herself! 
+                        You knew full well it wasn't my fault that the child died during sergery and you still took the case.
+                        Because of you I lost my license and my life is over. Say your goodbyes you corrupt narcissist, 
+                        it's time you got a taste of your own medicine.
+                    </p>
+                    <h3 id="fromLetterLine">From Victor </h3>
+
             </div>
         </div>
         <nav class="toolBar">
