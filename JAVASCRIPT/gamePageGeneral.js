@@ -31,6 +31,7 @@ const batteriesID = 3;
 
 //clue ids
 const rubbishClueID = 1;
+const computerClueID = 4;
 
 //VARIABLES
 let currentState;

@@ -57,16 +57,35 @@ function checkPictureFrame(){
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-    setResponse("You lift the frame and wipe away a thin layer of dust. The image is of a small spaniel sitting proudly. Below, an inscription reads: 'My dear Luna - 1988.' A pet's name and a year... Could this be useful somwhere?");
+    addClue(computerClueID);
+
+    setResponse("You lift the frame and wipe away a thin layer of dust. The image is of a small spaniel sitting proudly. Below, an inscription reads: 'My dear Luna - 2008.' A pet's name and a year... Could this be useful somwhere?");
 }
 
 function searchDrawers(){
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-    currentState = drawerLocked;
     setResponse("The top drawer is locked. Maybe I could get in somehow...");
 }
+
+document.getElementById('useItemBtn').addEventListener('click', function () {
+
+
+    if (selectedItemID != null) {
+        if (selectedItemID == lockpickID) {
+            document.getElementById(LockPickGameContainer).style.display = "flex";
+        }
+        else {
+            setResponse("");
+        }
+    }
+    else {
+
+        setResponse("You must select an item before you can use it");
+    }
+
+})
 
 function turnOnComputer(){
     let button = document.getElementById(responseId);
@@ -117,7 +136,7 @@ btnenterPassword.addEventListener('click', checkPassword);
 
 function checkPassword() {
     let input = document.getElementById("passwordInput").value;
-    let correctPassword = "Luna1988";
+    let correctPassword = "Luna2008";
     closeModal();
 
     if (input === correctPassword) {
@@ -136,19 +155,3 @@ function openModal() {
 function closeModal() {
     document.getElementById("signOutModal").style.display = "none";
 }
-
-document.getElementById('useItemBtn').addEventListener('click', function () {
-    if (currentState == drawerLocked && selectedItemID != null) {
-        if (selectedItemID == lockPickID) {
-            
-        }
-        else {
-            setResponse("That didn't do anything, maybe try something else.");
-        }
-    }
-    else {
-
-        setResponse("You must select an item before you can use it");
-    }
-
-})
