@@ -215,17 +215,7 @@ async function checkUnderMat() {
     }
 }
 
-function goToDownStairsHall() {
-    
-    if (lightingOn == false) {
-        currentState = downStairsHall;
-        updateState();
-    }
-    else{
-        currentState = downStairsHallLightsOn;
-        updateState();
-    }
-}
+
 
 async function enterHouse(){
     if (lightingOn == false) {
