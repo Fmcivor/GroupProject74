@@ -12,6 +12,7 @@
 
 <body>
     <header>
+        <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
         <h2 id="mobileHeader">Front Of The house</h1>
     </header>
@@ -31,6 +32,14 @@
                 </div>
                 <div class="divider" id="leftDivider"></div>
                     <div id="buttonContainer" class="buttonContainer">
+                </div>
+            </div>
+
+            <div class="settingsContainer">
+                <h2 id="settingsHeader" style="justify-content: center;">Settings</h2>
+                <div class="settingsContent">
+                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;" >Save and Exit</button>
+                    <button class="optionButton" id="deleteAndExit" style="font-size: 1.5rem;" > Delete and Exit</button>
                 </div>
             </div>
         </div>
@@ -57,23 +66,13 @@
                     <h2 class="toolBarSectionHeader">Notebook</h2>
                     <section class="notebookSection" id="suspectSection">
                         <h3 class="notebookSectionHeader">Suspects</h3>
-                        <ul class="notebookList">
-                            <li>Jonathan Donaghy - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
-                                hasdbjahdb hasbdjahb asdhabdjha</li>
-                            <li>Margaret - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
-                                hasdbjahdb
-                                hasbdjahb asdhabdjha</li>
-                            <li>Victor - A failed business partner of Charles ahsahs abshdajs ashdbjabdj hasdbjahdb
-                                hasbdjahb asdhabdjha</li>
-                        </ul>
+                        <ul class="notebookList"></ul>
                     </section>
 
 
                     <section class="notebookSection">
                         <h3 class="notebookSectionHeader">Clues</h3>
-                        <ul class="notebookList" id="clueList">
-
-                        </ul>
+                        <ul class="notebookList" id="clueList"></ul>
                     </section>
                 </div>
 
@@ -94,8 +93,6 @@
                     </div>
 
                 </div>
-
-
 
             </div>
         </nav>
@@ -118,12 +115,8 @@
         </div>
     </main>
     
-
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
-
-
-
 
 </body>
 

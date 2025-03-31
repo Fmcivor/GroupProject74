@@ -19,12 +19,30 @@ let dbConfig = new URLSearchParams({
     database: 'CSC1034_CW_74',
 });
 
+class Item {
+    constructor(itemID, itemName, itemHREF) {
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.itemHREF = itemHREF;
+        this.itemUsed = false;
+    }
+}
+
+class Clue{
+    constructor(clueID,clueText){
+        this.clueID = clueID;
+        this.clueText = clueText;
+    }
+}
+
     document.addEventListener('DOMContentLoaded',function(){
        
-sessionStorage.setItem("userID",11);
-sessionStorage.setItem("displayName",'Gilly');
+    sessionStorage.setItem("userID", 11);
+    sessionStorage.setItem("displayName",'Gilly');
 
-load();
+
+
+    load();
     });
 
     async function load() {
@@ -42,10 +60,10 @@ try {
 
     if (result.success && result.data.length > 0) {
         let gameSave = result.data[0];
-        sessionStorage.setItem('gameID', 139);
+        sessionStorage.setItem('gameID', 221);
         sessionStorage.setItem('electricityOn', gameSave.electricityOn);
         sessionStorage.setItem('frontDoorUnlocked', gameSave.frontDoorUnlocked);
-        sessionStorage.setItem('currentRoom', 'livingRoom.html');
+        sessionStorage.setItem('currentRoom', 'upstairsHall.html');
         sessionStorage.setItem('currentState', gameSave.currentState);
         sessionStorage.setItem('noGeneratorRepairAttempts', gameSave.noGeneratorRepairAttempts);
         sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
@@ -54,7 +72,7 @@ try {
 
         let inventoryQuery = `SELECT tblItem.itemID, tblItem.itemName, tblItem.itemHREF 
         FROM tblGameInventory JOIN tblItem on tblGameInventory.itemID = tblItem.itemID 
-        WHERE tblGameInventory.gameID = 139`;
+        WHERE tblGameInventory.gameID = 221`;
         dbConfig.set("query", inventoryQuery);
 
         let inventoryResponse = await fetch(dbConnectorUrl, {
@@ -81,7 +99,7 @@ try {
 
         let clueListQuery = `SELECT tblClue.clueID, tblClue.clueText FROM tblGameNotebook 
         JOIN tblClue on tblGameNotebook.clueID = tblClue.clueID 
-        WHERE tblGameNotebook.gameID = 139`;
+        WHERE tblGameNotebook.gameID = 221`;
 
         dbConfig.set("query", clueListQuery);
 
@@ -117,9 +135,9 @@ try {
         console.error("Error loading the game save");
     }
 
-} catch (error) {
-    console.error("Error loading the selected gameSave,inventory and clue");
-}
+    } catch (error) {
+        console.error("Error loading the selected gameSave,inventory and clue",error);
+    }
 
     }
 </script>

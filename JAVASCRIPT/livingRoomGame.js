@@ -32,46 +32,18 @@ async function getSessionStorage(){
 }
 
 //CONSTANTS
-const button = document.getElementById('burntLetter');
-
+const pickUpLetterButton = document.getElementById('burntLetter');
+const letterContainer = document.getElementById('letterContainer')
 
 //VARIABLES
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
+let letterFound = clueList.some(clue => clue.clueID == 2)
 
 
 
 //GAME STATES
-/*
-const template = {
-    "room": "Living Room",
-    "description": `description`,
-    "ImageHREF": "jpg",
-    "interactions": [
-        {
-            "id": 0,
-            "Text": "text",
-            "response": getOffSofa
-        },
-        {
-            "id": 1,
-            "Text": "text",
-            "response": examineFireplace
-        },
-        {
-            "id": 2,
-            "Text": "text",
-            "response": lookAtShelves
-        },
-        {
-            "id": 3,
-            "Text": "text",
-            "response": checkRug
-        }
-    ]
-}
-*/
 
 const enteredLivingRoom = {
     "room": "Living Room",
@@ -101,6 +73,11 @@ const enteredLivingRoom = {
             "id": 3,
             "Text": "Check under the rug",
             "response": "You look underneath the rug, but find nothing but a faceful of dust"
+        },
+        {
+            "id": 4,
+            "Text": "Leave the living room",
+            "response": goToHall
         }
     ]
 }
@@ -243,28 +220,26 @@ function getOffSofa() {
 }
 
 function examineFireplace() {
-    button.classList.remove('hide')
-    setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it")
-
     rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
-
-    
-
-    // rubbishContainer.style.display = 'block';
-    // if (hasClue1) {
-    //     clue1Btn.style.display = 'none';
-    //     rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
-    // }
-    // else {
-    //     clue1Btn.style.display = 'block';
-    //     rightColumn.style.backgroundImage = 'url("Images/rubbish.jpg")';
-    // }
-    // button.style.color = 'rgb(153, 153, 153)';
-    // button.querySelector('i').style.color = 'rgb(153, 153, 153)';
+    if(letterFound) {
+        setResponse("You take another look at the firePlace but you don't see anything else of note")
+    }
+    else {
+        pickUpLetterButton.classList.remove('hide')
+        setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it \n (HINT: Try licking on it)")
+    }
 }
 
-function letterClicked() {
-    button.classList.add('hide')
+function pickUpLetter() {
+    pickUpLetterButton.classList.add('hide');
+    letterContainer.classList.remove('hide');
+    // letterContainer.addEventListener("click", addLettertoNoteBook);
+    document.documentElement.addEventListener('click',addLettertoNoteBook);
+}
+
+function addLettertoNoteBook() {
+    letterContainer.classList.add('hide'); 
+    addClue(2);
 }
 
 function lookAtShelves() {
@@ -298,5 +273,10 @@ async function updateTimesOnSofa(){
         let achSRC = 'Images/sofaAchievementIcon.jpg';
         awardAchievement(1, 1, achSRC)
     }
+}
+
+function goToHall() {
+    sessionStorage.setItem('currentState', 3);
+    window.location.href = 'downStairsHall.html';
 }
 

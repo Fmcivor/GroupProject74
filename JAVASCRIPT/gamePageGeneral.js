@@ -26,6 +26,7 @@ const deleteAndExit = document.getElementById('deleteAndExit');
 
 // item ids
 const keyID = 1;
+const lockpickID = 2;
 
 //clue ids
 const rubbishClueID = 1;
@@ -44,7 +45,7 @@ let displayName = sessionStorage.getItem("displayName");
 let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 UpdateInventory();
-
+updateClueNotebook();
 
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
@@ -174,22 +175,28 @@ function updateState() {
     const responseParagraph = document.getElementById('responseParagraph').textContent = '';
     const buttonContainer = document.getElementById('buttonContainer');
     const stateImageHref = currentState.ImageHREF;
+    const descText = currentState.description;
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
     description.textContent = "";
 
     //typing effect
+    const descLength = descText.length;
+    let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(5500, totalTime);
+    let intervalTime = totalTime/descLength;
+    intervalTime.toFixed(1);
     let typingIndex = 0;
-    let totalTypingTime = currentState.description.length * 20;
+    // let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
-        description.textContent += currentState.description[typingIndex];
+        description.textContent += descText[typingIndex];
         typingIndex++;
         if (typingIndex == currentState.description.length) {
             clearInterval(typingInterval);
         }
 
-    }, 20);
+    }, intervalTime);
 
 
     //background image
@@ -207,18 +214,10 @@ function updateState() {
         button.id = interaction.id;
         button.innerHTML = `<i id="${interaction.id}" class="fa-solid fa-caret-right"></i>&nbsp ${interaction.Text}`;
         button.addEventListener('click', userDecisionHandler);
-        button.setAttribute('disabled', true);
+        // button.setAttribute('disabled', true);
         buttonContainer.appendChild(button);
 
     });
-
-    setTimeout(() => {
-        const optionBtns = document.querySelectorAll('.optionButton');
-        optionBtns.forEach(btn => {
-            btn.removeAttribute('disabled');
-        });
-    }, totalTypingTime);
-
 }
 
 
@@ -227,16 +226,82 @@ function userDecisionHandler(event) {
 
 
     if (typeof currentState.interactions[responseId].response === 'string') {
-        document.getElementById('responseParagraph').textContent = currentState.interactions[responseId].response;
+        setResponse(currentState.interactions[responseId].response);
+        document.getElementById('descriptionParagraph').textContent = currentState.description;
+
     }
     else {
         currentState.interactions[responseId].response(responseId);
     }
 }
 
+
 function setResponse(responseText) {
-    document.getElementById('responseParagraph').textContent = responseText;
+    const responseBox = document.getElementById('responseParagraph');
+    responseBox.textContent = "";
+    const responseLength = responseText.length;
+    let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(6000, totalTime)
+    let intervalTime = totalTime/responseLength;
+    intervalTime = Math.max(20, intervalTime)
+    
+    let typingIndex = 0;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        responseBox.textContent += responseText[typingIndex];
+        typingIndex++;
+        if (typingIndex == responseLength) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
 }
+
+function setDescriptionAndResponse(responseText) {
+    const description = document.getElementById('descriptionParagraph');
+    const descText = currentState.description;
+    description.textContent = "";
+
+    //typing effect
+    const descLength = descText.length;
+    let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(5500, totalTime);
+    let intervalTime = totalTime/descLength;
+    intervalTime.toFixed(1);
+    let typingIndex = 0;
+    // let totalTypingTime = currentState.description.length * 20;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        description.textContent += descText[typingIndex];
+        typingIndex++;
+        if (typingIndex == currentState.description.length) {
+            clearInterval(typingInterval);
+            setResponseAfterDescription(responseText);
+        }
+
+    }, intervalTime);
+}
+
+function setResponseAfterDescription(responseText) {
+    const responseBox = document.getElementById('responseParagraph');
+    responseBox.textContent = "";
+    const responseLength = responseText.length;
+    let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
+    totalTime = Math.min(6000, totalTime)
+    let intervalTime = totalTime/responseLength;
+    intervalTime = Math.max(20, intervalTime)
+    
+    let typingIndex = 0;
+    typingInterval = setInterval(() => {
+        responseBox.textContent += responseText[typingIndex];
+        typingIndex++;
+        if (typingIndex == responseLength) {
+            clearInterval(typingInterval);
+        }
+
+    }, intervalTime);
+}
+
 
 function UpdateInventory() {
     for (let i = 0; i < inventory.length; i++) {
@@ -369,7 +434,6 @@ function updateClueNotebook() {
         let clueElement = document.createElement("li");
         clueElement.textContent = clueList[i].clueText;
         document.getElementById('clueList').appendChild(clueElement);
-
     }
 }
 
@@ -397,7 +461,7 @@ async function addItem(itemID) {
             UpdateInventory();
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
-                                     VALUES(${sessionStorage.getItem("gameID")},${keyID})`;
+                                VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
             dbConfig.set("query", saveItemQuery);
 
             let saveItemResponse = await fetch(dbConnectorUrl, {

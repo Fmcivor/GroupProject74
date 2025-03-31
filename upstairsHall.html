@@ -1,31 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Living Room</title>
+    <title>Upstairs Hall</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
-    <link rel="stylesheet" href="CSS/livingRoom.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@700&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
         <i class="fa-solid fa-gear" id="settingsButton" title="Settings"></i>
         <h1 id="desktopHeader">Buried Secrets</h1>
-        <h2 id="mobileHeader">Living Room</h1>
+        <h2 id="mobileHeader">Upstairs Hall</h1>
     </header>
     <main class="wrapper">
 
         <div class="leftColumn">
             <div class="gameInteractionContainer">
                 <div class="responseContainer">
-                    <h2 id="roomHeader">Front Of The house</h2>
+                    <h2 id="roomHeader">Upstairs Hall</h2>
 
                     <div class="promptWrapper">
                         <p id="descriptionParagraph"></p>
@@ -35,32 +30,25 @@
 
                 </div>
                 <div class="divider" id="leftDivider"></div>
-                <div id="buttonContainer" class="buttonContainer">
-
+                    <div id="buttonContainer" class="buttonContainer">
                 </div>
             </div>
+
             <div class="settingsContainer">
                 <h2 id="settingsHeader" style="justify-content: center;">Settings</h2>
                 <div class="settingsContent">
-                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;" >Exit and save</button>
-
+                    <button class="optionButton" id="exitAndSaveBtn" style="font-size: 1.5rem;" >Save and Exit</button>
+                    <button class="optionButton" id="deleteAndExit" style="font-size: 1.5rem;" > Delete and Exit</button>
                 </div>
             </div>
         </div>
 
         <div class="rightColumn">
-            <div class="gameContainer"></div>
-            <button id="burntLetter" class="hide" type="button" onclick="pickUpLetter()"></button>
-            <div id="letterContainer" class="hide" onclick="" >
-                    <h3>Dear Charles Kingston</h3>    
-                    <p>
-                        I just found out you bribed that junior doctor to perjure herself! 
-                        You knew full well it wasn't my fault that the child died during sergery and you still took the case.
-                        Because of you I lost my license and my life is over. Say your goodbyes you corrupt narcissist, 
-                        it's time you got a taste of your own medicine.
-                    </p>
-                    <h3 id="fromLetterLine">From Victor </h3>
+            <div class="gameContainer">
+               
             </div>
+
+           
         </div>
         <nav class="toolBar">
             <div class="iconContainer">
@@ -77,23 +65,13 @@
                     <h2 class="toolBarSectionHeader">Notebook</h2>
                     <section class="notebookSection" id="suspectSection">
                         <h3 class="notebookSectionHeader">Suspects</h3>
-                        <ul class="notebookList">
-                            <li>Jonathan Donaghy - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
-                                hasdbjahdb hasbdjahb asdhabdjha</li>
-                            <li>Margaret - A failed business partner of Charles ahsahs abshdajs ashdbjabdj
-                                hasdbjahdb
-                                hasbdjahb asdhabdjha</li>
-                            <li>Victor - A failed business partner of Charles ahsahs abshdajs ashdbjabdj hasdbjahdb
-                                hasbdjahb asdhabdjha</li>
-                        </ul>
+                        <ul class="notebookList"></ul>
                     </section>
 
 
                     <section class="notebookSection">
                         <h3 class="notebookSectionHeader">Clues</h3>
-                        <ul class="notebookList" id="clueList">
-
-                        </ul>
+                        <ul class="notebookList" id="clueList"></ul>
                     </section>
                 </div>
 
@@ -115,8 +93,6 @@
 
                 </div>
 
-
-
             </div>
         </nav>
         <div class="achievementContainer">
@@ -137,11 +113,10 @@
             </div>
         </div>
     </main>
-
+    
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
-    <script src="JAVASCRIPT/livingRoomGame.js"></script>
-
+    <script src="JAVASCRIPT/upstairsHall.js"></script>
 </body>
 
 </html>
