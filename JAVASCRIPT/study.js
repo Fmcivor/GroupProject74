@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     states.push(studyDefault,computerLoginScreen);
   
-    // let currentStateID = Number(sessionStorage.getItem('currentState'));
-    // states.forEach(state => {
-    //     if (state.ID == currentStateID) {
-    //         currentState = state;
-    //         return;
-    //     }
-    // });
-    currentState = studyDefault;
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    states.forEach(state => {
+        if (state.ID == currentStateID) {
+            currentState = state;
+            return;
+        }
+    });
+    
     updateState();
 })
 
