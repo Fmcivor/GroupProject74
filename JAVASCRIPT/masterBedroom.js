@@ -1,4 +1,10 @@
 //CONSTANTS
+const dial1 = document.getElementById('dial1');
+const dial2 = document.getElementById('dial2');
+const dial3 = document.getElementById('dial3');
+const dial4 = document.getElementById('dial4');
+const dialCenter = document.getElementById('dialCenter');
+
 const dial1SVG = document.getElementById('d1SVG');
 const dial2SVG = document.getElementById('d2SVG');
 const dial3SVG = document.getElementById('d3SVG');
@@ -44,19 +50,21 @@ let selectedDial = 1;
 function keyDownEventHandler(event) {
     switch (event.key) {
         case "ArrowLeft":
-            rotateLeft();
+            rotateRight();
             break;
         case "ArrowRight":
-            rotateRight();
+            rotateLeft();
             break;
         case "ArrowUp":
             if(selectedDial > 1) {
                 selectedDial--;
+                higlightSelectedDial();
             }
             break;
         case "ArrowDown":
             if(selectedDial < 4) {
                 selectedDial++;
+                higlightSelectedDial();
             }
             break;
     }
@@ -386,4 +394,40 @@ function investigateSafe() {
 function displaySafe() {
     safeGameContainer.style.display = 'flex';  
     window.addEventListener("keydown", keyDownEventHandler);
+}
+
+function higlightSelectedDial() {
+    dial1.style.border = "3px solid black";
+    dial2.style.border = "3px solid black";
+    dial3.style.border = "3px solid black";
+    dial4.style.border = "3px solid black";
+    dialCenter.style.border = "3px solid black";
+
+    dial1Display.style.color = "black";
+    dial2Display.style.color = "black";
+    dial3Display.style.color = "black";
+    dial4Display.style.color = "black";
+
+    switch(selectedDial) {
+        case 1:
+            dial1.style.border = "3px solid rgb(252, 215, 7)";         
+            dial2.style.border = "3px solid rgb(252, 215, 7)";   
+            dial1Display.style.color = "rgb(252, 215, 7)";
+            break;
+        case 2:
+            dial2.style.border = "3px solid rgb(252, 215, 7)";         
+            dial3.style.border = "3px solid rgb(252, 215, 7)"; 
+            dial2Display.style.color = "rgb(252, 215, 7)";
+            break;
+        case 3:
+            dial3.style.border = "3px solid rgb(252, 215, 7)";         
+            dial4.style.border = "3px solid rgb(252, 215, 7)"; 
+            dial3Display.style.color = "rgb(252, 215, 7)";
+            break;
+        case 4:
+            dial4.style.border = "3px solid rgb(252, 215, 7)";         
+            dialCenter.style.border = "3px solid rgb(252, 215, 7)"; 
+            dial4Display.style.color = "rgb(252, 215, 7)";
+            break;
+    }
 }
