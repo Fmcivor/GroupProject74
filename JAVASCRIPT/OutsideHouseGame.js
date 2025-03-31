@@ -515,7 +515,6 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
         if (currentState == frontOfHouseDoorLocked && selectedItemID == keyID) {
             currentState = frontOfHouseDoorUnlocked;
             updateState();
-            setResponse('You have unlocked the door now.');
 
             doorUnlocked = true;
             sessionStorage.setItem('frontDoorUnlocked', JSON.stringify(doorUnlocked));

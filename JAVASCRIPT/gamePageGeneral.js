@@ -178,7 +178,7 @@ function updateState() {
     buttonContainer.innerHTML = '';
     roomHeader.textContent = currentState.room;
     document.getElementById('mobileHeader').textContent = currentState.room;
-    description.textContent = currentState.description;
+    description.textContent = '';
 
 
     //typing effect
