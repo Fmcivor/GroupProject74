@@ -123,8 +123,6 @@ async function loadClueList(gameID) {
 }
 
 
-  
-
 
 async function loadGameSaveData(gameID) {
     let selectQuery = `SELECT * FROM tblGameSave WHERE gameID = ${gameID}`;

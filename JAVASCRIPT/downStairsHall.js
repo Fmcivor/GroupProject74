@@ -195,7 +195,10 @@ async function goToKitchen(){
 }
 
 async function goUpstairs(){
-    //todo
+    sessionStorage.setItem('currentState',1);
+    sessionStorage.setItem('currentRoom','upstairsHall.html');
+    await saveGame();
+    window.location.href = 'upstairsHall.html';
 }
 
 async function goToStudy(){

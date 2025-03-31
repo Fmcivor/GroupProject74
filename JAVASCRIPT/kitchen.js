@@ -45,12 +45,7 @@ const leftKitchen = {
         {
             "id": 1,
             "Text": "Enter hallway",
-            "response": searchDrawers
-        },
-        {
-            "id": 2,
-            "Text": "Enter dining room",
-            "response": enterDiningRoom
+            "response": enterHallway
         },
         {
             "id": 3,
@@ -110,23 +105,10 @@ function examineGlass(){
 
 function enterLivingRoom(){
     window.location.href = 'livingRoom.html'
+    sessionStorage.setItem('currentState', 1);
 }
 
-
-function enterLivingRoom(){
-    window.location.href = 'livingRoom.html'
-    currentState = 0;
-    updateState();
-}
-
-function enterhallway(){
+function enterHallway(){
     window.location.href = 'hallway.html'
-    currentState = 0;
-    updateState();
-}
-
-function enterDiningRoom(){
-    window.location.href = 'diningRoom.html'
-    currentState = 0;
-    updateState();
+    sessionStorage.setItem('currentState', 4);
 }

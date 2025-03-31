@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateState();
     getSessionStorage();
 
+
 })
 
 async function getSessionStorage(){
