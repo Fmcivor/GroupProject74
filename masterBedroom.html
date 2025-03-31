@@ -82,10 +82,10 @@
                     <div id="dial1" class="safeDial">
                         <svg class="svg" id="d1SVG" viewBox="0 0 200 200">
                             <defs>
-                                <path id="dial1Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                <path id="dial1Path" d="M 100, 100 m -83, 0 a 83,83 0 1,1 166,0 a 83,83 0 1,1 -166,0"/>
                             </defs>
-                            <text class="dialNums">
-                                <textPath href="#dial1Path" startOffset="0%" spacing="auto" textLength="465">
+                            <text id="d1Text" class="dialNums">
+                                <textPath href="#dial1Path" startOffset="0.25%" spacing="auto" textLength="478">
                                     0123456789 
                                 </textPath>
                             </text>
@@ -96,8 +96,8 @@
                                 <defs>
                                     <path id="dial2Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
                                 </defs>
-                                <text class="dialNums">
-                                    <textPath href="#dial2Path" startOffset="0%" spacing="auto" textLength="465">
+                                <text id="d2Text" class="dialNums">
+                                    <textPath href="#dial2Path" startOffset="0%" spacing="auto" textLength="461">
                                         0123456789 
                                     </textPath>
                                 </text>
@@ -106,10 +106,10 @@
                             <div id="dial3" class="safeDial">
                                 <svg class="svg" id="d3SVG" viewBox="0 0 200 200">
                                     <defs>
-                                        <path id="dial3Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                        <path id="dial3Path" d="M 100, 100 m -77, 0 a 77,77 0 1,1 154,0 a 77,77 0 1,1 -154,0" />
                                     </defs>
-                                    <text class="dialNums">
-                                        <textPath href="#dial3Path" startOffset="0%" spacing="auto" textLength="465">
+                                    <text id="d3Text" class="dialNums">
+                                        <textPath href="#dial3Path" startOffset="-0.3%" spacing="auto" textLength="450">
                                             0123456789 
                                         </textPath>
                                     </text>
@@ -118,15 +118,17 @@
                                 <div id="dial4" class="safeDial">
                                     <svg class="svg" id="d4SVG" viewBox="0 0 200 200">
                                         <defs>
-                                            <path id="dial4Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                            <path id="dial4Path" d="M 100, 100 m -72, 0 a 72,72 0 1,1 144,0 a 72,72 0 1,1 -144,0" />
                                         </defs>
-                                        <text class="dialNums">
-                                            <textPath href="#dial4Path" startOffset="0%" spacing="auto" textLength="465">
+                                        <text id="d4Text" class="dialNums">
+                                            <textPath href="#dial4Path" startOffset="-0.6%" spacing="auto" textLength="422">
                                                 0123456789 
                                             </textPath>
                                         </text>
                                     </svg>
             
+
+                                    <div id="dialCenter" class="safeDial"></div>
                                 </div> 
         
                             </div>  
