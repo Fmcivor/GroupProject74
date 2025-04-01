@@ -22,7 +22,18 @@ body {
     background-position: center center;
 }
 
+::-webkit-scrollbar {
+    width: 6px;
+}
 
+::-webkit-scrollbar-thumb{
+    background-color: rgb(0, 68, 204);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: transparent;
+}
 
 header {
     position: absolute;
@@ -72,11 +83,31 @@ header {
     height: clamp(500px, 50vh, 800px);
     border-radius: 20px;
     border: 2px solid rgb(51, 51, 102);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 10px 0 10px 0;
 }
 
-h1{
+#saveSlotWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+    background-color: rgba(10, 10, 40, 0.9);
+    width: 100%;
+    height: calc(85%);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 10px 0 10px 0;
+    border-top: 2px solid white;
+}
+
+h2{
     font-size: 3rem;
     text-align: center;
+    height: 15%;
+    min-height: calc(3rem+10px);
 }
 
 .saveSlot{
@@ -98,7 +129,7 @@ h1{
     transition: 0.3s;
 }
 
-.saveSlot button{
+.saveSlotBtn{
     background-color: transparent;
     text-decoration: none;
     font-size: clamp(2rem, 5vw, 3rem);
@@ -109,6 +140,8 @@ h1{
     word-wrap: break-word;
     border-right: 2px solid white;
 }
+
+
 
 @media (max-width: 480px){
     header{
@@ -122,7 +155,7 @@ h1{
 
 .btnMainMenu{
     position: fixed;
-    bottom: 12vh;
+    bottom: 8vh;
     background-color: rgb(0, 68, 204);
     color: white;
     text-decoration: none;
@@ -144,6 +177,12 @@ h1{
     width: 30%;
     height: 100%;
     font-size: 1.5rem;
+    color: red;
+    transition:font-size 0.5s ease-in-out;
+}
+
+.deleteSaveBtn:hover{
+    font-size: 2rem;
 }
 
 .fa-solid::before{

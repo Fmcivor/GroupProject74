@@ -60,7 +60,7 @@ exitAndSaveBtn.addEventListener('click', async function () {
 });
 
 deleteAndExit.addEventListener('click', async function () {
-    deleteSave(gameID);
+    await deleteSave(gameID);
     window.location.href = "mainMenu.html";
 
 });
