@@ -57,7 +57,7 @@ preferencesTab.addEventListener("click", function () {
 
 });
 
-statsTab.addEventListener('click', function(){
+statsTab.addEventListener('click', function () {
     preferencesTab.style.borderBottom = '4px solid transparent';
     profileTab.style.borderBottom = '4px solid transparent';
     statsTab.style.borderBottom = '4px solid rgb(0,102,255)';
@@ -328,28 +328,49 @@ async function savePreferences() {
 }
 
 
-async function displayStats(){
-    let statsQuery = `SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))) as totalTimePlayed 
-    FROM tblUser JOIN tblGameSave on tblUser.userID = tblGameSave.userID WHERE tblUser.userID = ${userID}`;
+async function displayStats() {
+    let statsQuery = `SELECT 
+    IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))),'You have not played a game yet') AS totalTimePlayed, 
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not won a game yet') AS averageToWin,
+    COUNT(tblGameInventory.itemID) as numOfItemsCollected,COUNT(tblGameNotebook.clueID) AS numOfCluesCollected,
+    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'You have not won a game yet') as fastestTimeToCompleteGame,
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status !=4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not played a game yet') AS averageTime,
+    COUNT(CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) as gamesLost, 
+    COUNT(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) as gamesWon,
+    COUNT(CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) as gamesAbandoned
+FROM tblGameSave 
+LEFT JOIN tblGameInventory ON tblGameInventory.gameID = tblGameSave.gameID 
+LEFT JOIN tblGameNotebook ON tblGameNotebook.gameID = tblGameSave.gameID
+WHERE tblGameSave.userID = ${userID}`;
 
-    dbConfig.set('query',statsQuery);
+    dbConfig.set('query', statsQuery);
 
     try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
         });
 
         let result = await response.json();
 
         if (result.success) {
             let stats = result.data[0];
-            document.getElementById('totalTimePlayed').textContent = stats.totalTimePlayed;
+            document.getElementById("totalTimePlayed").innerText = "Total Time Played: " + stats.totalTimePlayed;
+            document.getElementById("avgTimeToWin").innerText = "Average Time to Win: " + stats.averageToWin;
+            document.getElementById("itemCount").innerText = "Items Collected: " + stats.numOfItemsCollected;
+            document.getElementById("clueCount").innerText = "Clues Found: " + stats.numOfCluesCollected;
+            document.getElementById("quickestGame").innerText = "Fastest Game Completion: " + stats.fastestTimeToCompleteGame;
+            document.getElementById("averageTime").innerText = "Average Time Played: " + stats.averageTime;
+            document.getElementById("lost").innerText = "Games Lost: " + stats.gamesLost;
+            document.getElementById("won").innerText = "Games Won: " + stats.gamesWon;
+            document.getElementById("abandoned").innerText = "Games Abandoned: " + stats.gamesAbandoned;
+
+
         }
-        else{
+        else {
             console.error("it broke");
         }
     } catch (error) {
-        console.error("it broke",error);
+        console.error("it broke", error);
     }
 }
