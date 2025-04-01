@@ -228,9 +228,8 @@ async function displayGameSaves() {
                     saveSlotBtn.classList.add('saveSlotBtn');
 
 
-                    let deleteSaveBtn = document.createElement('i');
-                    deleteSaveBtn.classList.add('fa-solid');
-                    deleteSaveBtn.classList.add('fa-trash');
+                    let deleteSaveBtn = document.createElement('button');
+                    deleteSaveBtn.innerHTML = `<i class="fa-solid fa-trash deleteSaveIcon"></i>`;
                     deleteSaveBtn.classList.add('deleteSaveBtn');
                     deleteSaveBtn.value = gameSave.gameID;
                     deleteSaveBtn.addEventListener('click', async function (event) {

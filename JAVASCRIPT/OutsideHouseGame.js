@@ -349,7 +349,7 @@ function startRepair() {
         if (angle > 360) {
             angle = 1;
         }
-    }, 7);
+    }, 5);
 }
 
 
@@ -410,7 +410,16 @@ repairButton.addEventListener('click', async function () {
                 generatorAudio.currentTime = 0;
                 generatorAudio.play();
                 electricityOn = true;
-                document.getElementById('GeneratorGameContainer').style.display = 'none';
+                // document.getElementById('GeneratorGameContainer').style.display = 'none';
+                document.querySelector('.miniGameFunctionContainer').style.visibility = 'hidden';
+
+                circle.style.background = 'rgb(78,78,78)';
+                if (angle % 4 !== 0) {
+                    angle += (4 - (angle % 4));
+                }
+                rotateLine();
+
+
                 generatorBuilding.interactions.pop();
                 const buttonContainer = document.getElementById('buttonContainer');
                 buttonContainer.removeChild(buttonContainer.lastChild);
@@ -439,6 +448,31 @@ repairButton.addEventListener('click', async function () {
 
 })
 
+let intervalTime = 7;
+
+
+function rotateLine() {
+    line.style.transform = `rotate(${angle}deg)`;
+
+    angle += 4; 
+
+    if (angle > 360) {
+        angle = 4;
+    }
+
+    if (angle %180 == 0) {
+        intervalTime -= 0.5; 
+    }
+        
+    
+
+    if (intervalTime > 0.5) {
+        setTimeout(rotateLine, intervalTime); 
+    }
+    else{
+        document.getElementById('GeneratorGameContainer').style.display = 'none';
+    }
+}
 
 clue1Btn.addEventListener('click', async function () {
     rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
