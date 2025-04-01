@@ -906,4 +906,12 @@ p {
 .hide {
     visibility: collapse;
 }
-
+#atticFlashlight {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+    display: block;
+}
