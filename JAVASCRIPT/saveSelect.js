@@ -16,7 +16,7 @@ document.getElementById('yesBtn').addEventListener('click', async function (even
     await displayGameSaves();
     document.getElementById('yesBtn').value = null;
     document.getElementById('deletePopUp').style.display = 'none';
-
+    
 });
 
 
@@ -28,7 +28,7 @@ async function loadGame(gameID) {
 
     if (inventoryLoaded && clueListLoaded && gameSaveDataLoaded) {
 
-
+        sessionStorage.setItem('gameSessionStartTime',Date.now());
 
         let updateQuery = `UPDATE tblGameSave SET lastPlayedDate = CURRENT_TIMESTAMP WHERE gameID =${gameID}`;
 
@@ -183,7 +183,7 @@ async function loadGameSaveData(gameID) {
 
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
-    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = ${userID} ORDER BY lastPlayedDate DESC LIMIT 3`;
+    let selectQuery = `SELECT gameID,startDate, lastPlayedDate FROM tblGameSave WHERE userID = ${userID} AND status = ${activeGame} ORDER BY lastPlayedDate DESC LIMIT 3`;
 
     dbConfig.set('query', selectQuery);
 
@@ -212,10 +212,18 @@ async function displayGameSaves() {
                 latestGames.forEach(gameSave => {
                     let saveSlotBtn = document.createElement('button');
                     saveSlotBtn.value = gameSave.gameID;
-                    saveSlotBtn.textContent = `bjhgjhgjhgjhghsaveSlot${slotCounter}`;
+                    
+
+                    const startDate = new Date(gameSave.startDate);
+                    const day = String(startDate.getUTCDate()).padStart(2, '0'); 
+                    const month = String(startDate.getUTCMonth() + 1).padStart(2, '0');
+                    const year = startDate.getUTCFullYear();
+
+                    const formattedDate = `${day}/${month}/${year}`;
+                    saveSlotBtn.innerHTML = `<p id='saveName' style='font-size:1.2rem'>save${slotCounter}</p> <p id='startDate' style='font-size:1rem'>Start Date: ${formattedDate}</p>`;
                     slotCounter++;
                     saveSlotBtn.addEventListener('click', function (event) {
-                        loadGame(event.target.value);
+                        loadGame(event.currentTarget.value);
                     });
                     saveSlotBtn.classList.add('saveSlotBtn');
 

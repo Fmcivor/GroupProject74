@@ -22,16 +22,22 @@ const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
 const messageContainer = document.getElementById('messageContainer');
 const profileTab = document.getElementById('profileTab');
 const preferencesTab = document.getElementById('preferencesTab');
+const statsTab = document.getElementById('statsTab');
+
 const profileForm = document.getElementById('profileForm');
 const preferencesForm = document.getElementById('preferencesForm');
+const statsContainer = document.getElementById('statsContainer');
+
 const easyReadCheckBox = document.getElementById('easyReadCheckBox')
 
 profileTab.addEventListener("click", function () {
     profileTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     preferencesTab.style.borderBottom = '4px solid transparent';
+    statsTab.style.borderBottom = '4px solid transparent';
 
     profileForm.style.display = 'flex'
     preferencesForm.style.display = 'none';
+    statsContainer.style.display = 'none';
 
     displayNameInput.value = displayName
 });
@@ -39,15 +45,30 @@ profileTab.addEventListener("click", function () {
 preferencesTab.addEventListener("click", function () {
     preferencesTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     profileTab.style.borderBottom = '4px solid transparent';
+    statsTab.style.borderBottom = '4px solid transparent';
 
     preferencesForm.style.display = 'flex'
     profileForm.style.display = 'none';
+    statsContainer.style.display = 'none';
 
     fontSlider.value = fontSize;
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn")) === true;
     easyReadCheckBox.checked = easyReadOn;
 
 });
+
+statsTab.addEventListener('click', function(){
+    preferencesTab.style.borderBottom = '4px solid transparent';
+    profileTab.style.borderBottom = '4px solid transparent';
+    statsTab.style.borderBottom = '4px solid rgb(0,102,255)';
+
+    preferencesForm.style.display = 'none'
+    profileForm.style.display = 'none';
+    statsContainer.style.display = 'flex';
+
+
+
+})
 
 
 
@@ -57,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
     displayNameInput.value = displayName
     fontSlider.value = fontSize;
     easyReadCheckBox.checked = easyReadOn;
+
+    displayStats();
+
 });
 
 const showButton = document.getElementById('togglePassword');
@@ -304,3 +328,28 @@ async function savePreferences() {
 }
 
 
+async function displayStats(){
+    let statsQuery = `SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))) as totalTimePlayed 
+    FROM tblUser JOIN tblGameSave on tblUser.userID = tblGameSave.userID WHERE tblUser.userID = ${userID}`;
+
+    dbConfig.set('query',statsQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let stats = result.data[0];
+            document.getElementById('totalTimePlayed').textContent = stats.totalTimePlayed;
+        }
+        else{
+            console.error("it broke");
+        }
+    } catch (error) {
+        console.error("it broke",error);
+    }
+}

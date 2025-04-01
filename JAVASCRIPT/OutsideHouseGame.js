@@ -312,12 +312,12 @@ function FixGenerator() {
     if (redZoneEnd <= 360) {
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
-        black 0deg, 
-        black ${redZoneStart}deg, 
-        #4B0000 ${redZoneStart}deg, 
+        rgb(78,78, 78) 0deg, 
+        rgb(78,78, 78) ${redZoneStart}deg, 
+        rgb(200,44, 44) ${redZoneStart}deg, 
         #4B0000 ${redZoneEnd}deg, 
-        black ${redZoneEnd}deg, 
-        black 360deg
+        rgb(78,78, 78) ${redZoneEnd}deg, 
+        rgb(78,78, 78) 360deg
     ) border-box`;
 
     }
@@ -325,11 +325,11 @@ function FixGenerator() {
         let additionalRedAngle = redZoneEnd - 360;
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
-        #4B0000 0deg, 
+        rgb(200,44, 44) 0deg, 
         #4B0000 ${additionalRedAngle}deg, 
-        black ${additionalRedAngle}deg, 
-        black ${redZoneStart}deg, 
-        #4B0000 ${redZoneStart}deg, 
+        rgb(78,78, 78) ${additionalRedAngle}deg, 
+        rgb(78,78, 78) ${redZoneStart}deg, 
+        rgb(200,44, 44) ${redZoneStart}deg, 
         #4B0000 360deg
     ) border-box`;
     }
@@ -370,25 +370,38 @@ repairButton.addEventListener('click', async function () {
 
     if (success) {
         count++;
-        generatorProgressBar.style.width = count * 33.3 + '%';
+        generatorProgressBar.style.width = count * 20 + '%';
 
         switch (count) {
             case 1:
                 notches.forEach(notch => {
-                    notch.style.backgroundColor = ' rgba(35, 84, 182, 0.9)';
+                    notch.style.backgroundColor = ' rgba(24, 48, 98, 0.4)';
                 });
                 setGeneratorHitZone();
                 break;
             case 2:
                 notches.forEach(notch => {
-                    notch.style.backgroundColor = 'rgba(42, 100, 216, 0.9)'
+                    notch.style.backgroundColor = ' rgba(32, 65, 138, 0.51)'
                 });
-               
+
                 setGeneratorHitZone();
                 break;
             case 3:
                 notches.forEach(notch => {
-                    notch.style.backgroundColor = 'rgba(51, 119, 255, 1)';
+                    notch.style.backgroundColor = ' rgba(36, 81, 180, 0.64)'
+                });
+                setGeneratorHitZone();
+                break;
+            case 4:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = ' rgba(51, 104, 220, 0.89)'
+                });
+
+                setGeneratorHitZone();
+                break;
+            case 5:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = 'rgb(64, 128, 255)';
                 });
 
                 clearInterval(generatorInterval);
@@ -399,6 +412,8 @@ repairButton.addEventListener('click', async function () {
                 electricityOn = true;
                 document.getElementById('GeneratorGameContainer').style.display = 'none';
                 generatorBuilding.interactions.pop();
+                const buttonContainer = document.getElementById('buttonContainer');
+                buttonContainer.removeChild(buttonContainer.lastChild);
                 setResponse("You have successfully repaired the generator.");
 
                 if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
@@ -445,23 +460,23 @@ function setGeneratorHitZone() {
         let additionalRedAngle = redZoneEnd - 360;
         circle.style.background = `linear-gradient(black, black) padding-box,
 conic-gradient(
-#4B0000 0deg, 
+rgb(200,44, 44) 0deg, 
 #4B0000 ${additionalRedAngle}deg, 
-black ${additionalRedAngle}deg, 
-black ${redZoneStart}deg, 
-#4B0000 ${redZoneStart}deg, 
+rgb(78,78, 78) ${additionalRedAngle}deg, 
+rgb(78,78, 78) ${redZoneStart}deg, 
+rgb(200,44, 44) ${redZoneStart}deg, 
 #4B0000 360deg
 ) border-box`;
     }
     else {
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
-        black 0deg, 
-        black ${redZoneStart}deg, 
-        #4B0000 ${redZoneStart}deg, 
+        rgb(78,78, 78) 0deg, 
+        rgb(78,78, 78) ${redZoneStart}deg, 
+        rgb(200,44, 44) ${redZoneStart}deg, 
         #4B0000 ${redZoneEnd}deg, 
-        black ${redZoneEnd}deg, 
-        black 360deg
+        rgb(78,78, 78) ${redZoneEnd}deg, 
+        rgb(78,78, 78) 360deg
     ) border-box`;
     }
 
