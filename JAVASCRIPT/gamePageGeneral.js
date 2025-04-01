@@ -442,10 +442,10 @@ async function addClue(clueID) {
     let alternateColour = false;
     let notificationTimer = setInterval(() => {
         if (alternateColour == false) {
-            noteBookButton.classList.toggle('toolBarIconNotification');
+            noteBookButton.querySelector('i').classList.toggle('toolBarIconNotification');
         }
         else {
-            noteBookButton.style.color = 'black';
+            noteBookButton.querySelector('i').classList.remove('toolBarIconNotification');
             alternateColour = false
         }
     }, 400);
@@ -517,13 +517,13 @@ async function addItem(itemID) {
 
     let alternateColour = false;
     let notificationTimer = setInterval(() => {
-        inventoryButton.classList.toggle('toolBarIconNotification');
+        inventoryButton.querySelector('i').classList.toggle('toolBarIconNotification');
     }, 400);
 
 
     setTimeout(() => {
         clearInterval(notificationTimer);
-        inventoryButton.classList.remove('toolBarIconNotification');
+        inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
     }, 2400);
 }
 

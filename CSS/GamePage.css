@@ -241,11 +241,27 @@ form{
     right: 0;
 }
 
-.toolBarIcon {
+.toolBarBtn{
     display: block;
     text-align: center;
     color: black;
     margin-bottom: 3vh;
+    display: block;
+    font-size: 3rem;
+    width: 100%;
+    height: fit-content;
+    border-width: 5px 0 5px 5px;
+    border-style: solid;
+    border-color: rgb(255, 197, 105);
+    border-radius: 20px 0 0 20px;
+    background-color: rgb(255, 197, 105);
+    transition: color 0.3s ease-in-out;
+}
+
+.toolBarIcon {
+    display: block;
+    text-align: center;
+    color: black;
     display: block;
     font-size: 3rem;
     width: 100%;
