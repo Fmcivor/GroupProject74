@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outside House</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="CSS/GamePage.css">
     <link rel="stylesheet" href="CSS/outsideHouse.css">
@@ -52,7 +54,7 @@
                     <br>
                     <form>
                         <h2>Preferences</h2>
-                        
+
                         <div class="slideContainer">
                             <label for="fontSize" id="fontSizeLabel">Font Size</label>
                             <input type="range" id="slider" min="12" max="24">
@@ -79,16 +81,16 @@
                 <div class="circleContainer">
                     <div class="circle">
                         <div class="circleImg">
-                            <div class="notch" style="bottom: 50px;"></div>
-                            <div class="notch" style="transform: rotate(90deg);left: 60px;"></div>
-                            <div class="notch" style="transform: rotate(180deg);top: 50px;"></div>
-                            <div class="notch" style="transform: rotate(270deg); right: 60px;"></div>
+                            <div class="notch" id="tester" style="height: 20px; top: 10%;"></div>
+                            <div class="notch" style="height: 20px; transform: rotate(90deg); left: 80%;"></div>
+                            <div class="notch" style="height: 20px; transform: rotate(180deg); top: 70%;"></div>
+                            <div class="notch" style="height: 20px; transform: rotate(270deg); left: 20%;"></div>
 
-                            <div class="smallNotch" style="transform: rotate(45deg); bottom: 50px; left: 60px;"></div>
-                            <div class="smallNotch" style="transform: rotate(135deg);left: 60px;top: 50px;"></div>
-                            <div class="smallNotch" style="transform: rotate(225deg);top: 50px; right: 60px;" ></div>
-                            <div class="smallNotch" style="transform: rotate(315deg); right: 60px; bottom: 50px;"></div>
-                            
+                            <div class="notch" style="height: 10px; transform: rotate(45deg); top: 30%; left: 65%;"></div>
+                            <div class="notch" style="height: 10px; transform: rotate(135deg); left: 65%; top: 62.5%;"></div>
+                            <div class="notch" style="height: 10px; transform: rotate(225deg); top: 62.5%; left: 32.5%;"></div>
+                            <div class="notch" style="height: 10px; transform: rotate(315deg); left: 32.5%; top: 30%;"></div>
+
                             <div class="lineDiv" id="line"></div>
                         </div>
                     </div>
@@ -117,11 +119,16 @@
 
         <nav class="toolBar">
             <div class="iconContainer">
-
-                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"
-                    title="Close Toolbar"></i>
-                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton" title="Open Notebook"></i>
-                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton" title="Open Inventory"></i>
+                <button class="toolBarBtn hideToolBarButton" id="hideToolBarButton">
+                    <i class="fa-solid fa-arrow-right toolBarIcon" id="hideToolBarButton" title="Close Toolbar"></i>
+                </button>
+                <button class="toolBarBtn" id="noteBookButton">
+                    <i class="fa-solid fa-book toolBarIcon"  title="Open Notebook"></i>
+                </button>
+                <button class="toolBarBtn" id="inventoryButton">
+                <i class="fa-solid fa-boxes-stacked toolBarIcon" title="Open Inventory"></i>
+                </button>
+                
 
             </div>
             <div class="noteBook" id="noteBook">

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function checkTotalActiveGames(){
 
-    let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND complete = 0`;
+    let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND status = 0`;
 
     dbConfig.set('query',query);
 
@@ -75,7 +75,7 @@ async function checkTotalActiveGames(){
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
    
-
+    sessionStorage.setItem('gameSessionStartTime',Date.now());
     let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"introduction.html",1)`;
     dbConfig.set('query',insertQuery);
 

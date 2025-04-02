@@ -22,16 +22,22 @@ const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
 const messageContainer = document.getElementById('messageContainer');
 const profileTab = document.getElementById('profileTab');
 const preferencesTab = document.getElementById('preferencesTab');
+const statsTab = document.getElementById('statsTab');
+
 const profileForm = document.getElementById('profileForm');
 const preferencesForm = document.getElementById('preferencesForm');
+const statsContainer = document.getElementById('statsContainer');
+
 const easyReadCheckBox = document.getElementById('easyReadCheckBox')
 
 profileTab.addEventListener("click", function () {
     profileTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     preferencesTab.style.borderBottom = '4px solid transparent';
+    statsTab.style.borderBottom = '4px solid transparent';
 
     profileForm.style.display = 'flex'
     preferencesForm.style.display = 'none';
+    statsContainer.style.display = 'none';
 
     displayNameInput.value = displayName
 });
@@ -39,15 +45,30 @@ profileTab.addEventListener("click", function () {
 preferencesTab.addEventListener("click", function () {
     preferencesTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     profileTab.style.borderBottom = '4px solid transparent';
+    statsTab.style.borderBottom = '4px solid transparent';
 
     preferencesForm.style.display = 'flex'
     profileForm.style.display = 'none';
+    statsContainer.style.display = 'none';
 
     fontSlider.value = fontSize;
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn")) === true;
     easyReadCheckBox.checked = easyReadOn;
 
 });
+
+statsTab.addEventListener('click', function () {
+    preferencesTab.style.borderBottom = '4px solid transparent';
+    profileTab.style.borderBottom = '4px solid transparent';
+    statsTab.style.borderBottom = '4px solid rgb(0,102,255)';
+
+    preferencesForm.style.display = 'none'
+    profileForm.style.display = 'none';
+    statsContainer.style.display = 'flex';
+
+
+
+})
 
 
 
@@ -57,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
     displayNameInput.value = displayName
     fontSlider.value = fontSize;
     easyReadCheckBox.checked = easyReadOn;
+
+    displayStats();
+
 });
 
 const showButton = document.getElementById('togglePassword');
@@ -304,3 +328,49 @@ async function savePreferences() {
 }
 
 
+async function displayStats() {
+    let statsQuery = `SELECT 
+    IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))),'You have not played a game yet') AS totalTimePlayed, 
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not won a game yet') AS averageToWin,
+    COUNT(tblGameInventory.itemID) as numOfItemsCollected,COUNT(tblGameNotebook.clueID) AS numOfCluesCollected,
+    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'You have not won a game yet') as fastestTimeToCompleteGame,
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status !=4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not played a game yet') AS averageTime,
+    COUNT(CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) as gamesLost, 
+    COUNT(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) as gamesWon,
+    COUNT(CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) as gamesAbandoned
+FROM tblGameSave 
+LEFT JOIN tblGameInventory ON tblGameInventory.gameID = tblGameSave.gameID 
+LEFT JOIN tblGameNotebook ON tblGameNotebook.gameID = tblGameSave.gameID
+WHERE tblGameSave.userID = ${userID}`;
+
+    dbConfig.set('query', statsQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let stats = result.data[0];
+            document.getElementById("totalTimePlayed").innerText = "Total Time Played: " + stats.totalTimePlayed;
+            document.getElementById("avgTimeToWin").innerText = "Average Time to Win: " + stats.averageToWin;
+            document.getElementById("itemCount").innerText = "Items Collected: " + stats.numOfItemsCollected;
+            document.getElementById("clueCount").innerText = "Clues Found: " + stats.numOfCluesCollected;
+            document.getElementById("quickestGame").innerText = "Fastest Game Completion: " + stats.fastestTimeToCompleteGame;
+            document.getElementById("averageTime").innerText = "Average Time Played: " + stats.averageTime;
+            document.getElementById("lost").innerText = "Games Lost: " + stats.gamesLost;
+            document.getElementById("won").innerText = "Games Won: " + stats.gamesWon;
+            document.getElementById("abandoned").innerText = "Games Abandoned: " + stats.gamesAbandoned;
+
+
+        }
+        else {
+            console.error("it broke");
+        }
+    } catch (error) {
+        console.error("it broke", error);
+    }
+}

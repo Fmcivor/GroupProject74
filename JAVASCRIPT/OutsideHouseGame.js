@@ -9,7 +9,7 @@ let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
 let hasKey = inventory.some(item => item.itemID == keyID);
 let hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
-let hasGeneratorAchievement = userAchievementIDs.some(achievement =>achievement.achievementID == 2);
+let hasGeneratorAchievement = userAchievementIDs.some(achievement => achievement.achievementID == 2);
 
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
@@ -25,6 +25,8 @@ let count = 0;
 let angle = 1;
 let generatorInterval;
 let remainingRepairMisses = 2;
+let notches = Array.from(document.querySelectorAll('.notch'));
+
 
 document.querySelector('.gameContainer').style.display = 'none';
 
@@ -35,6 +37,7 @@ const clue1Btn = document.getElementById('clue1Btn');
 const generatorProgressBar = document.getElementById('GeneratorProgressBar');
 const startRepairButton = document.getElementById('startButton');
 const repairButton = document.getElementById('repairButton');
+
 const rubbishContainer = document.querySelector('.rubbishContainer');
 startRepairButton.addEventListener('click', startRepair);
 
@@ -168,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding);
 
-  
+
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
         if (state.ID == currentStateID) {
@@ -195,7 +198,7 @@ function goToSideOfHouse() {
     currentState = sideOfHouse;
     updateState();
     clearInterval(generatorInterval);
-
+    document.getElementById('GeneratorGameContainer').style.display = 'none';
     generatorAudio.pause();
 }
 
@@ -217,14 +220,14 @@ async function checkUnderMat() {
 
 
 
-async function enterHouse(){
+async function enterHouse() {
     if (lightingOn == false) {
-        sessionStorage.setItem('currentState',1);
-        sessionStorage.setItem('currentRoom','downStairsHall.html');
+        sessionStorage.setItem('currentState', 1);
+        sessionStorage.setItem('currentRoom', 'downStairsHall.html');
     }
-    else{
-        sessionStorage.setItem('currentState',3);
-        sessionStorage.setItem('currentRoom','downStairsHall.html');
+    else {
+        sessionStorage.setItem('currentState', 3);
+        sessionStorage.setItem('currentRoom', 'downStairsHall.html');
     }
 
     await saveGame();
@@ -309,12 +312,12 @@ function FixGenerator() {
     if (redZoneEnd <= 360) {
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
-        black 0deg, 
-        black ${redZoneStart}deg, 
-        red ${redZoneStart}deg, 
-        red ${redZoneEnd}deg, 
-        black ${redZoneEnd}deg, 
-        black 360deg
+        rgb(78,78, 78) 0deg, 
+        rgb(78,78, 78) ${redZoneStart}deg, 
+        rgb(200,44, 44) ${redZoneStart}deg, 
+        #4B0000 ${redZoneEnd}deg, 
+        rgb(78,78, 78) ${redZoneEnd}deg, 
+        rgb(78,78, 78) 360deg
     ) border-box`;
 
     }
@@ -322,12 +325,12 @@ function FixGenerator() {
         let additionalRedAngle = redZoneEnd - 360;
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
-        red 0deg, 
-        red ${additionalRedAngle}deg, 
-        black ${additionalRedAngle}deg, 
-        black ${redZoneStart}deg, 
-        red ${redZoneStart}deg, 
-        red 360deg
+        rgb(200,44, 44) 0deg, 
+        #4B0000 ${additionalRedAngle}deg, 
+        rgb(78,78, 78) ${additionalRedAngle}deg, 
+        rgb(78,78, 78) ${redZoneStart}deg, 
+        rgb(200,44, 44) ${redZoneStart}deg, 
+        #4B0000 360deg
     ) border-box`;
     }
 
@@ -346,7 +349,7 @@ function startRepair() {
         if (angle > 360) {
             angle = 1;
         }
-    }, 7);
+    }, 5);
 }
 
 
@@ -367,62 +370,68 @@ repairButton.addEventListener('click', async function () {
 
     if (success) {
         count++;
-        generatorProgressBar.style.width = count * 33.3 + '%';
+        generatorProgressBar.style.width = count * 20 + '%';
 
-        if (count == 3) {
-            clearInterval(generatorInterval);
-            electricityOn = true;
-            sessionStorage.setItem("electricityOn", JSON.stringify(electricityOn));
-            generatorAudio.currentTime = 0;
-            generatorAudio.play();
-            electricityOn = true;
-            document.getElementById('GeneratorGameContainer').style.display = 'none';
-            generatorBuilding.interactions.pop();
-            updateState();
-            setResponse("You have successfully repaired the generator.");
-            
-            if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
-                awardAchievement(2, userID, "Images/generatorAchievement.png");
-                hasGeneratorAchievement = true;
-            }
+        switch (count) {
+            case 1:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = ' rgba(24, 48, 98, 0.4)';
+                });
+                setGeneratorHitZone();
+                break;
+            case 2:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = ' rgba(32, 65, 138, 0.51)'
+                });
 
+                setGeneratorHitZone();
+                break;
+            case 3:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = ' rgba(36, 81, 180, 0.64)'
+                });
+                setGeneratorHitZone();
+                break;
+            case 4:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = ' rgba(51, 104, 220, 0.89)'
+                });
+
+                setGeneratorHitZone();
+                break;
+            case 5:
+                notches.forEach(notch => {
+                    notch.style.backgroundColor = 'rgb(64, 128, 255)';
+                });
+
+                clearInterval(generatorInterval);
+                electricityOn = true;
+                sessionStorage.setItem("electricityOn", JSON.stringify(electricityOn));
+                generatorAudio.currentTime = 0;
+                generatorAudio.play();
+                electricityOn = true;
+                // document.getElementById('GeneratorGameContainer').style.display = 'none';
+                document.querySelector('.miniGameFunctionContainer').style.visibility = 'hidden';
+
+                circle.style.background = 'rgb(78,78,78)';
+                if (angle % 4 !== 0) {
+                    angle += (4 - (angle % 4));
+                }
+                rotateLine();
+
+
+                generatorBuilding.interactions.pop();
+                const buttonContainer = document.getElementById('buttonContainer');
+                buttonContainer.removeChild(buttonContainer.lastChild);
+                setResponse("You have successfully repaired the generator.");
+
+                if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
+                    awardAchievement(2, userID, "Images/generatorAchievement.png");
+                    hasGeneratorAchievement = true;
+                }
+                break;
         }
-        else {
 
-            redZoneStart = Math.floor(Math.random() * 359);
-            redZoneEnd = redZoneStart + 40;
-
-            if (redZoneEnd >= 360) {
-                let additionalRedAngle = redZoneEnd - 360;
-                circle.style.background = `linear-gradient(black, black) padding-box,
-        conic-gradient(
-            red 0deg, 
-            red ${additionalRedAngle}deg, 
-            black ${additionalRedAngle}deg, 
-            black ${redZoneStart}deg, 
-            red ${redZoneStart}deg, 
-            red 360deg
-        ) border-box`;
-            }
-            else {
-                circle.style.background = `linear-gradient(black, black) padding-box,
-                conic-gradient(
-                    black 0deg, 
-                    black ${redZoneStart}deg, 
-                    red ${redZoneStart}deg, 
-                    red ${redZoneEnd}deg, 
-                    black ${redZoneEnd}deg, 
-                    black 360deg
-                ) border-box`;
-            }
-
-        }
-        circle.style.width = '120px';
-        circle.style.height = '120px';
-        setTimeout(() => {
-            circle.style.width = '100px';
-            circle.style.height = '100px';
-        }, 200);
 
     }
     else {
@@ -439,6 +448,31 @@ repairButton.addEventListener('click', async function () {
 
 })
 
+let intervalTime = 7;
+
+
+function rotateLine() {
+    line.style.transform = `rotate(${angle}deg)`;
+
+    angle += 4; 
+
+    if (angle > 360) {
+        angle = 4;
+    }
+
+    if (angle %180 == 0) {
+        intervalTime -= 0.5; 
+    }
+        
+    
+
+    if (intervalTime > 0.5) {
+        setTimeout(rotateLine, intervalTime); 
+    }
+    else{
+        document.getElementById('GeneratorGameContainer').style.display = 'none';
+    }
+}
 
 clue1Btn.addEventListener('click', async function () {
     rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
@@ -450,6 +484,55 @@ clue1Btn.addEventListener('click', async function () {
 
 
 })
+
+
+function setGeneratorHitZone() {
+    redZoneStart = Math.floor(Math.random() * 359);
+    redZoneEnd = redZoneStart + 40;
+
+    if (redZoneEnd >= 360) {
+        let additionalRedAngle = redZoneEnd - 360;
+        circle.style.background = `linear-gradient(black, black) padding-box,
+conic-gradient(
+rgb(200,44, 44) 0deg, 
+#4B0000 ${additionalRedAngle}deg, 
+rgb(78,78, 78) ${additionalRedAngle}deg, 
+rgb(78,78, 78) ${redZoneStart}deg, 
+rgb(200,44, 44) ${redZoneStart}deg, 
+#4B0000 360deg
+) border-box`;
+    }
+    else {
+        circle.style.background = `linear-gradient(black, black) padding-box,
+    conic-gradient(
+        rgb(78,78, 78) 0deg, 
+        rgb(78,78, 78) ${redZoneStart}deg, 
+        rgb(200,44, 44) ${redZoneStart}deg, 
+        #4B0000 ${redZoneEnd}deg, 
+        rgb(78,78, 78) ${redZoneEnd}deg, 
+        rgb(78,78, 78) 360deg
+    ) border-box`;
+    }
+
+
+    circle.style.width = '150px';
+    circle.style.height = '150px';
+    setTimeout(() => {
+        circle.style.width = '130px';
+        circle.style.height = '130px';
+    }, 200);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

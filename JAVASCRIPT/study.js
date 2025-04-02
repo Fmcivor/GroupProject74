@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 })
 
 function leaveStudy(){
+    sessionStorage.setItem('currentRoom','downStairsHall.html');
     window.location.replace('downStairsHall.html');
     sessionStorage.setItem('currentState', 4);
 }

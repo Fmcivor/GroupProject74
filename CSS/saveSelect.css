@@ -9,10 +9,7 @@ html{
 }
 
 body {
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+   
     height: 100vh;
     color: white;
     overflow: hidden;
@@ -22,7 +19,18 @@ body {
     background-position: center center;
 }
 
+::-webkit-scrollbar {
+    width: 6px;
+}
 
+::-webkit-scrollbar-thumb{
+    background-color: rgb(0, 68, 204);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: transparent;
+}
 
 header {
     position: absolute;
@@ -33,6 +41,18 @@ header {
     align-items: center;
     padding: 20px;
     background: rgba(11, 5, 56, 0.8);
+}
+
+.mainContentwrapper{
+    width: 100%;
+    height: 83%;
+    background-color: transparent;
+    position: relative;
+    top: 17%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .game-title {
@@ -72,11 +92,31 @@ header {
     height: clamp(500px, 50vh, 800px);
     border-radius: 20px;
     border: 2px solid rgb(51, 51, 102);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 10px 0 10px 0;
 }
 
-h1{
+#saveSlotWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+    background-color: rgba(10, 10, 40, 0.9);
+    width: 100%;
+    height: calc(85%);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 10px 0 10px 0;
+    border-top: 2px solid white;
+}
+
+h2{
     font-size: 3rem;
     text-align: center;
+    height: 15%;
+    min-height: calc(3rem+10px);
 }
 
 .saveSlot{
@@ -98,31 +138,58 @@ h1{
     transition: 0.3s;
 }
 
-.saveSlot button{
+.saveSlotBtn{
     background-color: transparent;
     text-decoration: none;
     font-size: clamp(2rem, 5vw, 3rem);
     color: white;
     border: 2px solid transparent;
+    border-radius: 20px 0 0 20px;
     box-shadow: none;
     width: 70%;
     word-wrap: break-word;
     border-right: 2px solid white;
 }
 
+#saveName{
+    font-size: 1.2rem;
+}
+
+#startDate{
+    font-size: 1rem;
+}
+
+
+
 @media (max-width: 480px){
     header{
         justify-content: space-between;
     }
 
+    h2{
+        font-size: 2rem;
+    }
+
     .profile{
-        right: 0px;
+        right: 20vw;
+        text-align: right;
+    }
+
+    .mainContentwrapper{
+        top: 12%;
+        height: 88%;
+        justify-content: flex-start;
+        gap: 15px;
+    }
+
+    .saveContainer{
+        width: 100%;
+        height: 75%;
     }
 }
 
-.btnMainMenu{
-    position: fixed;
-    bottom: 12vh;
+.btnMainMenu{       
+    
     background-color: rgb(0, 68, 204);
     color: white;
     text-decoration: none;
@@ -144,6 +211,22 @@ h1{
     width: 30%;
     height: 100%;
     font-size: 1.5rem;
+    border-radius: 0 20px 20px 0;
+    border: 2px solid transparent;
+    background-color: transparent;
+}
+
+.deleteSaveIcon{
+    height: 100%;
+    width: 100%;
+    font-size: inherit;
+    color: red;
+    transition:font-size 0.5s ease-in-out;
+    border-radius: 0 20px 20px 0;               
+}
+
+.deleteSaveBtn:hover{
+    font-size: 2rem;
 }
 
 .fa-solid::before{
