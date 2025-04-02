@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +8,9 @@
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
     <link rel="stylesheet" href="CSS/livingRoom.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -48,7 +49,7 @@
                     <br>
                     <form>
                         <h2>Preferences</h2>
-                        
+
                         <div class="slideContainer">
                             <label for="fontSize" id="fontSizeLabel">Font Size</label>
                             <input type="range" id="slider" min="12" max="24">
@@ -72,24 +73,30 @@
         <div class="rightColumn">
             <div class="gameContainer"></div>
             <button id="burntLetter" class="hide" type="button" onclick="pickUpLetter()"></button>
-            <div id="letterContainer" class="hide" onclick="" >
-                    <h3>Dear Charles Kingston</h3>    
-                    <p>
-                        I just found out you bribed that junior doctor to perjure herself! 
-                        You knew full well it wasn't my fault that the child died during sergery and you still took the case.
-                        Because of you I lost my license and my life is over. Say your goodbyes you corrupt narcissist, 
-                        it's time you got a taste of your own medicine.
-                    </p>
-                    <h3 id="fromLetterLine">From Victor </h3>
+            <div id="letterContainer" class="hide" onclick="">
+                <h3>Dear Charles Kingston</h3>
+                <p>
+                    I just found out you bribed that junior doctor to perjure herself!
+                    You knew full well it wasn't my fault that the child died during sergery and you still took the
+                    case.
+                    Because of you I lost my license and my life is over. Say your goodbyes you corrupt narcissist,
+                    it's time you got a taste of your own medicine.
+                </p>
+                <h3 id="fromLetterLine">From Victor </h3>
             </div>
         </div>
         <nav class="toolBar">
             <div class="iconContainer">
 
-                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
-                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
-                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
-
+                <button class="toolBarBtn hideToolBarButton" id="hideToolBarButton">
+                    <i class="fa-solid fa-arrow-right toolBarIcon" id="hideToolBarButton" title="Close Toolbar"></i>
+                </button>
+                <button class="toolBarBtn" id="noteBookButton">
+                    <i class="fa-solid fa-book toolBarIcon" title="Open Notebook"></i>
+                </button>
+                <button class="toolBarBtn" id="inventoryButton">
+                    <i class="fa-solid fa-boxes-stacked toolBarIcon" title="Open Inventory"></i>
+                </button>
             </div>
             <div class="noteBook" id="noteBook">
                 <div id="noteBookContentWrapper">
@@ -154,7 +161,7 @@
                         <p id="achDesc"></p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </main>

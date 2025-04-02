@@ -55,19 +55,23 @@ function keyDownEventHandler(event) {
     switch (event.key) {
         case "ArrowLeft":
             rotateRight();
+            rotateRight();
             break;
         case "ArrowRight":
+            rotateLeft();
             rotateLeft();
             break;
         case "ArrowUp":
             if(selectedDial > 1) {
                 selectedDial--;
                 higlightSelectedDial();
+                higlightSelectedDial();
             }
             break;
         case "ArrowDown":
             if(selectedDial < 4) {
                 selectedDial++;
+                higlightSelectedDial();
                 higlightSelectedDial();
             }
             break;
@@ -403,6 +407,7 @@ const openingSafe = {
 
 //STATE FUNCTIONS
 function goToHall() {
+    sessionStorage.setItem('currentRoom','upstairsHall.html');
     sessionStorage.setItem('currentState',1);
     window.location.replace('upstairsHall.html');
 }

@@ -61,30 +61,38 @@ noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 settingsButton.addEventListener('click', toggleSettings);
 exitAndSaveBtn.addEventListener('click', async function () {
-    sessionStorage.setItem("currentState",currentState.ID);
+    sessionStorage.setItem("currentState", currentState.ID);
     await saveGame();
     window.location.href = "mainMenu.html";
 });
 
 deleteAndExit.addEventListener('click', async function () {
-    deleteSave(gameID);
+    await deleteSave(gameID);
     window.location.href = "mainMenu.html";
 
 });
 
-document.addEventListener('DOMContentLoaded', function(){
-    checkLogin();
+document.addEventListener('DOMContentLoaded', function () {
+    let userLoggedIn = checkLogin();
+    if (userLoggedIn == true) {
+        // if (!window.location.href.includes(sessionStorage.getItem("currentRoom"))) {
+        //     window.location.replace(sessionStorage.getItem("currentRoom"));
+        // }
+        // else {
 
-    let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
-    if (easyReadOn == true) {
-        document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
-    }
-    else {
-        document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
-    }
 
-    UpdateInventory();
-    updateClueNotebook();
+            let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+            if (easyReadOn == true) {
+                document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+            }
+            else {
+                document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+            }
+
+            UpdateInventory();
+            updateClueNotebook();
+        // }
+    }
 })
 
 
@@ -194,7 +202,7 @@ function updateState() {
     const descLength = descText.length;
     let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(5500, totalTime);
-    let intervalTime = totalTime/descLength;
+    let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
     let typingIndex = 0;
     // let totalTypingTime = currentState.description.length * 20;
@@ -211,10 +219,10 @@ function updateState() {
 
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
-    
-    
 
-    
+
+
+
     //dynamic buttons
 
     currentState.interactions.forEach(interaction => {
@@ -252,9 +260,9 @@ function setResponse(responseText) {
     const responseLength = responseText.length;
     let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(6000, totalTime)
-    let intervalTime = totalTime/responseLength;
+    let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
-    
+
     let typingIndex = 0;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
@@ -277,7 +285,7 @@ function setDescriptionAndResponse(responseText) {
     const descLength = descText.length;
     let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(5500, totalTime);
-    let intervalTime = totalTime/descLength;
+    let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
     let typingIndex = 0;
     // let totalTypingTime = currentState.description.length * 20;
@@ -299,9 +307,9 @@ function setResponseAfterDescription(responseText) {
     const responseLength = responseText.length;
     let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(6000, totalTime)
-    let intervalTime = totalTime/responseLength;
+    let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
-    
+
     let typingIndex = 0;
     typingInterval = setInterval(() => {
         responseBox.textContent += responseText[typingIndex];
@@ -351,7 +359,7 @@ function selectInventoryItem(event) {
 }
 
 
-async function awardAchievement(achievementID, userID, achievementIconAddress){
+async function awardAchievement(achievementID, userID, achievementIconAddress) {
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
 
@@ -361,14 +369,14 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
         response = await fetch(dbConnectorUrl, {
             method: "POST",
             body: dbConfig
-        });    
-        
-        
+        });
+
+
         let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
 
-    
+
         dbConfig.set('query', selectQuery);
         try {
             response = await fetch(dbConnectorUrl, {
@@ -382,7 +390,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
                 let achievement = result.data[0];
                 displayAchievement(achievementIconAddress, achievement.name, achievement.description)
             }
-            
+
         } catch (error) {
             console.log("Error retrieving achievement data");
             console.log(error);
@@ -441,14 +449,14 @@ async function addClue(clueID) {
     let alternateColour = false;
     let notificationTimer = setInterval(() => {
         if (alternateColour == false) {
-            noteBookButton.classList.toggle('toolBarIconNotification');
+            noteBookButton.querySelector('i').classList.toggle('toolBarIconNotification');
         }
-        else{
-            noteBookButton.style.color = 'black';
+        else {
+            noteBookButton.querySelector('i').classList.remove('toolBarIconNotification');
             alternateColour = false
         }
     }, 400);
-    
+
 
     setTimeout(() => {
         clearInterval(notificationTimer);
@@ -516,13 +524,13 @@ async function addItem(itemID) {
 
     let alternateColour = false;
     let notificationTimer = setInterval(() => {
-        inventoryButton.classList.toggle('toolBarIconNotification');
+        inventoryButton.querySelector('i').classList.toggle('toolBarIconNotification');
     }, 400);
-    
+
 
     setTimeout(() => {
         clearInterval(notificationTimer);
-        inventoryButton.classList.remove('toolBarIconNotification');
+        inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
     }, 2400);
 }
 
@@ -530,21 +538,20 @@ async function addItem(itemID) {
 
 
 async function saveGame() {
-
+    sessionStorage.setItem('gameSessionEndTime', Date.now());
+    let totalTime = calculateGameSessionTime();
     let electricityOn = JSON.parse(sessionStorage.getItem("electricityOn"));
     let frontDoorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
-    
-
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-  
 
-  
+
+
 
 
     let updateQuery = `UPDATE tblGameSave SET
@@ -556,7 +563,8 @@ async function saveGame() {
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
-                        timesOnSofa = ${timesOnSofa}
+                        timesOnSofa = ${timesOnSofa},
+                        timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}'))
 
 
                         WHERE gameID = ${gameID}`;
@@ -581,8 +589,32 @@ async function saveGame() {
         onsole.error("error saving the game")
     }
 
+    sessionStorage.setItem("gameSessionStartTime", Date.now());
+    sessionStorage.setItem("gameSessionEndTime", null);
+
 }
 
+
+
+
+function calculateGameSessionTime() {
+    let start = Number(sessionStorage.getItem('gameSessionStartTime'));
+    let end = Number(sessionStorage.getItem('gameSessionEndTime'));
+
+    let milliseconds = end - start;
+
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const paddedHours = hours.toString().padStart(2, '0');
+    const paddedMinutes = minutes.toString().padStart(2, '0');
+    const paddedSeconds = seconds.toString().padStart(2, '0');
+
+    const totalTime = `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
+    return totalTime;
+}
 
 
 //preferences and settings

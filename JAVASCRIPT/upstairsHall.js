@@ -46,6 +46,7 @@ function goToAttic() {
 }
 
 function goToMasterBedroom() {
+    sessionStorage.setItem('currentRoom','masterBedroom.html');
     sessionStorage.setItem('currentState', 1);
     window.location.replace('masterBedroom.html');
 }
@@ -55,6 +56,7 @@ function goToGuestBedroom() {
 }
 
 function goToDownStairs() {
+    sessionStorage.setItem('currentRoom','downStairsHall.html');
     sessionStorage.setItem('currentState', 4);
     window.location.replace('downStairsHall.html');
 }

@@ -27,7 +27,9 @@ html{
     border-bottom: 4px solid rgb(0, 102, 255);
 }
 
-#preferencesTab {
+
+
+#statsTab{
     border-radius: 0 10px 0 0;
 }
 
@@ -107,6 +109,23 @@ html{
     left: 70%;
 }
 
+
+#statsContainer{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 0.4rem;
+    border-radius: 10px;
+    padding: 30px;
+    width: 450px;
+    height: 75vh;
+    text-align: center;
+    color: white;
+    position: relative;
+    min-height: fit-content;
+    flex-shrink: 0;
+}
 
 * {
     margin: 0;
@@ -425,3 +444,6 @@ li {
 
 
 }
+
+
+
