@@ -1,11 +1,71 @@
+.rightColumn {
+    overflow-x: hidden;
+}
+
 #safeGameContainer {
-    background-color: rgb(60, 60, 60);
-    border: rgb(30, 30, 30) 5px solid;
     width: clamp(280px, 40vw, 400px);
     height: 80%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+
+#safeBack {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    background-color: grey;;
+    border: rgb(30,30,30) 4px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+}
+
+.safeShelf {
+    background-color: grey;
+    border: rgb(60,60,60) 1vw solid;
+    flex: 1;
+    width: 100%;
+}
+
+#shelfWithEvidence {
+    flex: 2;
+    border-bottom: rgb(60,60,60) 1vh solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: baseline;
+}
+
+#safeEvidenceButton {
+    background-image: url(../Images/bloodyKnife.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    background-color: transparent;
+    width: 40%;
+    height: 95%;
+    border: none;
+}
+
+.safeFrontContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(60, 60, 60);
+    border: rgb(30, 30, 30) 5px solid;
+    transition: left 4s ease-in-out;
+    left: 0;
+    z-index: 1;
+}
+.openedSafeFront {
+    left: -80%;
 }
 
 #safeTop {
@@ -22,8 +82,14 @@
     width: 35%;
     height: 65%;
     background-color: rgb(199, 199, 199);
+    background-color: rgb(199, 199, 199);
     display: flex;
     flex-direction: row;
+    border: rgb(30, 30, 30) 3px solid;
+}
+
+#d1Display {
+    color: rgb(252, 215, 7);
     border: rgb(30, 30, 30) 3px solid;
 }
 
@@ -33,14 +99,31 @@
 
 #safeHandle {
     width: 30%;
-    height: 65%;
-    background-color: firebrick;
+    aspect-ratio: 1/1;
+    position: relative;
+    right: -4%;
+    bottom: -25%;
 }
 
 #safeHandleButton {
-    background-color: pink;
+    background-color: transparent;
     width: 100%;
     height: 100%;
+    background-image: url(../Images/safeHandle.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    border: none;
+}
+
+@keyframes turnHandleLocked {
+    0% {rotate: 0deg;}
+    50% {rotate: 15deg;}
+    100% {rotate: 0deg;}
+}
+@keyframes turnHandleUnlocked {
+    0% {rotate: 0deg;}
+    100% {rotate: 720deg;}
 }
 
 #safeInputContainer {
@@ -61,7 +144,19 @@
     font-size: 45px;
     font-weight: 600;
     text-decoration: underline;
+    font-weight: 600;
+    text-decoration: underline;
 }
+
+@keyframes incorrectNumbers {
+    0% {color: red;}
+    20% {color: black;}
+    40% {color: red;}
+    60% {color: black;}
+    80% {color: red;}
+    100% {color: black;}
+}
+
 
 
 .safeDial {
@@ -73,7 +168,14 @@
     border-radius: 50%;
     background-color: rgb(82, 81, 81);
     border: 3px solid black;
+    background-color: rgb(82, 81, 81);
+    border: 3px solid black;
     position: absolute;
+}
+
+#dialCenter {
+    background-color: rgb(50, 50, 50);
+    width: 50%;
 }
 
 #dialCenter {
@@ -84,10 +186,12 @@
 #dial1 {
     width: 80%;
     border: 3px solid rgb(252, 215, 7);
+    border: 3px solid rgb(252, 215, 7);
 }
 
 #dial2 {
     width: 80%;
+    border: 3px solid rgb(252, 215, 7);
     border: 3px solid rgb(252, 215, 7);
 }
 
@@ -96,6 +200,7 @@
 }
 
 #dial4 {
+    width: 66%;
     width: 66%;
 }
 
@@ -121,4 +226,39 @@ svg {
 }
 #d4Text {
     font-size: 1.75rem;
+}
+
+
+#codeContainer {
+    position: absolute;
+    right: 5%;
+    bottom: 2%;
+    width: 30%;
+    height: 25%;
+    z-index: 3;
+    background-image: url(../Images/secretCodeNote.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    padding: 2%;
+    display: none;
+}
+
+.codeText {
+    color: black;
+    font-family: "Corinthia", cursive;
+    font-weight: 700;
+    font-style: normal;
+    color: black;
+    font-size: 1.4rem;
+}
+
+#code {
+    font-size: 2.3rem;
+    text-align: center;
+    width: 100%;
+}
+
+.toolBar {
+    z-index: 7;
 }

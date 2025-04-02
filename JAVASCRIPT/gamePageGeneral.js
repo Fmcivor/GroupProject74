@@ -28,10 +28,17 @@ const deleteAndExit = document.getElementById('deleteAndExit');
 const keyID = 1;
 const lockpickID = 2;
 const batteriesID = 3;
+const pillBottleID = 4;
+const safeCodeID = 5;
+const flashlightID = 6;
+const knifeItemID = 7;
 
 //clue ids
 const rubbishClueID = 1;
+const burntLetterClueID = 2;
+const ringClueID = 3;
 const computerClueID = 4;
+const knifeClueID = 5;
 
 //VARIABLES
 let currentState;
