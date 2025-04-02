@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 html{
@@ -24,29 +25,6 @@ body {
     background-position: center center;
 }
 
-header {
-    position: absolute;
-    top: 0;
-    width:100%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: rgba(11, 5, 56, 0.8);
-}
-
-.game-title {
-    font-size: clamp(1rem, 5vw, 3.5rem);
-}
-
-.profile {
-    display: flex;
-    align-items: center;
-    font-size: clamp(0.5rem, 5vw, 1.5rem);
-    position: absolute;
-    right: 20px;
-}
 
 .profile img {
     width: 50px;
@@ -110,15 +88,7 @@ header {
     transform: scale(1.1);
 }
 
-@media (max-width: 480px){
-    header{
-        justify-content: space-between;
-    }
 
-    .profile{
-        right: 0px;
-    }
-}
 
 .signOutModal {
     display: none;
