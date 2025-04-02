@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Bedroom</title>
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/GamePage.css">
     <link rel="stylesheet" href="CSS/masterBedroom.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -67,77 +69,91 @@
 
         <div class="rightColumn">
             <div id="safeGameContainer" class="gameContainer">
-                <div id="safeTop">
-                    <div id="inputCodeDisplay">
-                        <p id="d1Display" class="inputNumberDisplay">0</p>
-                        <p id="d2Display" class="inputNumberDisplay">0</p>
-                        <p id="d3Display" class="inputNumberDisplay">0</p>
-                        <p id="d4Display" class="inputNumberDisplay">0</p>
+                <div id="safeFront" class="safeFrontContainer">
+                    <div id="safeTop">
+                        <div id="inputCodeDisplay">
+                            <p id="d1Display" class="inputNumberDisplay">0</p>
+                            <p id="d2Display" class="inputNumberDisplay">0</p>
+                            <p id="d3Display" class="inputNumberDisplay">0</p>
+                            <p id="d4Display" class="inputNumberDisplay">0</p>
+                        </div>
+                        <div id="safeHandle">
+                            <button id="safeHandleButton" style="border:none;"></button>
+                        </div>
                     </div>
-                    <div id="safeHandle">
-                        <button id="safeHandleButton">OPEN</button>
-                    </div>
-                </div>
-                <div id="safeInputContainer">
-                    <div id="dial1" class="safeDial">
-                        <svg class="svg" id="d1SVG" viewBox="0 0 200 200">
-                            <defs>
-                                <path id="dial1Path" d="M 100, 100 m -83, 0 a 83,83 0 1,1 166,0 a 83,83 0 1,1 -166,0"/>
-                            </defs>
-                            <text id="d1Text" class="dialNums">
-                                <textPath href="#dial1Path" startOffset="0.25%" spacing="auto" textLength="478">
-                                    0123456789 
-                                </textPath>
-                            </text>
-                        </svg>    
-
-                        <div id="dial2" class="safeDial">
-                            <svg class="svg" id="d2SVG" viewBox="0 0 200 200">
+                    <div id="safeInputContainer">
+                        <div id="dial1" class="safeDial">
+                            <svg class="svg" id="d1SVG" viewBox="0 0 200 200">
                                 <defs>
-                                    <path id="dial2Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+                                    <path id="dial1Path" d="M 100, 100 m -83, 0 a 83,83 0 1,1 166,0 a 83,83 0 1,1 -166,0"/>
                                 </defs>
-                                <text id="d2Text" class="dialNums">
-                                    <textPath href="#dial2Path" startOffset="0%" spacing="auto" textLength="461">
+                                <text id="d1Text" class="dialNums">
+                                    <textPath href="#dial1Path" startOffset="0.25%" spacing="auto" textLength="478">
                                         0123456789 
                                     </textPath>
                                 </text>
-                            </svg>
+                            </svg>    
 
-                            <div id="dial3" class="safeDial">
-                                <svg class="svg" id="d3SVG" viewBox="0 0 200 200">
+                            <div id="dial2" class="safeDial">
+                                <svg class="svg" id="d2SVG" viewBox="0 0 200 200">
                                     <defs>
-                                        <path id="dial3Path" d="M 100, 100 m -77, 0 a 77,77 0 1,1 154,0 a 77,77 0 1,1 -154,0" />
+                                        <path id="dial2Path" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
                                     </defs>
-                                    <text id="d3Text" class="dialNums">
-                                        <textPath href="#dial3Path" startOffset="-0.3%" spacing="auto" textLength="450">
+                                    <text id="d2Text" class="dialNums">
+                                        <textPath href="#dial2Path" startOffset="0%" spacing="auto" textLength="461">
                                             0123456789 
                                         </textPath>
                                     </text>
                                 </svg>
 
-                                <div id="dial4" class="safeDial">
-                                    <svg class="svg" id="d4SVG" viewBox="0 0 200 200">
+                                <div id="dial3" class="safeDial">
+                                    <svg class="svg" id="d3SVG" viewBox="0 0 200 200">
                                         <defs>
-                                            <path id="dial4Path" d="M 100, 100 m -72, 0 a 72,72 0 1,1 144,0 a 72,72 0 1,1 -144,0" />
+                                            <path id="dial3Path" d="M 100, 100 m -77, 0 a 77,77 0 1,1 154,0 a 77,77 0 1,1 -154,0" />
                                         </defs>
-                                        <text id="d4Text" class="dialNums">
-                                            <textPath href="#dial4Path" startOffset="-0.6%" spacing="auto" textLength="422">
+                                        <text id="d3Text" class="dialNums">
+                                            <textPath href="#dial3Path" startOffset="-0.3%" spacing="auto" textLength="450">
                                                 0123456789 
                                             </textPath>
                                         </text>
                                     </svg>
+
+                                    <div id="dial4" class="safeDial">
+                                        <svg class="svg" id="d4SVG" viewBox="0 0 200 200">
+                                            <defs>
+                                                <path id="dial4Path" d="M 100, 100 m -72, 0 a 72,72 0 1,1 144,0 a 72,72 0 1,1 -144,0" />
+                                            </defs>
+                                            <text id="d4Text" class="dialNums">
+                                                <textPath href="#dial4Path" startOffset="-0.6%" spacing="auto" textLength="422">
+                                                    0123456789 
+                                                </textPath>
+                                            </text>
+                                        </svg>
+                
+
+                                        <div id="dialCenter" class="safeDial"></div>
+                                    </div> 
             
+                                </div>  
 
-                                    <div id="dialCenter" class="safeDial"></div>
-                                </div> 
-        
-                            </div>  
+                            </div>
 
-                        </div>
-
-                    </div> 
-                    
-                </div>  
+                        </div> 
+                        
+                    </div>  
+                </div>
+                <div id="safeBack">
+                    <div class="safeShelf"></div>
+                    <div class="safeShelf"></div>
+                    <div id="shelfWithEvidence" class="safeShelf">
+                        <button id="safeEvidenceButton"></button>
+                    </div>
+                </div>
+                <div id="codeContainer">                   
+                    <h3 class="codeText">Important Don't Forget: </h1>
+                    <br>
+                    <h2 id="code" class="codeText">4379</h1>
+                </div>
             </div>                        
          
         </div>
