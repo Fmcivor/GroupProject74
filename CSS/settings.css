@@ -14,6 +14,7 @@ html{
 body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width: 100vw;
     height: 100vh;
     background-image: url(../Images/outsideHouse.jpg);
@@ -24,24 +25,18 @@ body {
 
 
 .wrapper{
+    position: absolute;
+    top: 12vh;
     display: flex;
     flex-direction: column;
     width: 100vw;
-    height: 90vh;
+    height: 88vh;
     justify-content: center;
     align-items: center;
+    
 }
 
-.titleBanner {
-    height: 10vh;
-    width: 100%;
-    background-color: rgb(11, 5, 56,0.8);
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-}
+
 
 .formContainer{
     width: 100vw;
