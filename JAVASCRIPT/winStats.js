@@ -61,8 +61,10 @@ async function getplayTime() {
             startDate = stats.startDate
             startTime = result.startTime
 
+
             playTimeDisplay.textContent = `${timeToComplete}`;
             saveStartedDisplay.textContent = `${startDate}, ${startTime}`;
+
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -164,6 +166,7 @@ async function getItemsAndClues() {
             cluesCollected = result.data[0].noCluesCollected;
 
             cluesFoundDisplay.textContent = `${cluesCollected}/${numOfClues}`;           
+
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -194,8 +197,10 @@ async function getRooms() {
                     completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
                     completion = completion * 100;
 
+
                     completionDisplay.textContent = `${completion}%`;
                     roomsVisitedDisplay.textContent = `${roomsVisited}/${numOfRooms}`;
+
                 }
             }
         }

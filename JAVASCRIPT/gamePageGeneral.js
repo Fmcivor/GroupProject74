@@ -30,7 +30,7 @@ const lockpickID = 2;
 const batteriesID = 3;
 const pillBottleID = 4;
 const safeCodeID = 5;
-const flashlightID = 6;
+const flashLightID = 6;
 const knifeItemID = 7;
 const ringID = 8;
 
@@ -576,7 +576,6 @@ async function saveGame() {
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
 
 
-
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
@@ -822,24 +821,28 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
 
 
 
+document.getElementById('submitEvidenceBtn').addEventListener('click', async function () {
+    let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
+    let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
+    let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
+    let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
-async function submitEvidence() {
-    let clue1 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue2 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue3 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue4 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let hasMurderWeapon = inventory.some(item => item.itemID == knifeItemID);
+    sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-
-    if (clue1 && clue2 && clue3 && clue4 && hasMurderWeapon) {
+    if (knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
         sessionStorage.setItem("status", gameWin);
+        sessionStorage.setItem("currentRoom", "endGameWin.html");
         await saveGame();
-        window.location.replace("mainMenu.html");
-
+        window.location.replace("endGameWin.html");
     }
     else {
         sessionStorage.setItem("status", gameLoss);
+        sessionStorage.setItem("currentRoom", "endGameLose.html");
+        await saveGame();
+        window.location.replace("endGameLose.html");
     }
 
+});
 
-}
+
+
