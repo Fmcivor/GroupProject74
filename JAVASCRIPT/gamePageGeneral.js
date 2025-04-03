@@ -30,7 +30,7 @@ const lockpickID = 2;
 const batteriesID = 3;
 const pillBottleID = 4;
 const safeCodeID = 5;
-const flashlightID = 6;
+const flashLightID = 6;
 const knifeItemID = 7;
 const ringID = 8;
 
@@ -574,7 +574,6 @@ async function saveGame() {
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-
 
 
     let updateQuery = `UPDATE tblGameSave SET
