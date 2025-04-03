@@ -164,8 +164,6 @@ async function validateChanges(event) {
         confirmPasswordInput.value = '';
         confirmPasswordInput.classList.add('disabled');
         confirmPasswordInput.setAttribute('disabled', true);
-
-
     }
     else {
         displayMessage(false);

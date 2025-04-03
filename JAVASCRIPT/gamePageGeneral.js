@@ -30,7 +30,7 @@ const lockpickID = 2;
 const batteriesID = 3;
 const pillBottleID = 4;
 const safeCodeID = 5;
-const flashlightID = 6;
+const flashLightID = 6;
 const knifeItemID = 7;
 const ringID = 8;
 
