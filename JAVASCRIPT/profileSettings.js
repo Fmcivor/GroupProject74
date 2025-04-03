@@ -333,24 +333,34 @@ async function savePreferences() {
 
 async function displayStats() {
     let statsQuery = `SELECT 
-    IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))),'You have not played a game yet') AS totalTimePlayed, 
-    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not won a game yet') AS averageToWin,
+    IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))),'N/A') AS totalTimePlayed, 
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS averageToWin,
     COUNT(tblGameInventory.itemID) AS numOfItemsCollected,
     COUNT(tblGameNotebook.clueID) AS numOfCluesCollected,
-    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'You have not won a game yet') AS fastestTimeToCompleteGame,
-    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status !=4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not played a game yet') AS averageTime,
+    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'N/A') AS fastestTimeToCompleteGame,
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status !=4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS averageTime,
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
     COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
-    ROUND(AVG(tblGameSave.noGeneratorRepairAttempts)) AS avgNoOfRepairAttempts
-
-
+    ROUND(AVG(tblGameSave.noGeneratorRepairAttempts)) AS avgNoOfRepairAttempts,
+    (SELECT tblRoom.roomName
+     FROM tblRoom 
+     WHERE tblRoom.roomID = (
+         SELECT tblGameRoom.roomID
+         FROM tblGameRoom
+         JOIN tblGameSave ON tblGameSave.gameID = tblGameRoom.gameID
+         WHERE tblGameSave.userID = ${userID}
+         GROUP BY tblGameRoom.roomID
+         ORDER BY SUM(tblGameRoom.timesVisited) DESC
+         LIMIT 1)
+    ) AS mostVisitedRoom
 FROM tblGameSave 
 LEFT JOIN tblGameInventory ON tblGameInventory.gameID = tblGameSave.gameID 
 LEFT JOIN tblGameNotebook ON tblGameNotebook.gameID = tblGameSave.gameID
 WHERE tblGameSave.userID = ${userID}
-GROUP BY tblGameSave.userID`;
+GROUP BY tblGameSave.userID;
+`;
 
     dbConfig.set('query', statsQuery);
 
@@ -364,18 +374,18 @@ GROUP BY tblGameSave.userID`;
 
         if (result.success) {
             let stats = result.data[0];
-            document.getElementById("totalTimePlayed").innerHTML = `<b style='text-decoration:underline;'>Total Time Played:</b> <span style = text-align:right;>${stats.totalTimePlayed}</span>`;
-            document.getElementById("avgTimeToWin").innerHTML = `<b style='text-decoration:underline;'>Average Time to Win:</b> <span style = text-align:right;> ${stats.averageToWin}</span>`;
-            document.getElementById("itemCount").innerHTML = `<b style='text-decoration:underline;'>Items Collected:</b> <span style = text-align:right;> ${stats.numOfItemsCollected}</span>`;
-            document.getElementById("clueCount").innerHTML = `<b style='text-decoration:underline;'>Clues Found:</b> <span style = text-align:right;> ${stats.numOfCluesCollected}</span>`;
-            document.getElementById("quickestGame").innerHTML = `<b style='text-decoration:underline;'>Fastest Game Completion:</b> <span style = text-align:right;> ${stats.fastestTimeToCompleteGame}</span>`;
-            document.getElementById("averageTime").innerHTML = `<b style='text-decoration:underline;'>Average Time Played:</b> <span style = text-align:right;> ${stats.averageTime}</span>`;
-            document.getElementById("lost").innerHTML = `<b style='text-decoration:underline;'>Games Lost:</b> <span style = text-align:right;> ${stats.gamesLost}</span>`;
-            document.getElementById("won").innerHTML = `<b style='text-decoration:underline;'>Games Won:</b> <span style = text-align:right;> ${stats.gamesWon}</span>`;
-            document.getElementById("abandoned").innerHTML = `<b style='text-decoration:underline;'>Games Abandoned:</b> <span style = text-align:right;> ${stats.gamesAbandoned}</span>`;
-            document.getElementById("totalGamesPlayed").innerHTML = `<b style='text-decoration:underline;'>Total Games Played:</b> <span style = text-align:right;> ${stats.totalGames}</span>`;
-            document.getElementById("avgRepairAttempts").innerHTML = `<b style='text-decoration:underline;'>Average Number of Repair Attempts:</b> <span style = text-align:right;> ${stats.avgNoOfRepairAttempts}</span>`;
-
+            document.getElementById("totalTimePlayed").innerHTML = `<b >Total Time Played:</b> <span style = text-align:right;>${stats.totalTimePlayed}</span>`;
+            document.getElementById("avgTimeToWin").innerHTML = `<b >Average Time to Win:</b> <span style = text-align:right;> ${stats.averageToWin}</span>`;
+            document.getElementById("itemCount").innerHTML = `<b >Items Collected:</b> <span style = text-align:right;> ${stats.numOfItemsCollected}</span>`;
+            document.getElementById("clueCount").innerHTML = `<b >Clues Found:</b> <span style = text-align:right;> ${stats.numOfCluesCollected}</span>`;
+            document.getElementById("quickestGame").innerHTML = `<b >Fastest Game Completion:</b> <span style = text-align:right;> ${stats.fastestTimeToCompleteGame}</span>`;
+            document.getElementById("averageTime").innerHTML = `<b >Average Time Played:</b> <span style = text-align:right;> ${stats.averageTime}</span>`;
+            document.getElementById("lost").innerHTML = `<b >Games Lost:</b> <span style = text-align:right;> ${stats.gamesLost}</span>`;
+            document.getElementById("won").innerHTML = `<b >Games Won:</b> <span style = text-align:right;> ${stats.gamesWon}</span>`;
+            document.getElementById("abandoned").innerHTML = `<b >Games Abandoned:</b> <span style = text-align:right;> ${stats.gamesAbandoned}</span>`;
+            document.getElementById("totalGamesPlayed").innerHTML = `<b >Total Games Played:</b> <span style = text-align:right;> ${stats.totalGames}</span>`;
+            document.getElementById("avgRepairAttempts").innerHTML = `<b >Average Number of Repair Attempts:</b> <span style = text-align:right;> ${stats.avgNoOfRepairAttempts}</span>`;
+            document.getElementById("mostVisitedRoom").innerHTML = `<b >Most Visited Room:</b> <span style = text-align:right;> ${stats.mostVisitedRoom}</span>`;
         }
         else {
             console.error("it broke");
