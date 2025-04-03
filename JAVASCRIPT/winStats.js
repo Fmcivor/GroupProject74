@@ -1,0 +1,184 @@
+//INITIALISE
+window.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+    displayStats();
+})
+
+//PLACEHOLDERS
+const userID = 11;
+const gameID = 139;
+
+//CONSTANTS
+const numOfClues = 6;
+const numOfItems = 7;
+const numOfRooms = 8;
+
+const playTimeDisplay = document.getElementById('playTimeDisplay');
+const saveStartedDisplay = document.getElementById('saveStartedDisplay');
+const averageTTWDisplay = document.getElementById('averageTTWDisplay');
+const globalAverageTTWDisplay = document.getElementById('globalAverageTTWDisplay');
+const completionDisplay = document.getElementById('completionDisplay');
+const roomsVisitedDisplay = document.getElementById('roomsVisitedDisplay');
+const cluesFoundDisplay = document.getElementById('cluesFoundDisplay');
+const itemsCollectedDisplay = document.getElementById('itemsCollectedDisplay');
+
+// VARIABLES
+let timeToComplete = 0;
+let startDate = null;
+let startTime = null;
+let avgTimeToComplete = 0;
+let globalAvgTimeCompletion = 0;
+let completion = 0;
+let roomsVisited = 0;
+let itemsCollected = 0;
+let cluesCollected = 0;
+
+async function loadStats() {
+    
+    getTimePlayedAndRooms();
+    getAvgTimes();
+    getItemsAndClues();
+}
+
+async function getTimePlayedAndRooms() {
+    let timeAndRoomsQuery = `SELECT  timePlayed AS 'timeToComplete', DATE(startDate) AS 'startDate', TIME(startDate) AS 'startTime',
+     OutsideHouseVisited, downStairsHallVisited, upstairsHallVisited, kitchenVisited, livingRoomVisited, masterBedroomVisited, studyVisited, guestBedroomVisited 
+     FROM tblGameSave WHERE gameID = ${gameID};`;
+
+    dbConfig.set('query', timeAndRoomsQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            let stats = result.data[0];
+            timeToComplete = stats.timeToComplete
+            startDate = stats.startDate
+            startTime = result.startTime
+
+            for(let i = 3; i <= 10; i++) {
+                if(result.data[i] > 0){
+                    roomsVisited++;
+                }
+            }
+        }
+        else {
+            console.error("Unable to retrieve stats form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while retrieving stats form the database", error);
+    }
+}
+
+async function getAvgTimes() {
+    let avgTimeQuery = `SELECT SEC_TO_TIME(ROUND(AVG(timePlayed))) AS 'averageTimeToComplete' FROM tblGameSave 
+                        WHERE tblGameSave.status = 1 GROUP BY userID HAVING userID = ${userID};`;
+
+    dbConfig.set('query', avgTimeQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            avgTimeToComplete = result.data[0];
+        }
+        else {
+            console.error("Unable to retrieve stats form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while retrieving stats form the database", error);
+    }
+
+    let globalAvgTimeQuery = `SELECT SEC_TO_TIME(ROUND(AVG(timePlayed))) AS 'globalAverageTimeToComplete' FROM tblGameSave 
+                            WHERE tblGameSave.status = 1;`;
+
+    dbConfig.set('query', globalAvgTimeQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            globalAvgTimeCompletion = result.data[0];
+        }
+        else {
+            console.error("Unable to retrieve stats form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while retrieving stats form the database", error);
+    }
+}
+
+async function getItemsAndClues() {
+    let itemQuery = `SELECT COUNT(itemID) FROM tblGameInventory WHERE gameID = ${gameID};`;
+
+    dbConfig.set('query', itemQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            itemsCollected = result.data[0];
+        }
+        else {
+            console.error("Unable to retrieve stats form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while retrieving stats form the database", error);
+    }
+
+    let clueQuery = `SELECT COUNT(itemID) FROM tblGameInventory WHERE gameID = ${gameID};`;
+
+    dbConfig.set('query', clueQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            cluesCollected = result.data[0];
+        }
+        else {
+            console.error("Unable to retrieve stats form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while retrieving stats form the database", error);
+    }
+}
+
+function displayStats() {
+    completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
+    completion = completion * 100;
+
+    playTimeDisplay.textContent = `Play Time: ${timeToComplete}`;
+    saveStartedDisplay.textContent = `Save Started: ${startDate}, ${startTime}`;
+    averageTTWDisplay.textContent = `Average time to complete: ${avgTimeToComplete}`;
+    globalAverageTTWDisplay.textContent = `Global Average Time to Complete: ${globalAvgTimeCompletion}`;
+    completionDisplay.textContent = `Completion%: ${completion}%`;
+    roomsVisitedDisplay.textContent = `Rooms Found: ${roomsVisited}/${numOfRooms}`;
+    cluesFoundDisplay.textContent = `Clues Found: ${cluesCollected}/${numOfClues}`;
+    itemsCollectedDisplay.textContent = `Items Collected: ${itemsCollected}/${numOfItems}`;
+}

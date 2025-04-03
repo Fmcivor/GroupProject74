@@ -255,6 +255,10 @@ function userDecisionHandler(event) {
 
 
 function setResponse(responseText) {
+    const description = document.getElementById('descriptionParagraph');
+    description.textContent = currentState.description;
+
+
     const responseBox = document.getElementById('responseParagraph');
     responseBox.textContent = "";
     const responseLength = responseText.length;
