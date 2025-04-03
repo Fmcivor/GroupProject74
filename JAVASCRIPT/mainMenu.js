@@ -117,7 +117,12 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('status',gameSave.status);
             sessionStorage.setItem('gameSessionStartTime',Date.now());
             console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = 'introduction.html';
+
+           let roomsInitialised =  await initialiseGameRooms();
+
+            if (roomsInitialised) {
+                window.location.href = 'introduction.html';
+            }
         }
         else{
             console.error("failed to retrieve latest game save ID:",selectResult)
@@ -167,4 +172,32 @@ async function getUserAchievements(){
     }
 
     
+}
+
+
+async function initialiseGameRooms(){
+
+    let query = `INSERT INTO tblGameRoom(roomID,gameID) SELECT roomID, ${sessionStorage.getItem("gameID")} FROM tblRoom`;
+    dbConfig.set("query",query);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+    
+        let result = await response.json();
+    
+        if (result.success) {
+            console.log("Game rooms initialized successfully");
+            return true;
+        }
+        else{
+            console.error("Error occurred while fetching the game rooms");
+            return false;
+        }
+    } catch (error) {
+        throw new error("Error occurred while fetching the game rooms",error);
+        return false;
+    }
 }

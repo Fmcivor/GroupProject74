@@ -102,6 +102,7 @@ async function goToNextRoom(nextRoom, startingState) {
     sessionStorage.setItem("currentRoom", nextRoom);
     sessionStorage.setItem("currentState", startingState);
     await saveGame();
+    await updateRoomVisits();
     window.location.replace(nextRoom);
 }
 
@@ -386,6 +387,8 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         });
 
 
+
+
         let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
@@ -457,7 +460,7 @@ async function addClue(clueID) {
                 noteBookButton.classList.remove('toolBarIconNotification');
             }, 2400);
 
-            
+
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -573,43 +576,6 @@ async function saveGame() {
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
 
 
-    let visitedRoom = '';
-
-    switch (currentRoom) {
-        case 'downStairsHall.html':
-            visitedRoom = 'downStairsHall';
-            break;
-        case 'guestBedroom.html':
-            visitedRoom = 'guestBedroom';
-            break;
-        case 'kitchen.html':
-            visitedRoom = 'kitchen';
-            break;
-        case 'livingRoom.html':
-            visitedRoom = 'livingRoom';
-            break;
-        case 'masterBedroom.html':
-            visitedRoom = 'masterBedroom';
-            break;
-        case 'OutsideHouse.html':
-            visitedRoom = 'OutsideHouse';
-            break;
-        case 'study.html':
-            visitedRoom = 'study';
-            break;
-        case 'upstairsHall.html':
-            visitedRoom = 'upstairsHall';
-            break;
-        case 'attic.html':
-            visitedRoom = 'attic';
-            break;
-        default:
-            console.log('Unknown room: ' + currentRoom);
-            visitedRoom = 'unknown';
-            break;
-    }
-    let roomVisitedQuery = `,${visitedRoom}Visited = ${visitedRoom}Visited + 1`;
-
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
@@ -621,7 +587,7 @@ async function saveGame() {
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa},
                         timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}'))
-                        ${roomVisitedQuery}
+                        
 
                         WHERE gameID = ${gameID}`;
 
@@ -650,6 +616,74 @@ async function saveGame() {
 
 }
 
+
+async function updateRoomVisits() {
+    let currentRoom = sessionStorage.getItem("currentRoom");
+    let visitedRoomID = '';
+
+    switch (currentRoom) {
+        case 'OutsideHouse.html':
+            visitedRoomID = 1;
+            break;
+        case 'downStairsHall.html':
+            visitedRoomID = 2;
+            break;
+        case 'livingRoom.html':
+            visitedRoomID = 3;
+            break;
+        case 'study.html':
+            visitedRoomID = 4;
+            break;
+        case 'kitchen.html':
+            visitedRoomID = 5;
+            break;
+        case 'upstairsHall.html':
+            visitedRoomID = 6;
+            break;
+        case 'masterBedroom.html':
+            visitedRoomID = 7;
+            break;
+        case 'guestBedroom.html':
+            visitedRoomID = 8;
+            break;
+        case 'attic.html':
+            visitedRoomID = 9;
+            break;
+        default:
+            console.log('Unknown room: ' + currentRoom);
+            visitedRoomID = null;
+            break;
+    }
+
+
+        if (visitedRoomID == null) {
+            console.log('no room found');   
+            return;
+        }
+
+
+    let insertQuery = `UPDATE tblGameRoom SET timesVisited = timesVisited + 1 WHERE gameID = ${gameID} AND roomID = ${visitedRoomID}`;
+    dbConfig.set('query', insertQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            console.log("Room visit count updated successfully");
+        } else {
+            console.error("Error updating room visit count");
+        }
+    } catch (error) {
+        console.error("Error while updating room visit count", error);
+    }
+
+    
+}
 
 
 
@@ -787,24 +821,28 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
 
 
 
+document.getElementById('submitEvidenceBtn').addEventListener('click', async function () {
+    let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
+    let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
+    let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
+    let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
-async function submitEvidence() {
-    let clue1 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue2 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue3 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue4 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let hasMurderWeapon = inventory.some(item => item.itemID == knifeItemID);
+    sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-
-    if (clue1 && clue2 && clue3 && clue4 && hasMurderWeapon) {
+    if (knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
         sessionStorage.setItem("status", gameWin);
+        sessionStorage.setItem("currentRoom", "endGameWin.html");
         await saveGame();
-        window.location.replace("mainMenu.html");
-
+        window.location.replace("endGameWin.html");
     }
     else {
         sessionStorage.setItem("status", gameLoss);
+        sessionStorage.setItem("currentRoom", "endGameLose.html");
+        await saveGame();
+        window.location.replace("endGameLose.html");
     }
 
+});
 
-}
+
+
