@@ -23,7 +23,7 @@
         <div class="formContainer">
             <div class="tabContainer">
                 <button class="tab" id="profileTab">Profile</button>
-                <button class="tab" id="preferencesTab">preferences</button>
+                <button class="tab" id="preferencesTab">Preferences</button>
                 <button class="tab" id="statsTab">Stats</button>
             </div>
             <form id="profileForm">
@@ -72,7 +72,7 @@
 
                     <div class="slideContainer">
                         <label for="fontSize" id="fontSizeLabel">Font Size</label>
-                        <input type="range" id="slider" min="12" max="24">
+                        <input type="range" id="slider" min="10" max="24">
                         <div class="sampleTextContainer">
                             <p id="sampleText" style="font-size: 1rem;">This text is an example of the base text size
                             </p>
@@ -96,27 +96,27 @@
                 <section class="formContentContainer" >
                     <div id="timeContainer">
                         <h3>⏳ Time</h3>
-                        <p id="totalTimePlayed"></p>
-                        <p id="avgTimeToWin"></p>
-                        <p id="quickestGame"></p>
-                        <p id="averageTime"></p>
+                        <p><b>Total Time Played</b><span id="totalTimePlayed"></span></p>
+                        <p><b>Average Time To Win</b><span id="avgTimeToWin"></span></p>
+                        <p><b>Quickest Time To Win</b><span id="quickestGame"></span></p>
+                        <p><b>Average Game Time</b><span id="averageTime"></span></p>
                     </div>
 
                     <div id="collectiblesContainer">
                         <h3>🎒 Collectibles</h3>
-                        <p id="itemCount"></p>
-                        <p id="clueCount"></p>
-                        <p id="mostCollectedClue"></p>
+                        <p><b>Items Collected</b><span id="itemCount"></span></p>
+                        <p><b>Clues Collected</b><span id="clueCount"></span></p>
+                        <p><b>Most Collected Clue</b><span id="mostCollectedClue"></span></p>
                     </div>
 
                     <div id="gameCountContainer">
                         <h3>🏆 Game Performance</h3>
-                        <p id="mostVisitedRoom"></p>
-                        <p id="totalGamesPlayed"></p>
-                        <p id="lost"></p>
-                        <p id="won"></p>
-                        <p id="abandoned"></p>
-                        <p id="avgRepairAttempts"></p>
+                        <p><b>Most Visited Room</b><span id="mostVisitedRoom"></span></p>
+                        <p><b>Total Games Played</b><span id="totalGamesPlayed"></span></p>
+                        <p><b>Total Games Lost</b><span id="lost"></span></p>
+                        <p><b>Total Games Won</b><span id="won"></span></p>
+                        <p><b>Total Games Abandoned</b><span id="abandoned"></span></p>
+                        <p><b>Average Generator</b><span id="avgRepairAttempts"></span></p>
                     </div>
 
 
