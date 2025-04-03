@@ -4,129 +4,6 @@ html{
     color: white;
 }
 
-.tabContainer {
-    display: flex;
-    width: 100%;
-    height: 5vh;
-
-}
-
-.tab {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    background-color: rgba(10, 10, 40, 0.9);
-    border: 4px solid transparent;
-    box-shadow: none;
-    font-size: 1.1rem;
-    color: white;
-}
-
-#profileTab {
-    border-radius: 10px 0 0 0;
-    border-bottom: 4px solid rgb(0, 102, 255);
-}
-
-
-
-#statsTab{
-    border-radius: 0 10px 0 0;
-}
-
-#preferencesForm {
-    display: none;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-#easyReadCheckBox{
-    -webkit-appearance: none;
-    position: relative;
-    width: 50px;
-    height: 30px;
-    border-radius: 25px;
-    background-color: lightgray;
-    transition: background-color .3s;
-    outline: none;
-    margin:0 auto 0 auto
-}
-
-#easyReadCheckBox::after{
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    transform: translate(-50%,-50%);
-    border-radius: 50%;
-    height: 1.25rem;
-    width: 1.25rem;
-    background-color: white;
-    transition: left .3s;
-}
-
-#easyReadCheckBox:checked{
-    background-color: green;
-}
-
-#easyReadCheckBox:checked::after{
-    left: 70%;
-}
-
-.sampleTextContainer{
-    width: 80%;
-    height: 15%;
-}
-
-#easyReadCheckBox{
-    -webkit-appearance: none;
-    position: relative;
-    width: 50px;
-    height: 30px;
-    border-radius: 25px;
-    background-color: lightgray;
-    transition: background-color .3s;
-    outline: none;
-}
-
-#easyReadCheckBox::after{
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    transform: translate(-50%,-50%);
-    border-radius: 50%;
-    height: 1.25rem;
-    width: 1.25rem;
-    background-color: white;
-    transition: left .3s;
-}
-
-#easyReadCheckBox:checked{
-    background-color: green;
-}
-
-#easyReadCheckBox:checked::after{
-    left: 70%;
-}
-
-
-#statsContainer{
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    gap: 0.4rem;
-    border-radius: 10px;
-    padding: 30px;
-    width: 450px;
-    height: 75vh;
-    text-align: center;
-    color: white;
-    position: relative;
-    min-height: fit-content;
-    flex-shrink: 0;
-}
 
 * {
     margin: 0;
@@ -136,49 +13,6 @@ html{
 }
 
 
-.slideContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    height: 30%;
-    gap: 20px;
-}
-
-#slider {
-    -webkit-appearance: none;
-    width: 50%;
-    height: 15px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-
-#slider:hover {
-    opacity: 1;
-}
-
-#slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: rgb(0, 102, 255);
-    cursor: pointer;
-}
-
-#slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #04AA6D;
-    cursor: pointer;
-}
 
 
 body {
@@ -227,7 +61,7 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     gap: 0.4rem;
     border-radius: 10px;
     padding: 30px;
@@ -236,13 +70,15 @@ form {
     text-align: center;
     color: white;
     position: relative;
-    min-height: fit-content;
+    
     flex-shrink: 0;
 }
 
 
-form h2 {
-    margin-bottom: 20px;
+.sectionHeader {
+    width: 100%;
+    text-align: center;
+    height: 10%;
     font-size: 1.7rem;
     font-weight: bold;
     color: #ffffff;
@@ -332,7 +168,7 @@ form label {
 }
 
 
-form button {
+form button, #statsContainer button {
     padding: 12px 20px;
     font-size: 1.1rem;
     background-color: rgb(0, 68, 204);
@@ -349,7 +185,7 @@ form button {
     font-family: inherit;
 }
 
-form button:hover {
+form button:hover, #statsContainer button:hover {
     background-color: #0066ff;
     transform: scale(1.05);
 }
@@ -402,6 +238,273 @@ li {
 .functionButton {
     width: fit-content;
 }
+
+
+
+.tabContainer {
+    display: flex;
+    width: 100%;
+    height: 5vh;
+
+}
+
+.tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color: rgba(10, 10, 40, 0.9);
+    border: 4px solid transparent;
+    box-shadow: none;
+    font-size: 1.1rem;
+    color: white;
+}
+
+#profileTab {
+    border-radius: 10px 0 0 0;
+    border-bottom: 4px solid rgb(0, 102, 255);
+}
+
+
+
+#statsTab{
+    border-radius: 0 10px 0 0;
+}
+
+#preferencesForm {
+    display: none;
+   
+}
+
+#easyReadCheckBox{
+    -webkit-appearance: none;
+    position: relative;
+    width: 50px;
+    height: 30px;
+    border-radius: 25px;
+    background-color: lightgray;
+    transition: background-color .3s;
+    outline: none;
+    margin:0 auto 0 auto
+}
+
+#easyReadCheckBox::after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    height: 1.25rem;
+    width: 1.25rem;
+    background-color: white;
+    transition: left .3s;
+}
+
+#easyReadCheckBox:checked{
+    background-color: green;
+}
+
+#easyReadCheckBox:checked::after{
+    left: 70%;
+}
+
+.sampleTextContainer{
+    width: 80%;
+    height: 15%;
+}
+
+#easyReadCheckBox{
+    -webkit-appearance: none;
+    position: relative;
+    width: 50px;
+    height: 30px;
+    border-radius: 25px;
+    background-color: lightgray;
+    transition: background-color .3s;
+    outline: none;
+}
+
+#easyReadCheckBox::after{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    height: 1.25rem;
+    width: 1.25rem;
+    background-color: white;
+    transition: left .3s;
+}
+
+#easyReadCheckBox:checked{
+    background-color: green;
+}
+
+#easyReadCheckBox:checked::after{
+    left: 70%;
+}
+
+
+.slideContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 30%;
+    gap: 20px;
+}
+
+#slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+#slider:hover {
+    opacity: 1;
+}
+
+#slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: rgb(0, 102, 255);
+    cursor: pointer;
+}
+
+#slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+
+
+
+
+#statsContainer{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
+    border-radius: 10px;
+    padding: 30px;
+    width: 450px;
+    height: 75vh;
+    text-align: center;
+    color: white;
+    position: relative;
+    
+    flex-shrink: 0;
+}
+
+.formContentContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+    
+}
+
+
+
+#timeContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    border-bottom: 2px solid white;
+    padding: 20px;
+    width: 100%;
+}
+
+#collectiblesContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    border-bottom: 2px solid white;
+    padding: 20px;
+    width: 100%;
+}
+
+#gameCountContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    border-bottom: 2px solid white;
+    padding: 20px;
+    width: 100%;
+}
+
+p{
+    text-align: left;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+b{
+    width: 50%;
+}
+
+span{
+    width: 50%;
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgb(0, 68, 204);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

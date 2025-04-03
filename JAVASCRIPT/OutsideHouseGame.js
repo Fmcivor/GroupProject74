@@ -53,7 +53,7 @@ startRepairButton.addEventListener('click', startRepair);
 const frontOfHouseDoorLocked = {
     "ID": 1,
     "room": "Front of House",
-    "description": `${displayName}, you stand infront of a large house with a locked door infront of you and a path leading to your left`,
+    "description": `${displayName}, you stand infront of a large house with a door infront of you and boarded up windows, you can see no way inside and a path leading to your left.It seems to be a garden of sorts over to the left.`,
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
         {
@@ -69,7 +69,7 @@ const frontOfHouseDoorLocked = {
         {
             "id": 2,
             "Text": "Enter house",
-            "response": "You can't enter the house with the door being locked"
+            "response": enterHouse
         }
     ]
 }
@@ -77,7 +77,7 @@ const frontOfHouseDoorLocked = {
 const frontOfHouseDoorUnlocked = {
     "ID": 2,
     "room": "Front of House",
-    "description": "You stand infront of a large house with an unlocked door infront of you and a path leading to your left",
+    "description": `${displayName}, you stand infront of a large house with a door infront of you and boarded up windows, you have already unlocked the door and a path leading to your left.It seems to be a garden of sorts over to the left.`,
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
         {
@@ -134,7 +134,7 @@ const sideOfHouse = {
 const generatorBuilding = {
     "ID": 4,
     "room": "Generator Building",
-    "description": "There is an old generator with powerlines leading to the house. It appears to be broken.",
+    "description": "There is an old generator with powerlines leading to the house. It appears to be broken. Maybe this could help with our investigation.",
     "ImageHREF": "Images/Generator.jpg",
     "interactions": [
         {
@@ -153,7 +153,7 @@ const generatorBuilding = {
 const generatorFixed = {
     "ID": 5,
     "room": "Generator Building",
-    "description": "There is an old generator with powerlines leading to the house. You have already fixed it and it now provides elecrtricity to the house.",
+    "description": "You have visited the generator building and have repaired the generator. It now provides electricity to the house.",
     "ImageHREF": "Images/Generator.jpg",
     "interactions": [
         {
@@ -205,7 +205,6 @@ function goToSideOfHouse() {
 
 async function checkUnderMat() {
     let button = document.getElementById(responseId);
-    button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
     if (hasKey) {
@@ -221,17 +220,21 @@ async function checkUnderMat() {
 
 
 async function enterHouse() {
-    if (lightingOn == false) {
-        sessionStorage.setItem('currentState', 1);
-        sessionStorage.setItem('currentRoom', 'downStairsHall.html');
+
+
+    if (doorUnlocked) {
+        if (lightingOn == false) {
+            await goToNextRoom('downStairsHall.html', 1);
+        }
+        else {
+            await goToNextRoom('downStairsHall.html',3);
+        }
     }
-    else {
-        sessionStorage.setItem('currentState', 3);
-        sessionStorage.setItem('currentRoom', 'downStairsHall.html');
+    else{
+        setResponse("The door is locked, maybe you could find a way to open it...");
     }
 
-    await saveGame();
-    window.location.replace('downStairsHall.html');
+    
 }
 
 function goTofrontOfHouse() {
@@ -260,7 +263,6 @@ function searchRubbish(responseId) {
         clue1Btn.style.display = 'block';
         rightColumn.style.backgroundImage = 'url("Images/rubbish.jpg")';
     }
-    button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
 
@@ -269,11 +271,10 @@ function searchRubbish(responseId) {
 
 function exploreGarden(responseId) {
     let button = document.getElementById(responseId);
-    button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
 
-    setResponse("You have walked through the garden and have come accross a section of uneven ground");
+    setResponse("You have walked through the garden and can have found nothing it appears our investigation is leading us elsewhere.");
 }
 
 
@@ -537,24 +538,4 @@ rgb(200,44, 44) ${redZoneStart}deg,
 
 
 
-document.getElementById('useItemBtn').addEventListener('click', function () {
 
-
-    if (selectedItemID != null) {
-        if (currentState == frontOfHouseDoorLocked && selectedItemID == keyID) {
-            currentState = frontOfHouseDoorUnlocked;
-            updateState();
-
-            doorUnlocked = true;
-            sessionStorage.setItem('frontDoorUnlocked', JSON.stringify(doorUnlocked));
-        }
-        else {
-            setResponse("That didn't do anything, maybe try something else.");
-        }
-    }
-    else {
-
-        setResponse("You must select an item before you can use it");
-    }
-
-})

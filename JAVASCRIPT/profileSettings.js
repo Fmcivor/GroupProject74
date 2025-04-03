@@ -19,6 +19,7 @@ const confirmPasswordInput = document.getElementById('confirmPassword')
 const saveProfileBtn = document.getElementById('saveProfileBtn');
 const exitProfileBtn = document.getElementById('exitProfileBtn');
 const exitPreferencesBtn = document.getElementById('exitPreferencesBtn');
+const exitStatsBtn = document.getElementById('exitStatsBtn');
 const messageContainer = document.getElementById('messageContainer');
 const profileTab = document.getElementById('profileTab');
 const preferencesTab = document.getElementById('preferencesTab');
@@ -121,7 +122,11 @@ exitProfileBtn.addEventListener('click', function () {
 exitPreferencesBtn.addEventListener('click', function () {
 
     window.location.href = 'mainMenu.html';
-})
+});
+
+exitStatsBtn.addEventListener('click', function () {
+    window.location.href = 'mainMenu.html';
+});
 
 
 
@@ -332,16 +337,22 @@ async function displayStats() {
     let statsQuery = `SELECT 
     IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))),'You have not played a game yet') AS totalTimePlayed, 
     IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not won a game yet') AS averageToWin,
-    COUNT(tblGameInventory.itemID) as numOfItemsCollected,COUNT(tblGameNotebook.clueID) AS numOfCluesCollected,
-    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'You have not won a game yet') as fastestTimeToCompleteGame,
+    COUNT(tblGameInventory.itemID) AS numOfItemsCollected,
+    COUNT(tblGameNotebook.clueID) AS numOfCluesCollected,
+    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'You have not won a game yet') AS fastestTimeToCompleteGame,
     IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status !=4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'You have not played a game yet') AS averageTime,
-    COUNT(CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) as gamesLost, 
-    COUNT(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) as gamesWon,
-    COUNT(CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) as gamesAbandoned
+    COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
+    COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
+    COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
+    COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
+    ROUND(AVG(tblGameSave.noGeneratorRepairAttempts)) AS avgNoOfRepairAttempts
+
+
 FROM tblGameSave 
 LEFT JOIN tblGameInventory ON tblGameInventory.gameID = tblGameSave.gameID 
 LEFT JOIN tblGameNotebook ON tblGameNotebook.gameID = tblGameSave.gameID
-WHERE tblGameSave.userID = ${userID}`;
+WHERE tblGameSave.userID = ${userID}
+GROUP BY tblGameSave.userID`;
 
     dbConfig.set('query', statsQuery);
 
@@ -355,16 +366,17 @@ WHERE tblGameSave.userID = ${userID}`;
 
         if (result.success) {
             let stats = result.data[0];
-            document.getElementById("totalTimePlayed").innerText = "Total Time Played: " + stats.totalTimePlayed;
-            document.getElementById("avgTimeToWin").innerText = "Average Time to Win: " + stats.averageToWin;
-            document.getElementById("itemCount").innerText = "Items Collected: " + stats.numOfItemsCollected;
-            document.getElementById("clueCount").innerText = "Clues Found: " + stats.numOfCluesCollected;
-            document.getElementById("quickestGame").innerText = "Fastest Game Completion: " + stats.fastestTimeToCompleteGame;
-            document.getElementById("averageTime").innerText = "Average Time Played: " + stats.averageTime;
-            document.getElementById("lost").innerText = "Games Lost: " + stats.gamesLost;
-            document.getElementById("won").innerText = "Games Won: " + stats.gamesWon;
-            document.getElementById("abandoned").innerText = "Games Abandoned: " + stats.gamesAbandoned;
-
+            document.getElementById("totalTimePlayed").innerHTML = `<b style='text-decoration:underline;'>Total Time Played:</b> <span style = text-align:right;>${stats.totalTimePlayed}</span>`;
+            document.getElementById("avgTimeToWin").innerHTML = `<b style='text-decoration:underline;'>Average Time to Win:</b> <span style = text-align:right;> ${stats.averageToWin}</span>`;
+            document.getElementById("itemCount").innerHTML = `<b style='text-decoration:underline;'>Items Collected:</b> <span style = text-align:right;> ${stats.numOfItemsCollected}</span>`;
+            document.getElementById("clueCount").innerHTML = `<b style='text-decoration:underline;'>Clues Found:</b> <span style = text-align:right;> ${stats.numOfCluesCollected}</span>`;
+            document.getElementById("quickestGame").innerHTML = `<b style='text-decoration:underline;'>Fastest Game Completion:</b> <span style = text-align:right;> ${stats.fastestTimeToCompleteGame}</span>`;
+            document.getElementById("averageTime").innerHTML = `<b style='text-decoration:underline;'>Average Time Played:</b> <span style = text-align:right;> ${stats.averageTime}</span>`;
+            document.getElementById("lost").innerHTML = `<b style='text-decoration:underline;'>Games Lost:</b> <span style = text-align:right;> ${stats.gamesLost}</span>`;
+            document.getElementById("won").innerHTML = `<b style='text-decoration:underline;'>Games Won:</b> <span style = text-align:right;> ${stats.gamesWon}</span>`;
+            document.getElementById("abandoned").innerHTML = `<b style='text-decoration:underline;'>Games Abandoned:</b> <span style = text-align:right;> ${stats.gamesAbandoned}</span>`;
+            document.getElementById("totalGamesPlayed").innerHTML = `<b style='text-decoration:underline;'>Total Games Played:</b> <span style = text-align:right;> ${stats.totalGames}</span>`;
+            document.getElementById("avgRepairAttempts").innerHTML = `<b style='text-decoration:underline;'>Average Number of Repair Attempts:</b> <span style = text-align:right;> ${stats.avgNoOfRepairAttempts}</span>`;
 
         }
         else {

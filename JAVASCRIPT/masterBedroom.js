@@ -407,9 +407,7 @@ const openingSafe = {
 
 //STATE FUNCTIONS
 function goToHall() {
-    sessionStorage.setItem('currentRoom','upstairsHall.html');
-    sessionStorage.setItem('currentState',1);
-    window.location.replace('upstairsHall.html');
+    goToNextRoom('upstairsHall.html', 1);
 }
 
 function hideSafe() {
