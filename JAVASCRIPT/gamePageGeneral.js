@@ -41,6 +41,7 @@ const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
 
+
 //VARIABLES
 let currentState;
 let selectedToolBarItem = null;
