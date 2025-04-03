@@ -1,12 +1,12 @@
 //INITIALISE
-window.addEventListener('DOMContentLoaded', function() {
-    loadStats();
-    displayStats();
+window.addEventListener('DOMContentLoaded', async function() {
+    await loadStats();
+    // displayStats();
 })
 
 //PLACEHOLDERS
-const userID = 11;
-const gameID = 139;
+const userID = 1;
+const gameID = 364;
 
 //CONSTANTS
 const numOfClues = 6;
@@ -35,14 +35,14 @@ let cluesCollected = 0;
 
 async function loadStats() {
     
-    getTimePlayedAndRooms();
-    getAvgTimes();
-    getItemsAndClues();
+     getplayTime();
+     getAvgTimes();
+     getItemsAndClues();
+     getRooms();
 }
 
-async function getTimePlayedAndRooms() {
-    let timeAndRoomsQuery = `SELECT  timePlayed AS 'timeToComplete', DATE(startDate) AS 'startDate', TIME(startDate) AS 'startTime',
-     OutsideHouseVisited, downStairsHallVisited, upstairsHallVisited, kitchenVisited, livingRoomVisited, masterBedroomVisited, studyVisited, guestBedroomVisited 
+async function getplayTime() {
+    let timeAndRoomsQuery = `SELECT  timePlayed AS 'timeToComplete', DATE(startDate) AS 'startDate', TIME(startDate) AS 'startTime'
      FROM tblGameSave WHERE gameID = ${gameID};`;
 
     dbConfig.set('query', timeAndRoomsQuery);
@@ -61,11 +61,8 @@ async function getTimePlayedAndRooms() {
             startDate = stats.startDate
             startTime = result.startTime
 
-            for(let i = 3; i <= 10; i++) {
-                if(result.data[i] > 0){
-                    roomsVisited++;
-                }
-            }
+            playTimeDisplay.textContent = `Play Time: ${timeToComplete}`;
+            saveStartedDisplay.textContent = `Save Started: ${startDate}, ${startTime}`;
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -90,7 +87,9 @@ async function getAvgTimes() {
         let result = await response.json();
 
         if (result.success && result.data.length > 0) {
-            avgTimeToComplete = result.data[0];
+            avgTimeToComplete = result.data[0].averageTimeToComplete;
+            averageTTWDisplay.textContent = `Average time to complete: ${avgTimeToComplete}`;
+    
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -113,7 +112,8 @@ async function getAvgTimes() {
         let result = await response.json();
 
         if (result.success && result.data.length > 0) {
-            globalAvgTimeCompletion = result.data[0];
+            globalAvgTimeCompletion = result.data[0].globalAverageTimeToComplete;
+            globalAverageTTWDisplay.textContent = `Global Average Time to Complete: ${globalAvgTimeCompletion}`;
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -124,7 +124,7 @@ async function getAvgTimes() {
 }
 
 async function getItemsAndClues() {
-    let itemQuery = `SELECT COUNT(itemID) FROM tblGameInventory WHERE gameID = ${gameID};`;
+    let itemQuery = `SELECT COUNT(itemID) AS 'noItemsCollected' FROM tblGameInventory WHERE gameID = ${gameID};`;
 
     dbConfig.set('query', itemQuery);
 
@@ -137,7 +137,9 @@ async function getItemsAndClues() {
         let result = await response.json();
 
         if (result.success && result.data.length > 0) {
-            itemsCollected = result.data[0];
+            itemsCollected = result.data[0].noItemsCollected;
+
+            itemsCollectedDisplay.textContent = `Items Collected: ${itemsCollected}/${numOfItems}`;
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -146,7 +148,7 @@ async function getItemsAndClues() {
         console.error("An error has occurred while retrieving stats form the database", error);
     }
 
-    let clueQuery = `SELECT COUNT(itemID) FROM tblGameInventory WHERE gameID = ${gameID};`;
+    let clueQuery = `SELECT COUNT(clueID) AS 'noCluesCollected' FROM tblGameNotebook WHERE gameID = ${gameID};`;
 
     dbConfig.set('query', clueQuery);
 
@@ -159,7 +161,43 @@ async function getItemsAndClues() {
         let result = await response.json();
 
         if (result.success && result.data.length > 0) {
-            cluesCollected = result.data[0];
+            cluesCollected = result.data[0].noCluesCollected;
+
+            cluesFoundDisplay.textContent = `Clues Found: ${cluesCollected}/${numOfClues}`;           
+        }
+        else {
+            console.error("Unable to retrieve stats form the database");
+        }
+    } catch (error) {
+        console.error("An error has occurred while retrieving stats form the database", error);
+    }
+}
+
+async function getRooms() {
+    let timeAndRoomsQuery = `SELECT timesVisited FROM tblGameRoom WHERE gameID = ${gameID};`;
+
+    dbConfig.set('query', timeAndRoomsQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+            for( let i = 0; i<9; i++) {
+                if(result.data[i].timesVisited > 0){
+                    roomsVisited++;
+
+                    completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
+                    completion = completion * 100;
+
+                    completionDisplay.textContent = `Completion%: ${completion}%`;
+                    roomsVisitedDisplay.textContent = `Rooms Found: ${roomsVisited}/${numOfRooms}`;
+                }
+            }
         }
         else {
             console.error("Unable to retrieve stats form the database");
