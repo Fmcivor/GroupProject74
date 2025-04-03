@@ -42,7 +42,7 @@ const upstairsHall = {
 
 //STATE FUNCTIONS
 function goToAttic() {
-    // window.location.replace( '';
+    goToNextRoom('attic.html',1);
 }
 
 function goToMasterBedroom() {

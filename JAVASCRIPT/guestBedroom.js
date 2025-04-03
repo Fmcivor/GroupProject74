@@ -1,5 +1,6 @@
 let hasPillBottle = inventory.some(item=>item.itemID ==pillBottleID);
 let hasGlassClue = clueList.some(clue =>clue.clueID ==6);
+let hasFlashLight = clueList.some(item=>item.itemID ==flashLightID);
 
 document.addEventListener('DOMContentLoaded', function () {
     let states = [guestBedroom, nightStandState, wardrobeState, underBedState];
@@ -86,7 +87,7 @@ const wardrobeState = {
             "id":1,
             "Text": "Open the suitcase",
             "response": function(){
-                setResponse("You find a one way train ticket belonging to Margaret dated a day after Charles death. Why would she plan to leave so soon after?")
+                setResponse("You find a receipt of a train ticket belonging to Margaret dated a day after Charles death. Why would she plan to leave so soon after?")
             }
 
 
@@ -108,6 +109,7 @@ const underBedState = {
     "ID": 4,
     "room": "Guest Bedroom",
     "description": `You kneel down under the bed but cannot see anything instantly.`,
+    "ImageHREF": "Images/guestBedroomFinal.jpg",
     "interactions": [
         {
             "id": 0,
