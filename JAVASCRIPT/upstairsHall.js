@@ -50,7 +50,8 @@ function goToMasterBedroom() {
 }
 
 function goToGuestBedroom() {
-    //window.location.replace( '';
+    sessionStorage.setItem('currentState',1);
+    window.location.replace('guestBedroom.html');
 }
 
 function goToDownStairs() {
