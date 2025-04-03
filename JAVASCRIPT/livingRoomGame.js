@@ -290,7 +290,7 @@ async function updateTimesOnSofa(){
 }
 
 function goToHall() {
-    sessionStorage.setItem('currentState', 3);
-    window.location.replace('downStairsHall.html');
+    
+    goToNextRoom('downStairsHall.html', 3);
 }
 

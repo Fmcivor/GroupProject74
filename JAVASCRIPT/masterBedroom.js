@@ -1,4 +1,10 @@
 //CONSTANTS
+const dial1 = document.getElementById('dial1');
+const dial2 = document.getElementById('dial2');
+const dial3 = document.getElementById('dial3');
+const dial4 = document.getElementById('dial4');
+const dialCenter = document.getElementById('dialCenter');
+
 const dial1SVG = document.getElementById('d1SVG');
 const dial2SVG = document.getElementById('d2SVG');
 const dial3SVG = document.getElementById('d3SVG');
@@ -10,12 +16,16 @@ const dial3Display = document.getElementById('d3Display');
 const dial4Display = document.getElementById('d4Display');
 
 const openButton = document.getElementById('safeHandleButton');
+const evidenceButton = document.getElementById('safeEvidenceButton');
+const safeFront = document.getElementById('safeFront');
+const codeContainer = document.getElementById('codeContainer');
 const safeCode = '4379';
 
 const safeGameContainer = document.getElementById('safeGameContainer')
 
 //VARIABLES
 let hasLockpick = inventory.some(item => item.itemID == lockpickID);
+let hasKnife = inventory.some(item => item.itemID == knifeItemID);
 
 let d1Rotating = false;
 let d2Rotating = false;
@@ -32,7 +42,7 @@ let d2TargetAngle = 0;
 let d3TargetAngle = 0;
 let d4TargetAngle = 0;
 
-let d1Value = 0;
+let d1Value = 3;
 let d2Value = 0;
 let d3Value = 0;
 let d4Value = 0;
@@ -44,19 +54,25 @@ let selectedDial = 1;
 function keyDownEventHandler(event) {
     switch (event.key) {
         case "ArrowLeft":
-            rotateLeft();
+            rotateRight();
+            rotateRight();
             break;
         case "ArrowRight":
-            rotateRight();
+            rotateLeft();
+            rotateLeft();
             break;
         case "ArrowUp":
             if(selectedDial > 1) {
                 selectedDial--;
+                higlightSelectedDial();
+                higlightSelectedDial();
             }
             break;
         case "ArrowDown":
             if(selectedDial < 4) {
                 selectedDial++;
+                higlightSelectedDial();
+                higlightSelectedDial();
             }
             break;
     }
@@ -286,18 +302,58 @@ function d4RotateRight(interval) {
 document.addEventListener('DOMContentLoaded', function() {
     currentState = enteredMasterBedroom;
     updateState();
+    randomiseDials();
 })
 
-openButton.addEventListener('click', function() {
+openButton.addEventListener('click', openSafeHandler)
+
+function openSafeHandler() {
     if(d1Value == safeCode[0] && d2Value == safeCode[1] && d3Value == safeCode[2] && d4Value == safeCode[3]) {
         //open safe
-        console.log("Safe opened!");
+        openButton.style.animation = 'turnHandleUnlocked 4s ease-in';
+        dial1Display.style.color = "green";
+        dial2Display.style.color = "green";
+        dial3Display.style.color = "green";
+        dial4Display.style.color = "green";
+        safeFront.classList.add('openedSafeFront');
+        window.removeEventListener("keydown", keyDownEventHandler);
+        openButton.removeEventListener("click", openSafeHandler);
+        dial1.style.border = "3px solid black";
+        dial2.style.border = "3px solid black";
+        dial3.style.border = "3px solid black";
+        dial4.style.border = "3px solid black";
+        dialCenter.style.border = "3px solid black";
+        evidenceButton.addEventListener("click", addKnifeEvidence);
+        setTimeout(function() {
+            openButton.style.animation = 'none';
+        }, 1000);
     }
     else {
         //wrong code
-        console.log("Wrong code!");
+        openButton.style.animation = 'turnHandleLocked 1s ';
+        dial1Display.style.animation = 'incorrectNumbers 1s';
+        dial2Display.style.animation = 'incorrectNumbers 1s';
+        dial3Display.style.animation = 'incorrectNumbers 1s';
+        dial4Display.style.animation = 'incorrectNumbers 1s';
+        setTimeout(function() {
+            openButton.style.animation = 'none';
+            dial1Display.style.animation = 'none';
+            dial2Display.style.animation = 'none';
+            dial3Display.style.animation = 'none';
+            dial4Display.style.animation = 'none';
+        }, 1000);
     }
-})
+}
+
+function addKnifeEvidence() {
+    addClue(knifeClueID);
+    addItem(knifeItemID);
+    hasKnife = true;
+    setResponse(`You take the knife out of the safe and feel proud of yourself, 
+                with this piece of evidence you are surely one step closer to catching the killer`)
+    evidenceButton.removeEventListener("click", addKnifeEvidence);
+    evidenceButton.style.display = 'none';
+}
 
 
 
@@ -351,12 +407,12 @@ const openingSafe = {
 
 //STATE FUNCTIONS
 function goToHall() {
-    sessionStorage.setItem('currentState',1);
-    window.location.replace('upstairsHall.html');
+    goToNextRoom('upstairsHall.html', 1);
 }
 
 function hideSafe() {
     safeGameContainer.style.display = 'none';  
+    codeContainer.style.display = 'none';
     window.removeEventListener("keydown", keyDownEventHandler);
     currentState = enteredMasterBedroom;
     updateState();
@@ -373,18 +429,104 @@ function searchBedsideTable() {
 }
 
 function investigateSafe() {
-    currentState = openingSafe;
-    updateState();
-    setDescriptionAndResponse(`
-                Guide:\n
-                Use the left and right arrows to rotate the dials\n
-                Use the up and down arrows to change between dials\n
-                Click on the handle to attempt to open the safe
-                `);
-    displaySafe();
+    if(hasKnife) {
+        currentState = openingSafe;
+        updateState();
+        setDescriptionAndResponse(`
+                    Guide:\n
+                    Use the left and right arrows to rotate the dials\n
+                    Use the up and down arrows to change between dials\n
+                    Click on the handle to attempt to open the safe
+                    `);
+        displaySafe();
+    }
+    else {
+        setResponse("You have already investigated the safe")
+    }
+    
 }
 
 function displaySafe() {
     safeGameContainer.style.display = 'flex';  
     window.addEventListener("keydown", keyDownEventHandler);
+}
+
+function higlightSelectedDial() {
+    dial1.style.border = "3px solid black";
+    dial2.style.border = "3px solid black";
+    dial3.style.border = "3px solid black";
+    dial4.style.border = "3px solid black";
+    dialCenter.style.border = "3px solid black";
+
+    dial1Display.style.color = "black";
+    dial2Display.style.color = "black";
+    dial3Display.style.color = "black";
+    dial4Display.style.color = "black";
+
+    switch(selectedDial) {
+        case 1:
+            dial1.style.border = "3px solid rgb(252, 215, 7)";         
+            dial2.style.border = "3px solid rgb(252, 215, 7)";   
+            dial1Display.style.color = "rgb(252, 215, 7)";
+            break;
+        case 2:
+            dial2.style.border = "3px solid rgb(252, 215, 7)";         
+            dial3.style.border = "3px solid rgb(252, 215, 7)"; 
+            dial2Display.style.color = "rgb(252, 215, 7)";
+            break;
+        case 3:
+            dial3.style.border = "3px solid rgb(252, 215, 7)";         
+            dial4.style.border = "3px solid rgb(252, 215, 7)"; 
+            dial3Display.style.color = "rgb(252, 215, 7)";
+            break;
+        case 4:
+            dial4.style.border = "3px solid rgb(252, 215, 7)";         
+            dialCenter.style.border = "3px solid rgb(252, 215, 7)"; 
+            dial4Display.style.color = "rgb(252, 215, 7)";
+            break;
+    }
+}
+
+document.getElementById('useItemBtn').addEventListener('click', itemUsedHandler);
+
+function itemUsedHandler() {
+    if (selectedItemID != null) {
+        if (currentState == openingSafe && selectedItemID == safeCodeID) {
+            codeContainer.style.display = 'flex';
+        }
+        else {
+            setResponse("That didn't do anything, maybe try something else.");
+        }
+    }
+    else {
+
+        setResponse("You must select an item before you can use it");
+    }
+}
+
+function randomiseDials() {
+    d1Value = Math.floor(Math.random() * 10);
+    d2Value = Math.floor(Math.random() * 10);
+    d3Value = Math.floor(Math.random() * 10);
+    d4Value = Math.floor(Math.random() * 10);
+
+    dial1Display.innerText = d1Value;
+    dial2Display.innerText = d2Value;
+    dial3Display.innerText = d3Value;
+    dial4Display.innerText = d4Value;
+
+    d1Angle = d1Value * -36;
+    d2Angle = d2Value * -36;
+    d3Angle = d3Value * -36;
+    d4Angle = d4Value * -36;
+
+    d1TargetAngle = d1Angle;
+    d2TargetAngle = d2Angle;
+    d3TargetAngle = d3Angle;
+    d4TargetAngle = d4Angle;
+
+    dial1SVG.style.transform = `rotate( ${d1Angle}deg)`;
+    dial2SVG.style.transform = `rotate( ${d2Angle}deg)`;
+    dial3SVG.style.transform = `rotate( ${d3Angle}deg`;
+    dial4SVG.style.transform = `rotate( ${d4Angle}deg`;
 }

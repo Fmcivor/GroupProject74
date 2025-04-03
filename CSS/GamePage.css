@@ -67,13 +67,15 @@ header{
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    height: 70%;
     gap: 20px;
+    flex-grow: 0;
 }
 
 #slider {
     -webkit-appearance: none;
-    width: 50%;
+    max-width: 50%;
+    min-width: 50%;
+    flex-grow: 0;
     height: 15px;
     border-radius: 5px;
     background: #d3d3d3;
@@ -81,6 +83,7 @@ header{
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    align-self: center;
 }
 
 #slider:hover {
@@ -145,7 +148,7 @@ header{
 
 
 .easyReadContainer{
-    width: 50%;
+    width: 100%;
     margin-bottom: 1.2rem;
     display: flex;
     flex-direction: column;
@@ -241,11 +244,27 @@ form{
     right: 0;
 }
 
-.toolBarIcon {
+.toolBarBtn{
     display: block;
     text-align: center;
     color: black;
     margin-bottom: 3vh;
+    display: block;
+    font-size: 3rem;
+    width: 100%;
+    height: fit-content;
+    border-width: 5px 0 5px 5px;
+    border-style: solid;
+    border-color: rgb(255, 197, 105);
+    border-radius: 20px 0 0 20px;
+    background-color: rgb(255, 197, 105);
+    transition: color 0.3s ease-in-out;
+}
+
+.toolBarIcon {
+    display: block;
+    text-align: center;
+    color: black;
     display: block;
     font-size: 3rem;
     width: 100%;
@@ -262,6 +281,10 @@ form{
 
 .toolBarIcon:hover {
      color: rgb(228, 140, 68);
+}
+
+.toolBarIconNotification{
+    color: #f5c518;
 }
 
 .hideToolBarButton {
@@ -528,7 +551,7 @@ li {
 
 #descriptionParagraph{
     margin-bottom: 1.3vh;
-    text-align: justify;
+    text-align: left;
     display: flex;
     flex: 1;
 }
@@ -747,7 +770,6 @@ p {
         height: 100vh;
         background-color: rgb(6, 3, 35);
     }
-
 
 
     header {

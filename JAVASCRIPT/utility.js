@@ -37,13 +37,14 @@ document.addEventListener('DOMContentLoaded',function(){
 function checkLogin(){
     if (!sessionStorage.getItem('userID')) {
         window.location.href = 'login.html';
-        return;
+        return false;
     }
+    return true;
 }
 
 
 async function deleteSave(gameID){
-    let deleteQuery = `DELETE FROM tblGameSave WHERE gameID = ${gameID}`;
+    let deleteQuery = `UPDATE tblGameSave SET status = ${gameAbandoned} WHERE gameID = ${gameID}`;
                        
     dbConfig.set('query', deleteQuery);
 
@@ -67,5 +68,13 @@ async function deleteSave(gameID){
     }
 
 }
+
+
+// game status constants
+
+const activeGame = 0;
+const gameWin = 1;
+const gameLoss = 2;
+const gameAbandoned = 3;
 
 

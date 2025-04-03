@@ -1,22 +1,22 @@
 
-document.addEventListener('DOMContentLoaded', async function(){
+document.addEventListener('DOMContentLoaded', async function () {
     checkLogin();
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
     await displayGameSaves();
 });
 
-document.getElementById('noBtn').addEventListener('click',function(){
+document.getElementById('noBtn').addEventListener('click', function () {
     document.getElementById('deletePopUp').style.display = 'none';
     document.getElementById('yesBtn').value = null;
 });
 
-document.getElementById('yesBtn').addEventListener('click',async function(event){
+document.getElementById('yesBtn').addEventListener('click', async function (event) {
     let gameSaveID = event.target.value;
     await deleteSave(gameSaveID);
     await displayGameSaves();
     document.getElementById('yesBtn').value = null;
     document.getElementById('deletePopUp').style.display = 'none';
-
+    
 });
 
 
@@ -27,8 +27,8 @@ async function loadGame(gameID) {
     let gameSaveDataLoaded = await loadGameSaveData(gameID);
 
     if (inventoryLoaded && clueListLoaded && gameSaveDataLoaded) {
-        window.location.href = sessionStorage.getItem("currentRoom");
 
+        sessionStorage.setItem('gameSessionStartTime',Date.now());
 
         let updateQuery = `UPDATE tblGameSave SET lastPlayedDate = CURRENT_TIMESTAMP WHERE gameID =${gameID}`;
 
@@ -53,6 +53,8 @@ async function loadGame(gameID) {
         } catch (error) {
             console.error("Error occurrred while updating the last played time stamp", error);
         }
+
+        window.location.href = sessionStorage.getItem("currentRoom");
     }
 
 
@@ -162,6 +164,8 @@ async function loadGameSaveData(gameID) {
             sessionStorage.setItem('noGeneratorRepairAttempts', gameSave.noGeneratorRepairAttempts);
             sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn', gameSave.lightingOn);
+            sessionStorage.setItem('status',gameSave.status);
+
             console.log("game save id retrieved:", gameSave.gameID);
 
 
@@ -181,7 +185,7 @@ async function loadGameSaveData(gameID) {
 
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
-    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = ${userID} ORDER BY lastPlayedDate DESC LIMIT 3`;
+    let selectQuery = `SELECT gameID,startDate, lastPlayedDate FROM tblGameSave WHERE userID = ${userID} AND status = ${activeGame} ORDER BY lastPlayedDate DESC LIMIT 3`;
 
     dbConfig.set('query', selectQuery);
 
@@ -196,42 +200,54 @@ async function displayGameSaves() {
 
         if (result.success) {
 
-            let saveContainer = document.querySelector('.saveContainer');
-            saveContainer.innerHTML = '<h1>Select Save</h1>';
+            let saveWrapper = document.getElementById('saveSlotWrapper');
+            saveWrapper.innerHTML = '';
             let latestGames = result.data;
             let slotCounter = 1;
 
+            if (latestGames.length < 1) {
+                saveWrapper.innerHTML = '<h3>No active games</h2>';
+            }
+            else {
 
-            latestGames.forEach(gameSave => {
-                let saveSlotBtn = document.createElement('button');
-                saveSlotBtn.value = gameSave.gameID;
-                saveSlotBtn.textContent = `bjhgjhgjhgjhghsaveSlot${slotCounter}`;
-                slotCounter++;
-                saveSlotBtn.addEventListener('click', function (event) {
-                    loadGame(event.target.value);
+
+                latestGames.forEach(gameSave => {
+                    let saveSlotBtn = document.createElement('button');
+                    saveSlotBtn.value = gameSave.gameID;
+                    
+
+                    const startDate = new Date(gameSave.startDate);
+                    const day = String(startDate.getUTCDate()).padStart(2, '0'); 
+                    const month = String(startDate.getUTCMonth() + 1).padStart(2, '0');
+                    const year = startDate.getUTCFullYear();
+
+                    const formattedDate = `${day}/${month}/${year}`;
+                    saveSlotBtn.innerHTML = `<p id='saveName' style='font-size:1.2rem'>save${slotCounter}</p> <p id='startDate' style='font-size:1rem'>Start Date: ${formattedDate}</p>`;
+                    slotCounter++;
+                    saveSlotBtn.addEventListener('click', function (event) {
+                        loadGame(event.currentTarget.value);
+                    });
+                    saveSlotBtn.classList.add('saveSlotBtn');
+
+
+                    let deleteSaveBtn = document.createElement('button');
+                    deleteSaveBtn.innerHTML = `<i class="fa-solid fa-trash deleteSaveIcon"></i>`;
+                    deleteSaveBtn.classList.add('deleteSaveBtn');
+                    deleteSaveBtn.value = gameSave.gameID;
+                    deleteSaveBtn.addEventListener('click', async function (event) {
+                        document.getElementById('confirmationMessage').textContent = 'Are you sure you ewant to delete this save slot';
+                        document.getElementById('yesBtn').value = event.currentTarget.value;
+                        document.getElementById('deletePopUp').style.display = 'flex';
+                    });
+
+
+                    let saveSlotDiv = document.createElement('div');
+                    saveSlotDiv.classList.add('saveSlot');
+                    saveSlotDiv.appendChild(saveSlotBtn);
+                    saveSlotDiv.appendChild(deleteSaveBtn);
+                    saveWrapper.appendChild(saveSlotDiv);
                 });
-
-
-                let deleteSaveBtn = document.createElement('i');
-                deleteSaveBtn.classList.add('fa-solid');
-                deleteSaveBtn.classList.add('fa-trash');
-                deleteSaveBtn.classList.add('deleteSaveBtn');
-                deleteSaveBtn.style.color = 'red';
-                deleteSaveBtn.value = gameSave.gameID;
-                deleteSaveBtn.addEventListener('click', async function(event){
-                    document.getElementById('confirmationMessage').textContent = 'Are you sure you ewant to delete this save slot';
-                    document.getElementById('yesBtn').value = event.target.value;
-                    document.getElementById('deletePopUp').style.display = 'flex';                    
-                });
-
-
-                let saveSlotDiv = document.createElement('div');
-                saveSlotDiv.classList.add('saveSlot');
-                saveSlotDiv.appendChild(saveSlotBtn);
-                saveSlotDiv.appendChild(deleteSaveBtn);
-                saveContainer.appendChild(saveSlotDiv);
-            });
-
+            }
         }
         else {
             console.error("Error while displaying saved games");

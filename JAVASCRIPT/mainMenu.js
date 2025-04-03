@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function checkTotalActiveGames(){
 
-    let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND complete = 0`;
+    let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND status = ${activeGame}`;
 
     dbConfig.set('query',query);
 
@@ -75,7 +75,7 @@ async function checkTotalActiveGames(){
 //Start new game
 document.getElementById('playBtn').addEventListener('click',async function(){
    
-
+    
     let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"introduction.html",1)`;
     dbConfig.set('query',insertQuery);
 
@@ -114,6 +114,8 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
             sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn',gameSave.lightingOn);
+            sessionStorage.setItem('status',gameSave.status);
+            sessionStorage.setItem('gameSessionStartTime',Date.now());
             console.log("game save id retrieved:",gameSave.gameID);
             window.location.href = 'introduction.html';
         }

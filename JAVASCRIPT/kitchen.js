@@ -113,11 +113,9 @@ function examineGlass(){
 }
 
 function enterLivingRoom(){
-    window.location.replace('livingRoom.html');
-    sessionStorage.setItem('currentState', 1);
+    goToNextRoom('livingRoom.html', 1);
 }
 
 function enterHallway(){
-    window.location.replace('hallway.html');
-    sessionStorage.setItem('currentState', 4);
+    goToNextRoom('downStairsHall.html', 4);
 }
