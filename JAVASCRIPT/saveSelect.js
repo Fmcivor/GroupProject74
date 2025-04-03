@@ -164,6 +164,8 @@ async function loadGameSaveData(gameID) {
             sessionStorage.setItem('noGeneratorRepairAttempts', gameSave.noGeneratorRepairAttempts);
             sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn', gameSave.lightingOn);
+            sessionStorage.setItem('status',gameSave.status);
+
             console.log("game save id retrieved:", gameSave.gameID);
 
 
@@ -234,7 +236,7 @@ async function displayGameSaves() {
                     deleteSaveBtn.value = gameSave.gameID;
                     deleteSaveBtn.addEventListener('click', async function (event) {
                         document.getElementById('confirmationMessage').textContent = 'Are you sure you ewant to delete this save slot';
-                        document.getElementById('yesBtn').value = event.target.value;
+                        document.getElementById('yesBtn').value = event.currentTarget.value;
                         document.getElementById('deletePopUp').style.display = 'flex';
                     });
 

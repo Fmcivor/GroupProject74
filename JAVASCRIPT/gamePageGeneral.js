@@ -32,6 +32,7 @@ const pillBottleID = 4;
 const safeCodeID = 5;
 const flashlightID = 6;
 const knifeItemID = 7;
+const ringID = 8;
 
 //clue ids
 const rubbishClueID = 1;
@@ -40,10 +41,12 @@ const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
 
+
 //VARIABLES
 let currentState;
 let selectedToolBarItem = null;
 let typingInterval;
+let typingIndex = 0;
 let settingsOpen = false;
 
 
@@ -81,21 +84,26 @@ document.addEventListener('DOMContentLoaded', function () {
         // else {
 
 
-            let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
-            if (easyReadOn == true) {
-                document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
-            }
-            else {
-                document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
-            }
+        let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+        if (easyReadOn == true) {
+            document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+        }
+        else {
+            document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+        }
 
-            UpdateInventory();
-            updateClueNotebook();
+        UpdateInventory();
+        updateClueNotebook();
         // }
     }
 })
 
-
+async function goToNextRoom(nextRoom, startingState) {
+    sessionStorage.setItem("currentRoom", nextRoom);
+    sessionStorage.setItem("currentState", startingState);
+    await saveGame();
+    window.location.replace(nextRoom);
+}
 
 
 
@@ -204,8 +212,8 @@ function updateState() {
     totalTime = Math.min(5500, totalTime);
     let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
-    let typingIndex = 0;
-    // let totalTypingTime = currentState.description.length * 20;
+    typingIndex = 0;
+    let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += descText[typingIndex];
@@ -255,11 +263,10 @@ function userDecisionHandler(event) {
 
 
 function setResponse(responseText) {
-    const description = document.getElementById('descriptionParagraph');
-    description.textContent = currentState.description;
-
+    clearInterval(typingInterval);
 
     const responseBox = document.getElementById('responseParagraph');
+    document.getElementById('descriptionParagraph').textContent = currentState.description;
     responseBox.textContent = "";
     const responseLength = responseText.length;
     let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
@@ -267,8 +274,7 @@ function setResponse(responseText) {
     let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
 
-    let typingIndex = 0;
-    clearInterval(typingInterval);
+    typingIndex = 0;
     typingInterval = setInterval(() => {
         responseBox.textContent += responseText[typingIndex];
         typingIndex++;
@@ -291,7 +297,7 @@ function setDescriptionAndResponse(responseText) {
     totalTime = Math.min(5500, totalTime);
     let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
-    let typingIndex = 0;
+    typingIndex = 0;
     // let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
@@ -314,7 +320,7 @@ function setResponseAfterDescription(responseText) {
     let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
 
-    let typingIndex = 0;
+    typingIndex = 0;
     typingInterval = setInterval(() => {
         responseBox.textContent += responseText[typingIndex];
         typingIndex++;
@@ -367,6 +373,10 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
 
+    let newAchievement = { "achievementID": achievementID };
+    userAchievementIDs.push(newAchievement);
+    sessionStorage.setItem("achievementIDs", JSON.stringify(userAchievementIDs));
+
     dbConfig.set('query', insertQuery);
 
     try {
@@ -407,6 +417,11 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 }
 
 async function addClue(clueID) {
+
+    if (clueList.length == 0 && userAchievementIDs.some(achievement => achievement.achievementID == 5) == false) {
+        awardAchievement(5, userID, "Images/readableLetter.png");
+    }
+
     let selectQuery = `SELECT * FROM tblClue WHERE clueID = ${clueID}`;
 
     dbConfig.set('query', selectQuery);
@@ -425,6 +440,24 @@ async function addClue(clueID) {
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
+            let alternateColour = false;
+            let notificationTimer = setInterval(() => {
+                if (alternateColour == false) {
+                    noteBookButton.querySelector('i').classList.toggle('toolBarIconNotification');
+                }
+                else {
+                    noteBookButton.querySelector('i').classList.remove('toolBarIconNotification');
+                    alternateColour = false
+                }
+            }, 400);
+
+
+            setTimeout(() => {
+                clearInterval(notificationTimer);
+                noteBookButton.classList.remove('toolBarIconNotification');
+            }, 2400);
+
+            
 
             let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
 
@@ -450,22 +483,7 @@ async function addClue(clueID) {
         console.error("An error has occurred while adding the clues to the notebook", error);
     }
 
-    let alternateColour = false;
-    let notificationTimer = setInterval(() => {
-        if (alternateColour == false) {
-            noteBookButton.querySelector('i').classList.toggle('toolBarIconNotification');
-        }
-        else {
-            noteBookButton.querySelector('i').classList.remove('toolBarIconNotification');
-            alternateColour = false
-        }
-    }, 400);
 
-
-    setTimeout(() => {
-        clearInterval(notificationTimer);
-        noteBookButton.classList.remove('toolBarIconNotification');
-    }, 2400);
 
 }
 
@@ -555,8 +573,39 @@ async function saveGame() {
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
 
 
+    let visitedRoom = '';
 
-
+    switch (currentRoom) {
+        case 'downStairsHall.html':
+            visitedRoom = 'downStairsHall';
+            break;
+        case 'guestBedroom.html':
+            visitedRoom = 'guestBedroom';
+            break;
+        case 'kitchen.html':
+            visitedRoom = 'kitchen';
+            break;
+        case 'livingRoom.html':
+            visitedRoom = 'livingRoom';
+            break;
+        case 'masterBedroom.html':
+            visitedRoom = 'masterBedroom';
+            break;
+        case 'OutsideHouse.html':
+            visitedRoom = 'OutsideHouse';
+            break;
+        case 'study.html':
+            visitedRoom = 'study';
+            break;
+        case 'upstairsHall.html':
+            visitedRoom = 'upstairsHall';
+            break;
+        default:
+            console.log('Unknown room: ' + currentRoom);
+            visitedRoom = 'unknown';
+            break;
+    }
+    let roomVisitedQuery = `,${visitedRoom}Visited = ${visitedRoom}Visited + 1`;
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
@@ -569,7 +618,7 @@ async function saveGame() {
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa},
                         timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}'))
-
+                        ${roomVisitedQuery}
 
                         WHERE gameID = ${gameID}`;
 
@@ -669,3 +718,90 @@ async function savePreferences() {
 }
 
 
+document.getElementById('useItemBtn').addEventListener('click', function () {
+    if (selectedItemID == null) {
+        setResponse("You must select an item before you can use it");
+        return;
+    }
+
+    let currentRoom = sessionStorage.getItem("currentRoom");
+    let validItemUse = false;
+
+    switch (currentRoom) {
+        case "downStairsHall.html":
+            break;
+        case "guestBedroom.html":
+            break;
+        case "kitchen.html":
+            break;
+        case "livingRoom.html":
+            break;
+        case "masterBedroom.html":
+            break;
+        case "OutsideHouse.html":
+            if (currentState == frontOfHouseDoorLocked || currentState == frontOfHouseDoorUnlocked) {
+                if (doorUnlocked == false && selectedItemID == keyID) {
+                    setResponse('You have unlocked the door.');
+                    doorUnlocked = true;
+                    sessionStorage.setItem('frontDoorUnlocked', JSON.stringify(doorUnlocked));
+                    validItemUse = true;
+                }
+                else if (doorUnlocked == true && selectedItemID == keyID) {
+                    setResponse('You have locked the door again.');
+                    validItemUse = true;
+                    doorUnlocked = false;
+                    sessionStorage.setItem('frontDoorUnlocked', JSON.stringify(doorUnlocked));
+                }
+            }
+            break;
+        case "study.html":
+            if (currentState == studyDefault && selectedItemID == lockpickID) {
+                document.getElementById(LockPickGameContainer).style.display = "flex";
+                validItemUse = true;
+            }
+            break;
+        case "upstairsHall.html":
+            break;
+        default:
+            console.error("Room not found!");
+    }
+
+    if (selectedItemID == ringID) {
+        validItemUse = true;
+        setResponse("You have tried on the ring... for investigative purposes of course!");
+
+        if (userAchievementIDs.some(achievement => achievement.achievementID == 3) == false) {
+            awardAchievement(3, userID, "Images/ring.png");
+        }
+    }
+
+
+    if (validItemUse == false) {
+        setResponse("That didn't seem to work, maybe I should try something else?");
+    }
+
+});
+
+
+
+
+async function submitEvidence() {
+    let clue1 = clueList.some(clue => clue.clueID == rubbishClueID);
+    let clue2 = clueList.some(clue => clue.clueID == rubbishClueID);
+    let clue3 = clueList.some(clue => clue.clueID == rubbishClueID);
+    let clue4 = clueList.some(clue => clue.clueID == rubbishClueID);
+    let hasMurderWeapon = inventory.some(item => item.itemID == knifeItemID);
+
+
+    if (clue1 && clue2 && clue3 && clue4 && hasMurderWeapon) {
+        sessionStorage.setItem("status", gameWin);
+        await saveGame();
+        window.location.replace("mainMenu.html");
+
+    }
+    else {
+        sessionStorage.setItem("status", gameLoss);
+    }
+
+
+}

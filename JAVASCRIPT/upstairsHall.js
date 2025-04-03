@@ -46,17 +46,15 @@ function goToAttic() {
 }
 
 function goToMasterBedroom() {
-    sessionStorage.setItem('currentRoom','masterBedroom.html');
-    sessionStorage.setItem('currentState', 1);
-    window.location.replace('masterBedroom.html');
+    goToNextRoom('masterBedroom.html',1);
 }
 
 function goToGuestBedroom() {
-    //window.location.replace( '';
+    sessionStorage.setItem('currentState',1);
+    window.location.replace('guestBedroom.html');
 }
 
 function goToDownStairs() {
-    sessionStorage.setItem('currentRoom','downStairsHall.html');
-    sessionStorage.setItem('currentState', 4);
-    window.location.replace('downStairsHall.html');
+    
+    goToNextRoom('downStairsHall.html',4);
 }

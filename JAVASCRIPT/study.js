@@ -49,9 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 })
 
 function leaveStudy(){
-    sessionStorage.setItem('currentRoom','downStairsHall.html');
-    window.location.replace('downStairsHall.html');
-    sessionStorage.setItem('currentState', 4);
+    goToNextRoom('downStairsHall.html',4);
 }
 
 function checkPictureFrame(){
@@ -70,23 +68,7 @@ function searchDrawers(){
     setResponse("The top drawer is locked. Maybe I could get in somehow...");
 }
 
-document.getElementById('useItemBtn').addEventListener('click', function () {
 
-
-    if (selectedItemID != null) {
-        if (selectedItemID == lockpickID) {
-            document.getElementById(LockPickGameContainer).style.display = "flex";
-        }
-        else {
-            setResponse("");
-        }
-    }
-    else {
-
-        setResponse("You must select an item before you can use it");
-    }
-
-})
 
 function turnOnComputer(){
     let button = document.getElementById(responseId);

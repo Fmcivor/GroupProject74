@@ -169,8 +169,10 @@ async function searchDrawers(){
     else{
         hasWeddingRingClue = true;
         await addClue(3);
+        await addItem(ringID);
+        UpdateInventory();
         updateClueNotebook();
-        setResponse("You have found an engagement ring on the table and Victor has no known past relationships. You take note of this in your notebook as a clue");
+        setResponse("You have found a wedding ring, but why was it lying here in the drawer? It looks like the relationship between the Margaret and Charles was not as perfect as it seemed.");
 
     }
 }
@@ -181,38 +183,23 @@ function goToBackOfHall(){
 }
 
 async function goToLivingRoom(){
-    sessionStorage.setItem("currentState",1);
-    sessionStorage.setItem("currentRoom","livingRoom.html");
-    await saveGame();
-    window.location.replace("livingRoom.html");
+    goToNextRoom('livingRoom.html',1);
 }
 
 async function goToKitchen(){
-    sessionStorage.setItem('currentState',1);
-    sessionStorage.setItem('currentRoom','kitchen.html');
-    await saveGame();
-    window.location.replace('kitchen.html');
+    goToNextRoom('kitchen.html',1);
 }
 
 async function goUpstairs(){
-    sessionStorage.setItem('currentState',1);
-    sessionStorage.setItem('currentRoom','upstairsHall.html');
-    await saveGame();
-    window.location.replace('upstairsHall.html');
+    goToNextRoom('upstairsHall.html',1);
 }
 
 async function goToStudy(){
-    sessionStorage.setItem('currentState',1);
-    sessionStorage.setItem('currentRoom','study.html');
-    await saveGame();
-    window.location.replace('study.html');
+    goToNextRoom('study.html',1);
 }
 
 async function GoOutside(){
-    sessionStorage.setItem("currentState",1);
-    sessionStorage.setItem('currentRoom','OutsideHouse.html');
-    await saveGame();
-    window.location.replace('OutsideHouse.html');
+    goToNextRoom('OutsideHouse.html',1);
 }
 
 
