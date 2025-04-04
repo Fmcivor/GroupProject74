@@ -41,6 +41,7 @@ const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
 const emailClueID = 7;
+const drawerClueID = 8;
 
 
 //VARIABLES
@@ -823,6 +824,7 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         case "study.html":
             if (currentState == studyDefault && selectedItemID == lockpickID) {
                 document.getElementById('LockPickGameContainer').style.display = "flex";
+                setResponse("Click when the moving box is on the red line to unlock the drawer.");
                 validItemUse = true;
             }
             break;
