@@ -374,7 +374,6 @@ GROUP BY tblGameSave.userID;
 
         if (result.success) {
             let stats = result.data[0];
-
             document.getElementById("totalTimePlayed").textContent = stats.totalTimePlayed;
             document.getElementById("avgTimeToWin").textContent = stats.averageToWin;
             document.getElementById("itemCount").textContent = stats.numOfItemsCollected;
@@ -387,7 +386,6 @@ GROUP BY tblGameSave.userID;
             document.getElementById("totalGamesPlayed").textContent = stats.totalGames;
             document.getElementById("avgRepairAttempts").textContent = stats.avgNoOfRepairAttempts;
             document.getElementById("mostVisitedRoom").textContent = stats.mostVisitedRoom;
-
         }
         else {
             console.error("it broke");

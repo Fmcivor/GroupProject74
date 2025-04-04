@@ -345,14 +345,31 @@ function openSafeHandler() {
     }
 }
 
-function addKnifeEvidence() {
-    addClue(knifeClueID);
-    addItem(knifeItemID);
-    hasKnife = true;
-    setResponse(`You take the knife out of the safe and feel proud of yourself, 
-                with this piece of evidence you are surely one step closer to catching the killer`)
-    evidenceButton.removeEventListener("click", addKnifeEvidence);
-    evidenceButton.style.display = 'none';
+async function addKnifeEvidence() {
+    if (hasKnife) {
+        setResponse("You have already taken the knife out of the safe")
+        return;
+    }
+    else{
+        inventory.filter(item => item.itemUsed == false).length;
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the knife. HINT try using an item to get rid of it.");
+        }
+        else {
+
+            hasKnife = true;
+            await addItem(knifeItemID);
+            await addClue(knifeClueID);
+            setResponse("There is a large golden key here and you lift it");
+            setResponse(`You take the knife out of the safe and feel proud of yourself, 
+                with this piece of evidence you are surely one step closer to catching the killer`);
+            evidenceButton.removeEventListener("click", addKnifeEvidence);
+            evidenceButton.style.display = 'none';
+        }
+    }
+    
+    
+    
 }
 
 
@@ -360,6 +377,7 @@ function addKnifeEvidence() {
 //GAME STATES
 
 const enteredMasterBedroom = {
+    "ID":1,
     "room": "Master Bedroom",
     "description": `You have entered the master bedroom, in the center of the room you see a large bed with red accents on a rich red rug.  
                     A safe stands beside a dresser with a clock and plant.  
@@ -391,6 +409,7 @@ const enteredMasterBedroom = {
 }
 
 const openingSafe = {
+    "ID": 2,
     "room": "Master Bedroom",
     "description": `You decide to try to open the safe but don't know the code.\n
                     perhaps you can find it somewhere in the house`,
@@ -418,18 +437,25 @@ function hideSafe() {
     updateState();
 }
 
-function searchBedsideTable() {
+async function searchBedsideTable() {
     if(hasLockpick){
         setResponse("You double check the bedside table, but theres nothing of interest left in them")
     }
     else {
-        setResponse("You look inside the bedside table and find a lockpick! You decide to take it with you as you're sure it'll come in handy")
-        addItem(lockpickID)
+        inventory.filter(item => item.itemUsed == false).length;
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the key. HINT try using an item to get rid of it.");
+        }
+        else {
+            hasLockpick = true;
+            await addItem(lockpickID);
+            setResponse("You look inside the bedside table and find a lockpick! You decide to take it with you as you're sure it'll come in handy");
+        }
     }
 }
 
 function investigateSafe() {
-    if(hasKnife) {
+    if(!hasKnife) {
         currentState = openingSafe;
         updateState();
         setDescriptionAndResponse(`
@@ -486,6 +512,8 @@ function higlightSelectedDial() {
             break;
     }
 }
+
+
 
 document.getElementById('useItemBtn').addEventListener('click', itemUsedHandler);
 

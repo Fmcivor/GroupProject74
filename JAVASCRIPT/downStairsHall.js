@@ -167,13 +167,17 @@ async function searchDrawers(){
         setResponse("You have already searched the drawers and papers and found the wedding ring");
     }
     else{
-        hasWeddingRingClue = true;
-        await addClue(3);
-        await addItem(ringID);
-        UpdateInventory();
-        updateClueNotebook();
-        setResponse("You have found a wedding ring, but why was it lying here in the drawer? It looks like the relationship between the Margaret and Charles was not as perfect as it seemed.");
-
+        inventory.filter(item => item.itemUsed == false).length;
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the ring. HINT try using an item to get rid of it.");
+        }
+        else{
+            hasWeddingRingClue = true;
+            await addItem(ringID);
+            await addClue(3);
+            setResponse("You have found a wedding ring, but why was it lying here in the drawer? It looks like the relationship between the Margaret and Charles was not as perfect as it seemed.");
+            
+        }
     }
 }
 
