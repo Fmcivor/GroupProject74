@@ -61,8 +61,10 @@ async function getplayTime() {
             startDate = stats.startDate
             startTime = result.startTime
 
-            playTimeDisplay.textContent = `Play Time: ${timeToComplete}`;
-            saveStartedDisplay.textContent = `Save Started: ${startDate}, ${startTime}`;
+
+            playTimeDisplay.textContent = `${timeToComplete}`;
+            saveStartedDisplay.textContent = `${startDate}, ${startTime}`;
+
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -88,7 +90,7 @@ async function getAvgTimes() {
 
         if (result.success && result.data.length > 0) {
             avgTimeToComplete = result.data[0].averageTimeToComplete;
-            averageTTWDisplay.textContent = `Average time to complete: ${avgTimeToComplete}`;
+            averageTTWDisplay.textContent = `${avgTimeToComplete}`;
     
         }
         else {
@@ -113,7 +115,7 @@ async function getAvgTimes() {
 
         if (result.success && result.data.length > 0) {
             globalAvgTimeCompletion = result.data[0].globalAverageTimeToComplete;
-            globalAverageTTWDisplay.textContent = `Global Average Time to Complete: ${globalAvgTimeCompletion}`;
+            globalAverageTTWDisplay.textContent = `${globalAvgTimeCompletion}`;
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -139,7 +141,7 @@ async function getItemsAndClues() {
         if (result.success && result.data.length > 0) {
             itemsCollected = result.data[0].noItemsCollected;
 
-            itemsCollectedDisplay.textContent = `Items Collected: ${itemsCollected}/${numOfItems}`;
+            itemsCollectedDisplay.textContent = `${itemsCollected}/${numOfItems}`;
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -163,7 +165,8 @@ async function getItemsAndClues() {
         if (result.success && result.data.length > 0) {
             cluesCollected = result.data[0].noCluesCollected;
 
-            cluesFoundDisplay.textContent = `Clues Found: ${cluesCollected}/${numOfClues}`;           
+            cluesFoundDisplay.textContent = `${cluesCollected}/${numOfClues}`;           
+
         }
         else {
             console.error("Unable to retrieve stats form the database");
@@ -194,8 +197,10 @@ async function getRooms() {
                     completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
                     completion = completion * 100;
 
-                    completionDisplay.textContent = `Completion%: ${completion}%`;
-                    roomsVisitedDisplay.textContent = `Rooms Found: ${roomsVisited}/${numOfRooms}`;
+
+                    completionDisplay.textContent = `${completion}%`;
+                    roomsVisitedDisplay.textContent = `${roomsVisited}/${numOfRooms}`;
+
                 }
             }
         }

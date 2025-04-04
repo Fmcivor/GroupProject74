@@ -39,7 +39,7 @@ body::before {
     color: white;
     font-size: 20px;
     height: 70%;
-    width: 35%;
+    width: 37%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,4 +70,9 @@ button:hover{
     flex-direction: row;
     width: 100%;
     align-items: baseline;
+}
+
+a {
+    color: rgb(61, 226, 255)
+
 }

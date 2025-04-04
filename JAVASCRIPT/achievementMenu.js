@@ -42,7 +42,7 @@ async function displayAllAchievements() {
             achievements.forEach(achievement => {
                 let achievementHTML = `<div class="achievement-wrapper">
             <div id="achievement${achievement.achievementID}" class="achievement">
-                <h2>${achievement.name}</h2>
+                <h3>${achievement.name}</h3>
                 <span class="description">${achievement.description}</span>
             </div>`;
                 achievementsContainer.innerHTML += achievementHTML;

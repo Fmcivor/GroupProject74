@@ -386,6 +386,9 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
             body: dbConfig
         });
 
+        let insertResult = await response.json();
+        if (insertResult.success) {
+
 
 
 
@@ -412,6 +415,10 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
             console.log("Error retrieving achievement data");
             console.log(error);
         }
+    }
+    else{
+        console.error("Error saving the achievement to the database")
+    }
 
     } catch (error) {
         console.log("Error setting achievement");

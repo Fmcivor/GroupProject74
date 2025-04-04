@@ -5,19 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buried Secrets - Introduction</title>
     <link rel="stylesheet" href="CSS/endingGeneral.css">
+
+    <link rel="stylesheet" href="CSS/endingStats.css">
 </head>
 <body>
     <div class="endingContainer">
-        <div class="endingBox">
-           <h1>Game Stats</h1>
-           <p id="playTimeDisplay"></p>
-           <p id="saveStartedDisplay"></p>
-           <p id="averageTTWDisplay"></p>
-           <p id="globalAverageTTWDisplay"></p>
-           <p id="completionDisplay"></p>
-           <p id="roomsVisitedDisplay"></p>
-           <p id="cluesFoundDisplay"></p>
-           <p id="itemsCollectedDisplay"></p>
+        <div id="statsEndingBox" class="endingBox">
+            <h1>Game Stats</h1>
+            <div id="statWrapper">
+            <p>
+                <b>Play Time:</b>
+                <span id="playTimeDisplay"></span>
+            </p>
+            <p>
+                <b>Save Started:</b>
+                <span id="saveStartedDisplay"></span>
+            </p>
+            <p>
+                <b>Average time to complete:</b>
+                <span id="averageTTWDisplay"></span>
+            </p>
+            <p >
+                <b>Global Average Time to Complete:</b>
+                <span id="globalAverageTTWDisplay"></span>
+            </p>
+            <p>
+                <b>Completion%: </b>
+                <span id="completionDisplay"></span>
+            </p>
+            <p>
+                <b>Rooms Found: </b>
+                <span id="roomsVisitedDisplay"></span>
+            </p>
+            <p>
+                <b>Clues Found:</b>
+                <span id="cluesFoundDisplay"></span>
+            </p>
+            <p>
+                <b>Items Collected:</b>
+                <span id="itemsCollectedDisplay"></span>
+            </p>
+        </div>
+            
 
             <a href="endGame.html">Return to End Screen</a>
             <button id="startGame">Back to Menu</button>

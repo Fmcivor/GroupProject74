@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
 
-    states.push(studyDefault,computerLoginScreen);
+    states.push(studyDefault,computerLoginScreen,computerUnlocked);
   
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     states.forEach(state => {
@@ -106,6 +106,23 @@ const computerLoginScreen = {
     ]
 }
 
+const computerUnlocked = {
+    "ID": 3,
+    "room": "Study",
+    "description": `The computer unlocks. An email is displayed, dated just a few days before the death. The message reads: Charles,
+    It’s been too long. I hate how we left things, and I’d rather remember the years of friendship than the mistakes.
+    Let’s meet for a drink — no tension, just a proper conversation.
+    — Jonathan `,
+    "ImageHREF": "Images/computerLogin.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Turn off computer",
+            "response": goToStudy
+        },
+    ]
+}
+
 function goToStudy(){
     currentState = studyDefault;
     updateState();
@@ -123,7 +140,8 @@ function checkPassword() {
     closeModal();
 
     if (input === correctPassword) {
-        setResponse("The computer unlocks. Files and folders fill the screen, waiting to be explored.");
+        sessionStorage.setItem('currentState', 3);
+
     } else {
         setResponse("Incorrect Password");
     }
