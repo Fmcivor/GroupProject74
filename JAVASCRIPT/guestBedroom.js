@@ -1,14 +1,14 @@
-let hasPillBottle = inventory.some(item=>item.itemID ==pillBottleID);
-let hasGlassClue = clueList.some(clue =>clue.clueID ==6);
-let hasFlashLight = clueList.some(item=>item.itemID ==flashLightID);
+let hasPillBottle = inventory.some(item => item.itemID == pillBottleID);
+let hasGlassClue = clueList.some(clue => clue.clueID == 6);
+let hasFlashLight = clueList.some(item => item.itemID == flashLightID);
 
 document.addEventListener('DOMContentLoaded', function () {
     let states = [guestBedroom, nightStandState, wardrobeState, underBedState];
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    
+
     // Find the matching state or default to guestBedroom
     currentState = states.find(state => state.ID === currentStateID) || guestBedroom;
-    
+
     updateState();
 });
 
@@ -60,7 +60,7 @@ const nightStandState = {
         {
             "id": 2,
             "Text": "Go back",
-            "response": function(){
+            "response": function () {
                 currentState = guestBedroom;
                 sessionStorage.setItem('currentState', guestBedroom.ID);
                 updateState();
@@ -73,20 +73,20 @@ const wardrobeState = {
     "ID": 3,
     "room": "Guest Bedroom",
     "description": `The wardrobe doors creak open, revealing a collection of outdated dresses and suits along with a suitcase. The scent of faded perfume clings to the fabric.`,
-    "ImageHREF":"Images/wardrobe.jpg",
+    "ImageHREF": "Images/wardrobe.jpg",
     "interactions": [
         {
             "id": 0,
             "Text": "Rummage through the suits",
-            "response": function(){
+            "response": function () {
                 setResponse("You don't find anything of use in the suits.");
             }
         },
 
         {
-            "id":1,
+            "id": 1,
             "Text": "Open the suitcase",
-            "response": function(){
+            "response": function () {
                 setResponse("You find a receipt of a train ticket belonging to Margaret dated a day after Charles death. Why would she plan to leave so soon after?")
             }
 
@@ -96,7 +96,7 @@ const wardrobeState = {
         {
             "id": 2,
             "Text": "Go back",
-            "response": function(){
+            "response": function () {
                 currentState = guestBedroom;
                 sessionStorage.setItem('currentState', guestBedroom.ID);
                 updateState();
@@ -115,13 +115,13 @@ const underBedState = {
             "id": 0,
             "Text": "Move your hand around",
             "response": moveHandAround
-                
-            
+
+
         },
         {
             "id": 1,
             "Text": "Go back",
-            "response": function(){
+            "response": function () {
                 currentState = guestBedroom;
                 sessionStorage.setItem('currentState', guestBedroom.ID);
                 updateState();
@@ -133,10 +133,10 @@ const underBedState = {
 const pillBottleChoiceState = {
     "ID": 5,
     "room": "GuestBedroom",
-    "ImageHREF":"Images/nightstand.jpg",
+    "ImageHREF": "Images/nightstand.jpg",
     "description": "You examine the nearly empty pill bottle. The label is partially torn, but you can still read:\n\n" +
-    "'including dizziness, confusion, and—if taken in excess—respiratory failure.'\n\n" + "This may be useful to take.",
-    "interactions":[
+        "'including dizziness, confusion, and—if taken in excess—respiratory failure.'\n\n" + "This may be useful to take.",
+    "interactions": [
         {
             "id": 0,
             "Text": "Take the pill bottle",
@@ -150,7 +150,7 @@ const pillBottleChoiceState = {
         {
             "id": 2,
             "Text": "Go back",
-            "response": function(){
+            "response": function () {
                 currentState = guestBedroom;
                 sessionStorage.setItem('currentState', guestBedroom.ID);
                 updateState();
@@ -163,28 +163,28 @@ const pillBottleChoiceState = {
 document.addEventListener('DOMContentLoaded', function () {
     let states = [guestBedroom, nightStandState, wardrobeState, underBedState];
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    
+
     // Find the matching state or default to guestBedroom
     currentState = states.find(state => state.ID === currentStateID) || guestBedroom;
-    
+
     updateState();
 });
 
 
 function checkNightstand() {
-    currentState = nightStandState; 
+    currentState = nightStandState;
     sessionStorage.setItem('currentState', nightStandState.ID);
     updateState();
 }
 
 function examineWardrobe() {
-    currentState = wardrobeState; 
+    currentState = wardrobeState;
     sessionStorage.setItem('currentState', wardrobeState.ID);
     updateState();
 }
 
 function checkUnderBed() {
-    currentState = underBedState; 
+    currentState = underBedState;
     sessionStorage.setItem('currentState', underBedState.ID);
     updateState();
 }
@@ -193,17 +193,18 @@ function goToHall() {
     goToNextRoom('upstairsHall.html', 1);
 }
 
-async function openDrawer(){
-    if(hasGlassClue) {
+async function openDrawer() {
+    if (hasGlassClue) {
         setResponse("You have already searched the drawer and taken note of the missing shard");
     } else {
-    hasGlassClue = true;
-    await addClue(6);
-    updateClueNotebook();
-    setResponse("Your eyes are drawn to a photoframe. The frame sadly lies in disarray, its glass shattered around it. A photo of Charles and Margaret once happy is still partially visible. You notice that the shards look sparce and so piece together what is left to see that there is a gap in the form of a large, pointed piece of glass. Surely not?");
-}}
+        hasGlassClue = true;
+        await addClue(6);
+        updateClueNotebook();
+        setResponse("Your eyes are drawn to a photoframe. The frame sadly lies in disarray, its glass shattered around it. A photo of Charles and Margaret once happy is still partially visible. You notice that the shards look sparce and so piece together what is left to see that there is a gap in the form of a large, pointed piece of glass. Surely not?");
+    }
+}
 
-function moveHandAround(){
+async function moveHandAround() {
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
@@ -212,16 +213,22 @@ function moveHandAround(){
         setResponse("There is nothing under here the flashlight has already been taken");
     }
     else {
-        setResponse("Your hand brushes past an object which you lift. It's a flash light which you decide to add to your inventory. This could come in handy...");
-        addItem(flashLightID);
-        hasFlashLight = true;
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the flashlight. HINT try using an item to get rid of it.");
+        }
+        else {
+            hasFlashLight = true;
+            await addItem(flashLightID);
+            setResponse("Your hand brushes past an object which you lift. It's a flash light which you decide to add to your inventory. This could come in handy...");
+        }
+        
     }
 }
 
 
 
-async function examinePillBottle(){
-   
+async function examinePillBottle() {
+
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153,153,153)';
@@ -232,18 +239,24 @@ async function examinePillBottle(){
         currentState = pillBottleChoiceState;
         updateState();
         setResponse("You examine the nearly empty pill bottle. The label is partially torn, but you can still read:\n\n" +
-    "'including dizziness, confusion, and—if taken in excess—respiratory failure.'\n\n" + "This may be useful to take"
-   
-     
+            "'including dizziness, confusion, and—if taken in excess—respiratory failure.'\n\n" + "This may be useful to take"
+
+
         );
     }
 }
 
-function takePillBottle() {
+async function takePillBottle() {
     if (!hasPillBottle) {
-        addItem(pillBottleID);
-        hasPillBottle = true;
-        setResponse("You take the pill bottle and add it to your inventory.");
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the flashlight. HINT try using an item to get rid of it.");
+        }
+        else {
+            hasPillBottle = true;
+            await addItem(pillBottleID);
+            setResponse("You take the pill bottle and add it to your inventory.");
+        }
+        
     } else {
         setResponse("You already have the pill bottle in your inventory.");
     }
