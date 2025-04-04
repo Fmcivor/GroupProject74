@@ -41,6 +41,7 @@ const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
 const emailClueID = 7;
+const drawerClueID = 8;
 
 
 //VARIABLES
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // }
         // else {
 
-
+        document.getElementById('slider').value = sessionStorage.getItem("fontSize");
         let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
         if (easyReadOn == true) {
             document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
@@ -252,7 +253,9 @@ function updateState() {
 
 function userDecisionHandler(event) {
     responseId = event.target.id;
-
+    let button = document.getElementById(responseId);
+    button.style.color = 'rgb(153, 153, 153)';
+    button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
     if (typeof currentState.interactions[responseId].response === 'string') {
         setResponse(currentState.interactions[responseId].response);
@@ -747,9 +750,11 @@ async function savePreferences() {
     sessionStorage.setItem("fontSize", fontSlider.value);
     sessionStorage.setItem("easyReadOn", easyReadOn);
     if (easyReadOn == true) {
+        document.documentElement.style.fontFamily = 'Arial, Helvetica, sans-serif';
         document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
     }
     else {
+        document.documentElement.style.fontFamily = '"merriweather", serif';
         document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
     }
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
@@ -780,6 +785,7 @@ async function savePreferences() {
 
 
 document.getElementById('useItemBtn').addEventListener('click', async function () {
+
     if (selectedItemID == null) {
         setResponse("You must select an item before you can use it");
         return;
@@ -818,6 +824,7 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         case "study.html":
             if (currentState == studyDefault && selectedItemID == lockpickID) {
                 document.getElementById('LockPickGameContainer').style.display = "flex";
+                setResponse("Click when the moving box is on the red line to unlock the drawer.");
                 validItemUse = true;
             }
             break;
@@ -894,19 +901,27 @@ async function submitEvidence() {
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
+    let accused  = 'victor';
+
     sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-    if (knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
+    if (accused == 'victor' && knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
         sessionStorage.setItem("status", gameWin);
         sessionStorage.setItem("currentRoom", "endGameWin.html");
         await saveGame();
         window.location.replace("endGameWin.html");
     }
     else {
-        sessionStorage.setItem("status", gameLoss);
+        if (accused != 'victor') {
+            sessionStorage.setItem("status", gameLoss);
         sessionStorage.setItem("currentRoom", "endGame.html");
         await saveGame();
         window.location.replace("endGame.html");
+        }
+        else{
+            //insufficient evidence
+        }
+        
     }
 }
 

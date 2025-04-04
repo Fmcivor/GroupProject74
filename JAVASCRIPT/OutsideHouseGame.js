@@ -173,19 +173,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    states.forEach(state => {
-        if (state.ID == currentStateID) {
-            if (state.ID == 1 && doorUnlocked) {
-                currentState = frontOfHouseDoorUnlocked;
-                currentStateID = frontOfHouseDoorUnlocked.ID;
-            }
-            else {
-                currentState = state;
+    currentState = states.find(state => state.ID == currentStateID) || frontOfHouseDoorLocked;
 
-            }
-            return;
-        }
-    });
+    if (currentState.ID == frontOfHouseDoorLocked.ID && doorUnlocked == true) {
+        currentState = frontOfHouseDoorUnlocked;
+    }
+    else if (currentState.ID == frontOfHouseDoorUnlocked.ID && doorUnlocked == false) {
+        currentState = frontOfHouseDoorLocked;
+    }
 
     updateState();
 
@@ -311,7 +306,7 @@ function FixGenerator() {
     count = 0;
     startRepairButton.style.display = 'block';
     repairButton.style.display = 'none';
-    setResponse("You must click on the repair button when the line is in the red zone 3 times. You have 2 miss hits before you have to try again");
+    setResponse("You must click on the repair button when the line is in the red zone 5 times. You have 2 miss hits before you have to try again");
 
     document.getElementById('GeneratorGameContainer').style.display = 'flex';
 

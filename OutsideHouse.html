@@ -57,7 +57,7 @@
 
                         <div class="slideContainer">
                             <label for="fontSize" id="fontSizeLabel">Font Size</label>
-                            <input type="range" id="slider" min="12" max="24">
+                            <input type="range" id="slider" min="8" max="24">
                             <div class="sampleTextContainer">
                                 <p id="sampleText" style="font-size: 1rem;">This text is an example of the base text
                                     size </p>
@@ -200,10 +200,20 @@
 
         <div class="submitEvidencePopUp" id="evidencePopUp">
             <div class="submitEvidencePopUpContent">
-                <p>Are you sure you want to submit evidence now. This will decide the case!</p>
-                <div class="confirmationBtnContainer">
-                    <button class="confirmationBtn" onclick="submitEvidence()">Yes</button>
-                    <button class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+                <div id="suspectSelectTextWrapper">
+                    <h2>Select which suspect to accuse:</h2>
+                </div>
+                <div id="selectImagesWrapper">
+                    <button id="victorButton" class="suspectButton"></button>
+                    <button id="margaretButton" class="suspectButton"></button>
+                    <button id="jonathanButton" class="suspectButton"></button>
+                </div>
+                <div id="confirmationWrapper">
+                    <p>Are you sure you want to submit evidence now. This will decide the case and end the game!</p>
+                    <div class="confirmationBtnContainer">
+                        <button class="confirmationBtn" onclick="submitEvidence()">Yes</button>
+                        <button class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+                    </div>
                 </div>
             </div>
         </div>
