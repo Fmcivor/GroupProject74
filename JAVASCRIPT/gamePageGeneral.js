@@ -341,6 +341,7 @@ function UpdateInventory() {
     let slotCount = 1;
     for (let i = 0; i < inventory.length; i++) {
         
+        
         if (inventory[i] != null && inventory[i].itemUsed == false) {
             const slot = document.getElementById(`slot${slotCount}`);
             let itemBtn = document.createElement('button');
@@ -516,12 +517,9 @@ function updateClueNotebook() {
 
 
 async function addItem(itemID) {
-    if (unusedItemCount.length ==6) {
-        return false;
-    }
+    
 
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
-    let itemAddedToSessionStorageInventory = false;
 
     dbConfig.set('query', query);
 
@@ -540,7 +538,6 @@ async function addItem(itemID) {
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
             UpdateInventory();
-            itemAddedToSessionStorageInventory = true;
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
                                 VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
@@ -578,8 +575,6 @@ async function addItem(itemID) {
         clearInterval(notificationTimer);
         inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
     }, 2400);
-
-    return itemAddedToSessionStorageInventory;
 }
 
 
@@ -601,7 +596,6 @@ async function saveGame() {
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-
 
 
     let updateQuery = `UPDATE tblGameSave SET
