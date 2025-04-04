@@ -36,12 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     states.push(studyDefault,computerLoginScreen,computerUnlocked);
   
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    states.forEach(state => {
-        if (state.ID == currentStateID) {
-            currentState = state;
-            return;
-        }
-    });
+    currentState = states.find(state => state.ID == currentStateID) || studyDefault;
     
     updateState();
 })

@@ -1,6 +1,11 @@
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function () {
-    currentState = enteredLivingRoom;
+    let states = [];
+
+    states.push(enteredLivingRoom, satOnSofa, satOnSofaAgain, standUpFromSofa);
+
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    currentState = states.find(state => state.ID == currentStateID) || enteredLivingRoom;
     updateState();
     getSessionStorage();
 
@@ -35,6 +40,7 @@ async function getSessionStorage(){
 //CONSTANTS
 
 const pickUpLetterButton = document.getElementById('burntLetter');
+pickUpLetterButton.addEventListener('click', pickUpLetter);
 const letterContainer = document.getElementById('letterContainer')
 
 const button = document.getElementById('burntLetter');
@@ -252,6 +258,7 @@ function pickUpLetter() {
 
 function addLettertoNoteBook() {
     letterContainer.classList.add('hide'); 
+    document.documentElement.removeEventListener('click',addLettertoNoteBook);
     addClue(2);
 
 }
