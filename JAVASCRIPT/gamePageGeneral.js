@@ -568,6 +568,7 @@ async function saveGame() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
+    let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
@@ -614,7 +615,7 @@ async function saveGame() {
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-
+                        atticLightingOn = ${atticLightingOn},
 
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},

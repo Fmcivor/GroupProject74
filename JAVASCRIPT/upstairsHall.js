@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 UpdateInventory();
 
+let atticLightingOn = sessionStorage.getItem('atticLightingOn');
+
 
 
 //GAME STATES
@@ -42,7 +44,13 @@ const upstairsHall = {
 
 //STATE FUNCTIONS
 function goToAttic() {
-    goToNextRoom('attic.html',1);
+    if (atticLightingOn) {
+        goToNextRoom('attic.html',2);
+    }
+    else{
+        goToNextRoom('attic.html',1);
+    }
+    
 }
 
 function goToMasterBedroom() {

@@ -115,6 +115,7 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn',gameSave.lightingOn);
             sessionStorage.setItem('status',gameSave.status);
+            sessionStorage.setItem('atticLightingOn',gameSave.atticLightingOn);
             sessionStorage.setItem('gameSessionStartTime',Date.now());
             console.log("game save id retrieved:",gameSave.gameID);
             window.location.href = 'introduction.html';
