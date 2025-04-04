@@ -40,6 +40,7 @@ const burntLetterClueID = 2;
 const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
+const emailClueID = 7;
 
 
 //VARIABLES
@@ -74,6 +75,7 @@ deleteAndExit.addEventListener('click', async function () {
     window.location.href = "mainMenu.html";
 
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
@@ -815,7 +817,7 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             break;
         case "study.html":
             if (currentState == studyDefault && selectedItemID == lockpickID) {
-                document.getElementById(LockPickGameContainer).style.display = "flex";
+                document.getElementById('LockPickGameContainer').style.display = "flex";
                 validItemUse = true;
             }
             break;
@@ -868,6 +870,11 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
 
 
 document.getElementById('submitEvidenceBtn').addEventListener('click', async function () {
+    document.getElementById("evidencePopUp").style.display = "flex";
+
+});
+
+async function submitEvidence() {
     let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
     let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
@@ -885,10 +892,10 @@ document.getElementById('submitEvidenceBtn').addEventListener('click', async fun
         sessionStorage.setItem("status", gameLoss);
         sessionStorage.setItem("currentRoom", "endGame.html");
         await saveGame();
-        window.location.replace("endGameLose.html");
+        window.location.replace("endGame.html");
     }
+}
 
-});
-
-
-
+function closeSubmitEvidencePopUp() {
+    document.getElementById("evidencePopUp").style.display = "none";
+}
