@@ -167,7 +167,6 @@ async function searchDrawers(){
         setResponse("You have already searched the drawers and papers and found the wedding ring");
     }
     else{
-        inventory.filter(item => item.itemUsed == false).length;
         if (inventory.filter(item => item.itemUsed == false).length == 6) {
             setResponse("You must drop an item before you can pick up the ring. HINT try using an item to get rid of it.");
         }

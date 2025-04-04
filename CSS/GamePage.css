@@ -355,6 +355,8 @@ form{
     font-family: inherit;
 }
 
+/* INVENTORY */
+
 .inventoryGrid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -416,6 +418,8 @@ form{
     color: black;
     background-color: rgb(190, 115, 54);
 }
+
+/* NOTEBOOK SECTION */
 
 .notebookSection {
     display: flex;
@@ -946,6 +950,21 @@ p {
     }
 
     .toolBarIcon {
+        display: flex;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        flex: 1;
+        text-align: center;
+        width: fit-content;
+        margin: auto;
+        height: 100%;
+        border-width: 5px 5px 0 5px;
+        border-radius: 20px 20px 0 0;
+        margin: 0;
+    }
+
+    .toolBarBtn{
         display: flex;
         justify-content: center;
         color: white;

@@ -50,7 +50,7 @@ const leftKitchen = {
             "response": enterHallway
         },
         {
-            "id": 3,
+            "id": 2,
             "Text": "Return to kitchen",
             "response": returnToKitchen
         }

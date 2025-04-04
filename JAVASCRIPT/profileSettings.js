@@ -82,7 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     displayStats();
 
+    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
+
 });
+
 
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);

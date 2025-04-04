@@ -1,6 +1,6 @@
 let hasPillBottle = inventory.some(item => item.itemID == pillBottleID);
 let hasGlassClue = clueList.some(clue => clue.clueID == 6);
-let hasFlashLight = clueList.some(item => item.itemID == flashLightID);
+let hasFlashLight = inventory.some(item => item.itemID == flashLightID);
 
 document.addEventListener('DOMContentLoaded', function () {
     let states = [guestBedroom, nightStandState, wardrobeState, underBedState];
