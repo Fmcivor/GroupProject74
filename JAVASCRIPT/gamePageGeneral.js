@@ -40,6 +40,7 @@ const burntLetterClueID = 2;
 const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
+const emailClueID = 7;
 
 
 //VARIABLES
