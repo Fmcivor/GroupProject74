@@ -393,6 +393,9 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
             body: dbConfig
         });
 
+        let insertResult = await response.json();
+        if (insertResult.success) {
+
 
 
 
@@ -419,6 +422,10 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
             console.log("Error retrieving achievement data");
             console.log(error);
         }
+    }
+    else{
+        console.error("Error saving the achievement to the database")
+    }
 
     } catch (error) {
         console.log("Error setting achievement");
@@ -586,7 +593,15 @@ async function saveGame() {
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
+<<<<<<< HEAD
     let status = sessionStorage.getItem("status");
+=======
+
+    let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
+
+    let status = sessionStorage.getItem("status");
+
+>>>>>>> b54777c7909ce7f0d1fb89fb36ba090006ac4baf
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
@@ -597,7 +612,7 @@ async function saveGame() {
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-
+                        atticLightingOn = ${atticLightingOn},
 
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
