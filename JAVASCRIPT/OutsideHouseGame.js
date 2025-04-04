@@ -173,19 +173,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    states.forEach(state => {
-        if (state.ID == currentStateID) {
-            if (state.ID == 1 && doorUnlocked) {
-                currentState = frontOfHouseDoorUnlocked;
-                currentStateID = frontOfHouseDoorUnlocked.ID;
-            }
-            else {
-                currentState = state;
+    currentState = states.find(state => state.ID == currentStateID) || frontOfHouseDoorLocked;
 
-            }
-            return;
-        }
-    });
+    if (currentState.ID == frontOfHouseDoorLocked.ID && doorUnlocked == true) {
+        currentState = frontOfHouseDoorUnlocked;
+    }
+    else if (currentState.ID == frontOfHouseDoorUnlocked.ID && doorUnlocked == false) {
+        currentState = frontOfHouseDoorLocked;
+    }
 
     updateState();
 

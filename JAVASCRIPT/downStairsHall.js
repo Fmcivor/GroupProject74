@@ -117,12 +117,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     states.push(downStairsHall,hallWall,downStairsHallLightsOn,BackOfHall);
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    states.forEach(state =>{
-        if (state.ID == currentStateID) {
-            currentState = state;
-            return;
-        }
-    });
+    currentState = states.find(state => state.ID == currentStateID) || downStairsHall;
 
     updateState();
 });

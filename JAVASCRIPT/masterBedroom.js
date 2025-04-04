@@ -300,7 +300,11 @@ function d4RotateRight(interval) {
 
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function() {
-    currentState = enteredMasterBedroom;
+    let states = [];
+
+    states.push(enteredMasterBedroom, openingSafe);
+
+    currentState = states.find(state => state.ID == currentStateID) || enteredMasterBedroom;
     updateState();
     randomiseDials();
 })

@@ -252,7 +252,9 @@ function updateState() {
 
 function userDecisionHandler(event) {
     responseId = event.target.id;
-
+    let button = document.getElementById(responseId);
+    button.style.color = 'rgb(153, 153, 153)';
+    button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
     if (typeof currentState.interactions[responseId].response === 'string') {
         setResponse(currentState.interactions[responseId].response);

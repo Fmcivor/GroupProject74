@@ -1,6 +1,10 @@
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function () {
-    currentState = enteredLivingRoom;
+    let states = [];
+
+    states.push(enteredLivingRoom, satOnSofa, satOnSofaAgain, standUpFromSofa);
+
+    currentState = states.find(state => state.ID == currentStateID) || enteredLivingRoom;
     updateState();
     getSessionStorage();
 
