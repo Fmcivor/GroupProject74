@@ -71,6 +71,14 @@ const attic = {
             "Text": "Search the boxes",
             "response": searchBoxes
         },
+
+        {
+            "id": 1,
+            "Text": "Pull down the cloth",
+            "response": pullDownCloth
+        },
+
+
         {
             "id": 1,
             "Text": "Leave the attic",
@@ -88,5 +96,9 @@ function goToHall() {
 }
 
 function searchBoxes() {
+
+}
+
+function pullDownCloth(){
 
 }
