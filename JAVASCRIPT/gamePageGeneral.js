@@ -868,7 +868,7 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
 
 
 document.getElementById('submitEvidenceBtn').addEventListener('click', async function () {
-    await submitEvidence();
+    document.getElementById("evidencePopUp").style.display = "flex";
 
 });
 
