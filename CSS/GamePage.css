@@ -1020,3 +1020,20 @@ p {
     pointer-events: none;
     display: block;
 }
+
+#atticContainer {
+    position: relative;
+    display: inline-block;
+}
+
+#lightSwitch {
+    position: absolute;
+    top: 40%; 
+    left: 59%; 
+    width: 40px;
+    height: 50px;
+    background: none;
+    z-index: 10;
+    border: none;
+    
+}
