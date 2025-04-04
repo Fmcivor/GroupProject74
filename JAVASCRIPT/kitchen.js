@@ -50,7 +50,7 @@ const leftKitchen = {
             "response": enterHallway
         },
         {
-            "id": 3,
+            "id": 2,
             "Text": "Return to kitchen",
             "response": returnToKitchen
         }
@@ -63,13 +63,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     states.push(kitchenDefault, leftKitchen);
 
-    // let currentStateID = Number(sessionStorage.getItem('currentState'));
-    // states.forEach(state => {
-    //     if (state.ID == currentStateID) {
-    //         currentState = state;
-    //         return;
-    //     }
-    // });
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    states.forEach(state => {
+        if (state.ID == currentStateID) {
+            currentState = state;
+            return;
+        }
+    });
     currentState = kitchenDefault;
     updateState();
 })

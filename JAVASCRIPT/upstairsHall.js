@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 UpdateInventory();
 
-let atticLightingOn = sessionStorage.getItem('atticLightingOn');
+let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
 
 
 

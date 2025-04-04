@@ -54,6 +54,7 @@ button{
     transition: 0.3s;
     height: 5vh;
     width: 15vw;
+    min-width: fit-content;
 }
 button:hover{
     background-color: #ff4444;

@@ -351,7 +351,6 @@ async function addKnifeEvidence() {
         return;
     }
     else{
-        inventory.filter(item => item.itemUsed == false).length;
         if (inventory.filter(item => item.itemUsed == false).length == 6) {
             setResponse("You must drop an item before you can pick up the knife. HINT try using an item to get rid of it.");
         }
@@ -442,7 +441,6 @@ async function searchBedsideTable() {
         setResponse("You double check the bedside table, but theres nothing of interest left in them")
     }
     else {
-        inventory.filter(item => item.itemUsed == false).length;
         if (inventory.filter(item => item.itemUsed == false).length == 6) {
             setResponse("You must drop an item before you can pick up the key. HINT try using an item to get rid of it.");
         }
