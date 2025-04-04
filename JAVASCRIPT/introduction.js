@@ -1,5 +1,5 @@
 document.getElementById("startGame").addEventListener("click", async function() {
-    let validUser = checklogin();
+    let validUser = checkLogin();
     if (validUser == false) {
         window.location.replace('login.html');
         return;
