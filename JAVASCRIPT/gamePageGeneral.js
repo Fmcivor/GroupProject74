@@ -75,6 +75,7 @@ deleteAndExit.addEventListener('click', async function () {
 
 });
 
+
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
     if (userLoggedIn == true) {
