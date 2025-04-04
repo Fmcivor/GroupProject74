@@ -1,6 +1,8 @@
 let hasFlashLight = inventory.some(item => item.itemID == flashLightID);
 let hasBatteries = inventory.some(item => item.itemID == batteriesID);
 let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
+let flashLightActive = false;
+let selectedItemID = null;
 
 
 
@@ -25,6 +27,10 @@ const darkAttic = {
 }
 
 function toggleLight() {
+    if (!hasFlashLight || !hasBatteries) {
+        setResponse("You fumble in the dark, but without a working flashlight, you can't see anything.");
+        return; 
+    }
     if (currentState.ID === 1) {
         currentState = attic;
         sessionStorage.setItem("currentState", 2);
@@ -80,9 +86,9 @@ const attic = {
 
 
         {
-            "id": 1,
+            "id": 2,
             "Text": "Leave the attic",
-            "response": goToHall
+            "response": goToHallAgain
         },
 
 
@@ -95,6 +101,11 @@ function goToHall() {
     window.location.replace('upstairsHall.html');
 }
 
+function goToHallAgain(){
+    sessionStorage.setItem('currentState',2);
+    window.location.replace('upstairsHall.html');
+}
+
 function searchBoxes() {
 
 }
@@ -102,3 +113,27 @@ function searchBoxes() {
 function pullDownCloth(){
 
 }
+
+function toggleFlashLight() {
+    
+        let flashlight = document.getElementById('atticFlashlight')
+        
+        if (flashLightActive) {
+            flashlight.style.display = "block"; 
+        } else {
+            flashlight.style.display = "none";  
+        }
+    }
+
+    
+    
+
+
+
+document.addEventListener("mousemove", function (event) {
+    if (flashLightActive) {
+        let flashlight = document.getElementById("atticFlashlight");
+        flashlight.style.left = `${event.pageX - 100}px`;
+        flashlight.style.top = `${event.pageY - 100}px`;
+    }
+});
