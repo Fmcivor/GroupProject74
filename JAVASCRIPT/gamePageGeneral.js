@@ -341,6 +341,7 @@ function UpdateInventory() {
     let slotCount = 1;
     for (let i = 0; i < inventory.length; i++) {
         
+        
         if (inventory[i] != null && inventory[i].itemUsed == false) {
             const slot = document.getElementById(`slot${slotCount}`);
             let itemBtn = document.createElement('button');
@@ -578,8 +579,6 @@ async function addItem(itemID) {
         clearInterval(notificationTimer);
         inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
     }, 2400);
-
-    return itemAddedToSessionStorageInventory;
 }
 
 
@@ -593,19 +592,14 @@ async function saveGame() {
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
-<<<<<<< HEAD
-    let status = sessionStorage.getItem("status");
-=======
 
     let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
 
     let status = sessionStorage.getItem("status");
 
->>>>>>> b54777c7909ce7f0d1fb89fb36ba090006ac4baf
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-
 
 
     let updateQuery = `UPDATE tblGameSave SET
