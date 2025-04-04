@@ -556,6 +556,23 @@ li {
     gap: 0.8rem;
 }
 
+#suspectSelectTextWrapper {
+
+}
+
+#selectImagesWrapper {
+
+}
+
+.suspectButton {
+
+}
+
+#confirmationBtnContainer {
+
+}
+
+
 
 
 /* Game interaction and options styling */
@@ -799,15 +816,6 @@ p {
     justify-content: center;
 }
 
-
-
-
-
-/* mobile responsive design */
-#mobileHeader {
-    display: none;
-}
-
 .settingsContainer{
     width: 100%;
     height: 100%;
@@ -848,7 +856,15 @@ p {
     overflow-y: auto;
     overflow-x: hidden;
     align-items: center;
-    
+}
+
+
+
+
+
+/* mobile responsive design */
+#mobileHeader {
+    display: none;
 }
 
 @media (max-width:650px) {

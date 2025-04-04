@@ -193,6 +193,7 @@ async function getRooms() {
 
                     completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
                     completion = completion * 100;
+                    completion = Math.round(completion * 10) / 10
 
                     completionDisplay.textContent = `${completion}%`;
                     roomsVisitedDisplay.textContent = `${roomsVisited}/${numOfRooms}`;
@@ -205,18 +206,4 @@ async function getRooms() {
     } catch (error) {
         console.error("An error has occurred while retrieving stats form the database", error);
     }
-}
-
-function displayStats() {
-    completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
-    completion = completion * 100;
-
-    playTimeDisplay.textContent = `Play Time: ${timeToComplete}`;
-    saveStartedDisplay.textContent = `Save Started: ${startDate}, ${startTime}`;
-    averageTTWDisplay.textContent = `Average time to complete: ${avgTimeToComplete}`;
-    globalAverageTTWDisplay.textContent = `Global Average Time to Complete: ${globalAvgTimeCompletion}`;
-    completionDisplay.textContent = `Completion%: ${completion}%`;
-    roomsVisitedDisplay.textContent = `Rooms Found: ${roomsVisited}/${numOfRooms}`;
-    cluesFoundDisplay.textContent = `Clues Found: ${cluesCollected}/${numOfClues}`;
-    itemsCollectedDisplay.textContent = `Items Collected: ${itemsCollected}/${numOfItems}`;
 }
