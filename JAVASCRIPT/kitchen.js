@@ -99,7 +99,6 @@ async function searchDrawers() {
         setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. You find nothing of interest.")
     }
     else {
-        inventory.filter(item => item.itemUsed == false).length;
         if (inventory.filter(item => item.itemUsed == false).length == 6) {
             setResponse("You must drop an item before you can pick up the batteries. HINT try using an item to get rid of it.");
         }

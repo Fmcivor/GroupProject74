@@ -517,12 +517,9 @@ function updateClueNotebook() {
 
 
 async function addItem(itemID) {
-    if (unusedItemCount.length ==6) {
-        return false;
-    }
+    
 
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
-    let itemAddedToSessionStorageInventory = false;
 
     dbConfig.set('query', query);
 
@@ -541,7 +538,6 @@ async function addItem(itemID) {
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
             UpdateInventory();
-            itemAddedToSessionStorageInventory = true;
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
                                 VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
