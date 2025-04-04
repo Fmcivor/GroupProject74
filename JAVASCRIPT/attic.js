@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
 const attic = {
     "ID": 2,
     "room": "Attic",
-    "description": `Well done ${displayName}, you have successfully found the light switch. Now continue your pursuit of the killer!`,
+    "description": `The light flickers on revealing a rather barren attic with only a few dusty boxes and a mysterious figure hiding under a cloth`,
     "ImageHREF": "Images/lightAttic.png",
     "interactions": [
         {
