@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     states.push(enteredLivingRoom, satOnSofa, satOnSofaAgain, standUpFromSofa);
 
-    let currentStateID = Number(sessionStorage.getItem('currentState'));
+    let currentStateID = sessionStorage.getItem("currentStateID");
+
     currentState = states.find(state => state.ID == currentStateID) || enteredLivingRoom;
     updateState();
     getSessionStorage();
@@ -258,7 +259,8 @@ function pickUpLetter() {
 
 function addLettertoNoteBook() {
     letterContainer.classList.add('hide'); 
-    document.documentElement.removeEventListener('click',addLettertoNoteBook);
+    document.removeEventListener('click',addLettertoNoteBook);
+
     addClue(2);
 
 }
