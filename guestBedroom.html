@@ -102,7 +102,12 @@
 
                         <section class="notebookSection">
                             <h3 class="notebookSectionHeader">Clues</h3>
-                            <ul class="notebookList" id="clueList"></ul>
+                            <ul class="notebookList" id="clueList">
+    
+                            </ul>
+                            <div class="submitEvidenceContainer">
+                            <button id="submitEvidenceBtn">Submit Evidence</button>
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -129,14 +134,29 @@
 
     <div class="achievementContainer">
         <div id="achievementBox">
-            <figure id="achFig">
-                <img id="achievementIcon" src="" alt="Achievement Icon">
-            </figure>
-            <div id="achContentBox">
+            <div id="achievementTop">
                 <h2 id="achName"></h2>
-                <p id="achDesc"></p>
+                <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
             </div>
-            <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+            <div id="achContentBox">
+                <figure id="achFig">
+                    <img id="achievementIcon" src="" alt="">
+                </figure>
+                <div id="achTextWrapper">
+                    <p id="achDesc"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="submitEvidencePopUp" id="evidencePopUp">
+        <div class="submitEvidencePopUpContent">
+            <p>Are you sure you want to submit evidence now. This will decide the case!</p>
+            <div class="confirmationBtnContainer">
+                <button class="confirmationBtn" onclick="submitEvidence()">Yes</button>
+                <button class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+            </div>
         </div>
     </div>
 

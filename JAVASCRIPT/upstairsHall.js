@@ -2,9 +2,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     currentState = upstairsHall;
     updateState();
-    getSessionStorage();
 })
 UpdateInventory();
+
+let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
 
 
 
@@ -42,7 +43,13 @@ const upstairsHall = {
 
 //STATE FUNCTIONS
 function goToAttic() {
-    // window.location.replace( '';
+    if (atticLightingOn) {
+        goToNextRoom('attic.html',2);
+    }
+    else{
+        goToNextRoom('attic.html',1);
+    }
+    
 }
 
 function goToMasterBedroom() {

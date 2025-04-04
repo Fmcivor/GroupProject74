@@ -165,6 +165,7 @@ async function loadGameSaveData(gameID) {
             sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
             sessionStorage.setItem('lightingOn', gameSave.lightingOn);
             sessionStorage.setItem('status',gameSave.status);
+            sessionStorage.setItem('atticLightingOn',gameSave.atticLightingOn);
 
             console.log("game save id retrieved:", gameSave.gameID);
 

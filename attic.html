@@ -46,7 +46,12 @@
         </div>
 
         <div class="rightColumn">
+            <button id="lightSwitch"></button>
             <div class="gameContainer">
+                <div id="atticContainer">
+                    <img id="atticImage" src="Images/darkAttic.png" alt="Attic">
+                    <button id="lightSwitch"></button>
+                </div>
                
             </div>
 
@@ -55,10 +60,15 @@
         <nav class="toolBar">
             <div class="iconContainer">
 
-                <i class="fa-solid fa-arrow-right toolBarIcon hideToolBarButton" id="hideToolBarButton"></i>
-                <i class="fa-solid fa-book toolBarIcon" id="noteBookButton"></i>
-                <i class="fa-solid fa-boxes-stacked toolBarIcon" id="inventoryButton"></i>
-
+                <button class="toolBarBtn hideToolBarButton" id="hideToolBarButton">
+                    <i class="fa-solid fa-arrow-right toolBarIcon" id="hideToolBarButton" title="Close Toolbar"></i>
+                </button>
+                <button class="toolBarBtn" id="noteBookButton">
+                    <i class="fa-solid fa-book toolBarIcon" title="Open Notebook"></i>
+                </button>
+                <button class="toolBarBtn" id="inventoryButton">
+                    <i class="fa-solid fa-boxes-stacked toolBarIcon" title="Open Inventory"></i>
+                </button>
             </div>
             <div class="noteBook" id="noteBook">
                 <div id="noteBookContentWrapper">
@@ -76,7 +86,12 @@
 
                     <section class="notebookSection">
                         <h3 class="notebookSectionHeader">Clues</h3>
-                        <ul class="notebookList" id="clueList"></ul>
+                        <ul class="notebookList" id="clueList">
+
+                        </ul>
+                        <div class="submitEvidenceContainer">
+                        <button id="submitEvidenceBtn">Submit Evidence</button>
+                        </div>
                     </section>
                 </div>
 
@@ -114,7 +129,17 @@
                         <p id="achDesc"></p>
                     </div>
                 </div>
-                
+
+            </div>
+        </div>
+
+        <div class="submitEvidencePopUp" id="evidencePopUp">
+            <div class="submitEvidencePopUpContent">
+                <p>Are you sure you want to submit evidence now. This will decide the case!</p>
+                <div class="confirmationBtnContainer">
+                    <button class="confirmationBtn" onclick="submitEvidence()">Yes</button>
+                    <button class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+                </div>
             </div>
         </div>
     </main>
@@ -123,6 +148,7 @@
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/gamePageGeneral.js"></script>
     <script src="JAVASCRIPT/attic.js"></script>
+    
 
 </body>
 

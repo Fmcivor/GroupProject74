@@ -50,7 +50,7 @@ const leftKitchen = {
             "response": enterHallway
         },
         {
-            "id": 3,
+            "id": 2,
             "Text": "Return to kitchen",
             "response": returnToKitchen
         }
@@ -58,64 +58,62 @@ const leftKitchen = {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-    
+
     let states = [];
 
-    states.push(kitchenDefault,leftKitchen);
-  
-    // let currentStateID = Number(sessionStorage.getItem('currentState'));
-    // states.forEach(state => {
-    //     if (state.ID == currentStateID) {
-    //         currentState = state;
-    //         return;
-    //     }
-    // });
-    currentState = kitchenDefault;
+    states.push(kitchenDefault, leftKitchen);
+
+    currentState = states.find(state => state.ID == currentStateID) || kitchenDefault;
     updateState();
 })
 
-function returnToKitchen(){
+function returnToKitchen() {
     currentState = kitchenDefault;
     updateState();
 }
 
-function leaveKitchen(){
+function leaveKitchen() {
     currentState = leftKitchen;
     updateState();
 }
 
-function checkCounterTop(){
+function checkCounterTop() {
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
     setResponse("You inspect the messy countertop. You notice a dried wine stain. There’s also an open wine bottle, half empty, with a faint fingerprint smudge near the neck.");
 }
 
-function searchDrawers(){
+async function searchDrawers() {
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-    if(hasBatteries){
+    if (hasBatteries) {
         setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. You find nothing of interest.")
     }
-    else{
-        setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. In the back of one drawer, your fingers brush against some small batteries, maybe for a torch? You take them.")
-        hasBatteries = true;
-        addItem(batteriesID);
+    else {
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the batteries. HINT try using an item to get rid of it.");
+        }
+        else {
+            hasBatteries = true;
+            await addItem(batteriesID);
+            setResponse("You pull open the drawers, rummaging through shiny silverware and scattered papers. In the back of one drawer, your fingers brush against some small batteries, maybe for a torch? You take them.");
+        }
     }
 }
 
-function examineGlass(){
+function examineGlass() {
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
     setResponse("Shards of the shattered glass glisten under the dim light. The way the glass is spread suggests it was knocked over with force, not simply dropped. A tiny smear of blood on one of the pieces catches your eye - someone was cut here.")
 }
 
-function enterLivingRoom(){
+function enterLivingRoom() {
     goToNextRoom('livingRoom.html', 1);
 }
 
-function enterHallway(){
+function enterHallway() {
     goToNextRoom('downStairsHall.html', 4);
 }

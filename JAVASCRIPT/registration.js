@@ -46,10 +46,10 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
          if (insertResult.success) {
             
-            alert("success");
+            
 
 
-            window.location.href = "login.html";
+            window.location.href = "mainMenu.html";
 
 
          } else {

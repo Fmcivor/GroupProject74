@@ -82,7 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     displayStats();
 
+    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
+
 });
+
 
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);
@@ -301,7 +304,7 @@ async function savePreferences() {
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
 
 
-    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
+    let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn} WHERE userID = ${userID}`;
     dbConfig.set('query', saveQuery);
 
 
@@ -374,18 +377,18 @@ GROUP BY tblGameSave.userID;
 
         if (result.success) {
             let stats = result.data[0];
-            document.getElementById("totalTimePlayed").innerHTML = `<b >Total Time Played:</b> <span style = text-align:right;>${stats.totalTimePlayed}</span>`;
-            document.getElementById("avgTimeToWin").innerHTML = `<b >Average Time to Win:</b> <span style = text-align:right;> ${stats.averageToWin}</span>`;
-            document.getElementById("itemCount").innerHTML = `<b >Items Collected:</b> <span style = text-align:right;> ${stats.numOfItemsCollected}</span>`;
-            document.getElementById("clueCount").innerHTML = `<b >Clues Found:</b> <span style = text-align:right;> ${stats.numOfCluesCollected}</span>`;
-            document.getElementById("quickestGame").innerHTML = `<b >Fastest Game Completion:</b> <span style = text-align:right;> ${stats.fastestTimeToCompleteGame}</span>`;
-            document.getElementById("averageTime").innerHTML = `<b >Average Time Played:</b> <span style = text-align:right;> ${stats.averageTime}</span>`;
-            document.getElementById("lost").innerHTML = `<b >Games Lost:</b> <span style = text-align:right;> ${stats.gamesLost}</span>`;
-            document.getElementById("won").innerHTML = `<b >Games Won:</b> <span style = text-align:right;> ${stats.gamesWon}</span>`;
-            document.getElementById("abandoned").innerHTML = `<b >Games Abandoned:</b> <span style = text-align:right;> ${stats.gamesAbandoned}</span>`;
-            document.getElementById("totalGamesPlayed").innerHTML = `<b >Total Games Played:</b> <span style = text-align:right;> ${stats.totalGames}</span>`;
-            document.getElementById("avgRepairAttempts").innerHTML = `<b >Average Number of Repair Attempts:</b> <span style = text-align:right;> ${stats.avgNoOfRepairAttempts}</span>`;
-            document.getElementById("mostVisitedRoom").innerHTML = `<b >Most Visited Room:</b> <span style = text-align:right;> ${stats.mostVisitedRoom}</span>`;
+            document.getElementById("totalTimePlayed").textContent = stats.totalTimePlayed;
+            document.getElementById("avgTimeToWin").textContent = stats.averageToWin;
+            document.getElementById("itemCount").textContent = stats.numOfItemsCollected;
+            document.getElementById("clueCount").textContent = stats.numOfCluesCollected;
+            document.getElementById("quickestGame").textContent = stats.fastestTimeToCompleteGame;
+            document.getElementById("averageTime").textContent = stats.averageTime;
+            document.getElementById("lost").textContent = stats.gamesLost;
+            document.getElementById("won").textContent = stats.gamesWon;
+            document.getElementById("abandoned").textContent = stats.gamesAbandoned;
+            document.getElementById("totalGamesPlayed").textContent = stats.totalGames;
+            document.getElementById("avgRepairAttempts").textContent = stats.avgNoOfRepairAttempts;
+            document.getElementById("mostVisitedRoom").textContent = stats.mostVisitedRoom;
         }
         else {
             console.error("it broke");

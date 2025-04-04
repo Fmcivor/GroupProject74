@@ -173,19 +173,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
-    states.forEach(state => {
-        if (state.ID == currentStateID) {
-            if (state.ID == 1 && doorUnlocked) {
-                currentState = frontOfHouseDoorUnlocked;
-                currentStateID = frontOfHouseDoorUnlocked.ID;
-            }
-            else {
-                currentState = state;
+    currentState = states.find(state => state.ID == currentStateID) || frontOfHouseDoorLocked;
 
-            }
-            return;
-        }
-    });
+    if (currentState.ID == frontOfHouseDoorLocked.ID && doorUnlocked == true) {
+        currentState = frontOfHouseDoorUnlocked;
+    }
+    else if (currentState.ID == frontOfHouseDoorUnlocked.ID && doorUnlocked == false) {
+        currentState = frontOfHouseDoorLocked;
+    }
 
     updateState();
 
@@ -211,12 +206,17 @@ async function checkUnderMat() {
         setResponse("There is nothing under here the key has already been taken");
     }
     else {
-        setResponse("There is a large golden key here and you lift it");
-        addItem(keyID);
-        hasKey = true;
+        inventory.filter(item => item.itemUsed == false).length;
+        if (inventory.filter(item => item.itemUsed == false).length == 6) {
+            setResponse("You must drop an item before you can pick up the key. HINT try using an item to get rid of it.");
+        }
+        else {
+            hasKey = true;
+            await addItem(keyID);
+            setResponse("There is a large golden key here and you lift it");
+        }
     }
 }
-
 
 
 async function enterHouse() {
@@ -227,14 +227,14 @@ async function enterHouse() {
             await goToNextRoom('downStairsHall.html', 1);
         }
         else {
-            await goToNextRoom('downStairsHall.html',3);
+            await goToNextRoom('downStairsHall.html', 3);
         }
     }
-    else{
+    else {
         setResponse("The door is locked, maybe you could find a way to open it...");
     }
 
-    
+
 }
 
 function goTofrontOfHouse() {
@@ -455,22 +455,22 @@ let intervalTime = 7;
 function rotateLine() {
     line.style.transform = `rotate(${angle}deg)`;
 
-    angle += 4; 
+    angle += 4;
 
     if (angle > 360) {
         angle = 4;
     }
 
-    if (angle %180 == 0) {
-        intervalTime -= 0.5; 
+    if (angle % 180 == 0) {
+        intervalTime -= 0.5;
     }
-        
-    
+
+
 
     if (intervalTime > 0.5) {
-        setTimeout(rotateLine, intervalTime); 
+        setTimeout(rotateLine, intervalTime);
     }
-    else{
+    else {
         document.getElementById('GeneratorGameContainer').style.display = 'none';
     }
 }
@@ -480,7 +480,6 @@ clue1Btn.addEventListener('click', async function () {
     clue1Btn.style.visibility = 'collapse';
     hasRubbishClue = true;
     await addClue(rubbishClueID);
-    updateClueNotebook();
     setResponse('You have found a letter check your notebook to see its content');
 
 

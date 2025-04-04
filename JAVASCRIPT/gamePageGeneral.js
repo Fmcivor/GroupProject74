@@ -30,7 +30,7 @@ const lockpickID = 2;
 const batteriesID = 3;
 const pillBottleID = 4;
 const safeCodeID = 5;
-const flashlightID = 6;
+const flashLightID = 6;
 const knifeItemID = 7;
 const ringID = 8;
 
@@ -40,6 +40,7 @@ const burntLetterClueID = 2;
 const ringClueID = 3;
 const computerClueID = 4;
 const knifeClueID = 5;
+const emailClueID = 7;
 
 
 //VARIABLES
@@ -74,6 +75,7 @@ deleteAndExit.addEventListener('click', async function () {
     window.location.href = "mainMenu.html";
 
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
@@ -250,7 +252,9 @@ function updateState() {
 
 function userDecisionHandler(event) {
     responseId = event.target.id;
-
+    let button = document.getElementById(responseId);
+    button.style.color = 'rgb(153, 153, 153)';
+    button.querySelector('i').style.color = 'rgb(153, 153, 153)';
 
     if (typeof currentState.interactions[responseId].response === 'string') {
         setResponse(currentState.interactions[responseId].response);
@@ -334,14 +338,20 @@ function setResponseAfterDescription(responseText) {
 
 
 function UpdateInventory() {
+    for (let i = 1; i < 7; i++) {
+        document.getElementById(`slot${i}`).innerHTML = '';
+        
+    }
+    let slotCount = 1;
     for (let i = 0; i < inventory.length; i++) {
-        const slot = document.getElementById(`slot${i + 1}`);
-        slot.innerHTML = '';
+        
+        
         if (inventory[i] != null && inventory[i].itemUsed == false) {
+            const slot = document.getElementById(`slot${slotCount}`);
             let itemBtn = document.createElement('button');
             itemBtn.classList.add('itemBtn');
             itemBtn.value = inventory[i].itemID;
-            itemBtn.id = `item${i + 1}`;
+            itemBtn.id = `item${slotCount}`;
             itemBtn.addEventListener('click', selectInventoryItem);
 
             let itemImage = document.createElement('img');
@@ -351,6 +361,7 @@ function UpdateInventory() {
             itemImage.title = inventory[i].itemName;
             itemBtn.appendChild(itemImage);
             slot.appendChild(itemBtn);
+            slotCount++;
         }
     }
 
@@ -358,9 +369,10 @@ function UpdateInventory() {
 
 function selectInventoryItem(event) {
     const selectedItemBtn = event.currentTarget;
+    let inventoryUnusedCount = inventory.filter(item => item.itemUsed == false).length;
 
-    for (let i = 0; i < inventory.length; i++) {
-        document.getElementById(`item${i + 1}`).style.border = 'none';
+    for (let i = 0; i < inventoryUnusedCount; i++) {
+        document.getElementById(`item${i + 1}`).style.border = '8px solid transparent';
     }
 
     selectedItemID = selectedItemBtn.value;
@@ -385,6 +397,9 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
             method: "POST",
             body: dbConfig
         });
+
+        let insertResult = await response.json();
+        if (insertResult.success) {
 
 
 
@@ -412,6 +427,10 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
             console.log("Error retrieving achievement data");
             console.log(error);
         }
+    }
+    else{
+        console.error("Error saving the achievement to the database")
+    }
 
     } catch (error) {
         console.log("Error setting achievement");
@@ -442,6 +461,7 @@ async function addClue(clueID) {
             let clueToAdd = new Clue(clue.clueID, clue.clueText);
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
+            updateClueNotebook();
 
             let alternateColour = false;
             let notificationTimer = setInterval(() => {
@@ -501,6 +521,8 @@ function updateClueNotebook() {
 
 
 async function addItem(itemID) {
+    
+
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
 
     dbConfig.set('query', query);
@@ -571,24 +593,27 @@ async function saveGame() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
+    let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
+
+    let status = sessionStorage.getItem("status");
+
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-
 
 
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
                         currentRoom = '${currentRoom}',
-
+                        atticLightingOn = ${atticLightingOn},
 
                         currentState = ${currentStateID},
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa},
-                        timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}'))
-                        
+                        timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}')),
+                        status = ${status}
 
                         WHERE gameID = ${gameID}`;
 
@@ -756,7 +781,7 @@ async function savePreferences() {
 }
 
 
-document.getElementById('useItemBtn').addEventListener('click', function () {
+document.getElementById('useItemBtn').addEventListener('click', async function () {
     if (selectedItemID == null) {
         setResponse("You must select an item before you can use it");
         return;
@@ -794,7 +819,7 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
             break;
         case "study.html":
             if (currentState == studyDefault && selectedItemID == lockpickID) {
-                document.getElementById(LockPickGameContainer).style.display = "flex";
+                document.getElementById('LockPickGameContainer').style.display = "flex";
                 validItemUse = true;
             }
             break;
@@ -807,7 +832,31 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
     if (selectedItemID == ringID) {
         validItemUse = true;
         setResponse("You have tried on the ring... for investigative purposes of course!");
+        const ringIndex = inventory.findIndex(item => item.itemID == ringID);
+        inventory[ringIndex].itemUsed = true;
+        sessionStorage.setItem("inventory", JSON.stringify(inventory));
+        UpdateInventory();
+        let updateQuery = `UPDATE tblGameInventory SET itemUsed = 1 WHERE gameID = ${gameID} AND itemID = ${ringID}`;
+        dbConfig.set('query', updateQuery);
 
+        try {
+            let response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success) {
+                console.log("Item usage updated successfully in the database");
+            }
+            else{
+                console.error("Error updating item usage in the database");
+            }
+        } catch (error) {
+            console.error("Error updating item usage in the database", error);
+        }
+        
         if (userAchievementIDs.some(achievement => achievement.achievementID == 3) == false) {
             awardAchievement(3, userID, "Images/ring.png");
         }
@@ -822,24 +871,33 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
 
 
 
+document.getElementById('submitEvidenceBtn').addEventListener('click', async function () {
+    document.getElementById("evidencePopUp").style.display = "flex";
+
+});
 
 async function submitEvidence() {
-    let clue1 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue2 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue3 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let clue4 = clueList.some(clue => clue.clueID == rubbishClueID);
-    let hasMurderWeapon = inventory.some(item => item.itemID == knifeItemID);
+    let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
+    let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
+    let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
+    let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
+    sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-    if (clue1 && clue2 && clue3 && clue4 && hasMurderWeapon) {
+    if (knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
         sessionStorage.setItem("status", gameWin);
+        sessionStorage.setItem("currentRoom", "endGameWin.html");
         await saveGame();
-        window.location.replace("mainMenu.html");
-
+        window.location.replace("endGameWin.html");
     }
     else {
         sessionStorage.setItem("status", gameLoss);
+        sessionStorage.setItem("currentRoom", "endGame.html");
+        await saveGame();
+        window.location.replace("endGame.html");
     }
+}
 
-
+function closeSubmitEvidencePopUp() {
+    document.getElementById("evidencePopUp").style.display = "none";
 }

@@ -1,6 +1,10 @@
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function () {
-    currentState = enteredLivingRoom;
+    let states = [];
+
+    states.push(enteredLivingRoom, satOnSofa, satOnSofaAgain, standUpFromSofa);
+
+    currentState = states.find(state => state.ID == currentStateID) || enteredLivingRoom;
     updateState();
     getSessionStorage();
 
@@ -285,7 +289,7 @@ async function updateTimesOnSofa(){
     
     if(timesOnSofa === 5) {
         let achSRC = 'Images/sofaAchievementIcon.jpg';
-        awardAchievement(1, 1, achSRC)
+        awardAchievement(1, userID, achSRC)
     }
 }
 
