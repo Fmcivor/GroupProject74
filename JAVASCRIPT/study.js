@@ -1,5 +1,3 @@
-
-
 const studyDefault = {
     "ID": 1,
     "room": "Study",
@@ -67,7 +65,12 @@ function searchDrawers(){
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-    setResponse("The top drawer is locked. Maybe I could get in somehow...");
+    if(!clueList.some(clue => clue.clueID == drawerClueID)){
+        setResponse("The top drawer is locked. Maybe I could get in somehow...");
+    }
+    else{
+        setResponse("The drawer is empty.");
+    }    
 }
 
 
