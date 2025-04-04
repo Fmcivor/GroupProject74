@@ -306,7 +306,7 @@ function FixGenerator() {
     count = 0;
     startRepairButton.style.display = 'block';
     repairButton.style.display = 'none';
-    setResponse("You must click on the repair button when the line is in the red zone 3 times. You have 2 miss hits before you have to try again");
+    setResponse("You must click on the repair button when the line is in the red zone 5 times. You have 2 miss hits before you have to try again");
 
     document.getElementById('GeneratorGameContainer').style.display = 'flex';
 
