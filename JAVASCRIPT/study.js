@@ -52,12 +52,14 @@ function leaveStudy(){
     goToNextRoom('downStairsHall.html',4);
 }
 
-function checkPictureFrame(){
+async function checkPictureFrame(){
     let button = document.getElementById(responseId);
     button.style.color = 'rgb(153, 153, 153)';
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-    addClue(computerClueID);
-
+    if(!clueList.some(clue => clue.clueID == computerClueID)){
+        await addClue(computerClueID);
+    }
+    
     setResponse("You lift the frame and wipe away a thin layer of dust. The image is of a small spaniel sitting proudly. Below, an inscription reads: 'My dear Luna - 2008.' A pet's name and a year... Could this be useful somwhere?");
 }
 
@@ -134,14 +136,18 @@ function tryPassword() {
 
 btnenterPassword.addEventListener('click', checkPassword);
 
-function checkPassword() {
+async function checkPassword() {
     let input = document.getElementById("passwordInput").value;
     let correctPassword = "Luna2008";
     closeModal();
 
     if (input === correctPassword) {
         sessionStorage.setItem('currentState', 3);
-
+        currentState = computerUnlocked;
+        updateState();
+        if(!clueList.some(clue => clue.clueID == emailClueID)){
+            await addClue(emailClueID);
+        }
     } else {
         setResponse("Incorrect Password");
     }
