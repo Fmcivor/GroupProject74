@@ -190,6 +190,7 @@ form{
     align-items: center;
     justify-content: space-between;
     height: 60%;
+    width: 100%;
 }
 
 
@@ -229,6 +230,13 @@ form{
     align-items: flex-start;
     transition: right 1s ease-in-out;
     font-family: "Lugrasimo", cursive;
+}
+
+.toolBar ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Change the thumb color */
+    border-radius: 20px;
+    /* Make the thumb rounded */
 }
 
 .iconContainer {
