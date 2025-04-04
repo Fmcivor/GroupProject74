@@ -334,14 +334,19 @@ function setResponseAfterDescription(responseText) {
 
 
 function UpdateInventory() {
+    for (let i = 1; i < 7; i++) {
+        document.getElementById(`slot${i}`).innerHTML = '';
+        
+    }
+    let slotCount = 1;
     for (let i = 0; i < inventory.length; i++) {
-        const slot = document.getElementById(`slot${i + 1}`);
-        slot.innerHTML = '';
+        
         if (inventory[i] != null && inventory[i].itemUsed == false) {
+            const slot = document.getElementById(`slot${slotCount}`);
             let itemBtn = document.createElement('button');
             itemBtn.classList.add('itemBtn');
             itemBtn.value = inventory[i].itemID;
-            itemBtn.id = `item${i + 1}`;
+            itemBtn.id = `item${slotCount}`;
             itemBtn.addEventListener('click', selectInventoryItem);
 
             let itemImage = document.createElement('img');
@@ -351,6 +356,7 @@ function UpdateInventory() {
             itemImage.title = inventory[i].itemName;
             itemBtn.appendChild(itemImage);
             slot.appendChild(itemBtn);
+            slotCount++;
         }
     }
 
@@ -358,9 +364,10 @@ function UpdateInventory() {
 
 function selectInventoryItem(event) {
     const selectedItemBtn = event.currentTarget;
+    let inventoryUnusedCount = inventory.filter(item => item.itemUsed == false).length;
 
-    for (let i = 0; i < inventory.length; i++) {
-        document.getElementById(`item${i + 1}`).style.border = 'none';
+    for (let i = 0; i < inventoryUnusedCount; i++) {
+        document.getElementById(`item${i + 1}`).style.border = '8px solid transparent';
     }
 
     selectedItemID = selectedItemBtn.value;
@@ -442,6 +449,7 @@ async function addClue(clueID) {
             let clueToAdd = new Clue(clue.clueID, clue.clueText);
             clueList.push(clueToAdd);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
+            updateClueNotebook();
 
             let alternateColour = false;
             let notificationTimer = setInterval(() => {
@@ -501,7 +509,12 @@ function updateClueNotebook() {
 
 
 async function addItem(itemID) {
+    if (unusedItemCount.length ==6) {
+        return false;
+    }
+
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
+    let itemAddedToSessionStorageInventory = false;
 
     dbConfig.set('query', query);
 
@@ -520,6 +533,7 @@ async function addItem(itemID) {
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
             UpdateInventory();
+            itemAddedToSessionStorageInventory = true;
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
                                 VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
@@ -557,6 +571,8 @@ async function addItem(itemID) {
         clearInterval(notificationTimer);
         inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
     }, 2400);
+
+    return itemAddedToSessionStorageInventory;
 }
 
 
@@ -570,7 +586,7 @@ async function saveGame() {
     let gameID = sessionStorage.getItem("gameID");
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
-
+    let status = sessionStorage.getItem("status");
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
@@ -587,8 +603,8 @@ async function saveGame() {
                         lightingOn = ${lightingOn},
                         noGeneratorRepairAttempts = ${noGeneratorRepairAttempts},
                         timesOnSofa = ${timesOnSofa},
-                        timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}'))
-                        
+                        timePlayed = SEC_TO_TIME(TIME_TO_SEC(timePlayed)+TIME_TO_SEC('${totalTime}')),
+                        status = ${status}
 
                         WHERE gameID = ${gameID}`;
 
@@ -756,7 +772,7 @@ async function savePreferences() {
 }
 
 
-document.getElementById('useItemBtn').addEventListener('click', function () {
+document.getElementById('useItemBtn').addEventListener('click', async function () {
     if (selectedItemID == null) {
         setResponse("You must select an item before you can use it");
         return;
@@ -807,7 +823,31 @@ document.getElementById('useItemBtn').addEventListener('click', function () {
     if (selectedItemID == ringID) {
         validItemUse = true;
         setResponse("You have tried on the ring... for investigative purposes of course!");
+        const ringIndex = inventory.findIndex(item => item.itemID == ringID);
+        inventory[ringIndex].itemUsed = true;
+        sessionStorage.setItem("inventory", JSON.stringify(inventory));
+        UpdateInventory();
+        let updateQuery = `UPDATE tblGameInventory SET itemUsed = 1 WHERE gameID = ${gameID} AND itemID = ${ringID}`;
+        dbConfig.set('query', updateQuery);
 
+        try {
+            let response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success) {
+                console.log("Item usage updated successfully in the database");
+            }
+            else{
+                console.error("Error updating item usage in the database");
+            }
+        } catch (error) {
+            console.error("Error updating item usage in the database", error);
+        }
+        
         if (userAchievementIDs.some(achievement => achievement.achievementID == 3) == false) {
             awardAchievement(3, userID, "Images/ring.png");
         }
@@ -838,7 +878,7 @@ document.getElementById('submitEvidenceBtn').addEventListener('click', async fun
     }
     else {
         sessionStorage.setItem("status", gameLoss);
-        sessionStorage.setItem("currentRoom", "endGameLose.html");
+        sessionStorage.setItem("currentRoom", "endGame.html");
         await saveGame();
         window.location.replace("endGameLose.html");
     }
