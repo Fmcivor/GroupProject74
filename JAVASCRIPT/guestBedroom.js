@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentStateID = Number(sessionStorage.getItem('currentState'));
 
     // Find the matching state or default to guestBedroom
-    currentState = states.find(state => state.ID === currentStateID) || guestBedroom;
+    currentState = states.find(state => state.ID == currentStateID) || guestBedroom;
 
     updateState();
 });

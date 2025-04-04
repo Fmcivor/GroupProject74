@@ -19,7 +19,7 @@ html{
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0, 68, 204);
     /* Change the thumb color */
     border-radius: 20px;
     /* Make the thumb rounded */
