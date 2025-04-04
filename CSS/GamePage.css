@@ -433,7 +433,7 @@ form{
 
 ul {
     width: 100%;
-    overflow: hidden;
+    list-style: none;
 }
 
 li::before{
@@ -469,6 +469,89 @@ li {
     height: 100%;
     object-fit: cover;
 }
+
+.submitEvidenceContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 30%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+}
+
+#submitEvidenceBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 15%;
+    min-width: fit-content;
+    text-wrap: noWrap;
+    padding: 20px;
+    border-radius: 30px;
+    background-color: rgb(228, 140, 68);
+    font-size: 1.2rem;
+    color: black;
+    overflow: hidden;
+    border: none;
+}
+
+.submitEvidencePopUp {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+
+.submitEvidencePopUpContent {
+    background-color: rgb(10, 10, 40);
+    border: 2px solid rgb(51, 51, 102);
+    display: grid;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    height: 90%;
+    max-height: 200px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#confirmationMessage {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+}
+
+.confirmationBtn {
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: 0.3s ease;
+    width: 48%;
+    background-color: #999;
+}
+
+.confirmationBtn:hover{
+    background-color: #777;
+}
+
+.confirmationBtnContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.8rem;
+}
+
 
 
 /* Game interaction and options styling */
