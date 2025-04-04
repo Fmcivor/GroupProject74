@@ -25,27 +25,28 @@ body {
 
 .achievement-wrapper{
     width: fit-content;
-    height: fit-content;
+    height: 95%;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden;
-    flex-shrink: 0;
+    overflow-x: hidden;
     gap: 15px;
 }
 
 .achievements-container {
     width: fit-content;
     height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     border-radius: 10px;
     padding: 1.1rem;
-    overflow: auto;
     background-color: rgba(10, 10, 40, 0.9);
     border: 2px solid rgb(51, 51, 102); 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 15px;
 }
 
@@ -63,17 +64,17 @@ body {
 }
 
 .achievement {
+    height: fit-content;
     width: 30vw;
-    padding: 10px;
+    padding: 15px;
     min-width: 300px;
-    min-height: fit-content;
-    overflow: hidden;
     background-color: rgb(34, 34, 68);
     text-align: center;
-    border-radius: 15px;
+    border-radius: 5px;
+    transition: min-height 0.3s ease-in-out;
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction:column;
 }
 
 h2{
@@ -93,14 +94,14 @@ h3{
 .btnMainMenu{
     position: fixed;
     min-width: 120px;
-    bottom: 5vh;
+    bottom: 12vh;
     background-color: rgb(0, 68, 204);
     color: white;
     text-decoration: none;
-    font-size: 1rem;
-    width: fit-content;
+    font-size: 1.1rem;
+    width: 6vw;
     padding: 20px;
-    height: 8vh;
+    height: 3vh;
     border-radius: 20px;
     align-content: center;
     text-align: center;
@@ -120,6 +121,12 @@ h3{
     color: rgb(0, 102, 255); /*button hover*/
 }
 
+.unlocked {
+    background-color: #d4edda; /* Light green background */
+    border: 2px solid #28a745; /* Green border */
+    color: #155724; /* Dark green text */
+}
+
 @media (max-width: 480px){
     html{
         font-size: 10px;
@@ -132,8 +139,4 @@ h3{
     .profile{
         right: 0px;
     }
-}
-
-.unlocked {
-    background-color:rgb(0, 102, 255);
 }
