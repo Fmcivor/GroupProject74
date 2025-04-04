@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     currentState = upstairsHall;
     updateState();
-    getSessionStorage();
 })
 UpdateInventory();
 
