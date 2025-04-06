@@ -61,8 +61,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
 
-    states.push(kitchenDefault, leftKitchen);
+    states.push(kitchenDefault);
 
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
     currentState = states.find(state => state.ID == currentStateID) || kitchenDefault;
     updateState();
 })

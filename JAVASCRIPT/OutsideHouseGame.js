@@ -164,12 +164,38 @@ const generatorFixed = {
     ]
 }
 
+const overgrownGarden = {
+    "ID": 6,
+    "room": "Overgrown Garden",
+    "description": `You step deeper into the garden, where tangled vines and wildflowers surround you. 
+                    Surrounded by the overgrown foliage, you think maybe a something could be hidden here
+                    The faint sound of rustling in the bushes catches your attention, and the smell of damp earth is overpowering.`,
+    "ImageHREF": "Images/outsideHouse.jpg",
+    "interactions": [
+        {
+            "id": 0,
+            "Text": "Search the bushes",
+            "response": searchBushes
+        },
+        {
+            "id": 1,
+            "Text": "Investigate the rustling sound",
+            "response": investigateRustling
+        },
+        {
+            "id": 2,
+            "Text": "Go back to the side of the house",
+            "response": goToSideOfHouse
+        }
+    ]
+}
+
 
 document.addEventListener('DOMContentLoaded', async function () {
 
     let states = [];
 
-    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding);
+    states.push(frontOfHouseDoorLocked, frontOfHouseDoorUnlocked, sideOfHouse, generatorBuilding, generatorFixed, overgrownGarden);
 
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
@@ -253,30 +279,37 @@ function goTofrontOfHouse() {
 function searchRubbish(responseId) {
     let button = document.getElementById(responseId);
     setResponse('Click on the screen to try collect or find items in the rubbish');
+    rightColumn.style.backgroundImage = 'url("Images/rubbish2.png")';
 
-    rubbishContainer.style.display = 'block';
+    rubbishContainer.style.display = 'flex';
     if (hasRubbishClue) {
         clue1Btn.style.display = 'none';
-        rightColumn.style.backgroundImage = 'url("Images/rubbishNoNote.jpg")';
     }
     else {
         clue1Btn.style.display = 'block';
-        rightColumn.style.backgroundImage = 'url("Images/rubbish.jpg")';
     }
     button.querySelector('i').style.color = 'rgb(153, 153, 153)';
+}
 
+document.getElementById('postCardContainer').addEventListener('click', function () {
+    document.getElementById('postCardContainer').style.display = 'none';
+});
+
+
+function exploreGarden() {
+    currentState = overgrownGarden;
+    updateState();
+}
+
+function searchBushes() {
+    setResponse(`OUCH. ${displayName.toUpperCase()}! You reach into the bushes, but a thorny vine scratches your hand, and you find nothing for your troubles.`);
 
 }
 
+function investigateRustling() {
+    setResponse(`You approach the bushes cautiously, heart racing. As you get closer, the rustling stops. You peer into the foliage, but it’s just a squirrel scurrying away.`);
 
-function exploreGarden(responseId) {
-    let button = document.getElementById(responseId);
-    button.querySelector('i').style.color = 'rgb(153, 153, 153)';
-
-
-    setResponse("You have walked through the garden and can have found nothing it appears our investigation is leading us elsewhere.");
 }
-
 
 function enterGeneratorBuilding() {
 
@@ -339,6 +372,7 @@ function FixGenerator() {
 
 function startRepair() {
     noGeneratorRepairAttempts++;
+    sessionStorage.setItem("noGeneratorRepairAttempts", noGeneratorRepairAttempts);
     startRepairButton.style.display = 'none';
     repairButton.style.display = 'block';
     const hammer = document.getElementById('hammerIcon');
@@ -476,11 +510,11 @@ function rotateLine() {
 }
 
 clue1Btn.addEventListener('click', async function () {
-    rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
     clue1Btn.style.visibility = 'collapse';
     hasRubbishClue = true;
     await addClue(rubbishClueID);
     setResponse('You have found a letter check your notebook to see its content');
+    document.getElementById('postCardContainer').style.display = 'block';
 
 
 })

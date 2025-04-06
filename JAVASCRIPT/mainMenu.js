@@ -10,7 +10,10 @@ function openModal() {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    checkLogin();
+    let validUser = checkLogin();
+    if (validUser == false) {
+        return;
+    }
     const btnSignOut = document.getElementById("btnSignOut");
     const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
@@ -116,7 +119,6 @@ document.getElementById('playBtn').addEventListener('click',async function(){
             sessionStorage.setItem('lightingOn',gameSave.lightingOn);
             sessionStorage.setItem('status',gameSave.status);
             sessionStorage.setItem('atticLightingOn',gameSave.atticLightingOn);
-            sessionStorage.setItem('gameSessionStartTime',Date.now());
             console.log("game save id retrieved:",gameSave.gameID);
 
            let roomsInitialised =  await initialiseGameRooms();

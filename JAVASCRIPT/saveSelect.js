@@ -1,6 +1,10 @@
 
 document.addEventListener('DOMContentLoaded', async function () {
-    checkLogin();
+    let validUser = checkLogin();
+    if (validUser == false) {
+        return;
+        
+    }
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
     await displayGameSaves();
 });
