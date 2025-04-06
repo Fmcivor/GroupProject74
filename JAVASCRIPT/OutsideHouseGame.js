@@ -1,4 +1,4 @@
-//Lead Developer = FINTAN MCIVOR
+//Lead Developer - FINTAN MCIVOR
 
 
 //VARIABLES

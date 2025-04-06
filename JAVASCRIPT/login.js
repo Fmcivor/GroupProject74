@@ -1,8 +1,8 @@
 //LEAD DEVELOPER - FINTAN 
-//Form styling and show button - MATTHEW
 
 
-//^ DEVELOPMENT PURPOSES
+
+
 
 
 let errorMessage = '<ul>';
