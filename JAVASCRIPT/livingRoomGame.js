@@ -259,7 +259,7 @@ function pickUpLetter() {
 
 function addLettertoNoteBook() {
     letterContainer.classList.add('hide'); 
-    document.removeEventListener('click',addLettertoNoteBook);
+    document.documentElement.removeEventListener('click',addLettertoNoteBook);
 
     addClue(2);
 

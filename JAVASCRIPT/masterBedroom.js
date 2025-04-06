@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     states.push(enteredMasterBedroom, openingSafe);
 
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
     currentState = states.find(state => state.ID == currentStateID) || enteredMasterBedroom;
     updateState();
     randomiseDials();
