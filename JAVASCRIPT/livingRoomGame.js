@@ -43,6 +43,7 @@ async function getSessionStorage(){
 const pickUpLetterButton = document.getElementById('burntLetter');
 pickUpLetterButton.addEventListener('click', pickUpLetter);
 const letterContainer = document.getElementById('letterContainer')
+const letterDisplayBackground = document.getElementById('letterBackgroundDimmer')
 
 const button = document.getElementById('burntLetter');
 
@@ -242,27 +243,26 @@ function examineFireplace() {
 
     rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
     if(letterFound) {
-        setResponse("You take another look at the firePlace but you don't see anything else of note")
+        setResponse("You take another look at the firePlace but you don't see anything else of note");
     }
     else {
-        pickUpLetterButton.classList.remove('hide')
-        setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it \n (HINT: Try licking on it)")
+        pickUpLetterButton.classList.remove('hide');
+        setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it \n (HINT: Try clicking on it)");
     }
 }
 
 function pickUpLetter() {
     pickUpLetterButton.classList.add('hide');
-    letterContainer.classList.remove('hide');
-    // letterContainer.addEventListener("click", addLettertoNoteBook);
-    document.documentElement.addEventListener('click',addLettertoNoteBook);
+    letterDisplayBackground.classList.remove('hide');
+    letterDisplayBackground.addEventListener('click',addLettertoNoteBook);
 }
 
 function addLettertoNoteBook() {
-    letterContainer.classList.add('hide'); 
-    document.documentElement.removeEventListener('click',addLettertoNoteBook);
+    letterDisplayBackground.classList.add('hide'); 
+    document.removeEventListener('click',addLettertoNoteBook);
 
     addClue(2);
-
+    letterFound = true;
 }
 
 function lookAtShelves() {
