@@ -1,4 +1,4 @@
-html{
+html {
     font-size: 16px;
     font-family: "merriweather", serif;
     color: white;
@@ -70,7 +70,7 @@ form {
     text-align: center;
     color: white;
     position: relative;
-    
+
     flex-shrink: 0;
 }
 
@@ -120,7 +120,7 @@ form label {
     box-shadow: 0 0 8px #6666ff;
 }
 
-.disabled {
+#profileForm input:disabled {
     background-color: #0f0f1f;
 }
 
@@ -143,7 +143,7 @@ form label {
 }
 
 
-.password-container button {
+#togglePassword{
     width: 25%;
     position: absolute;
     right: 1.5px;
@@ -162,33 +162,11 @@ form label {
 
 }
 
-.password-container button:hover {
+#togglePassword:hover {
     background: rgb(0, 102, 255);
-    transform: scale(1.05);
 }
 
 
-form button, #statsContainer button {
-    padding: 12px 20px;
-    font-size: 1.1rem;
-    background-color: rgb(0, 68, 204);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: white;
-    font-weight: bold;
-    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
-    vertical-align: middle;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: inherit;
-}
-
-form button:hover, #statsContainer button:hover {
-    background-color: #0066ff;
-    transform: scale(1.05);
-}
 
 #messageContainer {
     position: absolute;
@@ -236,8 +214,29 @@ li {
 }
 
 .functionButton {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: rgb(0, 68, 204);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: inherit;
     width: fit-content;
 }
+
+.functionButton:hover {
+    background-color: #0066ff;
+    transform: scale(1.05);
+}
+
+
 
 
 
@@ -267,16 +266,16 @@ li {
 
 
 
-#statsTab{
+#statsTab {
     border-radius: 0 10px 0 0;
 }
 
 #preferencesForm {
     display: none;
-   
+
 }
 
-#easyReadCheckBox{
+#easyReadCheckBox {
     -webkit-appearance: none;
     position: relative;
     width: 50px;
@@ -285,15 +284,15 @@ li {
     background-color: lightgray;
     transition: background-color .3s;
     outline: none;
-    margin:0 auto 0 auto
+    margin: 0 auto 0 auto
 }
 
-#easyReadCheckBox::after{
+#easyReadCheckBox::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 30%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     border-radius: 50%;
     height: 1.25rem;
     width: 1.25rem;
@@ -301,20 +300,29 @@ li {
     transition: left .3s;
 }
 
-#easyReadCheckBox:checked{
+#easyReadCheckBox:checked {
     background-color: green;
 }
 
-#easyReadCheckBox:checked::after{
+#easyReadCheckBox:checked::after {
     left: 70%;
 }
 
-.sampleTextContainer{
+.sampleTextContainer {
     width: 80%;
     height: 15%;
+    display: flex;
+    justify-content: center;
 }
 
-#easyReadCheckBox{
+#sampleText {
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+
+#easyReadCheckBox {
     -webkit-appearance: none;
     position: relative;
     width: 50px;
@@ -325,12 +333,12 @@ li {
     outline: none;
 }
 
-#easyReadCheckBox::after{
+#easyReadCheckBox::after {
     content: '';
     position: absolute;
     top: 50%;
     left: 30%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     border-radius: 50%;
     height: 1.25rem;
     width: 1.25rem;
@@ -338,11 +346,11 @@ li {
     transition: left .3s;
 }
 
-#easyReadCheckBox:checked{
+#easyReadCheckBox:checked {
     background-color: green;
 }
 
-#easyReadCheckBox:checked::after{
+#easyReadCheckBox:checked::after {
     left: 70%;
 }
 
@@ -392,10 +400,7 @@ li {
 }
 
 
-
-
-
-#statsContainer{
+#statsContainer {
     display: none;
     flex-direction: column;
     align-items: center;
@@ -411,7 +416,7 @@ li {
     flex-shrink: 0;
 }
 
-.formContentContainer{
+.formContentContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -420,12 +425,12 @@ li {
     width: 100%;
     overflow-y: auto;
     padding-bottom: 2px;
-    
+
 }
 
 
 
-#timeContainer{
+#timeContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -436,7 +441,7 @@ li {
     width: 100%;
 }
 
-#collectiblesContainer{
+#collectiblesContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -447,7 +452,7 @@ li {
     width: 100%;
 }
 
-#gameCountContainer{
+#gameCountContainer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -458,18 +463,18 @@ li {
     width: 100%;
 }
 
-p{
+p {
     text-align: left;
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-b{
+b {
     width: 50%;
 }
 
-span{
+span {
     width: 50%;
     text-align: right;
 }
@@ -479,12 +484,12 @@ span{
     width: 6px;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
     background-color: rgb(0, 68, 204);
     border-radius: 20px;
 }
 
-::-webkit-scrollbar-track{
+::-webkit-scrollbar-track {
     background-color: transparent;
 }
 
@@ -542,6 +547,3 @@ span{
 
 
 }
-
-
-

@@ -46,9 +46,6 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
          if (insertResult.success) {
             
-            
-
-
             window.location.href = "mainMenu.html";
 
 
@@ -83,8 +80,9 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
 
 async function validateUsername(enteredUsername) {
-   let usernameRegex = /^[a-zA-Z0-9.]{5,20}$/;
+   let usernameRegex = /^[a-zA-Z0-9]{5,20}$/;
    if (usernameRegex.test(enteredUsername) == false) {
+      errorMessage += `<li>Username must be between 5 and 20 characters long and can only contain letters, numbers.</li>`;
       return false;
    }
 
