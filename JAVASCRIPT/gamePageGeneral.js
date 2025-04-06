@@ -176,6 +176,8 @@ function toggleSettings() {
 }
 
 
+//Achievement pop up
+
 function displayAchievement(iconSRC, achName, achDesc) {
     achievementIcon.src = iconSRC;
     achievementName.innerHTML = achName;
@@ -187,6 +189,8 @@ function displayAchievement(iconSRC, achName, achDesc) {
 function hideAchievement() {
     achievementContainer.classList.remove('achExpanded')
 }
+
+
 
 //removes transition properties to prevent transitions applying during resizing
 window.addEventListener('resize', function () {
@@ -349,15 +353,18 @@ function setResponseAfterDescription(responseText) {
 }
 
 
+// ADD ITEMS, CLUES AND ACHIEVEMENTS
+
+
 function UpdateInventory() {
     for (let i = 1; i < 7; i++) {
         document.getElementById(`slot${i}`).innerHTML = '';
-        
+
     }
     let slotCount = 1;
     for (let i = 0; i < inventory.length; i++) {
-        
-        
+
+
         if (inventory[i] != null && inventory[i].itemUsed == false) {
             const slot = document.getElementById(`slot${slotCount}`);
             let itemBtn = document.createElement('button');
@@ -416,33 +423,33 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 
 
-        let selectQuery = `SELECT name, description FROM tblAchievement
+            let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
 
 
-        dbConfig.set('query', selectQuery);
-        try {
-            response = await fetch(dbConnectorUrl, {
-                method: "POST",
-                body: dbConfig
-            });
+            dbConfig.set('query', selectQuery);
+            try {
+                response = await fetch(dbConnectorUrl, {
+                    method: "POST",
+                    body: dbConfig
+                });
 
-            let result = await response.json();
+                let result = await response.json();
 
-            if (result.success && result.data.length > 0) {
-                let achievement = result.data[0];
-                displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                if (result.success && result.data.length > 0) {
+                    let achievement = result.data[0];
+                    displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                }
+
+            } catch (error) {
+                console.log("Error retrieving achievement data");
+                console.log(error);
             }
-
-        } catch (error) {
-            console.log("Error retrieving achievement data");
-            console.log(error);
         }
-    }
-    else{
-        console.error("Error saving the achievement to the database")
-    }
+        else {
+            console.error("Error saving the achievement to the database")
+        }
 
     } catch (error) {
         console.log("Error setting achievement");
@@ -533,7 +540,7 @@ function updateClueNotebook() {
 
 
 async function addItem(itemID) {
-    
+
 
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
 
@@ -595,7 +602,7 @@ async function addItem(itemID) {
 
 
 
-
+//UPDATE GAMESAVE IN DATABASE
 async function saveGame() {
     sessionStorage.setItem('gameSessionEndTime', Date.now());
     let totalTime = calculateGameSessionTime();
@@ -694,10 +701,10 @@ async function updateRoomVisits() {
     }
 
 
-        if (visitedRoomID == null) {
-            console.log('no room found');   
-            return;
-        }
+    if (visitedRoomID == null) {
+        console.log('no room found');
+        return;
+    }
 
 
     let insertQuery = `UPDATE tblGameRoom SET timesVisited = timesVisited + 1 WHERE gameID = ${gameID} AND roomID = ${visitedRoomID}`;
@@ -720,7 +727,7 @@ async function updateRoomVisits() {
         console.error("Error while updating room visit count", error);
     }
 
-    
+
 }
 
 
@@ -795,6 +802,9 @@ async function savePreferences() {
 }
 
 
+
+// USE ITEMS AND SUBMIT EVIDENCE
+
 document.getElementById('useItemBtn').addEventListener('click', async function () {
 
     if (selectedItemID == null) {
@@ -866,13 +876,13 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             if (result.success) {
                 console.log("Item usage updated successfully in the database");
             }
-            else{
+            else {
                 console.error("Error updating item usage in the database");
             }
         } catch (error) {
             console.error("Error updating item usage in the database", error);
         }
-        
+
         if (userAchievementIDs.some(achievement => achievement.achievementID == 3) == false) {
             awardAchievement(3, userID, "Images/ring.png");
         }
@@ -895,7 +905,7 @@ document.getElementById('submitEvidenceBtn').addEventListener('click', async fun
 async function submitEvidence() {
     let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
     let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
-    let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
+    let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
     sessionStorage.setItem("invetory", JSON.stringify(inventory));

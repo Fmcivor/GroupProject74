@@ -235,8 +235,7 @@ h2{
     text-align: center;
     width: 90%;
     max-width: 350px;
-    height: 90%;
-    max-height: 200px;
+    max-height: fit-content;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 

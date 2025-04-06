@@ -140,16 +140,45 @@
     background-size: 100% 100%;
     background-position: center center;
     display: none;
+    justify-content: center;
+    align-items: center;
 }
 
 #clue1Btn{
     position: relative;
-    width: 45%;
-    height: 25%;
+    width: 10%;
+    height: 5%;
     background-color: transparent;
     border: none;
-    top: 70%;
-    left: 33%;
+    top: 20%;
+    left: -15%;
+    background-image: url("../Images/rubbishNote.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    
+}
+
+#postCardContainer{
+    background: url("../Images/readableLetter.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: fit-content;
+    height: fit-content;
+    padding: 15px;
+    color: black;
+    display: none;
+    
+}
+
+#postCardContainer p{
+    color: inherit;
+    font-size: 1.1rem;
+    width: fit-content;
+    height: fit-content;
+    display: block;
+    font-family: "Lugrasimo", cursive;
 }
 
 @media (max-width:650px) {
