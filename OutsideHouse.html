@@ -201,18 +201,18 @@
         <div class="submitEvidencePopUp" id="evidencePopUp">
             <div class="submitEvidencePopUpContent">
                 <div id="suspectSelectTextWrapper">
-                    <h2>Select which suspect to accuse:</h2>
+                    <h1>Select which suspect to accuse:</h2>
                 </div>
                 <div id="selectImagesWrapper">
-                    <button id="victorButton" class="suspectButton"></button>
-                    <button id="margaretButton" class="suspectButton"></button>
-                    <button id="jonathanButton" class="suspectButton"></button>
+                    <button id="victorButton" class="suspectButton"><p>Victor</p></button>
+                    <button id="margaretButton" class="suspectButton"><p>Margaret</p></button>
+                    <button id="jonathanButton" class="suspectButton"><p>Jonathon</p></button>
                 </div>
                 <div id="confirmationWrapper">
-                    <p>Are you sure you want to submit evidence now. This will decide the case and end the game!</p>
+                    <p id="submissionConfirmationText">Are you sure you want to submit evidence now.<br>This will decide the case and end the game!</p>
                     <div class="confirmationBtnContainer">
-                        <button class="confirmationBtn" onclick="submitEvidence()">Yes</button>
-                        <button class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+                        <button id="suspectConfirmationYesBtn" class="confirmationBtn" onclick="submitEvidence()">Yes</button>
+                        <button id="suspectConfirmationNoBtn" class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
                     </div>
                 </div>
             </div>
