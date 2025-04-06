@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buried Secrets - Introduction</title>
+    <title>Buried Secrets Ending</title>
     <link rel="stylesheet" href="CSS/endingGeneral.css">
-
     <link rel="stylesheet" href="CSS/endingStats.css">
 </head>
 <body>
@@ -21,14 +20,6 @@
                 <p>
                     <b>Save Started:</b>
                     <span id="saveStartedDisplay"></span>
-                </p>
-                <p>
-                    <b>Average time to complete:</b>
-                    <span id="averageTTWDisplay"></span>
-                </p>
-                <p >
-                    <b>Global Average Time to Complete:</b>
-                    <span id="globalAverageTTWDisplay"></span>
                 </p>
                 <div class="divider"></div>
                 <h3>🏆 Game Stats</h3>
@@ -50,12 +41,17 @@
                 </p>
         </div>
         <div id="footerContainer">
-            <a href="endGameWin.html">Return to End Screen</a>
+            <a href="endGameLoss.html">Return to End Screen</a>
             <button id="backToMenuBtn">Back to Menu</button>
         </div>
     </div>
-    <script src="JAVASCRIPT/gameStatsGeneral.js"></script> 
-    <script src="JAVASCRIPT/winStats.js"></script>
+    <script src="JAVASCRIPT/gameStatsGeneral.js"></script>
+    <script>
+        //INITIALISE
+        window.addEventListener('DOMContentLoaded', async function() {
+            await loadStats();
+        });
+    </script>
     <script src="JAVASCRIPT/utility.js"></script>
 </body>
 </html>

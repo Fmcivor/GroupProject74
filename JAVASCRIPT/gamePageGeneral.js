@@ -23,6 +23,11 @@ const gameInteractionContainer = document.querySelector('.gameInteractionContain
 const rightColumn = document.querySelector(".rightColumn");
 const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
 const deleteAndExit = document.getElementById('deleteAndExit');
+const selectVictorButton = document.getElementById('victorButton');
+const selectMargaretButton = document.getElementById('margaretButton');
+const selectJonathanButton = document.getElementById('jonathanButton');
+const confirmSuspectBtn = document.getElementById('suspectConfirmationYesBtn');
+const cancelSuspectBtn = document.getElementById('suspectConfirmationNoBtn');
 
 // item ids
 const keyID = 1;
@@ -50,6 +55,7 @@ let selectedToolBarItem = null;
 let typingInterval;
 let typingIndex = 0;
 let settingsOpen = false;
+let suspectAccused = null;
 
 
 let gameID = sessionStorage.getItem("gameID");
@@ -77,6 +83,11 @@ deleteAndExit.addEventListener('click', async function () {
 
 });
 
+selectVictorButton.addEventListener('click', accuseVictor);
+selectMargaretButton.addEventListener('click', accuseMargaret);
+selectJonathanButton.addEventListener('click', accuseJonathan);
+confirmSuspectBtn.addEventListener('click', submitEvidence);
+cancelSuspectBtn.addEventListener('click', closeSubmitEvidencePopUp);
 
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
@@ -897,32 +908,70 @@ async function submitEvidence() {
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
-    let accused = 'victor';
 
     sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-    if (accused == 'victor' && knifeClue && victorGuiltyClue && margaretInnocentClue && jonathanInnocentClue) {
-        sessionStorage.setItem("status", gameWin);
-        sessionStorage.setItem("currentRoom", "endGameWin.html");
-        await saveGame();
-        window.location.replace("endGameWin.html");
-    }
-    else {
-        if (accused != 'victor') {
-            sessionStorage.setItem("insufficientvidence", false);
+    if(suspectAccused != null){
+        if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
+            sessionStorage.setItem("status", gameWin);
+            sessionStorage.setItem("currentRoom", "endGameWin.html");
+            await saveGame();
+            window.location.replace("endGameWin.html");
         }
         else {
-            sessionStorage.setItem("insufficientvidence", true);
-        }
+            sessionStorage.setItem("murderWeaponFound", knifeClue);
+            seesionStorage.setItem("suspectAccused", suspectAccused);
+            sessionStorage.setItem("victorGuiltyClue", victorGuiltyClue);
+            sessionStorage.setItem("jonathanInnocentClue", jonathanInnocentClue);
+            sessionStorage.setItem("margaretInnocentClue", margaretInnocentClue);
 
-        sessionStorage.setItem("status", gameLoss);
-        sessionStorage.setItem("currentRoom", "endGame.html");
-        await saveGame();
-        window.location.replace("endGame.html");
+            if (suspectAccused != 'victor') {
+                sessionStorage.setItem("status", gameLoss);
+                sessionStorage.setItem("currentRoom", "endGameLoss.html");
+            await saveGame();
+            window.location.replace("endGameLoss.html");
+            }
+            else{
+                //insufficient evidence
+            }
+            
+        }
+    }
+    else {
+        selectVictorButton.style.animation = 'noSuspectSelected 1s';
+        selectJonathanButton.style.animation = 'noSuspectSelected 1s';
+        selectMargaretButton.style.animation = 'noSuspectSelected 1s';
+        confirmSuspectBtn.style.animation = 'noSuspectSelected 1s';
+        setTimeout(function() {
+            selectVictorButton.style.animation = 'none';
+            selectJonathanButton.style.animation = 'none';
+            selectMargaretButton.style.animation = 'none';
+            confirmSuspectBtn.style.animation = 'none';
+        }, 1000);
 
     }
 }
 
 function closeSubmitEvidencePopUp() {
     document.getElementById("evidencePopUp").style.display = "none";
+    suspectAccused = null;
+}
+
+function accuseVictor() {
+    selectVictorButton.style.border = '#ffee35 solid 3px'
+    selectMargaretButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    selectJonathanButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    suspectAccused = 'victor';
+}
+function accuseMargaret() {
+    selectMargaretButton.style.border = '#ffee35 solid 3px'
+    selectVictorButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    selectJonathanButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    suspectAccused = 'margaret';
+}
+function accuseJonathan() {
+    selectJonathanButton.style.border = '#ffee35 solid 3px'
+    selectVictorButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    selectMargaretButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    suspectAccused = 'jonathan';
 }
