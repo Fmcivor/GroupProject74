@@ -482,22 +482,7 @@ async function addClue(clueID) {
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
             updateClueNotebook();
 
-            let alternateColour = false;
-            let notificationTimer = setInterval(() => {
-                if (alternateColour == false) {
-                    noteBookButton.querySelector('i').classList.toggle('toolBarIconNotification');
-                }
-                else {
-                    noteBookButton.querySelector('i').classList.remove('toolBarIconNotification');
-                    alternateColour = false
-                }
-            }, 400);
-
-
-            setTimeout(() => {
-                clearInterval(notificationTimer);
-                noteBookButton.classList.remove('toolBarIconNotification');
-            }, 2400);
+            noteBookButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
 
 
 
@@ -588,16 +573,12 @@ async function addItem(itemID) {
         console.log(error);
     }
 
-    let alternateColour = false;
-    let notificationTimer = setInterval(() => {
-        inventoryButton.querySelector('i').classList.toggle('toolBarIconNotification');
-    }, 400);
+   
+    inventoryButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
 
 
-    setTimeout(() => {
-        clearInterval(notificationTimer);
-        inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
-    }, 2400);
+
+   
 }
 
 
@@ -920,7 +901,7 @@ async function submitEvidence() {
         }
         else {
             sessionStorage.setItem("murderWeaponFound", knifeClue);
-            seesionStorage.setItem("suspectAccused", suspectAccused);
+            sessionStorage.setItem("suspectAccused", suspectAccused);
             sessionStorage.setItem("victorGuiltyClue", victorGuiltyClue);
             sessionStorage.setItem("jonathanInnocentClue", jonathanInnocentClue);
             sessionStorage.setItem("margaretInnocentClue", margaretInnocentClue);
