@@ -1,72 +1,57 @@
-// Get the canvas and its context
 const canvas = document.getElementById("lockpickCanvas");
 const ctx = canvas.getContext("2d");
 
-// Game settings
-const totalStages = 5;         // Total number of vertical bars (stages)
-let currentStage = 0;          // Index of the current active stage
+const totalStages = 5; //Number of vertical bars
+let currentStage = 0; //Current bar player is on
 let gameActive = true;
 let animationFrameId;
 
-// Parameters for each stage/bar
-// Parameters for each stage/bar remain the same
-const stageWidth = 55;        // Width of each vertical bar
-const stageMargin = 20;        // Space between bars
-const barHeight = canvas.height; // Full height of the canvas for each bar
-const gapHeight = 30;          // Height of the moving gap
+const stageWidth = 55; //Wdith of each bar
+const stageMargin = 20; //Space between bars
+const barHeight = canvas.height;
+const gapHeight = 30;
 
-// Create stage objects; each stage has its own vertical gap properties, x-position, and a random targetY.
 let stages = [];
 for (let i = 0; i < totalStages; i++) {
-  // Generate a random targetY such that it fits within the bar
-  let randomTargetY = Math.floor(Math.random() * (barHeight - gapHeight));
+  let randomTargetY = Math.floor(Math.random() * (barHeight - gapHeight)); // Creates a random target for each stage
   stages.push({
-    gapY: 0,                     // Starting y-position of the gap
+    gapY: 0,                     
     gapHeight: gapHeight,
-    speed: 2 + (i/5),                // Increase speed slightly for later stages
-    targetY: randomTargetY,      // Set a random targetY for this stage
-    x: stageMargin + i * (stageWidth + stageMargin) // x-position for the bar
+    speed: 2 + (i/5), // Increase speed for each stage
+    targetY: randomTargetY, //Sets the target for each stage
+    x: stageMargin + i * (stageWidth + stageMargin)// x position of each stage
   });
 }
 
-
-// Draw the game frame on the canvas
 function drawGame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // Loop through each stage (vertical bar)
+  // Loop through each stage
   for (let i = 0; i < totalStages; i++) {
     let stage = stages[i];
     
-    // Draw the full bar background
-    ctx.fillStyle = "#333";
+    ctx.fillStyle = "#333"; //color of the bar
     ctx.fillRect(stage.x, 0, stageWidth, barHeight);
     
-    // Draw the target marker as a thicker red bar (rectangle)
-    const markerHeight = 10; // Adjust this value to make the red bar taller (and the game easier)
+    const markerHeight = 10; //height of red target
     ctx.fillStyle = "red";
     ctx.fillRect(stage.x, stage.targetY - markerHeight / 2, stageWidth, markerHeight);
 
-    
     if (i === currentStage) {
-      // Active stage: animate the moving gap vertically
       stage.gapY += stage.speed;
       if (stage.gapY < 0 || stage.gapY + stage.gapHeight > barHeight) {
         stage.speed = -stage.speed;
-        stage.gapY += stage.speed; // adjust after reversing
+        stage.gapY += stage.speed; //reverse the moving rectangle
       }
-      // "Cut out" the gap from the bar (clear that area)
       ctx.clearRect(stage.x, stage.gapY, stageWidth, stage.gapHeight);
-      // Highlight the moving gap with a yellow border
-      ctx.strokeStyle = "yellow";
+      ctx.strokeStyle = "yellow"; //give moving rectangle a border
       ctx.strokeRect(stage.x, stage.gapY, stageWidth, stage.gapHeight);
-    } else if (i < currentStage) {
-      // Locked stages (succeeded): show the gap in green at its locked position
+    } 
+    else if (i < currentStage) {
       ctx.clearRect(stage.x, stage.gapY, stageWidth, stage.gapHeight);
-      ctx.strokeStyle = "green";
+      ctx.strokeStyle = "green"; //if timed correctly, the gap is green
       ctx.strokeRect(stage.x, stage.gapY, stageWidth, stage.gapHeight);
     }
-    // Stages beyond currentStage simply show the static bar with the red target marker.
   }
   
   if (gameActive) {
@@ -74,17 +59,14 @@ function drawGame() {
   }
 }
 
-// When the canvas is clicked, check the current stage's gap
 canvas.addEventListener("click", async function() {
   if (!gameActive) return;
   
   let stage = stages[currentStage];
-  // Check if the target line (targetY) falls within the gap
+  //Check if the target falls within the gap
   if (stage.targetY >= stage.gapY && stage.targetY <= stage.gapY + stage.gapHeight) {
-    // Correct timing: lock this stage and move to the next
-    currentStage++;
-    if (currentStage >= totalStages) {
-      // All stages complete—win the game
+    currentStage++;// Move to the next stage
+    if (currentStage >= totalStages) { // If all stages are completed
       gameActive = false;
       if(!clueList.some(clue => clue.clueID == drawerClueID)){
         setResponse("You successfully picked the lock! The drawer slides open, revealing a note with a code on it. It reads: 4-3-7-9.");
@@ -105,7 +87,7 @@ canvas.addEventListener("click", async function() {
   }
 });
 
-// Start (or restart) the lockpicking minigame
+// Start the lockpicking minigame
 function startLockPickGame() {
     currentStage = 0;
     gameActive = true;
