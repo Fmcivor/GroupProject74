@@ -198,6 +198,7 @@ window.addEventListener('resize', function () {
     toolbar.classList.add('noTransition');
     inventoryContainer.classList.add('noTransition');
     noteBookContainer.classList.add('noTransition');
+    achievementContainer.classList.add('noTransition');
 
 
     //enable transition
@@ -205,6 +206,7 @@ window.addEventListener('resize', function () {
         toolbar.classList.remove('noTransition');
         inventoryContainer.classList.remove('noTransition');
         noteBookContainer.classList.remove('noTransition');
+        achievementContainer.classList.remove('noTransition');
     }, 1000);
 });
 
