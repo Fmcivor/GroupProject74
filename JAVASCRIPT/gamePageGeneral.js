@@ -198,6 +198,7 @@ window.addEventListener('resize', function () {
     toolbar.classList.add('noTransition');
     inventoryContainer.classList.add('noTransition');
     noteBookContainer.classList.add('noTransition');
+    achievementContainer.classList.add('noTransition');
 
 
     //enable transition
@@ -205,6 +206,7 @@ window.addEventListener('resize', function () {
         toolbar.classList.remove('noTransition');
         inventoryContainer.classList.remove('noTransition');
         noteBookContainer.classList.remove('noTransition');
+        achievementContainer.classList.remove('noTransition');
     }, 1000);
 });
 
@@ -908,7 +910,6 @@ async function submitEvidence() {
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
-
     sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
     if(suspectAccused != null){
@@ -948,7 +949,6 @@ async function submitEvidence() {
             selectMargaretButton.style.animation = 'none';
             confirmSuspectBtn.style.animation = 'none';
         }, 1000);
-
     }
 }
 

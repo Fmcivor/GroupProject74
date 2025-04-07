@@ -9,9 +9,9 @@ const userID = 1;
 const gameID = 364;
 
 //CONSTANTS
-const numOfClues = 6;
-const numOfItems = 7;
-const numOfRooms = 8;
+const numOfClues = 8;
+const numOfItems = 8;
+const numOfRooms = 9;
 
 const playTimeDisplay = document.getElementById('playTimeDisplay');
 const saveStartedDisplay = document.getElementById('saveStartedDisplay');
