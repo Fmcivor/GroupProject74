@@ -56,6 +56,7 @@
                         <label for="confirm-password">Confirm Password</label>
                         <input class="disabled" type="password" id="confirmPassword" disabled name="confirm-password">
                     </div>
+                    <button id="deleteAccountBtn">Delete Account</button>
                     <div class="functionButtonContainer">
                         <button type="button" class="functionButton" id="exitProfileBtn">Exit</button>
                         <button type="button" class="functionButton" id="saveProfileBtn">Save</button>
@@ -96,26 +97,26 @@
                 <section class="formContentContainer" >
                     <div id="timeContainer">
                         <h3>⏳ Time</h3>
-                        <p><b>Total Time Played</b><span id="totalTimePlayed"></span></p>
-                        <p><b>Average Time To Win</b><span id="avgTimeToWin"></span></p>
-                        <p><b>Quickest Time To Win</b><span id="quickestGame"></span></p>
-                        <p><b>Average Game Time</b><span id="averageTime"></span></p>
+                        <p><b>Total Time Played</b><span id="totalTimePlayed">N/A</span></p>
+                        <p><b>Average Time To Win</b><span id="avgTimeToWin">N/A</span></p>
+                        <p><b>Quickest Time To Win</b><span id="quickestGame">N/A</span></p>
+                        <p><b>Average Game Time</b><span id="averageTime">N/A</span></p>
                     </div>
 
                     <div id="collectiblesContainer">
                         <h3>🎒 Collectibles</h3>
-                        <p><b>Items Collected</b><span id="itemCount"></span></p>
-                        <p><b>Clues Collected</b><span id="clueCount"></span></p>
+                        <p><b>Items Collected</b><span id="itemCount">0</span></p>
+                        <p><b>Clues Collected</b><span id="clueCount">0</span></p>
                     </div>
 
                     <div id="gameCountContainer">
                         <h3>🏆 Game Performance</h3>
-                        <p><b>Most Visited Room</b><span id="mostVisitedRoom"></span></p>
-                        <p><b>Total Games Played</b><span id="totalGamesPlayed"></span></p>
-                        <p><b>Total Games Lost</b><span id="lost"></span></p>
-                        <p><b>Total Games Won</b><span id="won"></span></p>
-                        <p><b>Total Games Abandoned</b><span id="abandoned"></span></p>
-                        <p><b>Average Generator</b><span id="avgRepairAttempts"></span></p>
+                        <p><b>Most Visited Room</b><span id="mostVisitedRoom">N/A</span></p>
+                        <p><b>Total Games Played</b><span id="totalGamesPlayed">0</span></p>
+                        <p><b>Total Games Lost</b><span id="lost">0</span></p>
+                        <p><b>Total Games Won</b><span id="won">0</span></p>
+                        <p><b>Total Games Abandoned</b><span id="abandoned">0</span></p>
+                        <p><b>Average Generator</b><span id="avgRepairAttempts">0</span></p>
 
                     </div>
 
@@ -125,6 +126,16 @@
                 </section>
 
 
+            </div>
+        </div>
+
+        <div class="deletePopUp" id="deletePopUp">
+            <div class="deletePopUpContent">
+                <p id="confirmationMessage">Are you sure you want to delete your account and all associated data?</p>
+                <div class="buttons">
+                    <button class="btn"  id="yesBtn">Yes</button>
+                    <button class="btn"  id="noBtn">No</button>
+                </div>
             </div>
         </div>
 

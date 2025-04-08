@@ -169,3 +169,7 @@ function markAsNotFound(header, symbol) {
     header.style.color = "rgb(179, 17, 17)";
     symbol.classList.add('fa-square-xmark');
 }
+
+document.getElementById('backToMenuBtn').addEventListener('click',function(){
+    window.location.replace("mainMenu.html");
+});
