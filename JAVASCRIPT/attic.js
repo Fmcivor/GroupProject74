@@ -1,6 +1,9 @@
 let hasFlashLight = inventory.some(item => item.itemID == flashLightID);
 let hasBatteries = inventory.some(item => item.itemID == batteriesID);
 let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
+let flashlight;
+let flashLightActive = false;
+let selectedItemID = null;
 
 
 
@@ -25,6 +28,10 @@ const darkAttic = {
 }
 
 function toggleLight() {
+    if (!hasFlashLight || !hasBatteries) {
+        setResponse("You fumble in the dark, but without a working flashlight, you can't see anything.");
+        return; 
+    }
     if (currentState.ID === 1) {
         currentState = attic;
         sessionStorage.setItem("currentState", 2);
@@ -56,6 +63,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("lightSwitch").addEventListener("click", function () {
         toggleLight();
     });
+
+    document.getElementById("useItemBtn").addEventListener("click", () => {
+        toggleFlashLight();
+    });
 });
 
 
@@ -80,9 +91,9 @@ const attic = {
 
 
         {
-            "id": 1,
+            "id": 2,
             "Text": "Leave the attic",
-            "response": goToHall
+            "response": goToHallAgain
         },
 
 
@@ -95,6 +106,11 @@ function goToHall() {
     window.location.replace('upstairsHall.html');
 }
 
+function goToHallAgain(){
+    sessionStorage.setItem('currentState',2);
+    window.location.replace('upstairsHall.html');
+}
+
 function searchBoxes() {
 
 }
@@ -102,3 +118,41 @@ function searchBoxes() {
 function pullDownCloth(){
 
 }
+
+function toggleFlashLight() {
+    
+        let flashlight = document.getElementById('atticFlashLight')
+        
+        if (flashLightActive) {
+            flashlight.style.display = "block"; 
+        } else {
+            flashlight.style.display = "none";  
+        }
+    }
+
+    
+    
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById("atticContainer");
+        const flashlight = document.getElementById("atticFlashLight");
+    
+        // safety check
+        if (!container || !flashlight) {
+            console.warn("Container or flashlight not found!");
+            return;
+        }
+    
+        container.addEventListener("mousemove", function (event) {
+            if (flashLightActive) {
+                const rect = container.getBoundingClientRect();
+                const offsetX = event.clientX - rect.left;
+                const offsetY = event.clientY - rect.top;
+    
+                flashlight.style.display = "block";
+                flashlight.style.left = `${offsetX - 100}px`; // center 
+                flashlight.style.top = `${offsetY - 100}px`;
+            }
+        });
+    });

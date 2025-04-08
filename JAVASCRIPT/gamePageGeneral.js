@@ -843,6 +843,20 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             break;
         case "upstairsHall.html":
             break;
+            case "attic.html":
+                if (currentState == darkAttic || currentState == attic) {
+                    if (!flashLightActive && selectedItemID == flashLightID) {
+                        flashLightActive = true;  
+                        validItemUse = true;
+                        toggleFlashLight();
+                    } else if (atticLightingOn && selectedItemID == flashLightID) {
+                        setResponse('You no longer require the flashlight');
+                        flashLightActive = false;  
+                        document.getElementById("atticFlashlight").style.display = "none";
+                        validItemUse = true;
+                    }
+                }
+                break;
         default:
             console.error("Room not found!");
     }
