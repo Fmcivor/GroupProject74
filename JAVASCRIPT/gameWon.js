@@ -82,9 +82,11 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log(error);
     }
 
-    setTimeout(() => {
-        awardAchievement(6,userID,'Images/trophy.png')
-    }, 6500);
+    if (userAchievementIDs.length == 5) {
+        await awardAchievement(6,userID,'Images/trophy.png');
+    }
+        
+    
 }
 
 

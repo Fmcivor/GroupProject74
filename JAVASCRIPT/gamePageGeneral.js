@@ -441,7 +441,8 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
                 if (result.success && result.data.length > 0) {
                     let achievement = result.data[0];
-                    displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                    displayAchievement(achievementIconAddress, achievement.name, achievement.description);
+                    console.log(`achievement ${achievementID} added`);
                 }
 
             } catch (error) {
