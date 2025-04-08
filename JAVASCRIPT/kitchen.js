@@ -1,4 +1,4 @@
-let hasBatteries = inventory.some(item => item.itemID == batteriesID);
+let hasBatteries;
 
 const kitchenDefault = {
     "ID": 1,
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     currentState = states.find(state => state.ID == currentStateID) || kitchenDefault;
+    hasBatteries = inventory.some(item => item.itemID == batteriesID);
     updateState();
 })
 

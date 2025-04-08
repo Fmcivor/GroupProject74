@@ -14,20 +14,20 @@ document.addEventListener("DOMContentLoaded", function () {
     if (validUser == false) {
         return;
     }
-    const btnSignOut = document.getElementById("btnSignOut");
-    const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
+    // const btnSignOut = document.getElementById("btnSignOut");
+    // const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
-    if (btnSignOut && signOutConfirm && cancelSignOut) {
-        btnSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "flex";
-        });
+    // if (btnSignOut && signOutConfirm && cancelSignOut) {
+    //     btnSignOut.addEventListener("click", function () {
+    //         signOutConfirm.style.display = "flex";
+    //     });
 
-        cancelSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "none";
-        });
-    } else {
-        console.error("One or more elements are missing in the DOM.");
-    }
+    //     cancelSignOut.addEventListener("click", function () {
+    //         signOutConfirm.style.display = "none";
+    //     });
+    // } else {
+    //     console.error("One or more elements are missing in the DOM.");
+    // }
 
 
 

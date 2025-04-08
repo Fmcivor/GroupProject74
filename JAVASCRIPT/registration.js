@@ -33,8 +33,8 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
       console.log("All validations passed. Submitting form...")
-      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName,iconHREF)
-   VALUES ('${username}', '${password}','${displayName}','placeholder')`;
+      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName)
+   VALUES ('${username}', '${password}','${displayName}')`;
       dbConfig.set('query', insertQuery);
       try {
          let insertResponse = await fetch(dbConnectorUrl, {

@@ -1,6 +1,6 @@
-let hasPillBottle = inventory.some(item => item.itemID == pillBottleID);
-let hasGlassClue = clueList.some(clue => clue.clueID == 6);
-let hasFlashLight = inventory.some(item => item.itemID == flashLightID);
+let hasPillBottle;
+let hasGlassClue;
+let hasFlashLight;
 
 document.addEventListener('DOMContentLoaded', function () {
     let states = [guestBedroom, nightStandState, wardrobeState, underBedState];
@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Find the matching state or default to guestBedroom
     currentState = states.find(state => state.ID == currentStateID) || guestBedroom;
 
+    hasPillBottle = inventory.some(item => item.itemID == pillBottleID);
+    hasGlassClue = clueList.some(clue => clue.clueID == 6);
+    hasFlashLight = inventory.some(item => item.itemID == flashLightID);
     updateState();
 });
 

@@ -52,7 +52,7 @@ preferencesTab.addEventListener("click", function () {
     profileForm.style.display = 'none';
     statsContainer.style.display = 'none';
 
-    fontSlider.value = fontSize;
+    fontSlider.value = sessionStorage.getItem('fontSize');
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn")) === true;
     easyReadCheckBox.checked = easyReadOn;
 
@@ -74,7 +74,7 @@ statsTab.addEventListener('click', function () {
 
 
 document.addEventListener('DOMContentLoaded', async function () {
-    let validUser = checkLogin();
+    let validUser =     checkLogin();
     if (validUser == true) {
 
 
@@ -82,10 +82,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         fontSlider.value = fontSize;
         easyReadCheckBox.checked = easyReadOn;
 
-        await getGameStats();
-        await getCollectibleStats();
-        await getTimeStats();
-
+        let gameCount = await checkGameCount();
+        if (gameCount > 0) {
+            await getGameStats();
+            await getCollectibleStats();
+            await getTimeStats();
+        }
         // await displayStats();
         document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
     }
@@ -141,7 +143,46 @@ exitStatsBtn.addEventListener('click', function () {
 
 saveProfileBtn.addEventListener('click', validateChanges);
 
+document.getElementById('deleteAccountBtn').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('deletePopUp').style.display = 'flex';
+});
 
+document.getElementById('noBtn').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('deletePopUp').style.display = 'none';
+});
+
+document.getElementById('yesBtn').addEventListener('click', async function (event) {
+    event.preventDefault();
+    await deleteAccount();
+    document.getElementById('deletePopUp').style.display = 'none';
+});
+
+
+async function deleteAccount() {
+    let deleteQuery = `DELETE FROM tblUser WHERE userID = ${userID}`;
+    dbConfig.set('query', deleteQuery);
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            sessionStorage.clear();
+            window.location.replace('login.html');
+        }
+        else {
+            console.error("Error occurred while deleting the account", result.error);
+        }
+    }
+    catch (error) {
+        console.error("Error deleting account", error);
+    }
+}
 
 async function validateChanges(event) {
     event.preventDefault();
@@ -428,6 +469,30 @@ async function savePreferences() {
 //     }
 // }
 
+async function checkGameCount() {
+    let query = `SELECT count(*) AS gameCount FROM tblGameSave`;
+    dbConfig.set('query', query);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let count = result.data[0].gameCount;
+            return count;
+        }
+        else {
+            console.error("Error occurred while checking the number of game saves");
+            return 0;
+        }
+    } catch (error) {
+        console.error("Error occurred while checking the number of game saves", error);
+    }
+}
 
 async function getTimeStats() {
     let timeQuery = `SELECT 

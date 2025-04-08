@@ -1,6 +1,6 @@
 
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
-let hasWeddingRingClue = clueList.some(clue =>clue.clueID ==3);
+let hasWeddingRingClue;
 
 
 const downStairsHall ={
@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     currentState = states.find(state => state.ID == currentStateID) || downStairsHall;
 
     updateState();
+    hasWeddingRingClue = clueList.some(clue =>clue.clueID ==3);
 });
 
 
@@ -145,7 +146,7 @@ function trySwitch(){
         sessionStorage.setItem("lightingOn",JSON.stringify(lightingOn));
         currentState = downStairsHallLightsOn;
         updateState();
-        setDescriptionAndResponse("You have managed to turn the lights on maybe now you will finally be able to find some clues.");
+        setDescriptionAndResponse("You have managed to turn the lights on, maybe now you will finally be able to find some clues.");
     }
     else{
         setResponse("Well that didn't do anything, maybe and electrician would've got further than you.");

@@ -7,10 +7,9 @@
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
-let hasKey = inventory.some(item => item.itemID == keyID);
-let hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
-let hasGeneratorAchievement = userAchievementIDs.some(achievement => achievement.achievementID == 2);
-
+let hasKey;
+let hasRubbishClue;
+let hasGeneratorAchievement;
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -207,6 +206,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     else if (currentState.ID == frontOfHouseDoorUnlocked.ID && doorUnlocked == false) {
         currentState = frontOfHouseDoorLocked;
     }
+
+    hasKey = inventory.some(item => item.itemID == keyID);
+    hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
+    hasGeneratorAchievement = userAchievementIDs.some(achievement => achievement.achievementID == 2);
 
     updateState();
 
