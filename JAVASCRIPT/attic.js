@@ -1,6 +1,7 @@
 let hasFlashLight = inventory.some(item => item.itemID == flashLightID);
 let hasBatteries = inventory.some(item => item.itemID == batteriesID);
 let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
+let flashlight;
 let flashLightActive = false;
 let selectedItemID = null;
 
@@ -62,6 +63,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("lightSwitch").addEventListener("click", function () {
         toggleLight();
     });
+
+    document.getElementById("useItemBtn").addEventListener("click", () => {
+        toggleFlashLight();
+    });
 });
 
 
@@ -116,7 +121,7 @@ function pullDownCloth(){
 
 function toggleFlashLight() {
     
-        let flashlight = document.getElementById('atticFlashlight')
+        let flashlight = document.getElementById('atticFlashLight')
         
         if (flashLightActive) {
             flashlight.style.display = "block"; 
@@ -129,11 +134,25 @@ function toggleFlashLight() {
     
 
 
-
-document.addEventListener("mousemove", function (event) {
-    if (flashLightActive) {
-        let flashlight = document.getElementById("atticFlashlight");
-        flashlight.style.left = `${event.pageX - 100}px`;
-        flashlight.style.top = `${event.pageY - 100}px`;
-    }
-});
+    document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById("atticContainer");
+        const flashlight = document.getElementById("atticFlashLight");
+    
+        // safety check
+        if (!container || !flashlight) {
+            console.warn("Container or flashlight not found!");
+            return;
+        }
+    
+        container.addEventListener("mousemove", function (event) {
+            if (flashLightActive) {
+                const rect = container.getBoundingClientRect();
+                const offsetX = event.clientX - rect.left;
+                const offsetY = event.clientY - rect.top;
+    
+                flashlight.style.display = "block";
+                flashlight.style.left = `${offsetX - 100}px`; // center 
+                flashlight.style.top = `${offsetY - 100}px`;
+            }
+        });
+    });

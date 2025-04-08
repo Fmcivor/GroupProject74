@@ -1062,6 +1062,7 @@ p {
     background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(0, 0, 0, 0) 70%);
     pointer-events: none;
     display: none;
+    z-index: 1000;
 }
 
 #atticContainer {
