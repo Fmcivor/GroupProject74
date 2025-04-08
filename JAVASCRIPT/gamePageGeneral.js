@@ -843,7 +843,7 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
                     } else if (atticLightingOn && selectedItemID == flashLightID) {
                         setResponse('You no longer require the flashlight');
                         flashLightActive = false;  
-                        document.getElementById("atticFlashlight").style.display = "none";
+                        document.getElementById("atticFlashLight").style.display = "none";
                         validItemUse = true;
                     }
                 }
