@@ -294,11 +294,11 @@ async function updateTimesOnSofa(){
         console.log(error);
     }
     
-    if(timesOnSofa === 5) {
+    if(timesOnSofa === 5 && !userAchievementIDs.some(achievement => achievement.achievementID == 1)) {
         let achSRC = 'Images/sofaAchievementIcon.jpg';
         awardAchievement(1, userID, achSRC)
     }
-}
+ }
 
 function goToHall() {
     

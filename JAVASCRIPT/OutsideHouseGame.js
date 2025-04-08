@@ -363,7 +363,7 @@ function FixGenerator() {
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
         rgb(200,44, 44) 0deg, 
-        #4B0000 ${additionalRedAngle}deg, 
+      #4B0000 ${additionalRedAngle}deg, 
         rgb(78,78, 78) ${additionalRedAngle}deg, 
         rgb(78,78, 78) ${redZoneStart}deg, 
         rgb(200,44, 44) ${redZoneStart}deg, 

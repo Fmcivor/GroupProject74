@@ -32,6 +32,7 @@ document.getElementById("registerBtn").addEventListener("click", async function 
    let validConfirmPassword = validateConfirmPassword(password, confirmPassword);
 
    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
+      password = await hashPassword(password);
       console.log("All validations passed. Submitting form...")
       let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName)
    VALUES ('${username}', '${password}','${displayName}')`;

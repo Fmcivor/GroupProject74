@@ -608,7 +608,9 @@ async function getGameStats() {
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
     COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
     
-    ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)) AS avgNoOfRepairAttempts,
+    ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 
+    |THEN tblGameSave.noGeneratorRepairAttempts END)) 
+    AS avgNoOfRepairAttempts,
 
     (
         SELECT tblRoom.roomName
