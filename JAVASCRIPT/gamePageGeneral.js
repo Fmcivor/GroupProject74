@@ -23,6 +23,11 @@ const gameInteractionContainer = document.querySelector('.gameInteractionContain
 const rightColumn = document.querySelector(".rightColumn");
 const exitAndSaveBtn = document.getElementById('exitAndSaveBtn');
 const deleteAndExit = document.getElementById('deleteAndExit');
+const selectVictorButton = document.getElementById('victorButton');
+const selectMargaretButton = document.getElementById('margaretButton');
+const selectJonathanButton = document.getElementById('jonathanButton');
+const confirmSuspectBtn = document.getElementById('suspectConfirmationYesBtn');
+const cancelSuspectBtn = document.getElementById('suspectConfirmationNoBtn');
 
 // item ids
 const keyID = 1;
@@ -50,6 +55,7 @@ let selectedToolBarItem = null;
 let typingInterval;
 let typingIndex = 0;
 let settingsOpen = false;
+let suspectAccused = null;
 
 
 let gameID = sessionStorage.getItem("gameID");
@@ -77,6 +83,11 @@ deleteAndExit.addEventListener('click', async function () {
 
 });
 
+selectVictorButton.addEventListener('click', accuseVictor);
+selectMargaretButton.addEventListener('click', accuseMargaret);
+selectJonathanButton.addEventListener('click', accuseJonathan);
+confirmSuspectBtn.addEventListener('click', submitEvidence);
+cancelSuspectBtn.addEventListener('click', closeSubmitEvidencePopUp);
 
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
@@ -165,6 +176,8 @@ function toggleSettings() {
 }
 
 
+//Achievement pop up
+
 function displayAchievement(iconSRC, achName, achDesc) {
     achievementIcon.src = iconSRC;
     achievementName.innerHTML = achName;
@@ -177,12 +190,15 @@ function hideAchievement() {
     achievementContainer.classList.remove('achExpanded')
 }
 
+
+
 //removes transition properties to prevent transitions applying during resizing
 window.addEventListener('resize', function () {
     //disable transitions
     toolbar.classList.add('noTransition');
     inventoryContainer.classList.add('noTransition');
     noteBookContainer.classList.add('noTransition');
+    achievementContainer.classList.add('noTransition');
 
 
     //enable transition
@@ -190,6 +206,7 @@ window.addEventListener('resize', function () {
         toolbar.classList.remove('noTransition');
         inventoryContainer.classList.remove('noTransition');
         noteBookContainer.classList.remove('noTransition');
+        achievementContainer.classList.remove('noTransition');
     }, 1000);
 });
 
@@ -338,15 +355,18 @@ function setResponseAfterDescription(responseText) {
 }
 
 
+// ADD ITEMS, CLUES AND ACHIEVEMENTS
+
+
 function UpdateInventory() {
     for (let i = 1; i < 7; i++) {
         document.getElementById(`slot${i}`).innerHTML = '';
-        
+
     }
     let slotCount = 1;
     for (let i = 0; i < inventory.length; i++) {
-        
-        
+
+
         if (inventory[i] != null && inventory[i].itemUsed == false) {
             const slot = document.getElementById(`slot${slotCount}`);
             let itemBtn = document.createElement('button');
@@ -405,33 +425,33 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 
 
-        let selectQuery = `SELECT name, description FROM tblAchievement
+            let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
 
 
-        dbConfig.set('query', selectQuery);
-        try {
-            response = await fetch(dbConnectorUrl, {
-                method: "POST",
-                body: dbConfig
-            });
+            dbConfig.set('query', selectQuery);
+            try {
+                response = await fetch(dbConnectorUrl, {
+                    method: "POST",
+                    body: dbConfig
+                });
 
-            let result = await response.json();
+                let result = await response.json();
 
-            if (result.success && result.data.length > 0) {
-                let achievement = result.data[0];
-                displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                if (result.success && result.data.length > 0) {
+                    let achievement = result.data[0];
+                    displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                }
+
+            } catch (error) {
+                console.log("Error retrieving achievement data");
+                console.log(error);
             }
-
-        } catch (error) {
-            console.log("Error retrieving achievement data");
-            console.log(error);
         }
-    }
-    else{
-        console.error("Error saving the achievement to the database")
-    }
+        else {
+            console.error("Error saving the achievement to the database")
+        }
 
     } catch (error) {
         console.log("Error setting achievement");
@@ -464,22 +484,7 @@ async function addClue(clueID) {
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
             updateClueNotebook();
 
-            let alternateColour = false;
-            let notificationTimer = setInterval(() => {
-                if (alternateColour == false) {
-                    noteBookButton.querySelector('i').classList.toggle('toolBarIconNotification');
-                }
-                else {
-                    noteBookButton.querySelector('i').classList.remove('toolBarIconNotification');
-                    alternateColour = false
-                }
-            }, 400);
-
-
-            setTimeout(() => {
-                clearInterval(notificationTimer);
-                noteBookButton.classList.remove('toolBarIconNotification');
-            }, 2400);
+            noteBookButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
 
 
 
@@ -522,7 +527,7 @@ function updateClueNotebook() {
 
 
 async function addItem(itemID) {
-    
+
 
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
 
@@ -570,21 +575,17 @@ async function addItem(itemID) {
         console.log(error);
     }
 
-    let alternateColour = false;
-    let notificationTimer = setInterval(() => {
-        inventoryButton.querySelector('i').classList.toggle('toolBarIconNotification');
-    }, 400);
+   
+    inventoryButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
 
 
-    setTimeout(() => {
-        clearInterval(notificationTimer);
-        inventoryButton.querySelector('i').classList.remove('toolBarIconNotification');
-    }, 2400);
+
+   
 }
 
 
 
-
+//UPDATE GAMESAVE IN DATABASE
 async function saveGame() {
     sessionStorage.setItem('gameSessionEndTime', Date.now());
     let totalTime = calculateGameSessionTime();
@@ -683,10 +684,10 @@ async function updateRoomVisits() {
     }
 
 
-        if (visitedRoomID == null) {
-            console.log('no room found');   
-            return;
-        }
+    if (visitedRoomID == null) {
+        console.log('no room found');
+        return;
+    }
 
 
     let insertQuery = `UPDATE tblGameRoom SET timesVisited = timesVisited + 1 WHERE gameID = ${gameID} AND roomID = ${visitedRoomID}`;
@@ -709,7 +710,7 @@ async function updateRoomVisits() {
         console.error("Error while updating room visit count", error);
     }
 
-    
+
 }
 
 
@@ -783,6 +784,9 @@ async function savePreferences() {
 
 }
 
+
+
+// USE ITEMS AND SUBMIT EVIDENCE
 
 document.getElementById('useItemBtn').addEventListener('click', async function () {
 
@@ -869,13 +873,13 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             if (result.success) {
                 console.log("Item usage updated successfully in the database");
             }
-            else{
+            else {
                 console.error("Error updating item usage in the database");
             }
         } catch (error) {
             console.error("Error updating item usage in the database", error);
         }
-        
+
         if (userAchievementIDs.some(achievement => achievement.achievementID == 3) == false) {
             awardAchievement(3, userID, "Images/ring.png");
         }
@@ -898,33 +902,71 @@ document.getElementById('submitEvidenceBtn').addEventListener('click', async fun
 async function submitEvidence() {
     let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
     let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
-    let jonathanInnocentClue = clueList.some(clue => clue.clueID == computerClueID);
+    let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
-
-    let accused  = 'victor';
 
     sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-    if (accused == 'victor' && knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
-        sessionStorage.setItem("status", gameWin);
-        sessionStorage.setItem("currentRoom", "endGameWin.html");
-        await saveGame();
-        window.location.replace("endGameWin.html");
+    if(suspectAccused != null){
+        if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
+            sessionStorage.setItem("status", gameWin);
+            sessionStorage.setItem("currentRoom", "endGameWin.html");
+            await saveGame();
+            window.location.replace("endGameWin.html");
+        }
+        else {
+            sessionStorage.setItem("murderWeaponFound", knifeClue);
+            sessionStorage.setItem("suspectAccused", suspectAccused);
+            sessionStorage.setItem("victorGuiltyClue", victorGuiltyClue);
+            sessionStorage.setItem("jonathanInnocentClue", jonathanInnocentClue);
+            sessionStorage.setItem("margaretInnocentClue", margaretInnocentClue);
+
+            if (suspectAccused != 'victor') {
+                sessionStorage.setItem("status", gameLoss);
+                sessionStorage.setItem("currentRoom", "endGameLoss.html");
+            await saveGame();
+            window.location.replace("endGameLoss.html");
+            }
+            else{
+                //insufficient evidence
+            }
+            
+        }
     }
     else {
-        if (accused != 'victor') {
-            sessionStorage.setItem("status", gameLoss);
-        sessionStorage.setItem("currentRoom", "endGame.html");
-        await saveGame();
-        window.location.replace("endGame.html");
-        }
-        else{
-            //insufficient evidence
-        }
-        
+        selectVictorButton.style.animation = 'noSuspectSelected 1s';
+        selectJonathanButton.style.animation = 'noSuspectSelected 1s';
+        selectMargaretButton.style.animation = 'noSuspectSelected 1s';
+        confirmSuspectBtn.style.animation = 'noSuspectSelected 1s';
+        setTimeout(function() {
+            selectVictorButton.style.animation = 'none';
+            selectJonathanButton.style.animation = 'none';
+            selectMargaretButton.style.animation = 'none';
+            confirmSuspectBtn.style.animation = 'none';
+        }, 1000);
     }
 }
 
 function closeSubmitEvidencePopUp() {
     document.getElementById("evidencePopUp").style.display = "none";
+    suspectAccused = null;
+}
+
+function accuseVictor() {
+    selectVictorButton.style.border = '#ffee35 solid 3px'
+    selectMargaretButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    selectJonathanButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    suspectAccused = 'victor';
+}
+function accuseMargaret() {
+    selectMargaretButton.style.border = '#ffee35 solid 3px'
+    selectVictorButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    selectJonathanButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    suspectAccused = 'margaret';
+}
+function accuseJonathan() {
+    selectJonathanButton.style.border = '#ffee35 solid 3px'
+    selectVictorButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    selectMargaretButton.style.border = 'rgb(10, 10, 40) 3px solid';
+    suspectAccused = 'jonathan';
 }

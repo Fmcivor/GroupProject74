@@ -1,8 +1,8 @@
 //LEAD DEVELOPER - FINTAN 
-//Form styling and show button - MATTHEW
 
 
-//^ DEVELOPMENT PURPOSES
+
+
 
 
 let errorMessage = '<ul>';
@@ -40,7 +40,7 @@ async function validateLogin(event) {
 
     let enteredUsername = document.getElementById('username').value;
     let enteredPassword = document.getElementById('password').value;
-
+    enteredPassword = await hashPassword(enteredPassword);
     let loginQuery = `SELECT userID, username, displayName, fontSize FROM tblUser WHERE BINARY username ='${enteredUsername}' AND BINARY userPassword ='${enteredPassword}'`;
     dbConfig.set("query", loginQuery);
     try {

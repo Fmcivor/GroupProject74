@@ -1,12 +1,15 @@
 
 document.addEventListener("DOMContentLoaded", async function () {
-    checkLogin();
-    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
+    let validUser = checkLogin();
+    if (validUser == true) {
 
-    let userID = sessionStorage.getItem("userID");
+        document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
 
-    await displayAllAchievements();
-    highlightUnlockedAchievements();
+        let userID = sessionStorage.getItem("userID");
+
+        await displayAllAchievements();
+        highlightUnlockedAchievements();
+    }
 });
 
 function highlightUnlockedAchievements() {
@@ -14,30 +17,30 @@ function highlightUnlockedAchievements() {
 
     userAchievementIDs.forEach(achievement => {
         let achievementID = achievement.achievementID;
-        
+
         document.getElementById(`achievement${achievementID}`).classList.add("unlocked");
     });
 }
 
 
 async function displayAllAchievements() {
-    
+
     let query = `SELECT * FROM tblAchievement`;
     dbConfig.set("query", query);
 
     try {
-        let response = await fetch(dbConnectorUrl,{
+        let response = await fetch(dbConnectorUrl, {
             method: "POST",
-            body:dbConfig
+            body: dbConfig
         });
 
         let result = await response.json();
 
         if (result.success) {
             let achievements = result.data;
-            
+
             const achievementsContainer = document.querySelector(".achievements-container");
-            achievementsContainer.innerHTML = ""; 
+            achievementsContainer.innerHTML = "";
 
             achievements.forEach(achievement => {
                 let achievementHTML = `<div class="achievement-wrapper">
@@ -47,7 +50,7 @@ async function displayAllAchievements() {
             </div>`;
                 achievementsContainer.innerHTML += achievementHTML;
             });
-            
+
         }
         else {
             console.error("Error fetching achievements:");

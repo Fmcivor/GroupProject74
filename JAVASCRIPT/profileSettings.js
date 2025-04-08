@@ -1,5 +1,5 @@
 //LEAD DEVELOPER - FINTAN 
-//Form styling and show button - MATTHEW
+
 
 
 
@@ -52,7 +52,7 @@ preferencesTab.addEventListener("click", function () {
     profileForm.style.display = 'none';
     statsContainer.style.display = 'none';
 
-    fontSlider.value = fontSize;
+    fontSlider.value = sessionStorage.getItem('fontSize');
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn")) === true;
     easyReadCheckBox.checked = easyReadOn;
 
@@ -73,17 +73,24 @@ statsTab.addEventListener('click', function () {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    checkLogin();
+document.addEventListener('DOMContentLoaded', async function () {
+    let validUser =     checkLogin();
+    if (validUser == true) {
 
-    displayNameInput.value = displayName
-    fontSlider.value = fontSize;
-    easyReadCheckBox.checked = easyReadOn;
 
-    displayStats();
+        displayNameInput.value = displayName
+        fontSlider.value = fontSize;
+        easyReadCheckBox.checked = easyReadOn;
 
-    document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("username");
-
+        let gameCount = await checkGameCount();
+        if (gameCount > 0) {
+            await getGameStats();
+            await getCollectibleStats();
+            await getTimeStats();
+        }
+        // await displayStats();
+        document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
+    }
 });
 
 
@@ -105,13 +112,13 @@ function togglePassword() {
 document.getElementById('password').addEventListener('input', function (event) {
     const confirmPasswordField = document.getElementById('confirmPassword');
     if (event.target.value.trim() == '') {
-        confirmPasswordField.classList.add('disabled');
+        // confirmPasswordField.classList.add('disabled');
         confirmPasswordField.setAttribute('disabled', true);
         confirmPasswordField.value = '';
 
     }
     else {
-        confirmPasswordField.classList.remove('disabled');
+        // confirmPasswordField.classList.remove('disabled');
         confirmPasswordField.removeAttribute('disabled');
     }
 });
@@ -136,7 +143,46 @@ exitStatsBtn.addEventListener('click', function () {
 
 saveProfileBtn.addEventListener('click', validateChanges);
 
+document.getElementById('deleteAccountBtn').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('deletePopUp').style.display = 'flex';
+});
 
+document.getElementById('noBtn').addEventListener('click', function (event) {
+    event.preventDefault();
+    document.getElementById('deletePopUp').style.display = 'none';
+});
+
+document.getElementById('yesBtn').addEventListener('click', async function (event) {
+    event.preventDefault();
+    await deleteAccount();
+    document.getElementById('deletePopUp').style.display = 'none';
+});
+
+
+async function deleteAccount() {
+    let deleteQuery = `DELETE FROM tblUser WHERE userID = ${userID}`;
+    dbConfig.set('query', deleteQuery);
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            sessionStorage.clear();
+            window.location.replace('login.html');
+        }
+        else {
+            console.error("Error occurred while deleting the account", result.error);
+        }
+    }
+    catch (error) {
+        console.error("Error deleting account", error);
+    }
+}
 
 async function validateChanges(event) {
     event.preventDefault();
@@ -181,7 +227,7 @@ function validateDisplayName(enteredDisplayName) {
     let displayNameRegex = /^[a-zA-Z]{1,15}$/;
 
     if (displayNameRegex.test(enteredDisplayName) == false) {
-        errorMessage += '<li>The display name must not be null and contain letters only.</li>';
+        errorMessage += '<li>The display name must be letters only and less than 16 characters.</li>';
         displayNameInput.classList.add('invalid');
         return false;
     }
@@ -232,7 +278,7 @@ async function updateProfile(enteredDisplayName, enteredPassword) {
 
         let result = await response.json();
 
-        if (result.success && result.affected_rows == 1) {
+        if (result.success) {
             displayMessage(true);
             sessionStorage.setItem("displayName", enteredDisplayName);
         }
@@ -249,7 +295,7 @@ function displayMessage(success) {
     if (success) {
         header = 'Success';
         headerColor = 'white';
-        message += '<p>Your profile has successfully been updated!</p>';
+        message += '<p style="text-align:center;">Your profile has successfully been updated!</p>';
         document.getElementById('messageContent').innerHTML = message;
     }
     else {
@@ -334,38 +380,142 @@ async function savePreferences() {
 }
 
 
-async function displayStats() {
-    let statsQuery = `SELECT 
-    IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))),'N/A') AS totalTimePlayed, 
-    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS averageToWin,
-    COUNT(tblGameInventory.itemID) AS numOfItemsCollected,
-    COUNT(tblGameNotebook.clueID) AS numOfCluesCollected,
-    IFNULL(SEC_TO_TIME(MIN(CASE WHEN tblGameSave.status = 1 THEN tblGameSave.timePlayed END)),'N/A') AS fastestTimeToCompleteGame,
-    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status !=4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS averageTime,
-    COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
-    COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
-    COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
-    COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
-    ROUND(AVG(tblGameSave.noGeneratorRepairAttempts)) AS avgNoOfRepairAttempts,
-    (SELECT tblRoom.roomName
-     FROM tblRoom 
-     WHERE tblRoom.roomID = (
-         SELECT tblGameRoom.roomID
-         FROM tblGameRoom
-         JOIN tblGameSave ON tblGameSave.gameID = tblGameRoom.gameID
-         WHERE tblGameSave.userID = ${userID}
-         GROUP BY tblGameRoom.roomID
-         ORDER BY SUM(tblGameRoom.timesVisited) DESC
-         LIMIT 1)
-    ) AS mostVisitedRoom
-FROM tblGameSave 
-LEFT JOIN tblGameInventory ON tblGameInventory.gameID = tblGameSave.gameID 
-LEFT JOIN tblGameNotebook ON tblGameNotebook.gameID = tblGameSave.gameID
-WHERE tblGameSave.userID = ${userID}
-GROUP BY tblGameSave.userID;
-`;
+// async function displayStats() {
+//     let statsQuery = `SELECT 
+//     IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))), 'N/A') AS totalTimePlayed, 
 
-    dbConfig.set('query', statsQuery);
+//     IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))), 'N/A') AS averageToWin,
+
+//     (
+//         SELECT COUNT(*) 
+//         FROM tblGameInventory 
+//         WHERE gameID IN (SELECT gameID FROM tblGameSave WHERE userID = ${userID})
+//     ) AS numOfItemsCollected,
+
+//     (
+//         SELECT COUNT(*) 
+//         FROM tblGameNotebook 
+//         WHERE gameID IN (SELECT gameID FROM tblGameSave WHERE userID = ${userID})
+//     ) AS numOfCluesCollected,
+
+//     IFNULL(
+//         SEC_TO_TIME(
+//             MIN(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END)
+//         ), 'N/A'
+//     ) AS fastestTimeToCompleteGame,
+
+//     IFNULL(
+//         SEC_TO_TIME(
+//             ROUND(AVG(CASE WHEN tblGameSave.status != 4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))
+//         ), 'N/A'
+//     ) AS averageTime,
+
+//     COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
+//     COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
+//     COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
+//     COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
+
+//     ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)) AS avgNoOfRepairAttempts,
+
+//     (
+//         SELECT tblRoom.roomName
+//         FROM tblRoom 
+//         WHERE tblRoom.roomID = (
+//             SELECT tblGameRoom.roomID
+//             FROM tblGameRoom
+//             JOIN tblGameSave ON tblGameSave.gameID = tblGameRoom.gameID
+//             WHERE tblGameSave.userID = ${userID}
+//             GROUP BY tblGameRoom.roomID
+//             ORDER BY SUM(tblGameRoom.timesVisited) DESC
+//             LIMIT 1
+//         )
+//     ) AS mostVisitedRoom
+
+// FROM tblGameSave 
+// WHERE tblGameSave.userID = ${userID}
+// GROUP BY tblGameSave.userID`;
+
+//     dbConfig.set('query', statsQuery);
+
+//     try {
+//         let response = await fetch(dbConnectorUrl, {
+//             method: "POST",
+//             body: dbConfig
+//         });
+
+//         let result = await response.json();
+
+//         if (result.success) {
+//             let stats = result.data[0];
+//             document.getElementById("totalTimePlayed").textContent = stats.totalTimePlayed;
+//             document.getElementById("avgTimeToWin").textContent = stats.averageToWin;
+//             document.getElementById("itemCount").textContent = stats.numOfItemsCollected;
+//             document.getElementById("clueCount").textContent = stats.numOfCluesCollected;
+//             document.getElementById("quickestGame").textContent = stats.fastestTimeToCompleteGame;
+//             document.getElementById("averageTime").textContent = stats.averageTime;
+//             document.getElementById("lost").textContent = stats.gamesLost;
+//             document.getElementById("won").textContent = stats.gamesWon;
+//             document.getElementById("abandoned").textContent = stats.gamesAbandoned;
+//             document.getElementById("totalGamesPlayed").textContent = stats.totalGames;
+//             document.getElementById("avgRepairAttempts").textContent = stats.avgNoOfRepairAttempts;
+//             document.getElementById("mostVisitedRoom").textContent = stats.mostVisitedRoom;
+//         }
+//         else {
+//             console.error("Error occurred while retrieving the game stats");
+//             console.error(result.error);
+//         }
+//     } catch (error) {
+//         console.error("Error while retrieving the game stats", error);
+//     }
+// }
+
+async function checkGameCount() {
+    let query = `SELECT count(*) AS gameCount FROM tblGameSave`;
+    dbConfig.set('query', query);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let count = result.data[0].gameCount;
+            return count;
+        }
+        else {
+            console.error("Error occurred while checking the number of game saves");
+            return 0;
+        }
+    } catch (error) {
+        console.error("Error occurred while checking the number of game saves", error);
+    }
+}
+
+async function getTimeStats() {
+    let timeQuery = `SELECT 
+    IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))), 'N/A') AS totalTimePlayed, 
+    
+    IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))), 'N/A') AS averageToWin,
+    IFNULL(
+        SEC_TO_TIME(
+            MIN(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END)
+        ), 'N/A'
+    ) AS fastestTimeToCompleteGame,
+
+    IFNULL(
+        SEC_TO_TIME(
+            ROUND(AVG(CASE WHEN tblGameSave.status != 4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))
+        ), 'N/A'
+    ) AS averageTime
+     
+FROM tblGameSave 
+WHERE tblGameSave.userID = ${userID}
+GROUP BY tblGameSave.userID`;
+
+    dbConfig.set('query', timeQuery);
 
     try {
         let response = await fetch(dbConnectorUrl, {
@@ -379,10 +529,119 @@ GROUP BY tblGameSave.userID;
             let stats = result.data[0];
             document.getElementById("totalTimePlayed").textContent = stats.totalTimePlayed;
             document.getElementById("avgTimeToWin").textContent = stats.averageToWin;
-            document.getElementById("itemCount").textContent = stats.numOfItemsCollected;
-            document.getElementById("clueCount").textContent = stats.numOfCluesCollected;
             document.getElementById("quickestGame").textContent = stats.fastestTimeToCompleteGame;
             document.getElementById("averageTime").textContent = stats.averageTime;
+        }
+        else {
+            console.error("Error occurred while retrieving the time stats");
+            console.error(result.error);
+        }
+    } catch (error) {
+        console.error("Error while retrieving the time stats", error);
+    }
+}
+
+
+async function getCollectibleStats() {
+    let query = `SELECT
+     COUNT(*) AS numOfItemsCollected 
+     FROM tblGameSave 
+     JOIN tblGameInventory ON tblGameSave.gameID = tblGameInventory.gameID 
+     WHERE tblGameSave.userID = ${userID}`;
+
+    dbConfig.set('query', query);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let stats = result.data[0];
+            document.getElementById("itemCount").textContent = stats.numOfItemsCollected;
+        }
+        else {
+            console.error("Error occurred while retrieving the item stats");
+            console.error(result.error);
+        }
+
+    } catch (error) {
+        console.error("Error while retrieving the item stats", error);
+    }
+
+
+    let clueQuery = `SELECT
+     COUNT(*) AS numOfCluesCollected FROM tblGameSave
+     JOIN tblGameNotebook ON tblGameSave.gameID = tblGameNotebook.gameID 
+     WHERE tblGameSave.userID = ${userID}`;
+
+    dbConfig.set('query', clueQuery);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let stats = result.data[0];
+            document.getElementById("clueCount").textContent = stats.numOfCluesCollected;
+        }
+        else {
+            console.error("Error occurred while retrieving the clue stats");
+            console.error(result.error);
+        }
+    } catch (error) {
+        console.error("Error while retrieving the clue stats", error);
+    }
+}
+
+async function getGameStats() {
+    let gameStats = `SELECT 
+    COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
+    COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
+    COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
+    COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
+    
+    ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 
+    |THEN tblGameSave.noGeneratorRepairAttempts END)) 
+    AS avgNoOfRepairAttempts,
+
+    (
+        SELECT tblRoom.roomName
+        FROM tblRoom 
+        WHERE tblRoom.roomID = (
+            SELECT tblGameRoom.roomID
+            FROM tblGameRoom
+            JOIN tblGameSave ON tblGameSave.gameID = tblGameRoom.gameID
+            WHERE tblGameSave.userID = ${userID}
+            GROUP BY tblGameRoom.roomID
+            ORDER BY SUM(tblGameRoom.timesVisited) DESC
+            LIMIT 1
+        )
+    ) AS mostVisitedRoom
+
+FROM tblGameSave 
+WHERE tblGameSave.userID = ${userID}
+GROUP BY tblGameSave.userID`;
+
+    dbConfig.set('query', gameStats);
+
+    try {
+        let response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let stats = result.data[0];
             document.getElementById("lost").textContent = stats.gamesLost;
             document.getElementById("won").textContent = stats.gamesWon;
             document.getElementById("abandoned").textContent = stats.gamesAbandoned;
@@ -391,9 +650,10 @@ GROUP BY tblGameSave.userID;
             document.getElementById("mostVisitedRoom").textContent = stats.mostVisitedRoom;
         }
         else {
-            console.error("it broke");
+            console.error("Error occurred while retrieving the game stats");
+            console.error(result.error);
         }
     } catch (error) {
-        console.error("it broke", error);
+        console.error("Error while retrieving the game stats", error);
     }
 }

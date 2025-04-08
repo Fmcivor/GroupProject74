@@ -8,9 +8,12 @@
     <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/GamePage.css">
     <link rel="stylesheet" href="CSS/livingRoom.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@700&display=swap" rel="stylesheet">
     <link
-        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap"
-        rel="stylesheet">
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lugrasimo&family=Macondo+Swash+Caps&family=Noto+Sans+KR:wght@100..900&family=Uncial+Antiqua&display=swap"
+    rel="stylesheet">
 
 </head>
 
@@ -73,7 +76,10 @@
         <div class="rightColumn">
             <div class="gameContainer"></div>
             <button id="burntLetter" class="hide" type="button" ></button>
-            <div id="letterContainer" class="hide">
+        </div>
+
+        <div id="letterBackgroundDimmer" class="hide">
+            <div id="letterContainer">
                 <h3>Dear Charles Kingston</h3>
                 <p>
                     I just found out you bribed that junior doctor to perjure herself!
@@ -85,6 +91,7 @@
                 <h3 id="fromLetterLine">From Victor </h3>
             </div>
         </div>
+
         <nav class="toolBar">
             <div class="iconContainer">
 
@@ -168,10 +175,20 @@
 
         <div class="submitEvidencePopUp" id="evidencePopUp">
             <div class="submitEvidencePopUpContent">
-                <p>Are you sure you want to submit evidence now. This will decide the case!</p>
-                <div class="confirmationBtnContainer">
-                    <button class="confirmationBtn" onclick="submitEvidence()">Yes</button>
-                    <button class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+                <div id="suspectSelectTextWrapper">
+                    <h1>Select which suspect to accuse:</h2>
+                </div>
+                <div id="selectImagesWrapper">
+                    <button id="victorButton" class="suspectButton"><p>Victor</p></button>
+                    <button id="margaretButton" class="suspectButton"><p>Margaret</p></button>
+                    <button id="jonathanButton" class="suspectButton"><p>Jonathon</p></button>
+                </div>
+                <div id="confirmationWrapper">
+                    <p id="submissionConfirmationText">Are you sure you want to submit evidence now.<br>This will decide the case and end the game!</p>
+                    <div class="confirmationBtnContainer">
+                        <button id="suspectConfirmationYesBtn" class="confirmationBtn" onclick="submitEvidence()">Yes</button>
+                        <button id="suspectConfirmationNoBtn" class="confirmationBtn" onclick="closeSubmitEvidencePopUp()">No</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -24,8 +24,8 @@ const safeCode = '4379';
 const safeGameContainer = document.getElementById('safeGameContainer')
 
 //VARIABLES
-let hasLockpick = inventory.some(item => item.itemID == lockpickID);
-let hasKnife = inventory.some(item => item.itemID == knifeItemID);
+let hasLockpick;
+let hasKnife;
 
 let d1Rotating = false;
 let d2Rotating = false;
@@ -304,9 +304,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     states.push(enteredMasterBedroom, openingSafe);
 
+    let currentStateID = Number(sessionStorage.getItem('currentState'));
     currentState = states.find(state => state.ID == currentStateID) || enteredMasterBedroom;
     updateState();
     randomiseDials();
+
+    hasLockpick = inventory.some(item => item.itemID == lockpickID);
+    hasKnife = inventory.some(item => item.itemID == knifeItemID);
 })
 
 openButton.addEventListener('click', openSafeHandler)

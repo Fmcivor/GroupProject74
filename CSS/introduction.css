@@ -39,9 +39,11 @@ body::before {
     color: white;
     font-size: 20px;
 }
+
 h1 {
     color: #f5c518;
 }
+
 button{
     background-color: #b30000;
     color: white;
@@ -56,6 +58,15 @@ button{
     width: 15vw;
     min-width: fit-content;
 }
+
 button:hover{
     background-color: #ff4444;
 }
+
+.buttonContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+

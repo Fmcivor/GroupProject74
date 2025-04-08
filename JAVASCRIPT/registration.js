@@ -32,9 +32,10 @@ document.getElementById("registerBtn").addEventListener("click", async function 
    let validConfirmPassword = validateConfirmPassword(password, confirmPassword);
 
    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
+      password = await hashPassword(password);
       console.log("All validations passed. Submitting form...")
-      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName,iconHREF)
-   VALUES ('${username}', '${password}','${displayName}','placeholder')`;
+      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName)
+   VALUES ('${username}', '${password}','${displayName}')`;
       dbConfig.set('query', insertQuery);
       try {
          let insertResponse = await fetch(dbConnectorUrl, {
@@ -46,9 +47,6 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
          if (insertResult.success) {
             
-            
-
-
             window.location.href = "mainMenu.html";
 
 
@@ -83,8 +81,9 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
 
 async function validateUsername(enteredUsername) {
-   let usernameRegex = /^[a-zA-Z0-9.]{5,20}$/;
+   let usernameRegex = /^[a-zA-Z0-9]{5,20}$/;
    if (usernameRegex.test(enteredUsername) == false) {
+      errorMessage += `<li>Username must be between 5 and 20 characters long and can only contain letters, numbers.</li>`;
       return false;
    }
 

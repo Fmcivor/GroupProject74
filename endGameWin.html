@@ -3,32 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buried Secrets - Introduction</title>
+    <title>Buried Secrets Ending</title>
+    <script src="https://kit.fontawesome.com/07c6fb2aa2.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="CSS/endingGeneral.css">
+    <link rel="stylesheet" href="CSS/gameOverDisplay.css">
 </head>
 <body>
     <div class="endingContainer">
         <div class="endingBox">
-            <h1>Case Cracked!</h1>
-            <p>You collected enough evidence to land Victor behind Bars for the forseeable future</p>
-            
-            <div class="clueContainer">
-                <strong>Murder Wepon:</strong> 
-                <p>
-                    You found a bloody knife in the safe with Victor's DNA on it. 
-                    Charles' body was found dead near the safe so it must've been open at the time of murder.
-                </p>
+            <div id="headerContainer">
+                <h1>Case Cracked!</h1>
+                <p id="subHeading">You collected enough evidence to land Victor behind Bars for the forseeable future</p>
             </div>
-            <div class="clueContainer">
-                <strong>Motive:</strong> 
-                <p>
-                    The burnt letter you found in the living room explained Victor's motive, 
-                    as Charles illegally caused him to lose his mediacl license.
-                </p>
+            <div id="clueInfoContainer">
+                <div class="clueContainer">
+                    <strong><i id="margaretsAlibiSymbol" class="fa-solid fa-square-check"></i>&nbsp Murder Wepon:</strong> 
+                    <p>
+                        You found a bloody knife in the safe with Victor's DNA on it. 
+                        Charles' body was found dead near the safe so it must've been open at the time of murder.
+                    </p>
+                </div>
+                <div class="clueContainer">
+                    <strong><i id="margaretsAlibiSymbol" class="fa-solid fa-square-check"></i>&nbsp Motive:</strong> 
+                    <p>
+                        The burnt letter you found in the living room explained Victor's motive, 
+                        as Charles illegally caused him to lose his mediacl license.
+                    </p>
+                </div>
+                <div class="clueContainer">
+                    <strong><i id="margaretsAlibiSymbol" class="fa-solid fa-square-check"></i>&nbsp Margaret's Alibi:</strong> 
+                    <p>
+                        You found a postcard from Margaret to Charles proving that she was in spain at the time of the murder,
+                        proving her innocence.
+                    </p>
+                </div>
+                <div class="clueContainer">
+                    <strong><i id="margaretsAlibiSymbol" class="fa-solid fa-square-check"></i>&nbsp Jonathan's Alibi:</strong> 
+                    <p>
+                        You found an email from Jonathan to Charles looking to get a drink, 
+                        indicating that their relationship is on the mend.
+                    </p>
+                </div>
             </div>
-            <a href="gameWonStats.html">View Game Stats</a>
-            <button id="startGame">Back to Menu</button>
+            <div id="footerContainer">
+                <a href="gameWonStats.html">View Game Stats</a>
+                <button id="backToMenuBtn">Back to Menu</button>
+            </div>
+        </div>
+        
+        <div class="achievementContainer">
+            <div id="achievementBox">
+                <div id="achievementTop">
+                    <h2 id="achName"></h2>
+                    <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+                </div>
+                <div id="achContentBox">
+                    <figure id="achFig">
+                        <img id="achievementIcon" src="" alt="">
+                    </figure>
+                    <div id="achTextWrapper">
+                        <p id="achDesc"></p>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
+
+    <script src="JAVASCRIPT/gameWon.js"></script>
 </body>
 </html>

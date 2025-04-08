@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     updateState();
     getSessionStorage();
 
+    letterFound = clueList.some(clue => clue.clueID == 2)
+
 
 })
 
@@ -43,6 +45,7 @@ async function getSessionStorage(){
 const pickUpLetterButton = document.getElementById('burntLetter');
 pickUpLetterButton.addEventListener('click', pickUpLetter);
 const letterContainer = document.getElementById('letterContainer')
+const letterDisplayBackground = document.getElementById('letterBackgroundDimmer')
 
 const button = document.getElementById('burntLetter');
 
@@ -52,7 +55,7 @@ const button = document.getElementById('burntLetter');
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
-let letterFound = clueList.some(clue => clue.clueID == 2)
+let letterFound; 
 
 
 
@@ -242,27 +245,26 @@ function examineFireplace() {
 
     rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
     if(letterFound) {
-        setResponse("You take another look at the firePlace but you don't see anything else of note")
+        setResponse("You take another look at the firePlace but you don't see anything else of note");
     }
     else {
-        pickUpLetterButton.classList.remove('hide')
-        setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it \n (HINT: Try licking on it)")
+        pickUpLetterButton.classList.remove('hide');
+        setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it \n (HINT: Try clicking on it)");
     }
 }
 
 function pickUpLetter() {
     pickUpLetterButton.classList.add('hide');
-    letterContainer.classList.remove('hide');
-    // letterContainer.addEventListener("click", addLettertoNoteBook);
-    document.documentElement.addEventListener('click',addLettertoNoteBook);
+    letterDisplayBackground.classList.remove('hide');
+    letterDisplayBackground.addEventListener('click',addLettertoNoteBook);
 }
 
 function addLettertoNoteBook() {
-    letterContainer.classList.add('hide'); 
+    letterDisplayBackground.classList.add('hide'); 
     document.removeEventListener('click',addLettertoNoteBook);
 
     addClue(2);
-
+    letterFound = true;
 }
 
 function lookAtShelves() {
@@ -292,11 +294,11 @@ async function updateTimesOnSofa(){
         console.log(error);
     }
     
-    if(timesOnSofa === 5) {
+    if(timesOnSofa === 5 && !userAchievementIDs.some(achievement => achievement.achievementID == 1)) {
         let achSRC = 'Images/sofaAchievementIcon.jpg';
         awardAchievement(1, userID, achSRC)
     }
-}
+ }
 
 function goToHall() {
     
