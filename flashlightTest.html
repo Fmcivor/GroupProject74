@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flashlight Test</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+    }
+
+    #atticContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    #atticFlashlight {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(0,0,0,0.9) 70%);
+      pointer-events: none;
+      mix-blend-mode: lighten;
+    }
+  </style>
+</head>
+<body>
+  <div id="atticContainer">
+    <div id="atticFlashlight"></div>
+  </div>
+
+  <script>
+    const container = document.getElementById("atticContainer");
+    const flashlight = document.getElementById("atticFlashlight");
+
+    
+    let flashLightActive = true;
+    flashlight.style.display = "block";
+
+    container.addEventListener("mousemove", function (event) {
+      if (flashLightActive) {
+        const rect = container.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+
+        flashlight.style.left = `${offsetX - flashlight.offsetWidth / 2}px`;
+        flashlight.style.top = `${offsetY - flashlight.offsetHeight / 2}px`;
+      }
+    });
+  </script>
+</body>
+</html>
