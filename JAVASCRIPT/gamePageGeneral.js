@@ -457,7 +457,16 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log("Error setting achievement");
         console.log(error);
     }
+
+    setTimeout(() => {
+        if (userAchievementIDs.length == 5) {
+            awardAchievement(6,userID,'Images/trophy.png');
+        }
+    }, 6500);
+
 }
+
+
 
 async function addClue(clueID) {
 
