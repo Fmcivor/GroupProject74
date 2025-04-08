@@ -1,3 +1,7 @@
+const menu = document.querySelector('.menu');
+const newSavePopUp = document.getElementById('saveNameWrapper')
+const saveNameInput = document.getElementById('saveNameInput');
+
 let userID = sessionStorage.getItem("userID");
 
 
@@ -14,20 +18,20 @@ document.addEventListener("DOMContentLoaded", function () {
     if (validUser == false) {
         return;
     }
-    const btnSignOut = document.getElementById("btnSignOut");
-    const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
+    // const btnSignOut = document.getElementById("btnSignOut");
+    // const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
 
-    if (btnSignOut && signOutConfirm && cancelSignOut) {
-        btnSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "flex";
-        });
+    // if (btnSignOut && signOutConfirm && cancelSignOut) {
+    //     btnSignOut.addEventListener("click", function () {
+    //         signOutConfirm.style.display = "flex";
+    //     });
 
-        cancelSignOut.addEventListener("click", function () {
-            signOutConfirm.style.display = "none";
-        });
-    } else {
-        console.error("One or more elements are missing in the DOM.");
-    }
+    //     cancelSignOut.addEventListener("click", function () {
+    //         signOutConfirm.style.display = "none";
+    //     });
+    // } else {
+    //     console.error("One or more elements are missing in the DOM.");
+    // }
 
 
 
@@ -42,6 +46,30 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 });
+
+document.getElementById('continueBtn').addEventListener('click', async function() {
+
+    let query = `SELECT gameID FROM tblGameSave WHERE userID = ${userID} AND status = ${activeGame} ORDER BY lastPlayedDate DESC;`
+
+    dbConfig.set('query',query);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let gameID = result.data[0].gameID;
+            loadGame(gameID);
+        }
+    } catch (error) {
+        console.log('error retrieving ID of most recent game');
+        console.log(error);
+    }    
+})
 
 async function checkTotalActiveGames(){
 
@@ -59,13 +87,19 @@ async function checkTotalActiveGames(){
 
         if (result.success) {
             let activeGameCount = result.data[0].activeGames;
-            if (activeGameCount <3) {
+            if (activeGameCount < 5) {
                 document.getElementById('playBtn').removeAttribute('disabled');
             }
             else if(activeGameCount){
                 document.getElementById('playBtn').setAttribute('disabled',true);
             }
 
+            if(activeGameCount > 0) {
+                document.getElementById('continueBtn').removeAttribute('disabled');
+            }
+            else {
+                document.getElementById('continueBtn').setAttribute('disabled',true)
+            }
         }
     } catch (error) {
         console.log('error with checking the number of active games this user has');
@@ -76,64 +110,89 @@ async function checkTotalActiveGames(){
 
 
 //Start new game
-document.getElementById('playBtn').addEventListener('click',async function(){
+document.getElementById('playBtn').addEventListener('click', function(){
+    menu.style.display = 'none';
+    newSavePopUp.style.display = 'flex';
+    saveNameInput.value = '';
+})
+
+
+document.getElementById('startNewGame').addEventListener('click', async function(){
    
-    
-    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"introduction.html",1)`;
-    dbConfig.set('query',insertQuery);
 
-    try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
+    if(saveNameInput.value != "") {
 
-        let result = await response.json();
+        let gameName = saveNameInput.value;
 
-        if (!result.success) {
-            console.error('Error creating a new game session');
-            return;
-        }
+        let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState, gameName) VALUES(${userID},"introduction.html",1, "${gameName}")`;
+        dbConfig.set('query',insertQuery);
 
-        let selectQuery = `SELECT * FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
-        dbConfig.set('query',selectQuery);
+        try {
+            let response = await fetch(dbConnectorUrl,{
+                method:"POST",
+                body:dbConfig
+            });
 
-        let selectResponse = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
+            let result = await response.json();
 
-        let selectResult = await selectResponse.json();
-
-        if (selectResult.success && selectResult.data.length>0) {
-            let gameSave = selectResult.data[0];
-            sessionStorage.setItem('gameID',gameSave.gameID);
-            sessionStorage.setItem('electricityOn',gameSave.electricityOn);
-            sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
-            sessionStorage.setItem('currentRoom',gameSave.currentRoom);
-            sessionStorage.setItem('currentState',gameSave.currentState);
-            sessionStorage.setItem('inventory',JSON.stringify([]));
-            sessionStorage.setItem('clueList',JSON.stringify([]));
-            sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
-            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
-            sessionStorage.setItem('lightingOn',gameSave.lightingOn);
-            sessionStorage.setItem('status',gameSave.status);
-            sessionStorage.setItem('atticLightingOn',gameSave.atticLightingOn);
-            console.log("game save id retrieved:",gameSave.gameID);
-
-           let roomsInitialised =  await initialiseGameRooms();
-
-            if (roomsInitialised) {
-                window.location.href = 'introduction.html';
+            if (!result.success) {
+                console.error('Error creating a new game session');
+                return;
             }
-        }
-        else{
-            console.error("failed to retrieve latest game save ID:",selectResult)
+
+            let selectQuery = `SELECT * FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
+            dbConfig.set('query',selectQuery);
+
+            let selectResponse = await fetch(dbConnectorUrl,{
+                method:"POST",
+                body:dbConfig
+            });
+
+            let selectResult = await selectResponse.json();
+
+            if (selectResult.success && selectResult.data.length>0) {
+                let gameSave = selectResult.data[0];
+                sessionStorage.setItem('gameID',gameSave.gameID);
+                sessionStorage.setItem('electricityOn',gameSave.electricityOn);
+                sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
+                sessionStorage.setItem('currentRoom',gameSave.currentRoom);
+                sessionStorage.setItem('currentState',gameSave.currentState);
+                sessionStorage.setItem('inventory',JSON.stringify([]));
+                sessionStorage.setItem('clueList',JSON.stringify([]));
+                sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
+                sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
+                sessionStorage.setItem('lightingOn',gameSave.lightingOn);
+                sessionStorage.setItem('status',gameSave.status);
+                sessionStorage.setItem('atticLightingOn',gameSave.atticLightingOn);
+                console.log("game save id retrieved:",gameSave.gameID);
+
+            let roomsInitialised =  await initialiseGameRooms();
+
+                if (roomsInitialised) {
+                    window.location.href = 'introduction.html';
+                }
+            }
+            else{
+                console.error("failed to retrieve latest game save ID:",selectResult)
+            }
+
+        } catch (error) {
+            console.error("error creating a new game:",error);
         }
 
-    } catch (error) {
-        console.error("error creating a new game:",error);
     }
+    else {
+        saveNameInput.style.animation = 'noNameInput 1s ';
+        setTimeout(function() {
+            saveNameInput.style.animation = 'none';
+        }, 1000)
+    }
+    
+})
+
+document.getElementById('backFromSaveName').addEventListener('click', function() {
+    newSavePopUp.style.display = 'none';
+    menu.style.display = 'flex';
 })
 
 
@@ -172,9 +231,7 @@ async function getUserAchievements(){
     } catch (error) {
         console.error("Error occurred while fetching the user achievements",error);
         return false;
-    }
-
-    
+    }    
 }
 
 
