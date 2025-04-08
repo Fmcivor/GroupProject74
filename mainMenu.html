@@ -16,24 +16,39 @@
             
         </div>
     </header>
-    <div class="menu">
-        <button id="playBtn">Play</button>
-        <a href="saveSelect.html" id="saveSelectBtn">Load</a>
-        <a href="achievementMenu.html">Achievements</a>
-        <a href="settings.html">Settings</a>
-        <a style="cursor: pointer;" onclick="openModal()">Sign Out</a>
-    </div>
+    <div id="contentWrapper">
+        <div class="menu">
+            <button id="continueBtn" class="menuOption">Continue</button>
+            <button id="playBtn" class="menuOption">New Game</button>
+            <a class="menuOption" href="saveSelect.html" id="saveSelectBtn">Load Game</a>
+            <a class="menuOption" href="achievementMenu.html">Achievements</a>
+            <a class="menuOption" href="settings.html">Settings</a>
+            <a class="menuOption" style="cursor: pointer;" onclick="openModal()">Sign Out</a>
+        </div>
 
-    <div class="signOutModal"  id="signOutModal">
-        <div class="modal-content">
-            <p>Are you sure you want to sign out?</p>
-            <div class="buttons">
-                <button class="btn btn-yes" onclick="signOut()">Yes</button>
-                <button class="btn btn-no" onclick="closeModal()">No</button>
+        <div class="signOutModal"  id="signOutModal">
+            <div class="modal-content">
+                <p>Are you sure you want to sign out?</p>
+                <div class="buttons">
+                    <button class="btn btn-yes" onclick="signOut()">Yes</button>
+                    <button class="btn btn-no" onclick="closeModal()">No</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="saveNameWrapper">
+            <div id="saveInputWrapper">
+                <label id="saveNameLabel" for="saveName">Please enter a name for the New Game's Save</label>
+                <input type="text" id="saveNameInput" name="saveName" maxlength="15">
+            </div>
+            <div id="newSaveOptionsWrapper">
+                <button id="backFromSaveName" class="saveOption">Back</button>
+                <button id="startNewGame" class="saveOption">Start Game</button>
             </div>
         </div>
     </div>
     <script src="JAVASCRIPT/utility.js"></script>
-    <script src="JAVASCRIPT/mainMenu.js"></script>
+    <script src="JAVASCRIPT/loadGame.js"></script>
+    <script src="JAVASCRIPT/mainMenu.js"></script>  
 </body>
 </html>

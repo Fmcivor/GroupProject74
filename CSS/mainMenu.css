@@ -25,17 +25,28 @@ body {
     background-position: center center;
 }
 
+#contentWrapper {
+    margin-top: 12vh;
+    height: 88vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .menu {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
     background-color: rgba(10, 10, 40, 0.9);
-    width: clamp(300px, 50vw, 600px);
-    height: clamp(550px, 50vh, 1000px);
+    width: clamp(300px, 45vw, 600px);
+    height: 85%;
     border-radius: 20px;
-    justify-content: center;
+    justify-content: space-between;
     border: 2px solid rgb(51, 51, 102);
+    overflow-y: auto;
+    padding: 3vh 0;
 }
 
 .menu a, .menu button {
@@ -129,6 +140,86 @@ body {
 .btn:hover{
     background-color: #777;
 }
+
+.menuOption {
+    min-height: fit-content;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgb(0, 68, 204);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+
+#saveNameWrapper {
+    position: absolute;
+    background-color: rgba(10, 10, 40, 0.9);
+    border-radius: 20px;
+    border: 2px solid rgb(51, 51, 102);
+    flex-direction: column;
+    align-items: center;
+    height: 30%;
+    justify-content: space-between;
+    padding: 1.5%;
+    display: none;
+}
+
+#saveInputWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#saveNameLabel {
+    height: 30%;
+}
+
+#saveNameInput {
+    height: 30%;
+    color: black;
+    font-size: 1.2rem;
+    width: 95%;
+    text-align: center;
+    border: #0044cc 2px solid;
+    border-radius: 6px;
+}
+
+#newSaveOptionsWrapper {
+    height: 30%;
+    width: 85%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.saveOption {
+    width: 30%;
+    height: 90%;
+    border-radius: 6px;
+    min-height: fit-content;
+    min-width: fit-content;
+    background-color: #0044cc;
+}
+
+@keyframes noNameInput {
+    0% {border-color: red;}
+    20% {border-color: black;}
+    40% {border-color: red;}
+    60% {border-color: black;}
+    80% {border-color: red;}
+    100% {border-color: black;}
+}
+
 
 @media (max-width: 480px) {
     .buttons {
