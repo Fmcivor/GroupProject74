@@ -197,6 +197,77 @@ li {
     margin-bottom: 1rem;
 }
 
+#deleteAccountBtn{
+    background-color: rgb(221, 9, 9);
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 1.2rem;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+#deleteAccountBtn:hover {
+    background-color: #f62c2c;
+    transform: scale(1.05);
+}
+
+.deletePopUp{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.deletePopUpContent {
+    background-color: rgb(10, 10, 40);
+    border: 2px solid rgb(51, 51, 102);
+    display: grid;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    max-height: fit-content;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#confirmationMessage {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: 0.3s ease;
+    width: 48%;
+    background-color: #999;
+    color: black;
+}
+
+.btn:hover{
+    background-color: #777;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.8rem;
+}
+
 .closeBtn {
     width: 60%;
     border-radius: 6px;
@@ -204,6 +275,13 @@ li {
     min-height: fit-content;
     min-width: fit-content;
     background-color: #0044cc;
+    border: none;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.closeBtn:hover{
+    transform: scale(1.05);
+    background-color: #0066ff;
 }
 
 .functionButtonContainer {

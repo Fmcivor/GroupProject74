@@ -291,9 +291,7 @@ form{
      color: rgb(228, 140, 68);
 }
 
-.toolBarIconNotification{
-    color: #f5c518;
-}
+
 
 .hideToolBarButton {
     visibility: hidden;
@@ -321,6 +319,16 @@ form{
     align-items: center;
     justify-content: center;
 }
+
+@keyframes toolBarIconNotification{
+    0% {color: #f5c518;}
+    20% {color: black;}
+    40% {color: #f5c518;}
+    60% {color: black;}
+    80% {color: #f5c518;}
+    100% {color: black;}
+}
+
 
 
 
@@ -609,7 +617,7 @@ li {
     min-height: fit-content;
     min-width: fit-content;
     background-color: #0044cc;
-    border: 
+    
 }
 
 .confirmationBtn:hover{

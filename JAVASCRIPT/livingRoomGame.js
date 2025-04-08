@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
     updateState();
     getSessionStorage();
 
+    letterFound = clueList.some(clue => clue.clueID == 2)
+
 
 })
 
@@ -53,7 +55,7 @@ const button = document.getElementById('burntLetter');
 inventory = JSON.parse(sessionStorage.getItem("inventory"));
 UpdateInventory();
 let timesOnSofa = -1;
-let letterFound = clueList.some(clue => clue.clueID == 2)
+let letterFound; 
 
 
 
@@ -292,11 +294,11 @@ async function updateTimesOnSofa(){
         console.log(error);
     }
     
-    if(timesOnSofa === 5) {
+    if(timesOnSofa === 5 && !userAchievementIDs.some(achievement => achievement.achievementID == 1)) {
         let achSRC = 'Images/sofaAchievementIcon.jpg';
         awardAchievement(1, userID, achSRC)
     }
-}
+ }
 
 function goToHall() {
     

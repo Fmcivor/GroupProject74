@@ -1,3 +1,5 @@
+//lead devloper - FINTAN MCIVOR
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     let validUser = checkLogin();

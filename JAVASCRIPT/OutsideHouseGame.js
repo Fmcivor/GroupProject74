@@ -1,4 +1,4 @@
-//Lead Developer = FINTAN MCIVOR
+//Lead Developer - FINTAN MCIVOR
 
 
 //VARIABLES
@@ -7,10 +7,9 @@
 let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
-let hasKey = inventory.some(item => item.itemID == keyID);
-let hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
-let hasGeneratorAchievement = userAchievementIDs.some(achievement => achievement.achievementID == 2);
-
+let hasKey;
+let hasRubbishClue;
+let hasGeneratorAchievement;
 
 let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
 let selectedItemID = null;
@@ -208,6 +207,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         currentState = frontOfHouseDoorLocked;
     }
 
+    hasKey = inventory.some(item => item.itemID == keyID);
+    hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
+    hasGeneratorAchievement = userAchievementIDs.some(achievement => achievement.achievementID == 2);
+
     updateState();
 
 })
@@ -360,7 +363,7 @@ function FixGenerator() {
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
         rgb(200,44, 44) 0deg, 
-        #4B0000 ${additionalRedAngle}deg, 
+      #4B0000 ${additionalRedAngle}deg, 
         rgb(78,78, 78) ${additionalRedAngle}deg, 
         rgb(78,78, 78) ${redZoneStart}deg, 
         rgb(200,44, 44) ${redZoneStart}deg, 
