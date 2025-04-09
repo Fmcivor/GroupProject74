@@ -842,15 +842,15 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         case "upstairsHall.html":
             break;
         case "attic.html":
-            if (currentState == darkAttic) {
-                if (!flashLightActive && selectedItemID == flashLightID && inventory.some(item => item.itemID == batteriesID && item.itemUsed == true)) {
+            if (currentState == darkAttic && selectedItemID == flashLightID) {
+                if (!flashLightActive && inventory.some(item => item.itemID == batteriesID && item.itemUsed == true)) {
                     flashLightActive = true;
                     validItemUse = true;
                     toggleFlashLight();
-                } else if (flashLightActive && selectedItemID == flashLightID) {
+                } else if (flashLightActive) {
                     setResponse('You no longer require the flashlight');
                     flashLightActive = false;
-                    document.getElementById("atticFlashLight").style.display = "none";
+                    toggleFlashLight();
                     validItemUse = true;
                 }
                 else {

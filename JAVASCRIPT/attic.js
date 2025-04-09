@@ -12,7 +12,7 @@ const darkAttic = {
     "ID": 1,
     "room": "Attic",
     "description": `${displayName}, you step into the attic, swallowed by complete darkness. The air is thick with dust, and the wooden floor creaks beneath your feet. Without a light, you can’t see a thing.`,
-    "ImageHREF": "Images/darkAttic.png",
+    "ImageHREF": "Images/darkAttic2.jpg",
     "interactions": [
         {
             "id": 0,
@@ -126,7 +126,7 @@ function toggleFlashLight() {
              document.querySelector('.rightColumn').style.backgroundImage = `url("Images/lightAttic.png")`;
         } else {
             flashlight.style.display = "none";  
-            document.querySelector('.rightColumn').style.backgroundImage = `url("Images/darkAttic.png")`;
+            document.querySelector('.rightColumn').style.backgroundImage = `url("Images/darkAttic2.jpg")`;
         }
 
         
