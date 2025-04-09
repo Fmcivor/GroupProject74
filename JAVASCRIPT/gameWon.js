@@ -81,10 +81,6 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log("Error setting achievement");
         console.log(error);
     }
-
-    if (userAchievementIDs.length == 5) {
-        await awardAchievement(6,userID,'Images/trophy.png');
-    }
         
     
 }
