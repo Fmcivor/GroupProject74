@@ -57,7 +57,7 @@ header{
 }
 
 #settingsButton:hover{
-    color: rgb(25, 12, 121);
+    transform: scale(1.1);
 }
 
 
@@ -230,6 +230,7 @@ form{
     align-items: flex-start;
     transition: right 1s ease-in-out;
     font-family: "Lugrasimo", cursive;
+    z-index: 11;
 }
 
 .toolBar ::-webkit-scrollbar-thumb {
@@ -814,6 +815,7 @@ p {
     justify-content: center;
     bottom: -25vh;
     transition: bottom 1s ease-in-out;
+    color: white;
 }
 .achExpanded {
     bottom: 5vh;
@@ -963,15 +965,16 @@ p {
 
     .wrapper {
         flex-direction: column-reverse;
-        height: 83vh;
-        
+        height: 88vh;
+        position: absolute;
+        top: 7vh;
     }
 
     .rightColumn {
         display: flex;
         flex-direction: column;
         width: 100vw;
-        min-height: 40%;
+        height: 35%;
         justify-content: flex-end;
         align-items: center;
         flex: 0.7;
@@ -980,11 +983,16 @@ p {
     .leftColumn {
         width: 100vw;
         flex:1;
-        max-height: 58%;
+        height: 65%;
     }
     .leftColumnContainer{
         gap: 1vh;
         border: none;
+    }
+
+    .gameInteractionContainer {
+        gap: 4%;
+        padding: 4% 0;
     }
 
     .responseContainer {
@@ -993,17 +1001,11 @@ p {
         flex: 1;
     }
     #leftDivider {
-        visibility: collapse;
-        height: 0px;
-        min-height: 0px;
-        flex: 0;
+        display: none;
     }
 
     #roomHeader {
-        visibility: collapse;
-        height: 0px;
-        padding: 0;
-        flex: 0;
+        display: none;
     }
 
     .buttonContainer {
@@ -1033,7 +1035,9 @@ p {
     .iconContainer {
         flex-direction: row;
         width: 100%;
-        height: 5vh;
+        height: 5.9vh;
+        gap: 10%;
+        padding: 0 5%;
     }
 
     .toolBarIcon {
@@ -1044,7 +1048,6 @@ p {
         flex: 1;
         text-align: center;
         width: fit-content;
-        margin: auto;
         height: 100%;
         border-width: 5px 5px 0 5px;
         border-radius: 20px 20px 0 0;
@@ -1059,9 +1062,8 @@ p {
         flex: 1;
         text-align: center;
         width: fit-content;
-        margin: auto;
         height: 100%;
-        border-width: 5px 5px 0 5px;
+        border-width: 5px 5px 5px 5px;
         border-radius: 20px 20px 0 0;
         margin: 0;
     }
@@ -1069,13 +1071,6 @@ p {
     #hideToolBarButton {
         display: flex;
         order: 3;
-        margin-right: 6vw;
-        margin-left: 10vw;
-    }
-
-    #noteBookButton {
-        margin-left: 6vw;
-        margin-right: 10vw;
     }
 
 
@@ -1107,6 +1102,18 @@ p {
     .toolBarSectionHeader{
         margin-top: 0;
     }
+
+    .settingsContainer {
+        padding-bottom: 5%;
+    }
+
+    .settingsContent {
+         padding: 1vh;
+    }
+
+    form {
+        height: 100%;
+    }
 }
 
 .noTransition {
@@ -1116,31 +1123,4 @@ p {
 
 .hide {
     visibility: collapse;
-}
-#atticFlashlight {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(0, 0, 0, 0) 70%);
-    pointer-events: none;
-    display: none;
-    z-index: 1000;
-}
-
-#atticContainer {
-    position: relative;
-    display: inline-block;
-}
-
-#lightSwitch {
-    position: absolute;
-    top: 40%; 
-    left: 59%; 
-    width: 40px;
-    height: 50px;
-    background: none;
-    z-index: 10;
-    border: none;
-    
 }

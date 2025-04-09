@@ -23,17 +23,17 @@ const guestBedroom = {
     "interactions": [
         {
             "id": 0,
-            "Text": "Check nightstand",
+            "Text": "Check the nightstand",
             "response": checkNightstand
         },
         {
             "id": 1,
-            "Text": "Examine wardrobe",
+            "Text": "Examine the wardrobe",
             "response": examineWardrobe
         },
         {
             "id": 2,
-            "Text": "Check under bed",
+            "Text": "Check under the bed",
             "response": checkUnderBed
         },
         {
@@ -47,7 +47,7 @@ const guestBedroom = {
 const nightStandState = {
     "ID": 2,
     "room": "Guest Bedroom",
-    "description": `You stand before the nightstand with a half opened drawer, alongside a nearly empty pill bottle with a smudged fingerprint.`,
+    "description": `You stand before the nightstand with a half-opened drawer, alongside a nearly empty pill bottle with a smudged fingerprint.`,
     "ImageHREF": "Images/nightstand.jpg",
     "interactions": [
         {
@@ -75,7 +75,7 @@ const nightStandState = {
 const wardrobeState = {
     "ID": 3,
     "room": "Guest Bedroom",
-    "description": `The wardrobe doors creak open, revealing a collection of outdated dresses and suits along with a suitcase. The scent of faded perfume clings to the fabric.`,
+    "description": `The wardrobe doors creak open, revealing a collection of outdated dresses and suits, along with a suitcase. The scent of faded perfume clings to the fabric.`,
     "ImageHREF": "Images/wardrobe.jpg",
     "interactions": [
         {
@@ -90,7 +90,7 @@ const wardrobeState = {
             "id": 1,
             "Text": "Open the suitcase",
             "response": function () {
-                setResponse("You find a receipt of a train ticket belonging to Margaret dated a day after Charles death. Why would she plan to leave so soon after?")
+                setResponse("You find a bundle of men's clothes, I wonder where all Margaret's are?")
             }
 
 

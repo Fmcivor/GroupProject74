@@ -1,4 +1,4 @@
-
+//Dylan's code
 document.addEventListener("DOMContentLoaded", async function () {
     let validUser = checkLogin();
     if (validUser == true) {

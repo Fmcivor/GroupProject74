@@ -166,11 +166,13 @@ function toggleSettings() {
         settingsOpen = true;
         gameInteractionContainer.style.display = 'none';
         settingsContainer.style.display = 'flex';
+        settingsButton.style.color = '#ffeb00';
     }
     else {
         settingsOpen = false;
         settingsContainer.style.display = 'none';
         gameInteractionContainer.style.display = 'flex';
+        settingsButton.style.color = '#FFFFFF';
     }
 
 }
@@ -441,7 +443,8 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
                 if (result.success && result.data.length > 0) {
                     let achievement = result.data[0];
-                    displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                    displayAchievement(achievementIconAddress, achievement.name, achievement.description);
+                    console.log(`achievement ${achievementID} added`);
                 }
 
             } catch (error) {
@@ -457,7 +460,13 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log("Error setting achievement");
         console.log(error);
     }
+
+   
+
 }
+
+
+
 
 async function addClue(clueID) {
 
@@ -575,12 +584,12 @@ async function addItem(itemID) {
         console.log(error);
     }
 
-   
+
     inventoryButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
 
 
 
-   
+
 }
 
 
@@ -834,20 +843,24 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             break;
         case "upstairsHall.html":
             break;
-            case "attic.html":
-                if (currentState == darkAttic || currentState == attic) {
-                    if (!flashLightActive && selectedItemID == flashLightID) {
-                        flashLightActive = true;  
-                        validItemUse = true;
-                        toggleFlashLight();
-                    } else if (atticLightingOn && selectedItemID == flashLightID) {
-                        setResponse('You no longer require the flashlight');
-                        flashLightActive = false;  
-                        document.getElementById("atticFlashLight").style.display = "none";
-                        validItemUse = true;
-                    }
+        case "attic.html":
+            if (currentState == darkAttic && selectedItemID == flashLightID) {
+                if (!flashLightActive && inventory.some(item => item.itemID == batteriesID && item.itemUsed == true)) {
+                    flashLightActive = true;
+                    validItemUse = true;
+                    toggleFlashLight();
+                } else if (flashLightActive) {
+                    setResponse('You no longer require the flashlight');
+                    flashLightActive = false;
+                    toggleFlashLight();
+                    validItemUse = true;
                 }
-                break;
+                else {
+                    setResponse("You maybe need some batteries first.");
+                    validItemUse = true;
+                }
+            }
+            break;
         default:
             console.error("Room not found!");
     }
@@ -885,6 +898,39 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         }
     }
 
+    if (selectedItemID == batteriesID && inventory.some(item => item.itemID == flashLightID)) {
+        setResponse("You put the batteries into the flashlight, maybe this will help somewhere.");
+        const batteryIndex = inventory.findIndex(item => item.itemID == batteriesID);
+        inventory[batteryIndex].itemUsed = true;
+        sessionStorage.setItem("inventory", JSON.stringify(inventory));
+        UpdateInventory();
+        let updateQuery = `UPDATE tblGameInventory SET itemUsed = 1 WHERE gameID = ${gameID} AND itemID = ${batteriesID}`;
+        dbConfig.set('query', updateQuery);
+
+        validItemUse = true;
+
+        try {
+            let response = await fetch(dbConnectorUrl, {
+                method: "POST",
+                body: dbConfig
+            });
+
+            let result = await response.json();
+
+            if (result.success) {
+                console.log("Item usage updated successfully in the database");
+            }
+            else {
+                console.error("Error updating item usage in the database");
+            }
+        } catch (error) {
+            console.error("Error updating item usage in the database", error);
+        }
+    }
+    else if (selectedItemID == batteriesID) {
+        setResponse("You maybe need somewhere to put them first");
+    }
+
 
     if (validItemUse == false) {
         setResponse("That didn't seem to work, maybe I should try something else?");
@@ -907,8 +953,8 @@ async function submitEvidence() {
 
     sessionStorage.setItem("invetory", JSON.stringify(inventory));
 
-    if(suspectAccused != null){
-        if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue  && margaretInnocentClue && jonathanInnocentClue) {
+    if (suspectAccused != null) {
+        if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue && margaretInnocentClue && jonathanInnocentClue) {
             sessionStorage.setItem("status", gameWin);
             sessionStorage.setItem("currentRoom", "endGameWin.html");
             await saveGame();
@@ -921,16 +967,14 @@ async function submitEvidence() {
             sessionStorage.setItem("jonathanInnocentClue", jonathanInnocentClue);
             sessionStorage.setItem("margaretInnocentClue", margaretInnocentClue);
 
-            if (suspectAccused != 'victor') {
-                sessionStorage.setItem("status", gameLoss);
-                sessionStorage.setItem("currentRoom", "endGameLoss.html");
+
+            sessionStorage.setItem("status", gameLoss);
+            sessionStorage.setItem("currentRoom", "endGameLoss.html");
             await saveGame();
             window.location.replace("endGameLoss.html");
-            }
-            else{
-                //insufficient evidence
-            }
-            
+
+
+
         }
     }
     else {
@@ -938,7 +982,7 @@ async function submitEvidence() {
         selectJonathanButton.style.animation = 'noSuspectSelected 1s';
         selectMargaretButton.style.animation = 'noSuspectSelected 1s';
         confirmSuspectBtn.style.animation = 'noSuspectSelected 1s';
-        setTimeout(function() {
+        setTimeout(function () {
             selectVictorButton.style.animation = 'none';
             selectJonathanButton.style.animation = 'none';
             selectMargaretButton.style.animation = 'none';

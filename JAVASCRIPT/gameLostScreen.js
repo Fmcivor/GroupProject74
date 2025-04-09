@@ -1,8 +1,8 @@
 //VARIABLES
-let murderWeaponFound = sessionStorage.getItem("murderWeaponFound");
-let victorClueFound = sessionStorage.getItem("victorGuiltyClueFound");
-let jonathanAlibiFound = sessionStorage.getItem("jonathanInnocentClue");
-let margaretAlibiFound = sessionStorage.getItem("margaretInnocentClue");
+let murderWeaponFound = (sessionStorage.getItem("murderWeaponFound") === 'true');
+let victorClueFound = (sessionStorage.getItem("victorGuiltyClue") === 'true');
+let jonathanAlibiFound = (sessionStorage.getItem("jonathanInnocentClue") === 'true');
+let margaretAlibiFound = (sessionStorage.getItem("margaretInnocentClue") === 'true');
 let suspectAccused = sessionStorage.getItem("suspectAccused");
 
 //CONSTANTS

@@ -1,3 +1,5 @@
+//Dylan's Lockpicking Minigame
+
 const canvas = document.getElementById("lockpickCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -68,9 +70,13 @@ canvas.addEventListener("click", async function() {
     currentStage++;// Move to the next stage
     if (currentStage >= totalStages) { // If all stages are completed
       gameActive = false;
+      canvas.style.display = "none"; // Hide the canvas
       if(!clueList.some(clue => clue.clueID == drawerClueID)){
         setResponse("You successfully picked the lock! The drawer slides open, revealing a note with a code on it. It reads: 4-3-7-9.");
         await addClue(drawerClueID);
+        if(!userAchievementIDs.some((achievement => achievement.achievementID == 8))){
+          await awardAchievement(8, userID, "Images/lockpick.png");
+        }
       }
       else{
         setResponse("You successfully picked the lock! The drawer slides open, but it’s empty.");

@@ -367,7 +367,6 @@ async function addKnifeEvidence() {
             hasKnife = true;
             await addItem(knifeItemID);
             await addClue(knifeClueID);
-            setResponse("There is a large golden key here and you lift it");
             setResponse(`You take the knife out of the safe and feel proud of yourself, 
                 with this piece of evidence you are surely one step closer to catching the killer`);
             evidenceButton.removeEventListener("click", addKnifeEvidence);
@@ -388,8 +387,7 @@ const enteredMasterBedroom = {
     "room": "Master Bedroom",
     "description": `You have entered the master bedroom, in the center of the room you see a large bed with red accents on a rich red rug.  
                     A safe stands beside a dresser with a clock and plant.  
-                    The bedside table holds a lamp and décor, while framed paintings add a classic touch. 
-                    The room feels warm, elegant, and inviting`,
+                    The bedside table holds a lamp and décor, while framed paintings add a classic touch.`,
     "ImageHREF": "IMAGES/masterBedroom.jpg",
     "interactions": [
         {
@@ -446,11 +444,11 @@ function hideSafe() {
 
 async function searchBedsideTable() {
     if(hasLockpick){
-        setResponse("You double check the bedside table, but theres nothing of interest left in them")
+        setResponse("You double check the bedside table, but theres nothing of interest left")
     }
     else {
         if (inventory.filter(item => item.itemUsed == false).length == 6) {
-            setResponse("You must drop an item before you can pick up the key. HINT try using an item to get rid of it.");
+            setResponse("You must drop an item before you can pick up the lockpick. HINT try using an item to get rid of it.");
         }
         else {
             hasLockpick = true;

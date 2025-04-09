@@ -2,12 +2,12 @@ const achievementContainer = document.querySelector('.achievementContainer');
 const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
 const achievementDesc = document.getElementById('achDesc');
-let achievementIDs = JSON.parse(sessionStorage.getItem('achievementIDs'));
+let userAchievementIDs = JSON.parse(sessionStorage.getItem('achievementIDs'));
 let userID = sessionStorage.getItem('userID');
 
 document.addEventListener('DOMContentLoaded', function(){
     
-    if (!achievementIDs.some(achievement => achievement.achievementID == 4)) {
+    if (!userAchievementIDs.some(achievement => achievement.achievementID == 4)) {
         awardAchievement(4,userID,'Images/trophy.png');
     }
 
@@ -81,6 +81,8 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log("Error setting achievement");
         console.log(error);
     }
+        
+    
 }
 
 
