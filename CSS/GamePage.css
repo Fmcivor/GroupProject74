@@ -530,6 +530,7 @@ li {
     min-height: 100vh;
     min-width: 100vw;
     padding: 2rem;
+    z-index: 15;
 }
 
 
@@ -771,6 +772,8 @@ p {
     padding: 2vh;
     flex: 2;
     margin-bottom: 3vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .optionButton {
@@ -1108,12 +1111,63 @@ p {
     }
 
     .settingsContent {
-         padding: 1vh;
+        padding: 1vh;
+        height: 34vh;
     }
 
     form {
         height: 100%;
     }
+
+
+    .submitEvidencePopUp {
+        padding: none;
+    }
+
+    .submitEvidencePopUpContent {
+        height: 55%;
+        width: 90%;
+        padding: 3%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    #suspectSelectTextWrapper {
+        text-align: center;
+        height: 20%;
+        min-height: fit-content;
+    }
+
+    #selectImagesWrapper {
+        height: 40%;
+        gap: 0;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .suspectButton {
+        flex: none;
+        width: 31%;
+        height: 80%;
+    }
+
+    .suspectButton p {
+        font-size: 1rem;
+    }
+
+    #confirmationWrapper {
+        gap: 15%;
+        height: 40%;
+    }
+
+    #submissionConfirmationText {
+        font-size: 1.25rem;
+    }
+
+    .confirmationBtnContainer {
+        height: 28%;
+    }
+    
 }
 
 .noTransition {

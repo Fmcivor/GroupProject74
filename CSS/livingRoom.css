@@ -34,7 +34,7 @@
     font-weight: 700;
     font-style: normal;
     color: black;
-    font-size: 1.5rem;
+    font-size: 30px;
 }
 
 
@@ -56,4 +56,29 @@
 
 .settingsContainer {
     z-index: 1;
+}
+
+@media (max-width:650px) {
+
+    #letterBackgroundDimmer {
+        height: 93vh;
+        display: flex;
+        justify-content: center;
+    }
+
+    #letterContainer {
+        width: auto;
+        height: 30vh;
+        top: 1.5vh;
+        left: auto;
+    }
+
+    #letterContainer * {
+        font-size: 11px;
+    }
+
+    #burntLetter {
+        right: 30%;
+        bottom: 15%;
+    }
 }
