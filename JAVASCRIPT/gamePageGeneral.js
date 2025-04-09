@@ -166,11 +166,13 @@ function toggleSettings() {
         settingsOpen = true;
         gameInteractionContainer.style.display = 'none';
         settingsContainer.style.display = 'flex';
+        settingsButton.style.color = '#ffeb00';
     }
     else {
         settingsOpen = false;
         settingsContainer.style.display = 'none';
         gameInteractionContainer.style.display = 'flex';
+        settingsButton.style.color = '#FFFFFF';
     }
 
 }

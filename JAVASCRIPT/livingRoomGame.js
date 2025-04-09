@@ -1,3 +1,4 @@
+
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function () {
     let states = [];
@@ -166,8 +167,8 @@ const standUpFromSofa = {
         },
         {
             "id": 4,
-            "Text": "Look around the room",
-            "response": lookAround
+            "Text": "Leave the living room",
+            "response": goToHall
         }
     ]
 }
@@ -177,10 +178,6 @@ const standUpFromSofa = {
 
 
 //GAME RESPONSE FUNCTIONS
-function lookAround(){
-    currentState = enteredLivingRoom;
-    updateState();
-}
 
 function sitOnSofa() {
     if(timesOnSofa === -1){
@@ -206,7 +203,7 @@ function sitLonger() {
 
         case 1:
             timesOnSofa++;
-            setResponse("Even with the trial racing closer and a lack of hard evidence, you continue to rest after all you need your mind to be well rested to find the killer.");
+            setResponse("You shut your mid off for another few minutes, and feel like nothing in the world could be more important than enjoying this sofa");
         break;
 
         case 2:
@@ -245,11 +242,11 @@ function examineFireplace() {
 
     rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
     if(letterFound) {
-        setResponse("You take another look at the firePlace but you don't see anything else of note");
+        setResponse("You take another look at the fireplace, but don't see anything else of note");
     }
     else {
         pickUpLetterButton.classList.remove('hide');
-        setResponse("You take a closer look at the fireplace and notice a slightly burn letter sitting beside it \n (HINT: Try clicking on it)");
+        setResponse("You take a closer look at the fireplace and notice a slightly burnt letter sitting beside it \n (HINT: Try clicking on it)");
     }
 }
 
@@ -269,11 +266,11 @@ function addLettertoNoteBook() {
 
 function lookAtShelves() {
     setResponse(
-        "The shelve are mostly full of pictures and certificates from charles achievements."
-        + "You find it odd that there are no photos of Mr and Mrs Kingston together and you notice empty, "
+        "The shelve are mostly full of pictures and certificates from Charles's achievements."
+        + "You find it odd that there are no photos of Mr and Mrs Kingston together. After considering this, you notice empty, "
         + "slightly less dusty spots, wehere these pictures might've once been. You decide to take note of this."
     )
-    addClue("You believe that any photos of Mr and Mrs Kingston have been removed suggesting the marriage was on shaky terms")
+    addClue("You believe that any photos of Mr and Mrs Kingston have been removed, suggesting that the marriage was on shaky terms")
 }
 
 async function updateTimesOnSofa(){
@@ -296,12 +293,11 @@ async function updateTimesOnSofa(){
     
     if(timesOnSofa === 5 && !userAchievementIDs.some(achievement => achievement.achievementID == 1)) {
         let achSRC = 'Images/sofaAchievementIcon.jpg';
-        awardAchievement(1, userID, achSRC)
+        awardAchievement(1, userID, achSRC);
     }
  }
 
 function goToHall() {
-    
     goToNextRoom('downStairsHall.html', 3);
 }
 

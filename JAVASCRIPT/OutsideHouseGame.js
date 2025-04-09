@@ -52,7 +52,7 @@ startRepairButton.addEventListener('click', startRepair);
 const frontOfHouseDoorLocked = {
     "ID": 1,
     "room": "Front of House",
-    "description": `${displayName}, you stand infront of a large house with a door infront of you and boarded up windows, you can see no way inside and a path leading to your left.It seems to be a garden of sorts over to the left.`,
+    "description": `${displayName}, you stand infront of a large house with a door infront of you and boarded up windows, you can see no way inside and a path leading to your left. It seems to be a garden of sorts over to the left.`,
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
         {
@@ -76,7 +76,7 @@ const frontOfHouseDoorLocked = {
 const frontOfHouseDoorUnlocked = {
     "ID": 2,
     "room": "Front of House",
-    "description": `${displayName}, you stand infront of a large house with a door infront of you and boarded up windows, you have already unlocked the door and a path leading to your left.It seems to be a garden of sorts over to the left.`,
+    "description": `${displayName}, you stand infront of a large house with a door infront of you and boarded up windows, you have already unlocked the door and a path leading to your left. It seems to be a garden of sorts over to the left.`,
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
         {
@@ -102,7 +102,7 @@ const sideOfHouse = {
     "ID": 3,
     "room": "Side of House",
     "description": `You now stand in an overgrown garden with a faint streetlight illuminating it. 
-                    There is  a small building beside you with a locked door, 
+                    There is a small building beside you with a locked door, 
                     however the window seems to be open. There is also a rubbish bin toppled over beside you`,
     "ImageHREF": "Images/outsideHouse.jpg",
     "interactions": [
@@ -113,12 +113,12 @@ const sideOfHouse = {
         },
         {
             "id": 1,
-            "Text": "Search rubbish",
+            "Text": "Search through the rubbish",
             "response": searchRubbish
         },
         {
             "id": 2,
-            "Text": "Explore Garden",
+            "Text": "Explore the Garden",
             "response": exploreGarden
         },
         {
