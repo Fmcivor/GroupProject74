@@ -9,7 +9,7 @@ const userID = 1;
 const gameID = 364;
 
 //CONSTANTS
-const numOfClues = 8;
+const numOfClues = 9;
 const numOfItems = 8;
 const numOfRooms = 9;
 

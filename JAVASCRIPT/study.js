@@ -111,7 +111,7 @@ const computerLoginScreen = {
 const computerUnlocked = {
     "ID": 3,
     "room": "Study",
-    "description": `The computer unlocks. An email is displayed, dated just a few days before the death. The message reads: Charles,
+    "description": `The computer unlocks. An email is displayed, dated 9th february 2006. The message reads: Charles,
     It’s been too long. I hate how we left things, and I’d rather remember the years of friendship than the mistakes.
     Let’s meet for a drink — no tension, just a proper conversation.
     — Jonathan `,
