@@ -16,8 +16,9 @@ const darkAttic = {
     "interactions": [
         {
             "id": 0,
-            "Text": "Search for light source",
-            "response": `you stupidly slam your toe against something solid. Tears stream down your face and you resist the urge to brutally kick the wall in frustration.`,
+            "Text": "Search for a light source",
+            "response": `You stupidly slam your toe against something solid. Tears stream down your face and 
+                        you resist the urge to brutally kick the wall in frustration.`,
         },
         {
             "id": 1,
@@ -72,7 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
 const attic = {
     "ID": 2,
     "room": "Attic",
-    "description": `The light flickers on revealing a rather barren attic with only a few dusty boxes and a mysterious figure hiding under a cloth`,
+    "description": `The light flickers on, revealing a rather barren attic with only a 
+                    few dusty boxes and a mysterious figure hidden under a cloth`,
     "ImageHREF": "Images/lightAttic.png",
     "interactions": [
         {

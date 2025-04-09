@@ -90,11 +90,6 @@
 
 #d1Display {
     color: rgb(252, 215, 7);
-    border: rgb(30, 30, 30) 3px solid;
-}
-
-#d1Display {
-    color: rgb(252, 215, 7);
 }
 
 #safeHandle {
@@ -114,6 +109,10 @@
     background-position: center center;
     background-size: 100% 100%;
     border: none;
+}
+
+#evidencePopUp {
+    z-index: 10;
 }
 
 @keyframes turnHandleLocked {

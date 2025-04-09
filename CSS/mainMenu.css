@@ -40,7 +40,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
     background-color: rgba(10, 10, 40, 0.9);
     width: clamp(300px, 45vw, 600px);
     height: 85%;

@@ -48,6 +48,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 });
 
+document.getElementById('saveSelectBtn').addEventListener('click', function() {
+    window.location.replace('saveSelect.html');
+})
+
 document.getElementById('continueBtn').addEventListener('click', async function() {
 
     let query = `SELECT gameID FROM tblGameSave WHERE userID = ${userID} AND status = ${activeGame} ORDER BY lastPlayedDate DESC;`
@@ -97,9 +101,11 @@ async function checkTotalActiveGames(){
 
             if(activeGameCount > 0) {
                 document.getElementById('continueBtn').removeAttribute('disabled');
+                document.getElementById('saveSelectBtn').removeAttribute('disabled');
             }
             else {
-                document.getElementById('continueBtn').setAttribute('disabled',true)
+                document.getElementById('continueBtn').setAttribute('disabled',true);
+                document.getElementById('saveSelectBtn').setAttribute('disabled',true);
             }
         }
     } catch (error) {
