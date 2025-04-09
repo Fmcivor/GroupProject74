@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--  Dylan's code -->>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +47,25 @@
                 <button id="startNewGame" class="saveOption">Start Game</button>
             </div>
         </div>
+
+        <div class="achievementContainer">
+            <div id="achievementBox">
+                <div id="achievementTop">
+                    <h2 id="achName"></h2>
+                    <button id="closeAchBtn" type="button" onclick="hideAchievement()">X</button>
+                </div>
+                <div id="achContentBox">
+                    <figure id="achFig">
+                        <img id="achievementIcon" src="" alt="">
+                    </figure>
+                    <div id="achTextWrapper">
+                        <p id="achDesc"></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
     <script src="JAVASCRIPT/utility.js"></script>
     <script src="JAVASCRIPT/loadGame.js"></script>

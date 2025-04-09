@@ -1,3 +1,5 @@
+//Dylan's code
+
 let hasBatteries;
 
 const kitchenDefault = {
