@@ -82,7 +82,6 @@
     width: 35%;
     height: 65%;
     background-color: rgb(199, 199, 199);
-    background-color: rgb(199, 199, 199);
     display: flex;
     flex-direction: row;
     border: rgb(30, 30, 30) 3px solid;
@@ -261,3 +260,86 @@ svg {
 .toolBar {
     z-index: 7;
 }
+
+.safeButton {
+    display: none;
+}
+
+
+@media (max-width:650px) {
+
+    .rightColumn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #safeGameContainer {
+        width: 70%;
+        height: 70%;
+    }
+
+    #safeFront {
+        flex-direction: row-reverse;
+    }
+
+    #safeTop {
+        flex-direction: column;
+        height: 100%;
+        width: 33%;
+        padding-right: 3%;
+    }
+
+    #safeInputContainer {
+        height: 100%;
+        width: 70%;
+    }
+
+    #inputCodeDisplay {
+        width: 100%;
+        height: 23.5%;
+    }
+
+    #safeHandle {
+        width: 100%;
+        right: 0;
+        bottom: 0;
+    }
+
+    .inputNumberDisplay {
+        font-size: 30px;
+    }
+
+    .safeButton {
+        display: flex;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+    }
+
+    #safeButtonContainer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #safeUpButton {
+
+    }
+
+    #safeDownButton {
+
+    }
+
+    #safeLeftButton {
+
+    }
+
+    #safeRightButton {
+        
+    }
+}
+
