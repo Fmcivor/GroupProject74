@@ -14,19 +14,21 @@
       position: relative;
       width: 100vw;
       height: 100vh;
-      background-color: black;
+      background-color: blue;
       background-size: cover;
       overflow: hidden;
     }
 
     #atticFlashlight {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(0,0,0,0.9) 70%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      mix-blend-mode: lighten;
+      background: radial-gradient(circle at center, transparent 100px, black 150px);
+      mix-blend-mode: normal;
+      z-index: 10;
     }
   </style>
 </head>
@@ -45,12 +47,15 @@
 
     container.addEventListener("mousemove", function (event) {
       if (flashLightActive) {
-        const rect = container.getBoundingClientRect();
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
+        // const rect = container.getBoundingClientRect();
+        // const offsetX = event.clientX - rect.left;
+        // const offsetY = event.clientY - rect.top;
 
-        flashlight.style.left = `${offsetX - flashlight.offsetWidth / 2}px`;
-        flashlight.style.top = `${offsetY - flashlight.offsetHeight / 2}px`;
+        // flashlight.style.left = `${offsetX - flashlight.offsetWidth / 2}px`;
+        // flashlight.style.top = `${offsetY - flashlight.offsetHeight / 2}px`;
+
+        flashlight.style.background = `radial-gradient(circle at ${event.clientX}px ${event.clientY}px, transparent 100px, black 150px)`;
+
       }
     });
   </script>

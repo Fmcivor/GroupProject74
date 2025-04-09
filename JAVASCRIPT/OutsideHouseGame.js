@@ -352,7 +352,7 @@ function FixGenerator() {
         rgb(78,78, 78) 0deg, 
         rgb(78,78, 78) ${redZoneStart}deg, 
         rgb(200,44, 44) ${redZoneStart}deg, 
-        #4B0000 ${redZoneEnd}deg, 
+        rgb(200,44, 44) ${redZoneEnd}deg, 
         rgb(78,78, 78) ${redZoneEnd}deg, 
         rgb(78,78, 78) 360deg
     ) border-box`;
@@ -363,11 +363,11 @@ function FixGenerator() {
         circle.style.background = `linear-gradient(black, black) padding-box,
     conic-gradient(
         rgb(200,44, 44) 0deg, 
-      #4B0000 ${additionalRedAngle}deg, 
+      rgb(200,44, 44) ${additionalRedAngle}deg, 
         rgb(78,78, 78) ${additionalRedAngle}deg, 
         rgb(78,78, 78) ${redZoneStart}deg, 
         rgb(200,44, 44) ${redZoneStart}deg, 
-        #4B0000 360deg
+       rgb(200,44, 44) 360deg
     ) border-box`;
     }
 
@@ -532,11 +532,11 @@ function setGeneratorHitZone() {
         circle.style.background = `linear-gradient(black, black) padding-box,
 conic-gradient(
 rgb(200,44, 44) 0deg, 
-#4B0000 ${additionalRedAngle}deg, 
+rgb(200,44, 44) ${additionalRedAngle}deg, 
 rgb(78,78, 78) ${additionalRedAngle}deg, 
 rgb(78,78, 78) ${redZoneStart}deg, 
 rgb(200,44, 44) ${redZoneStart}deg, 
-#4B0000 360deg
+rgb(200,44, 44) 360deg
 ) border-box`;
     }
     else {
@@ -545,7 +545,7 @@ rgb(200,44, 44) ${redZoneStart}deg,
         rgb(78,78, 78) 0deg, 
         rgb(78,78, 78) ${redZoneStart}deg, 
         rgb(200,44, 44) ${redZoneStart}deg, 
-        #4B0000 ${redZoneEnd}deg, 
+        rgb(200,44, 44) ${redZoneEnd}deg, 
         rgb(78,78, 78) ${redZoneEnd}deg, 
         rgb(78,78, 78) 360deg
     ) border-box`;
