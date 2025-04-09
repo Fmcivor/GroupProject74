@@ -211,6 +211,88 @@ body {
     background-color: #0044cc;
 }
 
+.achievementContainer {
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 25vh;
+    flex-direction: row;
+    justify-content: center;
+    bottom: -25vh;
+    transition: bottom 1s ease-in-out;
+}
+.achExpanded {
+    bottom: 5vh;
+}
+
+#achievementBox {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(15, 7, 76);
+    border: white 2px solid;
+    width: clamp(400px, 32vw, 32vw);
+    border-radius: 15px;
+}
+
+#achievementTop {
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(11, 5, 56);
+    height: 5vh;
+    border-bottom: white 1px solid;
+    border-radius: 15px 15px 0 0;
+    border-width: 2px;
+    border-color: white;
+    align-items: center;
+}
+
+#achievementIcon {
+    width: 9vh;
+    height: 9vh;
+}
+
+#achContentBox {
+    display: flex;
+    flex-direction: row;
+    gap: 1vh;
+    height: 77%;
+    align-items: center;
+    padding: 1vh;
+}
+
+#achName {
+    width: 100%;
+    text-align: center;
+}
+
+#closeAchBtn {
+    width: 5vh;
+    height: 5vh;
+    background-color: darkred;
+    border: none;
+    border-bottom: white 2px solid;
+    border-left: white 2px solid;
+    border-radius: 0 15px 0 0;
+}
+
+#achFig {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#achTextWrapper {
+    display: flex;
+    height: 100%;
+    flex: 3;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 @keyframes noNameInput {
     0% {border-color: red;}
     20% {border-color: black;}

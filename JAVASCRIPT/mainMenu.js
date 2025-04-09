@@ -1,7 +1,12 @@
 const menu = document.querySelector('.menu');
 const newSavePopUp = document.getElementById('saveNameWrapper')
 const saveNameInput = document.getElementById('saveNameInput');
+const achievementContainer = document.querySelector('.achievementContainer');
+const achievementIcon = document.getElementById('achievementIcon');
+const achievementName = document.getElementById('achName');
+const achievementDesc = document.getElementById('achDesc');
 
+let userAchievementIDs;
 let userID = sessionStorage.getItem("userID");
 
 
@@ -13,7 +18,7 @@ function openModal() {
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     let validUser = checkLogin();
     if (validUser == false) {
         return;
@@ -36,10 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     //Fintan's work - check if available save slot
-    getUserAchievements();
+    await getUserAchievements();
+    userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
     document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
     checkTotalActiveGames();
-    getUserAchievements();
+    
+    if (userAchievementIDs.length == 6 && !userAchievementIDs.some(achievement => achievement.achievementID == 6)) {
+        awardAchievement(6,userID,'Images/completionist.png');
+    }
 
     // font size
     document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
@@ -110,7 +119,7 @@ async function checkTotalActiveGames(){
 
 
 //Start new game
-document.getElementById('playBtn').addEventListener('click', function(){
+    document.getElementById('playBtn').addEventListener('click', function(){
     menu.style.display = 'none';
     newSavePopUp.style.display = 'flex';
     saveNameInput.value = '';
@@ -260,4 +269,80 @@ async function initialiseGameRooms(){
         throw new error("Error occurred while fetching the game rooms",error);
         return false;
     }
+}
+
+
+
+async function awardAchievement(achievementID, userID, achievementIconAddress) {
+    let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
+        VALUES (${achievementID}, ${userID});`;
+
+    let newAchievement = { "achievementID": achievementID };
+    userAchievementIDs.push(newAchievement);
+    sessionStorage.setItem("achievementIDs", JSON.stringify(userAchievementIDs));
+
+    dbConfig.set('query', insertQuery);
+
+    try {
+        response = await fetch(dbConnectorUrl, {
+            method: "POST",
+            body: dbConfig
+        });
+
+        let insertResult = await response.json();
+        if (insertResult.success) {
+
+
+
+
+            let selectQuery = `SELECT name, description FROM tblAchievement
+
+        WHERE  achievementID = ${achievementID};`;
+
+
+            dbConfig.set('query', selectQuery);
+            try {
+                response = await fetch(dbConnectorUrl, {
+                    method: "POST",
+                    body: dbConfig
+                });
+
+                let result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    let achievement = result.data[0];
+                    displayAchievement(achievementIconAddress, achievement.name, achievement.description);
+                    console.log(`achievement ${achievementID} added`);
+                }
+
+            } catch (error) {
+                console.log("Error retrieving achievement data");
+                console.log(error);
+            }
+        }
+        else {
+            console.error("Error saving the achievement to the database")
+        }
+
+    } catch (error) {
+        console.log("Error setting achievement");
+        console.log(error);
+    }
+
+   
+
+}
+
+
+function displayAchievement(iconSRC, achName, achDesc) {
+    achievementIcon.src = iconSRC;
+    achievementName.innerHTML = achName;
+    achievementDesc.innerHTML = achDesc;
+
+    achievementContainer.classList.add('achExpanded')
+    setTimeout(hideAchievement, 6500)
+}
+
+function hideAchievement() {
+    achievementContainer.classList.remove('achExpanded')
 }
