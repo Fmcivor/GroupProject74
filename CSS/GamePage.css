@@ -815,6 +815,7 @@ p {
     justify-content: center;
     bottom: -25vh;
     transition: bottom 1s ease-in-out;
+    color: white;
 }
 .achExpanded {
     bottom: 5vh;
