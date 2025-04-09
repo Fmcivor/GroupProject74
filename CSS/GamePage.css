@@ -530,6 +530,7 @@ li {
     min-height: 100vh;
     min-width: 100vw;
     padding: 2rem;
+    z-index: 15;
 }
 
 

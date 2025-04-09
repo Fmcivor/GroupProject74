@@ -1,12 +1,7 @@
 
-// INITIALISE
-// window.addEventListener('DOMContentLoaded', async function() {
-//     await loadStats();
-// })
-
 //PLACEHOLDERS
-const userID = 1;
-const gameID = 364;
+let userID = sessionStorage.getItem('userID');
+let gameID = sessionStorage.getItem('gameID')
 
 //CONSTANTS
 const numOfClues = 8;
