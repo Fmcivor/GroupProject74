@@ -417,7 +417,7 @@ const openingSafe = {
     "ID": 2,
     "room": "Master Bedroom",
     "description": `You decide to try to open the safe but don't know the code.\n
-                    perhaps you can find it somewhere in the house`,
+                    Perhaps you can find it somewhere in the house`,
     "ImageHREF": "IMAGES/masterBedroom.jpg",
     "interactions": [
         {
