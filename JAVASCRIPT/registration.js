@@ -34,8 +34,8 @@ document.getElementById("registerBtn").addEventListener("click", async function 
    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
       password = await hashPassword(password);
       console.log("All validations passed. Submitting form...")
-      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName)
-   VALUES ('${username}', '${password}','${displayName}')`;
+      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName) 
+                        VALUES ('${username}', '${password}','${displayName}');`;
       dbConfig.set('query', insertQuery);
       try {
          let insertResponse = await fetch(dbConnectorUrl, {
@@ -46,10 +46,38 @@ document.getElementById("registerBtn").addEventListener("click", async function 
          let insertResult = await insertResponse.json();
 
          if (insertResult.success) {
-            
-            window.location.href = "mainMenu.html";
 
+            let selectQuery = "SELECT userID FROM tblUser ORDER BY userID DESC LIMIT 1;";
+            dbConfig.set('query', selectQuery);
+            try {
+               let selectResponse = await fetch(dbConnectorUrl, {
+                  method: "POST",
+                  body: dbConfig
+               });
 
+               let selectResult = await selectResponse.json();
+
+               if(selectResult.success) {
+
+                  sessionStorage.setItem("username", username);
+                  sessionStorage.setItem("displayName", displayName);
+                  sessionStorage.setItem("userID", selectResult.data[0].userID);
+                  sessionStorage.setItem("fontSize", "16");
+
+                  window.location.replace("mainMenu.html");
+               }
+               else {
+                  errorMessage = '<p>Error registering user</p>';
+                  document.getElementById('messageContent').innerHTML = errorMessage;
+                  const headerElement = document.getElementById('messageHeader');
+                  headerElement.textContent = "ERROR";
+
+                  messageContainer.style.display = 'flex';
+               }
+            }
+            catch (error) {
+               console.log("Error retrieving UserID")
+            }
          } else {
             errorMessage = '<p>Error registering user</p>';
             document.getElementById('messageContent').innerHTML = errorMessage;

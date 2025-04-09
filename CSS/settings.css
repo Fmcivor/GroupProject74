@@ -238,6 +238,11 @@ a{
     color: rgb(0, 102, 255);
 }
 
+#formWrapper {
+    position: absolute;
+    top: 16vh;
+    height: 80vh;
+}
 
 
 /* Responsive design */

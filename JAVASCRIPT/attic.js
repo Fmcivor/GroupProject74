@@ -55,11 +55,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let states = [darkAttic, attic];
     let currentStateID = Number(sessionStorage.getItem('currentState'));
 
-    currentState = states.find(state => state.ID == currentStateID) || darkAttic
-
-
+    currentState = states.find(state => state.ID == currentStateID) || darkAttic;
 
     updateState();
+    hasAtticLetterClue = clueList.some(clue =>clue.clueID ==9);
+
+
+
+    
    
     
 });
@@ -111,11 +114,18 @@ function goToHallAgain(){
     window.location.replace('upstairsHall.html');
 }
 
-function searchBoxes() {
+async function searchBoxes() {
+    if (hasAtticLetterClue) {
+        setResponse("You have already searched the boxes and found all you could.");
+    }else{
+        hasAtticLetterClue = true;
+        await addClue(9);
+    setResponse("You rummage through the boxes revealing old newspapers, photos... and a wrinkled letter addressed to Charles. It reads, 'Charles you have left me with no choice you took everything from me. We were supposed to be partners. It's unsigned but the envelope is marked with a business logo: Donaghy and Kingston. Dated 27/01/2006")
 
-}
+}}
 
 function pullDownCloth(){
+    setResponse("You carefully lift the cloth to reveal a dusty mannequin and... dozens of tiny spiders scurry away. There is nothing else of interest. ")
 
 }
 
