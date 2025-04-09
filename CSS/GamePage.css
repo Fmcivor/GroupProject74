@@ -230,6 +230,7 @@ form{
     align-items: flex-start;
     transition: right 1s ease-in-out;
     font-family: "Lugrasimo", cursive;
+    z-index: 11;
 }
 
 .toolBar ::-webkit-scrollbar-thumb {
@@ -814,6 +815,7 @@ p {
     justify-content: center;
     bottom: -25vh;
     transition: bottom 1s ease-in-out;
+    color: white;
 }
 .achExpanded {
     bottom: 5vh;
@@ -1121,31 +1123,4 @@ p {
 
 .hide {
     visibility: collapse;
-}
-#atticFlashlight {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(0, 0, 0, 0) 70%);
-    pointer-events: none;
-    display: none;
-    z-index: 1000;
-}
-
-#atticContainer {
-    position: relative;
-    display: inline-block;
-}
-
-#lightSwitch {
-    position: absolute;
-    top: 40%; 
-    left: 59%; 
-    width: 40px;
-    height: 50px;
-    background: none;
-    z-index: 10;
-    border: none;
-    
 }
