@@ -10,11 +10,19 @@ let userAchievementIDs;
 let userID = sessionStorage.getItem("userID");
 
 
-
+//Dylan's work
 function openModal() {
     document.getElementById("signOutModal").style.display = "flex";
 }
 
+function closeModal() {
+    document.getElementById("signOutModal").style.display = "none";
+}
+
+function signOut() {
+    sessionStorage.clear();
+    window.location.href = "login.html";
+}
 
 
 
@@ -23,22 +31,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (validUser == false) {
         return;
     }
-    // const btnSignOut = document.getElementById("btnSignOut");
-    // const cancelSignOut = document.getElementById("confirmNo"); // Fix variable reference
-
-    // if (btnSignOut && signOutConfirm && cancelSignOut) {
-    //     btnSignOut.addEventListener("click", function () {
-    //         signOutConfirm.style.display = "flex";
-    //     });
-
-    //     cancelSignOut.addEventListener("click", function () {
-    //         signOutConfirm.style.display = "none";
-    //     });
-    // } else {
-    //     console.error("One or more elements are missing in the DOM.");
-    // }
-
-
 
     //Fintan's work - check if available save slot
     await getUserAchievements();
@@ -55,6 +47,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     
 
 });
+
+document.getElementById('saveSelectBtn').addEventListener('click', function() {
+    window.location.replace('saveSelect.html');
+})
 
 document.getElementById('continueBtn').addEventListener('click', async function() {
 
@@ -105,9 +101,11 @@ async function checkTotalActiveGames(){
 
             if(activeGameCount > 0) {
                 document.getElementById('continueBtn').removeAttribute('disabled');
+                document.getElementById('saveSelectBtn').removeAttribute('disabled');
             }
             else {
-                document.getElementById('continueBtn').setAttribute('disabled',true)
+                document.getElementById('continueBtn').setAttribute('disabled',true);
+                document.getElementById('saveSelectBtn').setAttribute('disabled',true);
             }
         }
     } catch (error) {
@@ -205,14 +203,7 @@ document.getElementById('backFromSaveName').addEventListener('click', function()
 })
 
 
-function closeModal() {
-    document.getElementById("signOutModal").style.display = "none";
-}
 
-function signOut() {
-    sessionStorage.clear();
-    window.location.href = "login.html";
-}
 
 
 

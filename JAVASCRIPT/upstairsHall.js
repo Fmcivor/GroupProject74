@@ -13,8 +13,8 @@ let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
 const upstairsHall = {
     "ID": 1,
     "room": "Upstairs Hall",
-    "description": `You walk up the staircase and take alook around. 
-    You see 3 doors and take a quick peek into each of them, seeing that they lead to a  living room, master bedroom and a guest bedroom`,
+    "description": `You walk up the staircase and take a look around. 
+    You see 3 doors and take a quick peek into each of them, seeing that they lead to an attic, master bedroom and a guest bedroom`,
     "ImageHREF": "Images/upstairsHall.jpg",
     "interactions": [
         {

@@ -6,8 +6,8 @@ let hasWeddingRingClue;
 const downStairsHall ={
     "ID": 1,
     "room": "Down Stairs Hall",
-    "description": `You have managed to gain access to the house now and finally you can do some proper investigating. Wait...${displayName}
-    it's too dark to see anything. This is going to be difficult to find anything if we can't even see, except the faint outline of the room.`,
+    "description": `You have managed to gain access to the house, and now and finally you can do some proper investigating. Wait...${displayName}
+    it's too dark to see anything. This is going to be difficult to find anything if we can't even see, except for the faint outline of the room.`,
     "ImageHREF": "Images/lightsOffHall.jpg",
     "interactions": [
         {
@@ -22,7 +22,7 @@ const downStairsHall ={
         },
         {
             "id":2,
-            "Text": "explore the room blindly",
+            "Text": "Explore the room blindly",
             "response": exploreHall
         }
     ]
@@ -31,8 +31,8 @@ const downStairsHall ={
 const hallWall = {
     "ID": 2,
     "room": "Down Stairs Hall",
-    "description": `You felt your hand just brush over something on the wall, you slowly trace your hands back and you feel it again.
-    After a closer look you recognise it to be a switch. `,
+    "description": `You felt your hand just brush over something on the wall. You slowly trace your hands back and you feel it again.
+    After a closer look, you recognise it as a switch. `,
     "ImageHREF": "Images/lightsOffHall.jpg",
     "interactions": [
         {
@@ -51,9 +51,9 @@ const hallWall = {
 const downStairsHallLightsOn ={
     "ID": 3,
     "room": "Down Stairs Hall",
-    "description": `You stand in the hall and you can see the mess of the room. 
-    A cleaner would've been more useful than a detective like you ${displayName}
-    Over to your right stands a few drawers along with papers on top of the cabinet with various
+    "description": `You stand in the hall and take in the mess of the room. 
+    A cleaner would've been more useful than a detective like you, ${displayName}
+    Over to your right stands a few drawers along with papers on top of the cabinet, and various
     other items scattered along the floor.`,
     "ImageHREF": "Images/lightsOnHall.jpg",
     "interactions": [
@@ -83,8 +83,8 @@ const downStairsHallLightsOn ={
 const BackOfHall ={
     "ID": 4,
     "room": "Down Stairs Hall",
-    "description": `You stand at the back of the hall and now see the mess of the house continues throughout. In front of you and to your left are 2 more
-    doors while the your right is a staircase.${displayName} it's about time we start to delve further into this mystery 
+    "description": `You stand at the back of the hall and see that the mess of the house continues throughout. In front of you and to your left are two more
+    doors while to your right is a staircase.${displayName}, it's about time we start delving further into this mystery, 
     and I think that starts with a thorough sweep of the building.`,
     "ImageHREF": "Images/lightsOnHall.jpg",
     "interactions": [
