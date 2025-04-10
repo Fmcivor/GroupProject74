@@ -27,7 +27,7 @@ const selectMargaretButton = document.getElementById('margaretButton');
 const selectJonathanButton = document.getElementById('jonathanButton');
 const confirmSuspectBtn = document.getElementById('suspectConfirmationYesBtn');
 const cancelSuspectBtn = document.getElementById('suspectConfirmationNoBtn');
-const achievementContainer = document.getElementById('achievementContainer')
+const achievementContainer = document.querySelector('.achievementContainer')
 
 // item ids
 const keyID = 1;
