@@ -10,7 +10,7 @@ document.getElementById("startGame").addEventListener("click", async function() 
     }
     sessionStorage.setItem("currentRoom", 'OutsideHouse.html');
     sessionStorage.setItem("currentState", 1);
-    addRoomVisit();
+    await addRoomVisit();
     window.location.replace('OutsideHouse.html');
     sessionStorage.setItem('gameSessionStartTime',Date.now());
 });
