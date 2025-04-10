@@ -226,42 +226,15 @@ svg {
     font-size: 1.75rem;
 }
 
-
-#codeContainer {
-    position: absolute;
-    right: 5%;
-    bottom: 2%;
-    width: 30%;
-    height: 25%;
-    z-index: 3;
-    background-image: url(../Images/secretCodeNote.png);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 100% 100%;
-    padding: 2%;
-    display: none;
-}
-
-.codeText {
-    color: black;
-    font-family: "Corinthia", cursive;
-    font-weight: 700;
-    font-style: normal;
-    color: black;
-    font-size: 1.4rem;
-}
-
-#code {
-    font-size: 2.3rem;
-    text-align: center;
-    width: 100%;
-}
-
 .toolBar {
     z-index: 7;
 }
 
 .safeButton {
+    display: none;
+}
+
+#safeButtonContainer {
     display: none;
 }
 
@@ -312,34 +285,49 @@ svg {
 
     .safeButton {
         display: flex;
-        width: 10px;
-        height: 10px;
         position: absolute;
+        width: 8vw;
+        height: 8vw;
+        background: transparent;
+        border: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .safeButton i:hover {
+        transform: scale(1.2);
+    }
+
+    .safeButton i {
+        font-size: 20px;
     }
 
     #safeButtonContainer {
         position: absolute;
         width: 100%;
         height: 100%;
-        display: flex;
         justify-content: center;
         align-items: center;
     }
 
     #safeUpButton {
-
+        top: 5%;
     }
 
     #safeDownButton {
-
+        bottom: 5%;
     }
 
     #safeLeftButton {
-
+        left: 5%;
     }
 
     #safeRightButton {
-        
+        right: 5%;
+    }
+
+    #d4Text {
+        font-size: 2rem;
     }
 }
 
