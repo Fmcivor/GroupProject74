@@ -1,3 +1,5 @@
+DEVELOPER: CALLUM
+
 //INITIALISE
 window.addEventListener('DOMContentLoaded', async function() {
     await getAvgTimes();
@@ -17,6 +19,7 @@ let globalAvgTimeCompletion = 0;
 
 
 async function getAvgTimes() {
+    //retrieve users average time to win
     let avgTimeQuery = `SELECT SEC_TO_TIME(ROUND(AVG(timePlayed))) AS 'averageTimeToComplete' FROM tblGameSave 
                         WHERE tblGameSave.status = 1 GROUP BY userID HAVING userID = ${userID};`;
 
@@ -42,6 +45,7 @@ async function getAvgTimes() {
         console.error("An error has occurred while retrieving stats form the database", error);
     }
 
+    //retrieve global average time to win
     let globalAvgTimeQuery = `SELECT SEC_TO_TIME(ROUND(AVG(timePlayed))) AS 'globalAverageTimeToComplete' FROM tblGameSave 
                             WHERE tblGameSave.status = 1;`;
 

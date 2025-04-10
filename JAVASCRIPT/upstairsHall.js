@@ -1,3 +1,5 @@
+//DEVELOPER: CALLUM
+
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function() {
     currentState = upstairsHall;

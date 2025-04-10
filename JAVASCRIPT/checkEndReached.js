@@ -1,3 +1,4 @@
+//check if user has jumped to the end
 document.addEventListener('DOMContentLoaded', function() {
     let loggedIn = checkLoggedIn();
     if(loggedIn == true){
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+//check if logged in
 function checkLoggedIn(){
     if (!sessionStorage.getItem('userID')) {
         window.location.href = 'login.html';

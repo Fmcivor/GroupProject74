@@ -28,6 +28,7 @@ document.getElementById('yesBtn').addEventListener('click', async function (even
 });
 
 // retieves and displays the 5 most recent active game saves for the user
+//Developed by Callum and Fintan
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
     let selectQuery = `SELECT gameID, timePlayed, DATE_FORMAT(lastPlayedDate, '%d/%m/%Y') AS 'dateLastPlayed', DATE_FORMAT(lastPlayedDate, '%H:%i') AS 'timeLastPlayed', gameName 

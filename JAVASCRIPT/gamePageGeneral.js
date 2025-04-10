@@ -92,27 +92,29 @@ cancelSuspectBtn.addEventListener('click', closeSubmitEvidencePopUp);
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
     if (userLoggedIn == true) {
+        //check that user hasn't jumped to incorrect window
         if (!window.location.href.includes(sessionStorage.getItem("currentRoom"))) {
             window.location.replace(sessionStorage.getItem("currentRoom"));
         }
         else {
-        document.getElementById('slider').value = sessionStorage.getItem("fontSize");
-        let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
-        if (easyReadOn == true) {
-            document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
-        }
-        else {
-            document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
-        }
+            //set elements to game save values
+            document.getElementById('slider').value = sessionStorage.getItem("fontSize");
+            let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
+            if (easyReadOn == true) {
+                document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+            }
+            else {
+                document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+            }
 
-        UpdateInventory();
-        updateClueNotebook();
+            UpdateInventory();
+            updateClueNotebook();
         }
     }
 })
 
 
-
+//change window
 async function goToNextRoom(nextRoom, startingState) {
     sessionStorage.setItem("currentRoom", nextRoom);
     sessionStorage.setItem("currentState", startingState);
@@ -239,7 +241,6 @@ function updateState() {
     let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
     typingIndex = 0;
-    let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += descText[typingIndex];
@@ -290,7 +291,7 @@ function userDecisionHandler(event) {
     }
 }
 
-
+//display input response
 function setResponse(responseText) {
     clearInterval(typingInterval);
 
@@ -303,6 +304,7 @@ function setResponse(responseText) {
     let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
 
+    //typing effect
     typingIndex = 0;
     typingInterval = setInterval(() => {
         responseBox.textContent += responseText[typingIndex];
@@ -314,7 +316,7 @@ function setResponse(responseText) {
     }, intervalTime);
 }
 
-
+//set description then response
 function setDescriptionAndResponse(responseText) {
     const description = document.getElementById('descriptionParagraph');
     const descText = currentState.description;
@@ -327,19 +329,20 @@ function setDescriptionAndResponse(responseText) {
     let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
     typingIndex = 0;
-    // let totalTypingTime = currentState.description.length * 20;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
         description.textContent += descText[typingIndex];
         typingIndex++;
         if (typingIndex == currentState.description.length) {
             clearInterval(typingInterval);
+            //set response
             setResponseAfterDescription(responseText);
         }
 
     }, intervalTime);
 }
 
+//set response (called from setDescriptionAndResponse)
 function setResponseAfterDescription(responseText) {
     const responseBox = document.getElementById('responseParagraph');
     responseBox.textContent = "";
@@ -349,6 +352,7 @@ function setResponseAfterDescription(responseText) {
     let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
 
+    //typing effect
     typingIndex = 0;
     typingInterval = setInterval(() => {
         responseBox.textContent += responseText[typingIndex];
@@ -409,8 +413,10 @@ function selectInventoryItem(event) {
 
 }
 
-
+//award user an achievement
 async function awardAchievement(achievementID, userID, achievementIconAddress) {
+    
+    //add user achievement to database
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
 
@@ -431,7 +437,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 
 
-
+            //retrieve achievement data
             let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
@@ -447,6 +453,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
                 let result = await response.json();
 
                 if (result.success && result.data.length > 0) {
+                    //display achievement data
                     let achievement = result.data[0];
                     displayAchievement(achievementIconAddress, achievement.name, achievement.description);
                     console.log(`achievement ${achievementID} added`);
@@ -763,7 +770,7 @@ fontSlider.oninput = function () {
 
 savePreferencesBtn.addEventListener('click', savePreferences);
 
-
+//Saves input preferences to user in database
 async function savePreferences() {
     let easyReadOn = easyReadCheckBox.checked;
     sessionStorage.setItem("fontSize", fontSlider.value);
@@ -957,7 +964,9 @@ document.getElementById('submitEvidenceBtn').addEventListener('click', async fun
 
 });
 
+//takes user to end page
 async function submitEvidence() {
+    //Retrieve if clues found
     let knifeClue = clueList.some(clue => clue.clueID == knifeClueID);
     let victorGuiltyClue = clueList.some(clue => clue.clueID == burntLetterClueID);
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
@@ -966,6 +975,7 @@ async function submitEvidence() {
     sessionStorage.setItem("inventory", JSON.stringify(inventory));
 
     if (suspectAccused != null) {
+        //Check for game win
         if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue && margaretInnocentClue && jonathanInnocentClue) {
             sessionStorage.setItem("status", gameWin);
             sessionStorage.setItem("currentRoom", "endGameWin.html");
@@ -973,6 +983,7 @@ async function submitEvidence() {
             window.location.replace("endGameWin.html");
         }
         else {
+            //go to game lost screen
             sessionStorage.setItem("murderWeaponFound", knifeClue);
             sessionStorage.setItem("suspectAccused", suspectAccused);
             sessionStorage.setItem("victorGuiltyClue", victorGuiltyClue);
@@ -990,6 +1001,7 @@ async function submitEvidence() {
         }
     }
     else {
+        //notify user no suspect selected
         selectVictorButton.style.animation = 'noSuspectSelected 1s';
         selectJonathanButton.style.animation = 'noSuspectSelected 1s';
         selectMargaretButton.style.animation = 'noSuspectSelected 1s';
@@ -1008,6 +1020,7 @@ function closeSubmitEvidencePopUp() {
     suspectAccused = null;
 }
 
+//select suspect to accuse
 function accuseVictor() {
     selectVictorButton.style.border = '#ffee35 solid 3px'
     selectMargaretButton.style.border = 'rgb(10, 10, 40) 3px solid';

@@ -1,3 +1,5 @@
+//DEVELOPER: CALLUM
+
 //VARIABLES
 let murderWeaponFound = (sessionStorage.getItem("murderWeaponFound") === 'true');
 let victorClueFound = (sessionStorage.getItem("victorGuiltyClue") === 'true');

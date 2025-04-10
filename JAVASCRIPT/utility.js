@@ -1,3 +1,6 @@
+//Lead Developer: Fintan
+
+//cariables for database conection
 const dbConnectorUrl = "https://fmcivor02.webhosting1.eeecs.qub.ac.uk/dbConnector.php";
 
 let dbConfig = new URLSearchParams({
@@ -7,6 +10,7 @@ let dbConfig = new URLSearchParams({
     database: 'CSC1034_CW_74',
 });
 
+//Collectibles' classes
 class Item {
     constructor(itemID, itemName, itemHREF) {
         this.itemID = itemID;
@@ -23,6 +27,7 @@ class Clue{
     }
 }
 
+//load preferences
 document.addEventListener('DOMContentLoaded',function(){
     document.documentElement.style.fontSize = `${sessionStorage.getItem('fontSize')}px`;
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
@@ -42,7 +47,7 @@ function checkLogin(){
     return true;
 }
 
-
+//remove a save from the database
 async function deleteSave(gameID){
     let deleteQuery = `UPDATE tblGameSave SET status = ${gameAbandoned} WHERE gameID = ${gameID}`;
                        
@@ -69,9 +74,8 @@ async function deleteSave(gameID){
 
 }
 
+//hash input password
 async function hashPassword(password) {
-    
-
     
     const encoder = new TextEncoder();
     const data = encoder.encode(password);

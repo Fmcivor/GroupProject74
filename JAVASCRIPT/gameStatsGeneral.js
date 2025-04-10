@@ -1,3 +1,4 @@
+//DEVELOPER: CALLUM
 
 //PLACEHOLDERS
 let userID = sessionStorage.getItem('userID');
@@ -32,7 +33,7 @@ async function loadStats() {
     getRooms();
 }
 
-
+//get stats for number of rooms visited
 async function getRooms() {
     let timeAndRoomsQuery = `SELECT timesVisited FROM tblGameRoom WHERE gameID = ${gameID};`;
 
@@ -51,6 +52,7 @@ async function getRooms() {
                 if(result.data[i].timesVisited > 0){
                     roomsVisited++;
 
+                    //calculate completion
                     completion = ((5*roomsVisited) + (8*itemsCollected) + (7*cluesCollected)) / ((5*numOfRooms) + (8*numOfItems) + (7*numOfClues))
                     completion = completion * 100;
                     completion = Math.round(completion * 10) / 10
@@ -68,7 +70,9 @@ async function getRooms() {
     }
 }
 
+//get stats for items and clues collected
 async function getItemsAndClues() {
+    //items stats retrieved
     let itemQuery = `SELECT COUNT(itemID) AS 'noItemsCollected' FROM tblGameInventory WHERE gameID = ${gameID};`;
 
     dbConfig.set('query', itemQuery);
@@ -93,6 +97,7 @@ async function getItemsAndClues() {
         console.error("An error has occurred while retrieving stats form the database", error);
     }
 
+    //clue stats retrieved
     let clueQuery = `SELECT COUNT(clueID) AS 'noCluesCollected' FROM tblGameNotebook WHERE gameID = ${gameID};`;
 
     dbConfig.set('query', clueQuery);
@@ -118,6 +123,7 @@ async function getItemsAndClues() {
     }
 }
 
+//get stats for user play time
 async function getplayTime() {
     let timeAndRoomsQuery = `SELECT  timePlayed AS 'timeToComplete', DATE_FORMAT(startDate, '%d/%m/%Y') AS 'startDate', DATE_FORMAT(startDate, '%H:%i') AS 'startTime'
      FROM tblGameSave WHERE gameID = ${gameID};`;
