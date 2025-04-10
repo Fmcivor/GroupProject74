@@ -1,3 +1,5 @@
+// Lead Developer MATTHEW CONNOLLY
+
 let hasFlashLight = inventory.some(item => item.itemID == flashLightID);
 let hasBatteries = inventory.some(item => item.itemID == batteriesID);
 let atticLightingOn = JSON.parse(sessionStorage.getItem('atticLightingOn'));
@@ -27,17 +29,20 @@ const darkAttic = {
         },
     ]
 }
-
+// Handles toggling the light
 function toggleLight() {
+    // If flashlight isn't active and still in dark attic block light activation
     if (!flashLightActive && currentState == darkAttic) {
         setResponse("You fumble in the dark, but without a working flashlight, you can't see anything.");
         return; 
+
+        //If in dark attic, transition to light attic
     }
     if (currentState.ID === 1) {
         currentState = attic;
         sessionStorage.setItem("currentState", 2);
         atticLightingOn = true;
-        flashLightActive = false;
+        flashLightActive = false; // stop flashlight effect
         toggleFlashLight();
         updateState();
 
@@ -148,7 +153,7 @@ function toggleFlashLight() {
     
 
 
-    
+    // setup flashlight movement based on mouse tracking
     flashlight = document.getElementById("atticFlashLight");
 
     rightColumn.addEventListener("mousemove", function (event) {
@@ -162,7 +167,7 @@ function toggleFlashLight() {
             // flashlight.style.top = `${offsetY - 100}px`;
 
             let x = event.clientX - 50
-
+            // creates radial gradient around the cursor
             flashlight.style.background = `radial-gradient(circle at ${offsetX}px ${offsetY}px, rgba(0, 0, 0, 0.763) 120px, rgba(0, 0, 0, 0.99) 150px)`;
 
         }
