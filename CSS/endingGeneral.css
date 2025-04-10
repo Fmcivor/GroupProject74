@@ -199,6 +199,10 @@ button {
     justify-content: center;
 }
 
+#achievementBox {
+    color: white;
+}
+
 @media (max-width:650px) {
 
     .endingBox {
