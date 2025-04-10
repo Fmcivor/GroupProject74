@@ -18,3 +18,7 @@ function checkLoggedIn(){
     }
     return true;
 }
+
+document.getElementById('backToMenuBtn').addEventListener('click', function() {
+    window.location.replace('mainMenu.html');
+})

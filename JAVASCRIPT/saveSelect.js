@@ -1,5 +1,8 @@
 //lead devloper - FINTAN MCIVOR
-
+let menuLinkWrapper = document.createElement('div')
+        menuLinkWrapper.classList.add('menuLinkWrapper');
+        menuLinkWrapper.innerHTML = '<a class="btnMainMenu" href="mainMenu.html">Main Menu</a>'
+        document.querySelector('.saveContainer').appendChild(menuLinkWrapper);
 
 document.addEventListener('DOMContentLoaded', async function () {
     let validUser = checkLogin();
@@ -92,12 +95,9 @@ async function displayGameSaves() {
                     saveSlotDiv.appendChild(deleteSaveBtn);
                     saveWrapper.appendChild(saveSlotDiv);
                 });
-                let menuLinkWrapper = document.createElement('div')
-                menuLinkWrapper.classList.add('menuLinkWrapper');
-                menuLinkWrapper.innerHTML = '<a class="btnMainMenu" href="mainMenu.html">Main Menu</a>'
-                document.querySelector('.saveContainer').appendChild(menuLinkWrapper);
-
             }
+
+            
         }
         else {
             console.error("Error while displaying saved games");
