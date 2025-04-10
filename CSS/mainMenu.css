@@ -51,6 +51,7 @@ body {
     padding: 3vh 0;
 }
 
+/* Default styling for menu buttons */
 .menu a, .menu button {
     text-decoration: none;
     font-size: clamp(2rem, 5vw, 3rem);
@@ -66,18 +67,19 @@ body {
     box-shadow: none;
     font-family: inherit;
 }
-
+/* Change disabled buttons to grey */
 .menu button:disabled:hover{
     color: rgb(135, 135, 135);
     transform: none;
 }
 
+/* Change disabled links to grey */
 .menu button:disabled, .menu a:disabled{
     color: rgb(135, 135, 135);
 }
 
 
-
+/* Change menu buttons when mouse hovers */
 .menu a:hover, .menu button:hover {
     text-decoration:underline;
     transition: 0.3s;
