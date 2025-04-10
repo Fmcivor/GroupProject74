@@ -10,7 +10,7 @@ document.getElementById("startGame").addEventListener("click", async function() 
     }
     sessionStorage.setItem("currentRoom", 'OutsideHouse.html');
     sessionStorage.setItem("currentState", 1);
-    addRoomVisit();
+    await addRoomVisit();
     window.location.replace('OutsideHouse.html');
     sessionStorage.setItem('gameSessionStartTime',Date.now());
 });
@@ -31,15 +31,15 @@ document.addEventListener('DOMContentLoaded', function () {
 async function addRoomVisit() {
     let insertQuery = `UPDATE tblGameRoom SET timesVisited = timesVisited + 1 WHERE gameID = ${gameID} AND roomID = ${nextRoomID}`;
     dbConfig.set('query', insertQuery);
-
+ 
     try {
         let response = await fetch(dbConnectorUrl, {
             method: "POST",
             body: dbConfig
         });
-
+ 
         let result = await response.json();
-
+ 
         if (result.success) {
             console.log("Room visit count updated successfully");
         } else {
