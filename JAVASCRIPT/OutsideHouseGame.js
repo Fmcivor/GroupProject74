@@ -302,6 +302,7 @@ document.getElementById('postCardContainer').addEventListener('click', function 
 function exploreGarden() {
     currentState = overgrownGarden;
     updateState();
+    rubbishContainer.style.display = 'none';
 }
 
 function searchBushes() {
