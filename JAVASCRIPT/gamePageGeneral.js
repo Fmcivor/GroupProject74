@@ -953,7 +953,7 @@ async function submitEvidence() {
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
-    sessionStorage.setItem("invetory", JSON.stringify(inventory));
+    sessionStorage.setItem("inventory", JSON.stringify(inventory));
 
     if (suspectAccused != null) {
         if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue && margaretInnocentClue && jonathanInnocentClue) {
