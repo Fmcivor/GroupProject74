@@ -13,7 +13,6 @@ const hideToolBarButton = document.getElementById('hideToolBarButton');
 const noteBookContainer = document.getElementById('noteBook');
 const inventoryContainer = document.getElementById('inventory');
 const promptDivider = document.getElementById('promptDivider');
-const achievementContainer = document.querySelector('.achievementContainer');
 const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
 const achievementDesc = document.getElementById('achDesc');

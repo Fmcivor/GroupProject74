@@ -70,3 +70,29 @@ button:hover{
 }
 
 
+@media (max-width:650px) {
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .introContainer {
+        height: 85%;
+        width: 85%;
+    }
+
+    .introBox {
+        height: 100%;
+        padding: 5%;
+        overflow-y: auto;
+    }
+
+    h1 {
+        margin: 1vh;
+    }
+
+}
