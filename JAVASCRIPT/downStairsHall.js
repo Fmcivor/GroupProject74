@@ -52,7 +52,7 @@ const downStairsHallLightsOn ={
     "ID": 3,
     "room": "Down Stairs Hall",
     "description": `You stand in the hall and take in the mess of the room. 
-    A cleaner would've been more useful than a detective like you, ${displayName}. 
+    A cleaner would've been more useful than a detective like you, ${displayName}.
     Over to your right stands a few drawers along with papers on top of the cabinet, and various
     other items scattered along the floor.`,
     "ImageHREF": "Images/lightsOnHall.jpg",
