@@ -1,9 +1,7 @@
 //LEAD DEVELOPER - FINTAN 
 
 
-
-
-//^ DEVELOPMENT PURPOSES
+//VARIABLES AND CONSTANTS
 
 let userID = sessionStorage.getItem("userID");
 let username = sessionStorage.getItem("username");
@@ -31,6 +29,10 @@ const statsContainer = document.getElementById('statsContainer');
 
 const easyReadCheckBox = document.getElementById('easyReadCheckBox')
 
+const showButton = document.getElementById('togglePassword');
+showButton.addEventListener('click', togglePassword);
+
+// Change the tab displayed
 profileTab.addEventListener("click", function () {
     profileTab.style.borderBottom = '4px solid rgb(0, 102, 255)';
     preferencesTab.style.borderBottom = '4px solid transparent';
@@ -95,9 +97,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 
-const showButton = document.getElementById('togglePassword');
-showButton.addEventListener('click', togglePassword);
 
+// shows password
 function togglePassword() {
     const password = document.getElementById("password");
     const confirmPassword = document.getElementById("confirmPassword");
@@ -110,6 +111,8 @@ function togglePassword() {
     }
 }
 
+
+// enables or disables the confirm password input
 document.getElementById('password').addEventListener('input', function (event) {
     const confirmPasswordField = document.getElementById('confirmPassword');
     if (event.target.value.trim() == '') {
@@ -125,7 +128,7 @@ document.getElementById('password').addEventListener('input', function (event) {
 });
 
 
-
+// exit to main menu
 exitProfileBtn.addEventListener('click', function () {
     window.location.href = 'mainMenu.html';
 });
@@ -144,6 +147,8 @@ exitStatsBtn.addEventListener('click', function () {
 
 saveProfileBtn.addEventListener('click', validateChanges);
 
+
+//delete account methods
 document.getElementById('deleteAccountBtn').addEventListener('click', function (event) {
     event.preventDefault();
     document.getElementById('deletePopUp').style.display = 'flex';
@@ -185,6 +190,8 @@ async function deleteAccount() {
     }
 }
 
+
+// calls all validation methods and if all return true updates the user information locally and in the database
 async function validateChanges(event) {
     event.preventDefault();
     saveProfileBtn.setAttribute('disabled', true);
@@ -205,7 +212,8 @@ async function validateChanges(event) {
 
 
     if (validDisplayName && validPassword && validConfirmPassword) {
-        await updateProfile(enteredDisplayName, enteredPassword);
+        let hashedPassword = await hashPassword(enteredPassword);
+        await updateProfile(enteredDisplayName, hashedPassword);
         displayNameInput.classList.remove('invalid');
         passwordInput.classList.remove('invalid');
         confirmPasswordInput.classList.remove('invalid');
@@ -223,7 +231,7 @@ async function validateChanges(event) {
 }
 
 
-
+// checks if the display name is characters only and between 1 and 15 characters
 function validateDisplayName(enteredDisplayName) {
     let displayNameRegex = /^[a-zA-Z]{1,15}$/;
 
@@ -236,6 +244,8 @@ function validateDisplayName(enteredDisplayName) {
     displayNameInput.classList.remove('invalid');
     return true;
 }
+
+// checks if the password has a capital letter a symbol and a number and between 8 and 20 characters long
 
 function validatePassword(enteredPassword) {
     let passwordRegex = /^(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
@@ -250,6 +260,7 @@ function validatePassword(enteredPassword) {
     return true;
 }
 
+//checks if passwords match
 function validateConfirmPassword(enteredPassword, enteredConfirmPassword) {
     if (enteredPassword !== enteredConfirmPassword) {
         errorMessage += '<li>The passwords must match.</li>';
@@ -260,7 +271,7 @@ function validateConfirmPassword(enteredPassword, enteredConfirmPassword) {
     return true;
 }
 
-
+//updates the profiles data - allows password and display to be updated invidually
 async function updateProfile(enteredDisplayName, enteredPassword) {
     let query;
     if (enteredPassword == '') {
@@ -282,6 +293,7 @@ async function updateProfile(enteredDisplayName, enteredPassword) {
         if (result.success) {
             displayMessage(true);
             sessionStorage.setItem("displayName", enteredDisplayName);
+            document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
         }
     } catch (error) {
         alert("Error updating", error);
@@ -289,6 +301,7 @@ async function updateProfile(enteredDisplayName, enteredPassword) {
     }
 }
 
+// returns error or success message
 function displayMessage(success) {
     let header = '';
     let headerColor = '';
@@ -337,7 +350,7 @@ fontSlider.oninput = function () {
 savePreferencesBtn.addEventListener('click', savePreferences);
 
 
-
+// updates the session storage and database when preferences are saved
 async function savePreferences() {
     let easyReadOn = easyReadCheckBox.checked;
     sessionStorage.setItem("fontSize", fontSlider.value);
@@ -381,95 +394,7 @@ async function savePreferences() {
 }
 
 
-// async function displayStats() {
-//     let statsQuery = `SELECT 
-//     IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))), 'N/A') AS totalTimePlayed, 
-
-//     IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))), 'N/A') AS averageToWin,
-
-//     (
-//         SELECT COUNT(*) 
-//         FROM tblGameInventory 
-//         WHERE gameID IN (SELECT gameID FROM tblGameSave WHERE userID = ${userID})
-//     ) AS numOfItemsCollected,
-
-//     (
-//         SELECT COUNT(*) 
-//         FROM tblGameNotebook 
-//         WHERE gameID IN (SELECT gameID FROM tblGameSave WHERE userID = ${userID})
-//     ) AS numOfCluesCollected,
-
-//     IFNULL(
-//         SEC_TO_TIME(
-//             MIN(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END)
-//         ), 'N/A'
-//     ) AS fastestTimeToCompleteGame,
-
-//     IFNULL(
-//         SEC_TO_TIME(
-//             ROUND(AVG(CASE WHEN tblGameSave.status != 4 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))
-//         ), 'N/A'
-//     ) AS averageTime,
-
-//     COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
-//     COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
-//     COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
-//     COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
-
-//     ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)) AS avgNoOfRepairAttempts,
-
-//     (
-//         SELECT tblRoom.roomName
-//         FROM tblRoom 
-//         WHERE tblRoom.roomID = (
-//             SELECT tblGameRoom.roomID
-//             FROM tblGameRoom
-//             JOIN tblGameSave ON tblGameSave.gameID = tblGameRoom.gameID
-//             WHERE tblGameSave.userID = ${userID}
-//             GROUP BY tblGameRoom.roomID
-//             ORDER BY SUM(tblGameRoom.timesVisited) DESC
-//             LIMIT 1
-//         )
-//     ) AS mostVisitedRoom
-
-// FROM tblGameSave 
-// WHERE tblGameSave.userID = ${userID}
-// GROUP BY tblGameSave.userID`;
-
-//     dbConfig.set('query', statsQuery);
-
-//     try {
-//         let response = await fetch(dbConnectorUrl, {
-//             method: "POST",
-//             body: dbConfig
-//         });
-
-//         let result = await response.json();
-
-//         if (result.success) {
-//             let stats = result.data[0];
-//             document.getElementById("totalTimePlayed").textContent = stats.totalTimePlayed;
-//             document.getElementById("avgTimeToWin").textContent = stats.averageToWin;
-//             document.getElementById("itemCount").textContent = stats.numOfItemsCollected;
-//             document.getElementById("clueCount").textContent = stats.numOfCluesCollected;
-//             document.getElementById("quickestGame").textContent = stats.fastestTimeToCompleteGame;
-//             document.getElementById("averageTime").textContent = stats.averageTime;
-//             document.getElementById("lost").textContent = stats.gamesLost;
-//             document.getElementById("won").textContent = stats.gamesWon;
-//             document.getElementById("abandoned").textContent = stats.gamesAbandoned;
-//             document.getElementById("totalGamesPlayed").textContent = stats.totalGames;
-//             document.getElementById("avgRepairAttempts").textContent = stats.avgNoOfRepairAttempts;
-//             document.getElementById("mostVisitedRoom").textContent = stats.mostVisitedRoom;
-//         }
-//         else {
-//             console.error("Error occurred while retrieving the game stats");
-//             console.error(result.error);
-//         }
-//     } catch (error) {
-//         console.error("Error while retrieving the game stats", error);
-//     }
-// }
-
+// checks the number of games between all users
 async function checkGameCount() {
     let query = `SELECT count(*) AS gameCount FROM tblGameSave`;
     dbConfig.set('query', query);
@@ -495,6 +420,8 @@ async function checkGameCount() {
     }
 }
 
+// calculates and retrieves time related stats from the database
+// both global and user specific
 async function getTimeStats() {
     let timeQuery = `SELECT 
     IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))), 'N/A') AS totalTimePlayed, 
@@ -542,7 +469,7 @@ GROUP BY tblGameSave.userID`;
     }
 }
 
-
+//calcluates and retrieves item and clue related stats from the database
 async function getCollectibleStats() {
     let query = `SELECT
      COUNT(*) AS numOfItemsCollected 
@@ -602,6 +529,8 @@ async function getCollectibleStats() {
     }
 }
 
+
+// calculates and retrives stats related to game completion from the database specific to the user
 async function getGameStats() {
     let gameStats = `SELECT 
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
@@ -609,7 +538,7 @@ async function getGameStats() {
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
     COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
     
-    ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)) 
+    IFNULL(ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)),'N/A') 
     AS avgNoOfRepairAttempts,
 
     (
@@ -658,6 +587,8 @@ GROUP BY tblGameSave.userID`;
     }
 }
 
+
+//calculates and retrieves stats bertween all users and games for comparision
 async function getGlobalStats() {
     let query = `SELECT IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS globalTimeToComplete,
  COUNT(CASE WHEN status = 1 THEN tblGameSave.gameID END) AS completedCount,

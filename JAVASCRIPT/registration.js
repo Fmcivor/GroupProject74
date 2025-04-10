@@ -166,8 +166,8 @@ function validateDisplayName(enteredDisplayName) {
 
 
    let displayNameRegex = /^[a-zA-Z-\s]{1,15}$/;
-   if (!enteredDisplayName) {
-      errorMessage +=`<li>Display name cannot be blank.</li>`;
+   if (!displayNameRegex.test(enteredDisplayName)) {
+      errorMessage +=`<li>Display name must be letters only and be between 1 and 15 characters long.</li>`;
 
       return false;
    }

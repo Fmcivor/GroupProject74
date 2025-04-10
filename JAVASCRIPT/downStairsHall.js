@@ -1,8 +1,9 @@
-
+//LEAD DEVELOPER - FINTAN MCIVOR
+//VARIABLES
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 let hasWeddingRingClue;
 
-
+//STATES
 const downStairsHall ={
     "ID": 1,
     "room": "Down Stairs Hall",
@@ -113,6 +114,7 @@ const BackOfHall ={
 
 
 document.addEventListener('DOMContentLoaded', async function(){
+    //displays the state the user was last in
     let states = [];
     states.push(downStairsHall,hallWall,downStairsHallLightsOn,BackOfHall);
 
@@ -123,6 +125,8 @@ document.addEventListener('DOMContentLoaded', async function(){
     hasWeddingRingClue = clueList.some(clue =>clue.clueID ==3);
 });
 
+
+//Methods as responses to user's selected option
 
 function goToFrontOfHall(){
     if (lightingOn == false) {
@@ -140,6 +144,8 @@ function traceHall(){
     updateState();
 }
 
+
+// turns lights on if electricity is on
 function trySwitch(){
     if (electricityOn) {
         lightingOn = true;
