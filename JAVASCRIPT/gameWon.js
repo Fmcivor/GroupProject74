@@ -1,3 +1,5 @@
+//DEVELOPER: CALLUM
+
 const achievementContainer = document.querySelector('.achievementContainer');
 const achievementIcon = document.getElementById('achievementIcon');
 const achievementName = document.getElementById('achName');
@@ -6,14 +8,14 @@ let userAchievementIDs = JSON.parse(sessionStorage.getItem('achievementIDs'));
 let userID = sessionStorage.getItem('userID');
 
 document.addEventListener('DOMContentLoaded', function(){
-    
+    //award achievement for completion
     if (!userAchievementIDs.some(achievement => achievement.achievementID == 4)) {
         awardAchievement(4,userID,'Images/trophy.png');
     }
 
 });
 
-
+//display achievement
 function displayAchievement(iconSRC, achName, achDesc) {
     achievementIcon.src = iconSRC;
     achievementName.innerHTML = achName;
@@ -26,8 +28,9 @@ function hideAchievement() {
     achievementContainer.classList.remove('achExpanded')
 }
 
-
+//add achievement to the database
 async function awardAchievement(achievementID, userID, achievementIconAddress) {
+    //add user achievement to database
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
 
@@ -48,7 +51,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 
 
-
+            //get data for achievement and display
             let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
