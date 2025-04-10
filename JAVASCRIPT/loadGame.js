@@ -40,7 +40,7 @@ async function loadGame(gameID) {
 
 
 async function loadInventory(gameID) {
-    let inventoryQuery = `SELECT tblItem.itemID, tblItem.itemName, tblItem.itemHREF 
+    let inventoryQuery = `SELECT tblItem.itemID, tblItem.itemName, tblItem.itemHREF, tblGameInventory.itemUsed
             FROM tblGameInventory JOIN tblItem on tblGameInventory.itemID = tblItem.itemID 
             WHERE tblGameInventory.gameID = ${gameID}`;
     dbConfig.set("query", inventoryQuery);
@@ -59,6 +59,7 @@ async function loadInventory(gameID) {
             if (inventoryArray.length > 0) {
                 inventoryArray.forEach(item => {
                     let existingItem = new Item(item.itemID, item.itemName, item.itemHREF);
+                    existingItem.itemUsed = item.itemUsed;
                     inventory.push(existingItem);
                 });
             }

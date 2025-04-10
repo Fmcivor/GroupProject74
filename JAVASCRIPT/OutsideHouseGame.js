@@ -207,6 +207,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         currentState = frontOfHouseDoorLocked;
     }
 
+    if (currentState.ID == generatorBuilding.ID && electricityOn) {
+        currentState = generatorFixed;
+    }
+
     hasKey = inventory.some(item => item.itemID == keyID);
     hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
     hasGeneratorAchievement = userAchievementIDs.some(achievement => achievement.achievementID == 2);
