@@ -552,7 +552,7 @@ b {
     width: 50%;
 }
 
-span {
+p span {
     width: 50%;
     text-align: right;
 }
@@ -609,9 +609,7 @@ span {
     }
 
 
-    .titleBanner {
-        height: 10%;
-    }
+    
 
     .wrapper {
         width: 100%;
