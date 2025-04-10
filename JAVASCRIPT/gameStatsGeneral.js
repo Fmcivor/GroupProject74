@@ -5,7 +5,7 @@ let gameID = sessionStorage.getItem('gameID')
 
 //CONSTANTS
 const numOfClues = 9;
-const numOfItems = 8;
+const numOfItems = 7;
 const numOfRooms = 9;
 
 const playTimeDisplay = document.getElementById('playTimeDisplay');
