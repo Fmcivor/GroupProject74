@@ -1,4 +1,4 @@
-
+// Lead Developer - Matthew Connolly
 
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);
@@ -15,25 +15,32 @@ function togglePassword() {
       confirmPassword.type = "password";
    }
 }
-
+// main logic triggered when you press register button
 document.getElementById("registerBtn").addEventListener("click", async function (event) {
 
    event.preventDefault();
    errorMessage = "<ul>";
 
+
+// get form values
    let username = document.getElementById("username").value;
    let displayName = document.getElementById('displayName').value;
    let password = document.getElementById("password").value;
    let confirmPassword = document.getElementById("confirmPassword").value;
 
+
+// run all validations
    let validUsername = await validateUsername(username);
    let validDisplayName = validateDisplayName(displayName);
    let validPassword = validatePassword(password);
    let validConfirmPassword = validateConfirmPassword(password, confirmPassword);
 
+
    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
-      password = await hashPassword(password);
+      password = await hashPassword(password); // hash password before stored
       console.log("All validations passed. Submitting form...")
+
+      // SQL to insert new user
       let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName) 
                         VALUES ('${username}', '${password}','${displayName}');`;
       dbConfig.set('query', insertQuery);
@@ -67,6 +74,7 @@ document.getElementById("registerBtn").addEventListener("click", async function 
                   window.location.replace("mainMenu.html");
                }
                else {
+                  // error handling when registering new user
                   errorMessage = '<p>Error registering user</p>';
                   document.getElementById('messageContent').innerHTML = errorMessage;
                   const headerElement = document.getElementById('messageHeader');
@@ -86,6 +94,7 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
             messageContainer.style.display = 'flex';
          }
+
       } catch (error) {
          errorMessage = '<p>Error registering user</p>';
          document.getElementById('messageContent').innerHTML = errorMessage;
@@ -96,6 +105,7 @@ document.getElementById("registerBtn").addEventListener("click", async function 
       }
    }
    else {
+      // show errors to user in pop up
       errorMessage += '</ul>';
       document.getElementById('messageContent').innerHTML = errorMessage;
       const headerElement = document.getElementById('messageHeader');
@@ -148,10 +158,10 @@ async function validateUsername(enteredUsername) {
    }
 }
 
+// VALIDATION FUNCTIONS
 
 
-
-
+// Validate username with regex and check uniqueness in database
 function validateDisplayName(enteredDisplayName) {
 
 
