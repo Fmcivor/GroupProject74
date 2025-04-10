@@ -89,3 +89,14 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 document.getElementById('backToMenuBtn').addEventListener('click',function(){
     window.location.replace("mainMenu.html");
 });
+
+//removes transition properties to prevent transitions applying during resizing
+window.addEventListener('resize', function () {
+    //disable transitions
+    achievementContainer.classList.add('noTransition');
+
+    //enable transition
+    setTimeout(() => {
+        achievementContainer.classList.remove('noTransition');
+    }, 1000);
+});
