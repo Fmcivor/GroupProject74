@@ -18,10 +18,10 @@ const dial4Display = document.getElementById('d4Display');
 const openButton = document.getElementById('safeHandleButton');
 const evidenceButton = document.getElementById('safeEvidenceButton');
 const safeFront = document.getElementById('safeFront');
-const codeContainer = document.getElementById('codeContainer');
 const safeCode = '4379';
 
-const safeGameContainer = document.getElementById('safeGameContainer')
+const safeGameContainer = document.getElementById('safeGameContainer');
+const safeButtonContainer = document.getElementById('safeButtonContainer');
 
 //VARIABLES
 let hasLockpick;
@@ -55,24 +55,24 @@ function keyDownEventHandler(event) {
     switch (event.key) {
         case "ArrowLeft":
             rotateRight();
-            rotateRight();
+            // rotateRight();
             break;
         case "ArrowRight":
             rotateLeft();
-            rotateLeft();
+            // rotateLeft();
             break;
         case "ArrowUp":
             if(selectedDial > 1) {
                 selectedDial--;
                 higlightSelectedDial();
-                higlightSelectedDial();
+                // higlightSelectedDial();
             }
             break;
         case "ArrowDown":
             if(selectedDial < 4) {
                 selectedDial++;
                 higlightSelectedDial();
-                higlightSelectedDial();
+                // higlightSelectedDial();
             }
             break;
     }
@@ -326,6 +326,7 @@ function openSafeHandler() {
         safeFront.classList.add('openedSafeFront');
         window.removeEventListener("keydown", keyDownEventHandler);
         openButton.removeEventListener("click", openSafeHandler);
+        safeButtonContainer.style.display = 'none';  
         dial1.style.border = "3px solid black";
         dial2.style.border = "3px solid black";
         dial3.style.border = "3px solid black";
@@ -435,8 +436,7 @@ function goToHall() {
 }
 
 function hideSafe() {
-    safeGameContainer.style.display = 'none';  
-    codeContainer.style.display = 'none';
+    safeGameContainer.style.display = 'none';
     window.removeEventListener("keydown", keyDownEventHandler);
     currentState = enteredMasterBedroom;
     updateState();
@@ -478,6 +478,7 @@ function investigateSafe() {
 
 function displaySafe() {
     safeGameContainer.style.display = 'flex';  
+    safeButtonContainer.style.display = 'flex';  
     window.addEventListener("keydown", keyDownEventHandler);
 }
 
@@ -517,25 +518,6 @@ function higlightSelectedDial() {
     }
 }
 
-
-
-document.getElementById('useItemBtn').addEventListener('click', itemUsedHandler);
-
-function itemUsedHandler() {
-    if (selectedItemID != null) {
-        if (currentState == openingSafe && selectedItemID == safeCodeID) {
-            codeContainer.style.display = 'flex';
-        }
-        else {
-            setResponse("That didn't do anything, maybe try something else.");
-        }
-    }
-    else {
-
-        setResponse("You must select an item before you can use it");
-    }
-}
-
 function randomiseDials() {
     d1Value = Math.floor(Math.random() * 10);
     d2Value = Math.floor(Math.random() * 10);
@@ -562,3 +544,24 @@ function randomiseDials() {
     dial3SVG.style.transform = `rotate( ${d3Angle}deg`;
     dial4SVG.style.transform = `rotate( ${d4Angle}deg`;
 }
+
+
+//MOBILE EVENT LISTENERS
+
+document.getElementById('safeUpButton').addEventListener('click', function() {
+    if(selectedDial > 1) {
+        selectedDial--;
+        higlightSelectedDial();
+    }
+});
+
+document.getElementById('safeDownButton').addEventListener('click', function() {
+    if(selectedDial < 4) {
+        selectedDial++;
+        higlightSelectedDial();
+    }
+})
+
+document.getElementById('safeLeftButton').addEventListener('click', rotateRight);
+
+document.getElementById('safeRightButton').addEventListener('click', rotateLeft);
