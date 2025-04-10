@@ -53,7 +53,8 @@ document.getElementById('saveSelectBtn').addEventListener('click', function() {
 })
 
 document.getElementById('continueBtn').addEventListener('click', async function() {
-
+    //Callum's work
+    //take user to last played game
     let query = `SELECT gameID FROM tblGameSave WHERE userID = ${userID} AND status = ${activeGame} ORDER BY lastPlayedDate DESC;`
 
     dbConfig.set('query',query);
@@ -76,8 +77,8 @@ document.getElementById('continueBtn').addEventListener('click', async function(
     }    
 })
 
+//Enable and disable menu options based on number of games
 async function checkTotalActiveGames(){
-
     let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND status = ${activeGame}`;
 
     dbConfig.set('query',query);
@@ -116,21 +117,20 @@ async function checkTotalActiveGames(){
 
 
 
-//Start new game
+//Display new game name pop up
     document.getElementById('playBtn').addEventListener('click', function(){
     menu.style.display = 'none';
     newSavePopUp.style.display = 'flex';
     saveNameInput.value = '';
 })
 
-
+//Create new game
 document.getElementById('startNewGame').addEventListener('click', async function(){
    
-
     if(saveNameInput.value != "") {
 
         let gameName = saveNameInput.value;
-
+        //add game to database
         let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState, gameName) VALUES(${userID},"introduction.html",1, "${gameName}")`;
         dbConfig.set('query',insertQuery);
 
@@ -158,6 +158,7 @@ document.getElementById('startNewGame').addEventListener('click', async function
             let selectResult = await selectResponse.json();
 
             if (selectResult.success && selectResult.data.length>0) {
+                //create session storage
                 let gameSave = selectResult.data[0];
                 sessionStorage.setItem('gameID',gameSave.gameID);
                 sessionStorage.setItem('electricityOn',gameSave.electricityOn);
@@ -206,7 +207,7 @@ document.getElementById('backFromSaveName').addEventListener('click', function()
 
 
 
-
+//add user achievements to session storage
 async function getUserAchievements(){
     let query = `SELECT achievementID FROM tblUserAchievements WHERE userID = ${userID}`;
     dbConfig.set("query",query);
@@ -234,7 +235,7 @@ async function getUserAchievements(){
     }    
 }
 
-
+//add game rooms for game save to database
 async function initialiseGameRooms(){
 
     let query = `INSERT INTO tblGameRoom(roomID,gameID) SELECT roomID, ${sessionStorage.getItem("gameID")} FROM tblRoom`;
@@ -263,8 +264,9 @@ async function initialiseGameRooms(){
 }
 
 
-
+//award user an achievement
 async function awardAchievement(achievementID, userID, achievementIconAddress) {
+    //add user achievement to database
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
 
@@ -285,7 +287,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 
 
-
+            //retrieve achievement data and display
             let selectQuery = `SELECT name, description FROM tblAchievement
 
         WHERE  achievementID = ${achievementID};`;
@@ -324,7 +326,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 }
 
-
+//display achievement pop up
 function displayAchievement(iconSRC, achName, achDesc) {
     achievementIcon.src = iconSRC;
     achievementName.innerHTML = achName;

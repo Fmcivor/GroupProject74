@@ -1,3 +1,5 @@
+//DEVELOPER: CALLUM
+
 //CONSTANTS
 const dial1 = document.getElementById('dial1');
 const dial2 = document.getElementById('dial2');
@@ -78,6 +80,7 @@ function keyDownEventHandler(event) {
     }
 }
 
+//rotate selected dial left
 function rotateLeft() {
     const interval = 10;
 
@@ -185,7 +188,7 @@ function d4RotateLeft(interval) {
     }, interval);
 }
 
-
+//rotate selected dial right
 function rotateRight() {
     const interval = 10;
     
@@ -354,6 +357,7 @@ function openSafeHandler() {
     }
 }
 
+//add the knife to inventory and notebook
 async function addKnifeEvidence() {
     if (hasKnife) {
         setResponse("You have already taken the knife out of the safe")
@@ -443,6 +447,7 @@ function hideSafe() {
 }
 
 async function searchBedsideTable() {
+    //add lockpick to inventory
     if(hasLockpick){
         setResponse("You double check the bedside table, but theres nothing of interest left")
     }
@@ -458,6 +463,7 @@ async function searchBedsideTable() {
     }
 }
 
+//display safe
 function investigateSafe() {
     if(!hasKnife) {
         currentState = openingSafe;
@@ -518,6 +524,7 @@ function higlightSelectedDial() {
     }
 }
 
+//set dials to a random number at start
 function randomiseDials() {
     d1Value = Math.floor(Math.random() * 10);
     d2Value = Math.floor(Math.random() * 10);

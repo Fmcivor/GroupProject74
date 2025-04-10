@@ -1,6 +1,6 @@
 //LEAD DEVELOPER - FINTAN MCIVOR
 
-// each method loads its corresponding dat in its name from the database into session storage
+// each method loads its corresponding data in its name from the database into session storage
 
 async function loadGame(gameID) {
 

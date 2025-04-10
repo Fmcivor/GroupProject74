@@ -1,3 +1,4 @@
+//DEVELOPER: CALLUM
 
 //INITIALISE
 document.addEventListener('DOMContentLoaded', function () {
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 async function getSessionStorage(){
-    
+    //update session
     let query = `SELECT timesOnSofa FROM tblGameSave WHERE gameID = '${gameID}';`;
 
     dbConfig.set('query', query);
@@ -180,6 +181,7 @@ const standUpFromSofa = {
 //GAME RESPONSE FUNCTIONS
 
 function sitOnSofa() {
+    //check if user has sat on sofa before
     if(timesOnSofa === -1){
         currentState = satOnSofa;
         updateState();
@@ -194,6 +196,7 @@ function sitOnSofa() {
     }
 }
 
+//continue sitting on sofa and increment
 function sitLonger() {
     switch(timesOnSofa){
         case 0:
@@ -239,7 +242,7 @@ function getOffSofa() {
 }
 
 function examineFireplace() {
-
+    //display the burnt letter
     rightColumn.style.backgroundImage = 'url(Images/fireplace.jpg)'
     if(letterFound) {
         setResponse("You take another look at the fireplace, but don't see anything else of note");
@@ -250,6 +253,7 @@ function examineFireplace() {
     }
 }
 
+//display readable letter
 function pickUpLetter() {
     pickUpLetterButton.classList.add('hide');
     letterDisplayBackground.classList.remove('hide');
@@ -273,6 +277,7 @@ function lookAtShelves() {
     addClue("You believe that any photos of Mr and Mrs Kingston have been removed, suggesting that the marriage was on shaky terms")
 }
 
+//save the number of times on sofa to database
 async function updateTimesOnSofa(){
     sessionStorage.setItem("timesOnSofa", timesOnSofa);
 
