@@ -1,10 +1,7 @@
 //LEAD DEVELOPER - FINTAN 
 
 
-
-
-
-
+//VARIABLES AND CONSTANTS
 let errorMessage = '<ul>';
 sessionStorage.setItem("easyReadOn",JSON.stringify(false));
 
@@ -18,6 +15,7 @@ const messageContainer = document.getElementById('messageContainer');
 const showButton = document.getElementById('togglePassword');
 showButton.addEventListener('click', togglePassword);
 
+//Shows and hides the password
 function togglePassword() {
     const password = document.getElementById("password");
     if (password.type == "password") {
@@ -35,6 +33,7 @@ function togglePassword() {
 
 loginBtn.addEventListener('click', validateLogin);
 
+// trys to retrieve the data from the user who' username and password match the enter data and logs them in
 async function validateLogin(event) {
     event.preventDefault();
 

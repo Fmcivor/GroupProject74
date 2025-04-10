@@ -64,6 +64,7 @@ body {
     background-color: transparent;
 }
 
+/* Styling for each individual achievement */
 .achievement {
     width: 30vw;
     padding: 10px;
@@ -91,7 +92,7 @@ h3{
     font-size: 0.8rem;
 }
 
-
+/* Style for returning to main menu */
 .btnMainMenu{
     position: fixed;
     min-width: 120px;
@@ -135,7 +136,7 @@ h3{
         right: 0px;
     }
 }
-
+/* Change the unlocked acheivements to blue */
 .unlocked {
     background-color:rgb(0, 102, 255);
 }

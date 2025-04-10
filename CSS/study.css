@@ -1,5 +1,6 @@
 /* Dylan's CSS for Study */
 
+/* Code for computer password input */
 .signOutModal {
     display: none;
     position: fixed;
@@ -45,7 +46,7 @@
     margin-bottom: 0.5rem;
 }
 
-/* Adjust button */
+/* Styling for the enter password button */
 #btnenterPassword {
     padding: 0.5rem;
     border: none;
@@ -63,7 +64,7 @@
     background-color: rgb(0, 102, 255);
 }
 
-/* Optional styling for the container and canvas */
+/* Styling for lockpicking minigame */
 #lockpickCanvas {
     background-color: #111;
     display: block;
