@@ -47,3 +47,10 @@ p {
 .fa-solid {
     font-size: 1.4rem;
 }
+
+
+@media (max-width:650px) {
+    #clueInfoContainer {
+        margin-top: 10%;
+    }
+}
