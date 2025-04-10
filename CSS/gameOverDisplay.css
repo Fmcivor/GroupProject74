@@ -54,3 +54,7 @@ p {
         margin-top: 10%;
     }
 }
+
+.noTransition {
+    transition: none;
+}

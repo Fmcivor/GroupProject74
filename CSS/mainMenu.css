@@ -306,13 +306,26 @@ body {
     100% {border-color: black;}
 }
 
-
 @media (max-width: 480px) {
     .buttons {
         flex-direction: column;
     }
 
     .btn {
-        width: 100%;
+        width: 80%;
+        height: 40%;
     }
+
+    .modal-content {
+        padding: 0.5rem 1rem;
+    }
+
+    .modal-content p {
+        margin: auto 0;
+        font-size: 1.35rem;
+    }
+}
+
+.noTransition {
+    transition: none;
 }
