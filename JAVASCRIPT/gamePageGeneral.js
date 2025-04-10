@@ -102,9 +102,11 @@ document.addEventListener('DOMContentLoaded', function () {
             let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
             if (easyReadOn == true) {
                 document.querySelector('.toolBar').style.fontFamily = 'Arial, Helvetica, sans-serif';
+                easyReadCheckBox.checked = true;
             }
             else {
                 document.querySelector('.toolBar').style.fontFamily = '"Lugrasimo", cursive';
+                easyReadCheckBox.checked = false;
             }
 
             UpdateInventory();

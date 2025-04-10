@@ -1,4 +1,4 @@
-DEVELOPER: CALLUM
+//DEVELOPER: CALLUM
 
 //INITIALISE
 window.addEventListener('DOMContentLoaded', async function() {

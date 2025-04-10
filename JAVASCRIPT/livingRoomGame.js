@@ -274,7 +274,7 @@ function lookAtShelves() {
         + "You find it odd that there are no photos of Mr and Mrs Kingston together. After considering this, you notice empty, "
         + "slightly less dusty spots, wehere these pictures might've once been. You decide to take note of this."
     )
-    addClue("You believe that any photos of Mr and Mrs Kingston have been removed, suggesting that the marriage was on shaky terms")
+    
 }
 
 //save the number of times on sofa to database
