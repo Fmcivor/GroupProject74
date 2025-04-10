@@ -191,6 +191,9 @@ form label {
     width: 90%;
     height: 70%;
     padding: 1rem;
+    max-height: 70%;
+    overflow-y: auto;
+    margin-bottom: 5px;
 }
 
 li {
