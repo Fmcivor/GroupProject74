@@ -74,7 +74,7 @@ statsTab.addEventListener('click', function () {
 
 
 document.addEventListener('DOMContentLoaded', async function () {
-    let validUser =     checkLogin();
+    let validUser = checkLogin();
     if (validUser == true) {
 
 
@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             await getGameStats();
             await getCollectibleStats();
             await getTimeStats();
+            await getGlobalStats();
         }
         // await displayStats();
         document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
@@ -656,3 +657,36 @@ GROUP BY tblGameSave.userID`;
         console.error("Error while retrieving the game stats", error);
     }
 }
+
+async function getGlobalStats() {
+    let query = `SELECT IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS globalTimeToComplete,
+ COUNT(CASE WHEN status = 1 THEN tblGameSave.gameID END) AS completedCount,
+ COUNT(*) AS totalCount
+FROM tblGameSave;`;
+
+    dbConfig.set('query', query);
+
+    try {
+        let response = await fetch(dbConnectorUrl,{
+            method:"POST",
+            body:dbConfig
+        });
+
+        let result = await response.json();
+
+        if (result.success) {
+            let globalStats = result.data[0];
+            let globalCompletionPercentage = globalStats.completedCount / globalStats.totalCount *100;
+
+            document.getElementById('globalCompletion').textContent = globalCompletionPercentage.toFixed(2)+"%";
+            document.getElementById('globalAvergeTime').textContent = globalStats.globalTimeToComplete;
+        }
+        else{
+            console.error("Error occurred while retrieving the global stats.");
+        }
+    } catch (error) {
+        console.error("Error occurred while retrieving the global stats",error);
+    }
+}
+
+

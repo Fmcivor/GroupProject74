@@ -461,7 +461,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log(error);
     }
 
-   
+
 
 }
 
@@ -489,11 +489,7 @@ async function addClue(clueID) {
         if (result.success && result.data.length > 0) {
             let clue = result.data[0];
             let clueToAdd = new Clue(clue.clueID, clue.clueText);
-            clueList.push(clueToAdd);
-            sessionStorage.setItem('clueList', JSON.stringify(clueList));
-            updateClueNotebook();
 
-            noteBookButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
 
 
 
@@ -509,6 +505,11 @@ async function addClue(clueID) {
             let insertResult = await insertResponse.json();
             if (insertResult.success) {
                 console.log("Clue successfully added and saved");
+                clueList.push(clueToAdd);
+                sessionStorage.setItem('clueList', JSON.stringify(clueList));
+                updateClueNotebook();
+
+                noteBookButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
             }
             else {
                 console.error("An error has occurred while recording the clue in the database");
@@ -554,9 +555,7 @@ async function addItem(itemID) {
             let newItem = new Item();
             Object.assign(newItem, result.data[0]);
             newItem.itemUsed = false;
-            inventory.push(newItem);
-            sessionStorage.setItem("inventory", JSON.stringify(inventory));
-            UpdateInventory();
+
 
             let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
                                 VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
@@ -571,6 +570,9 @@ async function addItem(itemID) {
 
             if (saveItemResult.success) {
                 console.log("Inventory Updated Successfully");
+                inventory.push(newItem);
+                sessionStorage.setItem("inventory", JSON.stringify(inventory));
+                UpdateInventory();
             }
             else {
                 console.error("Error saving the item to the inventory");
@@ -951,7 +953,7 @@ async function submitEvidence() {
     let jonathanInnocentClue = clueList.some(clue => clue.clueID == emailClueID);
     let margaretInnocentClue = clueList.some(clue => clue.clueID == rubbishClueID);
 
-    sessionStorage.setItem("invetory", JSON.stringify(inventory));
+    sessionStorage.setItem("inventory", JSON.stringify(inventory));
 
     if (suspectAccused != null) {
         if (suspectAccused == 'victor' && knifeClue && victorGuiltyClue && margaretInnocentClue && jonathanInnocentClue) {

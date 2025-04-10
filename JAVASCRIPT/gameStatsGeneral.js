@@ -4,7 +4,7 @@ let userID = sessionStorage.getItem('userID');
 let gameID = sessionStorage.getItem('gameID')
 
 //CONSTANTS
-const numOfClues = 8;
+const numOfClues = 9;
 const numOfItems = 8;
 const numOfRooms = 9;
 
