@@ -110,13 +110,11 @@ const attic = {
 };
 
 function goToHall() {
-    sessionStorage.setItem('currentState', 1);
-    window.location.replace('upstairsHall.html');
+    goToNextRoom('upstairsHall.html',1);
 }
 
 function goToHallAgain(){
-    sessionStorage.setItem('currentState',2);
-    window.location.replace('upstairsHall.html');
+    goToNextRoom('upstairsHall.html',2);
 }
 
 async function searchBoxes() {
