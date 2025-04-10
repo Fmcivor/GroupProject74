@@ -205,7 +205,8 @@ async function validateChanges(event) {
 
 
     if (validDisplayName && validPassword && validConfirmPassword) {
-        await updateProfile(enteredDisplayName, enteredPassword);
+        let hashedPassword = await hashPassword(enteredPassword);
+        await updateProfile(enteredDisplayName, hashedPassword);
         displayNameInput.classList.remove('invalid');
         passwordInput.classList.remove('invalid');
         confirmPasswordInput.classList.remove('invalid');
@@ -282,6 +283,7 @@ async function updateProfile(enteredDisplayName, enteredPassword) {
         if (result.success) {
             displayMessage(true);
             sessionStorage.setItem("displayName", enteredDisplayName);
+            document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
         }
     } catch (error) {
         alert("Error updating", error);
@@ -609,7 +611,7 @@ async function getGameStats() {
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 3 THEN tblGameSave.gameID END) AS gamesAbandoned,
     COUNT(DISTINCT tblGameSave.gameID) AS totalGames,
     
-    ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)) 
+    IFNULL(ROUND(AVG( CASE WHEN tblGameSave.noGeneratorRepairAttempts >0 THEN tblGameSave.noGeneratorRepairAttempts END)),'N/A') 
     AS avgNoOfRepairAttempts,
 
     (

@@ -92,11 +92,10 @@ cancelSuspectBtn.addEventListener('click', closeSubmitEvidencePopUp);
 document.addEventListener('DOMContentLoaded', function () {
     let userLoggedIn = checkLogin();
     if (userLoggedIn == true) {
-        // if (!window.location.href.includes(sessionStorage.getItem("currentRoom"))) {
-        //     window.location.replace(sessionStorage.getItem("currentRoom"));
-        // }
-        // else {
-
+        if (!window.location.href.includes(sessionStorage.getItem("currentRoom"))) {
+            window.location.replace(sessionStorage.getItem("currentRoom"));
+        }
+        else {
         document.getElementById('slider').value = sessionStorage.getItem("fontSize");
         let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
         if (easyReadOn == true) {
@@ -108,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         UpdateInventory();
         updateClueNotebook();
-        // }
+        }
     }
 })
 
