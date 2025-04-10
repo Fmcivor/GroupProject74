@@ -1,4 +1,4 @@
-//Lead Developer = FINTAN MCIVOR
+//Lead Developers = FINTAN MCIVOR and Callum Gilpin
 //The general layout for all game pages
 // but the game logic such as the button functions and the minigames is coded by each of the lead devleoper for that page
 // we all worked and discussed the best way in which to implement interaction
@@ -111,6 +111,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
+
+
 async function goToNextRoom(nextRoom, startingState) {
     sessionStorage.setItem("currentRoom", nextRoom);
     sessionStorage.setItem("currentState", startingState);
@@ -212,8 +214,10 @@ window.addEventListener('resize', function () {
 });
 
 
-//Game interaction - front of house - side of house - shed 
+//Game interaction
 
+
+//updates the page with the data from the new state 
 function updateState() {
     const roomHeader = document.getElementById('roomHeader');
     const description = document.getElementById('descriptionParagraph');
@@ -269,6 +273,7 @@ function updateState() {
 }
 
 
+// calls the method associated with the option the user clicked or sets the response
 function userDecisionHandler(event) {
     responseId = event.target.id;
     let button = document.getElementById(responseId);
@@ -358,7 +363,7 @@ function setResponseAfterDescription(responseText) {
 
 // ADD ITEMS, CLUES AND ACHIEVEMENTS
 
-
+//Updates the HTML of the inventory when a new item is added 
 function UpdateInventory() {
     for (let i = 1; i < 7; i++) {
         document.getElementById(`slot${i}`).innerHTML = '';
@@ -389,6 +394,7 @@ function UpdateInventory() {
 
 }
 
+// hightlights the item the user has selected
 function selectInventoryItem(event) {
     const selectedItemBtn = event.currentTarget;
     let inventoryUnusedCount = inventory.filter(item => item.itemUsed == false).length;
@@ -466,7 +472,7 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
 
 
-
+// adds the clue ID to the database table tblGameNotebook with the current game ID
 async function addClue(clueID) {
 
     if (clueList.length == 0 && userAchievementIDs.some(achievement => achievement.achievementID == 5) == false) {
@@ -525,6 +531,8 @@ async function addClue(clueID) {
 
 }
 
+
+//Updates the HTML of the notebook when a new clue is added
 function updateClueNotebook() {
     document.getElementById('clueList').innerHTML = '';
     for (let i = 0; i < clueList.length; i++) {
@@ -535,6 +543,7 @@ function updateClueNotebook() {
 }
 
 
+// adds the item ID to the database table tblGameInventory with the current game ID 
 async function addItem(itemID) {
 
 
@@ -587,9 +596,6 @@ async function addItem(itemID) {
 
 
     inventoryButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
-
-
-
 
 }
 
@@ -655,6 +661,7 @@ async function saveGame() {
 }
 
 
+// increments the number of times a user visits a room and updates the database - tblGameRoom
 async function updateRoomVisits() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let visitedRoomID = '';
@@ -724,7 +731,7 @@ async function updateRoomVisits() {
 }
 
 
-
+//Calculates how long the user has spent playing this particular game save
 function calculateGameSessionTime() {
     let start = Number(sessionStorage.getItem('gameSessionStartTime'));
     let end = Number(sessionStorage.getItem('gameSessionEndTime'));
@@ -755,6 +762,7 @@ fontSlider.oninput = function () {
 }
 
 savePreferencesBtn.addEventListener('click', savePreferences);
+
 
 async function savePreferences() {
     let easyReadOn = easyReadCheckBox.checked;
@@ -798,6 +806,7 @@ async function savePreferences() {
 
 // USE ITEMS AND SUBMIT EVIDENCE
 
+// determines if the item has a use in the room the user is in and responds accordingly 
 document.getElementById('useItemBtn').addEventListener('click', async function () {
 
     if (selectedItemID == null) {
@@ -866,6 +875,8 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             console.error("Room not found!");
     }
 
+
+    // if the item is used up it is updated in the database
     if (selectedItemID == ringID) {
         validItemUse = true;
         setResponse("You have tried on the ring... for investigative purposes of course!");
