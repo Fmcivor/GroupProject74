@@ -1,3 +1,9 @@
+
+html{
+    font-size: 16px;
+    font-family: "merriweather", serif;
+}
+
 body {
     text-align: center;
     margin: 0;
@@ -37,7 +43,11 @@ body::before {
     max-width: 650px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     color: white;
-    font-size: 20px;
+    font-size: 1rem;
+}
+
+strong{
+    font-size: 1rem;
 }
 
 h1 {
@@ -47,7 +57,7 @@ h1 {
 button{
     background-color: #b30000;
     color: white;
-    font-size: 18px;
+    font-size: 1rem;
     padding: 10px, 20px;
     border: none;
     cursor: pointer;
@@ -57,6 +67,10 @@ button{
     height: 5vh;
     width: 15vw;
     min-width: fit-content;
+}
+
+p{
+    font-size: 1rem;
 }
 
 button:hover{
@@ -96,3 +110,4 @@ button:hover{
     }
 
 }
+
