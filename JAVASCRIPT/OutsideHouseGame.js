@@ -41,11 +41,6 @@ const rubbishContainer = document.querySelector('.rubbishContainer');
 startRepairButton.addEventListener('click', startRepair);
 
 
-//CLASS
-// let key = new item(1, "key", "Images/goldKey.png");
-
-
-
 
 //GAME STATES
 
@@ -200,6 +195,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     let currentStateID = Number(sessionStorage.getItem('currentState'));
     currentState = states.find(state => state.ID == currentStateID) || frontOfHouseDoorLocked;
 
+    // handles if the current state is one which a response is usually set and the state only changes when they return to the state
     if (currentState.ID == frontOfHouseDoorLocked.ID && doorUnlocked == true) {
         currentState = frontOfHouseDoorUnlocked;
     }
@@ -334,7 +330,10 @@ function enterGeneratorBuilding() {
 
 
 
+//Minigame methods
 
+
+// initialise minigame
 function FixGenerator() {
     clearInterval(generatorInterval);
     line.style.transform = 'rotate(0deg)';
@@ -377,6 +376,7 @@ function FixGenerator() {
 
 }
 
+// starts the minigame
 function startRepair() {
     noGeneratorRepairAttempts++;
     sessionStorage.setItem("noGeneratorRepairAttempts", noGeneratorRepairAttempts);
@@ -394,7 +394,7 @@ function startRepair() {
     }, 5);
 }
 
-
+// checks if the bar is in the red section and checks for misses
 repairButton.addEventListener('click', async function () {
 
     let success = false;
@@ -492,7 +492,7 @@ repairButton.addEventListener('click', async function () {
 
 let intervalTime = 7;
 
-
+// rotates the line after the minigame is complete
 function rotateLine() {
     line.style.transform = `rotate(${angle}deg)`;
 
@@ -516,6 +516,8 @@ function rotateLine() {
     }
 }
 
+//adds the clue when its licked on in the rubbish
+
 clue1Btn.addEventListener('click', async function () {
     clue1Btn.style.visibility = 'collapse';
     hasRubbishClue = true;
@@ -527,6 +529,7 @@ clue1Btn.addEventListener('click', async function () {
 })
 
 
+// randomises the position of the red section
 function setGeneratorHitZone() {
     redZoneStart = Math.floor(Math.random() * 359);
     redZoneEnd = redZoneStart + 40;

@@ -27,7 +27,7 @@ document.getElementById('yesBtn').addEventListener('click', async function (even
     
 });
 
-
+// retieves and displays the 5 most recent active game saves for the user
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
     let selectQuery = `SELECT gameID, timePlayed, DATE_FORMAT(lastPlayedDate, '%d/%m/%Y') AS 'dateLastPlayed', DATE_FORMAT(lastPlayedDate, '%H:%i') AS 'timeLastPlayed', gameName 
@@ -55,7 +55,7 @@ async function displayGameSaves() {
             }
             else {
 
-
+                // displays each game save
                 latestGames.forEach(gameSave => {
                     let saveSlotBtn = document.createElement('button');
                     saveSlotBtn.value = gameSave.gameID;
@@ -72,6 +72,8 @@ async function displayGameSaves() {
                                                 <p class = 'gameStat' style='font-size:1rem'>Last Played: ${lastPlayedTime} ${lastPlayedDate}</p>
                                                 <p class = 'gameStat' style='font-size:1rem'>Playtime: ${timePlayed}</p>
                                             </div> `;
+
+                    // loads the game save when clicked
                     saveSlotBtn.addEventListener('click', function (event) {
                         loadGame(event.currentTarget.value);
                     });
@@ -82,6 +84,7 @@ async function displayGameSaves() {
                     deleteSaveBtn.innerHTML = `<i class="fa-solid fa-trash deleteSaveIcon"></i>`;
                     deleteSaveBtn.classList.add('deleteSaveBtn');
                     deleteSaveBtn.value = gameSave.gameID;
+                    // deletes the game save when clicked
                     deleteSaveBtn.addEventListener('click', async function (event) {
                         document.getElementById('confirmationMessage').textContent = 'Are you sure you want to delete this save slot';
                         document.getElementById('yesBtn').value = event.currentTarget.value;
