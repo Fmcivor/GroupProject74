@@ -55,6 +55,9 @@ document.getElementById('saveSelectBtn').addEventListener('click', function() {
 document.getElementById('continueBtn').addEventListener('click', async function() {
     //Callum's work
     //take user to last played game
+
+    /*
+    // database version (commented out)
     let query = `SELECT gameID FROM tblGameSave WHERE userID = ${userID} AND status = ${activeGame} ORDER BY lastPlayedDate DESC;`
 
     dbConfig.set('query',query);
@@ -75,10 +78,23 @@ document.getElementById('continueBtn').addEventListener('click', async function(
         console.log('error retrieving ID of most recent game');
         console.log(error);
     }    
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let activeGames = gameSaves.filter(g => String(g.userID) === String(userID) && Number(g.status) === activeGame);
+    activeGames.sort((a, b) => new Date(b.lastPlayedDate) - new Date(a.lastPlayedDate));
+    if (activeGames.length > 0) {
+        loadGame(activeGames[0].gameID);
+    } else {
+        console.log('no active games found');
+    }
 })
 
 //Enable and disable menu options based on number of games
 async function checkTotalActiveGames(){
+    /*
+    // database version (commented out)
     let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND status = ${activeGame}`;
 
     dbConfig.set('query',query);
@@ -113,6 +129,27 @@ async function checkTotalActiveGames(){
         console.log('error with checking the number of active games this user has');
         console.log(error);
     }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let activeGameCount = gameSaves.filter(g => String(g.userID) === String(userID) && Number(g.status) === activeGame).length;
+
+    if (activeGameCount < 5) {
+        document.getElementById('playBtn').removeAttribute('disabled');
+    }
+    else {
+        document.getElementById('playBtn').setAttribute('disabled', true);
+    }
+
+    if (activeGameCount > 0) {
+        document.getElementById('continueBtn').removeAttribute('disabled');
+        document.getElementById('saveSelectBtn').removeAttribute('disabled');
+    }
+    else {
+        document.getElementById('continueBtn').setAttribute('disabled', true);
+        document.getElementById('saveSelectBtn').setAttribute('disabled', true);
+    }
 }
 
 
@@ -130,6 +167,9 @@ document.getElementById('startNewGame').addEventListener('click', async function
     if(saveNameInput.value != "") {
 
         let gameName = saveNameInput.value;
+
+        /*
+        // database version (commented out)
         //add game to database
         let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState, gameName) VALUES(${userID},"introduction.html",1, "${gameName}")`;
         dbConfig.set('query',insertQuery);
@@ -187,6 +227,52 @@ document.getElementById('startNewGame').addEventListener('click', async function
         } catch (error) {
             console.error("error creating a new game:",error);
         }
+        */
+
+        // localStorage version
+        let newGameID = generateID();
+        let now = new Date().toISOString();
+        let newGameSave = {
+            gameID: newGameID,
+            userID: userID,
+            gameName: gameName,
+            startDate: now,
+            lastPlayedDate: now,
+            currentRoom: 'introduction.html',
+            currentState: 1,
+            electricityOn: 0,
+            frontDoorUnlocked: 0,
+            lightingOn: 0,
+            atticLightingOn: 0,
+            noGeneratorRepairAttempts: 0,
+            timesOnSofa: 0,
+            timePlayed: '00:00:00',
+            status: activeGame
+        };
+
+        let gameSaves = lsGet('ls_gameSaves');
+        gameSaves.push(newGameSave);
+        lsSave('ls_gameSaves', gameSaves);
+
+        sessionStorage.setItem('gameID', newGameSave.gameID);
+        sessionStorage.setItem('electricityOn', newGameSave.electricityOn);
+        sessionStorage.setItem('frontDoorUnlocked', newGameSave.frontDoorUnlocked);
+        sessionStorage.setItem('currentRoom', newGameSave.currentRoom);
+        sessionStorage.setItem('currentState', newGameSave.currentState);
+        sessionStorage.setItem('inventory', JSON.stringify([]));
+        sessionStorage.setItem('clueList', JSON.stringify([]));
+        sessionStorage.setItem('noGeneratorRepairAttempts', newGameSave.noGeneratorRepairAttempts);
+        sessionStorage.setItem('timesOnSofa', newGameSave.timesOnSofa);
+        sessionStorage.setItem('lightingOn', newGameSave.lightingOn);
+        sessionStorage.setItem('status', newGameSave.status);
+        sessionStorage.setItem('atticLightingOn', newGameSave.atticLightingOn);
+        console.log("game save id retrieved:", newGameSave.gameID);
+
+        let roomsInitialised = await initialiseGameRooms();
+
+        if (roomsInitialised) {
+            window.location.href = 'introduction.html';
+        }
 
     }
     else {
@@ -209,6 +295,8 @@ document.getElementById('backFromSaveName').addEventListener('click', function()
 
 //add user achievements to session storage
 async function getUserAchievements(){
+    /*
+    // database version (commented out)
     let query = `SELECT achievementID FROM tblUserAchievements WHERE userID = ${userID}`;
     dbConfig.set("query",query);
 
@@ -233,11 +321,19 @@ async function getUserAchievements(){
         console.error("Error occurred while fetching the user achievements",error);
         return false;
     }    
+    */
+
+    // localStorage version
+    let userAchievements = lsGet('ls_userAchievements');
+    let myAchievements = userAchievements.filter(a => String(a.userID) === String(userID));
+    sessionStorage.setItem("achievementIDs", JSON.stringify(myAchievements));
+    return true;
 }
 
-//add game rooms for game save to database
+//add game rooms for game save using localStorage
 async function initialiseGameRooms(){
-
+    /*
+    // database version (commented out)
     let query = `INSERT INTO tblGameRoom(roomID,gameID) SELECT roomID, ${sessionStorage.getItem("gameID")} FROM tblRoom`;
     dbConfig.set("query",query);
 
@@ -261,11 +357,25 @@ async function initialiseGameRooms(){
         throw new error("Error occurred while fetching the game rooms",error);
         return false;
     }
+    */
+
+    // localStorage version
+    let currentGameID = sessionStorage.getItem("gameID");
+    let gameRooms = lsGet('ls_gameRooms');
+    for (let roomID = 1; roomID <= 9; roomID++) {
+        gameRooms.push({ gameID: currentGameID, roomID: roomID, timesVisited: 0 });
+    }
+    lsSave('ls_gameRooms', gameRooms);
+    console.log("Game rooms initialized successfully");
+    return true;
 }
 
 
 //award user an achievement
 async function awardAchievement(achievementID, userID, achievementIconAddress) {
+
+    /*
+    // database version (commented out)
     //add user achievement to database
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
@@ -321,8 +431,24 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log("Error setting achievement");
         console.log(error);
     }
+    */
 
+    // localStorage version
+    let newAchievement = { "achievementID": achievementID };
+    userAchievementIDs.push(newAchievement);
+    sessionStorage.setItem("achievementIDs", JSON.stringify(userAchievementIDs));
+
+    let userAchievements = lsGet('ls_userAchievements');
+    userAchievements.push({ userID: userID, achievementID: achievementID });
+    lsSave('ls_userAchievements', userAchievements);
+
+    let achievement = lsAchievements.find(a => a.achievementID == achievementID);
+    if (achievement) {
+        displayAchievement(achievementIconAddress, achievement.name, achievement.description);
+        console.log(`achievement ${achievementID} added`);
+    }
    
+
 
 }
 

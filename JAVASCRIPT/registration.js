@@ -40,6 +40,8 @@ document.getElementById("registerBtn").addEventListener("click", async function 
       password = await hashPassword(password); // hash password before stored
       console.log("All validations passed. Submitting form...")
 
+      /*
+      // database version (commented out)
       // SQL to insert new user
       let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName) 
                         VALUES ('${username}', '${password}','${displayName}');`;
@@ -103,6 +105,28 @@ document.getElementById("registerBtn").addEventListener("click", async function 
 
          messageContainer.style.display = 'flex';
       }
+      */
+
+      // localStorage version
+      let newUser = {
+         userID: generateID(),
+         username: username,
+         userPassword: password,
+         displayName: displayName,
+         fontSize: 16,
+         easyReadOn: false
+      };
+      let users = lsGet('ls_users');
+      users.push(newUser);
+      lsSave('ls_users', users);
+
+      sessionStorage.setItem("username", newUser.username);
+      sessionStorage.setItem("displayName", newUser.displayName);
+      sessionStorage.setItem("userID", newUser.userID);
+      sessionStorage.setItem("fontSize", "16");
+      sessionStorage.setItem("easyReadOn", false);
+
+      window.location.replace("mainMenu.html");
    }
    else {
       // show errors to user in pop up
@@ -125,6 +149,8 @@ async function validateUsername(enteredUsername) {
       return false;
    }
 
+   /*
+   // database version (commented out)
    let selectQuery = `SELECT username FROM tblUser WHERE BINARY username = '${enteredUsername}'`;
    dbConfig.set('query', selectQuery);
 
@@ -156,6 +182,15 @@ async function validateUsername(enteredUsername) {
 
       return false;
    }
+   */
+
+   // localStorage version
+   let users = lsGet('ls_users');
+   if (users.some(u => u.username === enteredUsername)) {
+      errorMessage += `<li>Username already exists.</li>`;
+      return false;
+   }
+   return true;
 }
 
 // VALIDATION FUNCTIONS

@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 async function getSessionStorage(){
+    /*
+    // database version (commented out)
     //update session
     let query = `SELECT timesOnSofa FROM tblGameSave WHERE gameID = '${gameID}';`;
 
@@ -39,6 +41,15 @@ async function getSessionStorage(){
     } catch (error) {
         console.log("Error retrieving timesOnSofa");
         console.log(error);
+    }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let gameSave = gameSaves.find(g => String(g.gameID) === String(gameID));
+    if (gameSave) {
+        sessionStorage.setItem("timesOnSofa", gameSave.timesOnSofa);
+        timesOnSofa = Number(sessionStorage.getItem("timesOnSofa"));
     }
 }
 
@@ -277,10 +288,12 @@ function lookAtShelves() {
     
 }
 
-//save the number of times on sofa to database
+//save the number of times on sofa to localStorage
 async function updateTimesOnSofa(){
     sessionStorage.setItem("timesOnSofa", timesOnSofa);
 
+    /*
+    // database version (commented out)
     let query = `UPDATE tblGameSave SET timesOnSofa = '${timesOnSofa}' WHERE gameID = '${gameID}';`;
 
     dbConfig.set('query', query);
@@ -294,6 +307,15 @@ async function updateTimesOnSofa(){
     } catch (error) {
         console.log("Error updating tblGameSave");
         console.log(error);
+    }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let idx = gameSaves.findIndex(g => String(g.gameID) === String(gameID));
+    if (idx !== -1) {
+        gameSaves[idx].timesOnSofa = timesOnSofa;
+        lsSave('ls_gameSaves', gameSaves);
     }
     
     if(timesOnSofa === 5 && !userAchievementIDs.some(achievement => achievement.achievementID == 1)) {

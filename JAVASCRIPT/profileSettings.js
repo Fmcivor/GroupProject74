@@ -167,6 +167,8 @@ document.getElementById('yesBtn').addEventListener('click', async function (even
 
 
 async function deleteAccount() {
+    /*
+    // database version (commented out)
     let deleteQuery = `DELETE FROM tblUser WHERE userID = ${userID}`;
     dbConfig.set('query', deleteQuery);
     try {
@@ -188,6 +190,14 @@ async function deleteAccount() {
     catch (error) {
         console.error("Error deleting account", error);
     }
+    */
+
+    // localStorage version
+    let users = lsGet('ls_users');
+    users = users.filter(u => String(u.userID) !== String(userID));
+    lsSave('ls_users', users);
+    sessionStorage.clear();
+    window.location.replace('login.html');
 }
 
 
@@ -273,6 +283,8 @@ function validateConfirmPassword(enteredPassword, enteredConfirmPassword) {
 
 //updates the profiles data - allows password and display to be updated invidually
 async function updateProfile(enteredDisplayName, enteredPassword) {
+    /*
+    // database version (commented out)
     let query;
     if (enteredPassword == '') {
         query = `UPDATE tblUser SET displayName ='${enteredDisplayName}' WHERE userID =${userID}`;
@@ -298,6 +310,24 @@ async function updateProfile(enteredDisplayName, enteredPassword) {
     } catch (error) {
         alert("Error updating", error);
         console.log(error);
+    }
+    */
+
+    // localStorage version
+    let users = lsGet('ls_users');
+    let idx = users.findIndex(u => String(u.userID) === String(userID));
+    if (idx !== -1) {
+        users[idx].displayName = enteredDisplayName;
+        if (enteredPassword !== '') {
+            users[idx].userPassword = enteredPassword;
+        }
+        lsSave('ls_users', users);
+        displayMessage(true);
+        sessionStorage.setItem("displayName", enteredDisplayName);
+        document.getElementById('usernameDisplay').textContent = sessionStorage.getItem("displayName");
+    }
+    else {
+        alert("Error updating profile");
     }
 }
 
@@ -350,7 +380,7 @@ fontSlider.oninput = function () {
 savePreferencesBtn.addEventListener('click', savePreferences);
 
 
-// updates the session storage and database when preferences are saved
+// updates the session storage and localStorage when preferences are saved
 async function savePreferences() {
     let easyReadOn = easyReadCheckBox.checked;
     sessionStorage.setItem("fontSize", fontSlider.value);
@@ -363,7 +393,8 @@ async function savePreferences() {
     }
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
 
-
+    /*
+    // database version (commented out)
     let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn} WHERE userID = ${userID}`;
     dbConfig.set('query', saveQuery);
 
@@ -390,12 +421,28 @@ async function savePreferences() {
         console.error("Error while saving the font size and easy read", error);
 
     }
+    */
+
+    // localStorage version
+    let users = lsGet('ls_users');
+    let idx = users.findIndex(u => String(u.userID) === String(userID));
+    if (idx !== -1) {
+        users[idx].fontSize = fontSlider.value;
+        users[idx].easyReadOn = easyReadOn;
+        lsSave('ls_users', users);
+        console.log("Font size and easy read updated and saved");
+    }
+    else {
+        console.error("Error occurred while saving the font size and easy read");
+    }
 
 }
 
 
-// checks the number of games between all users
+// checks the number of games across all saves in localStorage
 async function checkGameCount() {
+    /*
+    // database version (commented out)
     let query = `SELECT count(*) AS gameCount FROM tblGameSave`;
     dbConfig.set('query', query);
 
@@ -418,11 +465,19 @@ async function checkGameCount() {
     } catch (error) {
         console.error("Error occurred while checking the number of game saves", error);
     }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let userGames = gameSaves.filter(g => String(g.userID) === String(userID));
+    return userGames.length;
 }
 
-// calculates and retrieves time related stats from the database
+// calculates and retrieves time related stats from localStorage
 // both global and user specific
 async function getTimeStats() {
+    /*
+    // database version (commented out)
     let timeQuery = `SELECT 
     IFNULL(SEC_TO_TIME(SUM(TIME_TO_SEC(tblGameSave.timePlayed))), 'N/A') AS totalTimePlayed, 
     
@@ -467,10 +522,58 @@ GROUP BY tblGameSave.userID`;
     } catch (error) {
         console.error("Error while retrieving the time stats", error);
     }
+    */
+
+    // localStorage version
+    let timeToSeconds = function(t) {
+        let parts = (t || '00:00:00').split(':').map(Number);
+        return (parts[0] * 3600) + (parts[1] * 60) + (parts[2] || 0);
+    };
+    let secondsToTime = function(s) {
+        let h = Math.floor(s / 3600);
+        let m = Math.floor((s % 3600) / 60);
+        let sec = s % 60;
+        return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+    };
+
+    let gameSaves = lsGet('ls_gameSaves');
+    let userGames = gameSaves.filter(g => String(g.userID) === String(userID));
+
+    // total time played
+    let totalSecs = userGames.reduce((sum, g) => sum + timeToSeconds(g.timePlayed), 0);
+    document.getElementById("totalTimePlayed").textContent = totalSecs > 0 ? secondsToTime(totalSecs) : 'N/A';
+
+    // average time to win (status = 1)
+    let wonGames = userGames.filter(g => Number(g.status) === 1);
+    if (wonGames.length > 0) {
+        let avgWinSecs = Math.round(wonGames.reduce((sum, g) => sum + timeToSeconds(g.timePlayed), 0) / wonGames.length);
+        document.getElementById("avgTimeToWin").textContent = secondsToTime(avgWinSecs);
+    } else {
+        document.getElementById("avgTimeToWin").textContent = 'N/A';
+    }
+
+    // fastest time to complete
+    if (wonGames.length > 0) {
+        let minSecs = Math.min(...wonGames.map(g => timeToSeconds(g.timePlayed)));
+        document.getElementById("quickestGame").textContent = secondsToTime(minSecs);
+    } else {
+        document.getElementById("quickestGame").textContent = 'N/A';
+    }
+
+    // average time (all non-abandoned games, status != 4)
+    let activeGames = userGames.filter(g => Number(g.status) !== 4);
+    if (activeGames.length > 0) {
+        let avgSecs = Math.round(activeGames.reduce((sum, g) => sum + timeToSeconds(g.timePlayed), 0) / activeGames.length);
+        document.getElementById("averageTime").textContent = secondsToTime(avgSecs);
+    } else {
+        document.getElementById("averageTime").textContent = 'N/A';
+    }
 }
 
-//calcluates and retrieves item and clue related stats from the database
+//calculates and retrieves item and clue related stats from localStorage
 async function getCollectibleStats() {
+    /*
+    // database version (commented out)
     let query = `SELECT
      COUNT(*) AS numOfItemsCollected 
      FROM tblGameSave 
@@ -527,11 +630,26 @@ async function getCollectibleStats() {
     } catch (error) {
         console.error("Error while retrieving the clue stats", error);
     }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let userGameIDs = gameSaves.filter(g => String(g.userID) === String(userID)).map(g => String(g.gameID));
+
+    let gameInventory = lsGet('ls_gameInventory');
+    let numOfItemsCollected = gameInventory.filter(i => userGameIDs.includes(String(i.gameID))).length;
+    document.getElementById("itemCount").textContent = numOfItemsCollected;
+
+    let gameNotebook = lsGet('ls_gameNotebook');
+    let numOfCluesCollected = gameNotebook.filter(c => userGameIDs.includes(String(c.gameID))).length;
+    document.getElementById("clueCount").textContent = numOfCluesCollected;
 }
 
 
-// calculates and retrives stats related to game completion from the database specific to the user
+// calculates and retrives stats related to game completion from localStorage specific to the user
 async function getGameStats() {
+    /*
+    // database version (commented out)
     let gameStats = `SELECT 
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 2 THEN tblGameSave.gameID END) AS gamesLost, 
     COUNT(DISTINCT CASE WHEN tblGameSave.status = 1 THEN tblGameSave.gameID END) AS gamesWon,
@@ -585,11 +703,53 @@ GROUP BY tblGameSave.userID`;
     } catch (error) {
         console.error("Error while retrieving the game stats", error);
     }
+    */
+
+    // localStorage version
+    const roomNames = {
+        1: 'Outside House', 2: 'Downstairs Hall', 3: 'Living Room',
+        4: 'Study', 5: 'Kitchen', 6: 'Upstairs Hall',
+        7: 'Master Bedroom', 8: 'Guest Bedroom', 9: 'Attic'
+    };
+
+    let gameSaves = lsGet('ls_gameSaves');
+    let userGames = gameSaves.filter(g => String(g.userID) === String(userID));
+    let userGameIDs = userGames.map(g => String(g.gameID));
+
+    let gamesLost = userGames.filter(g => Number(g.status) === 2).length;
+    let gamesWon = userGames.filter(g => Number(g.status) === 1).length;
+    let gamesAbandoned = userGames.filter(g => Number(g.status) === 3).length;
+    let totalGames = userGames.length;
+
+    let repairGames = userGames.filter(g => Number(g.noGeneratorRepairAttempts) > 0);
+    let avgRepairAttempts = repairGames.length > 0
+        ? Math.round(repairGames.reduce((sum, g) => sum + Number(g.noGeneratorRepairAttempts), 0) / repairGames.length)
+        : 'N/A';
+
+    // find most visited room
+    let gameRooms = lsGet('ls_gameRooms');
+    let userRooms = gameRooms.filter(r => userGameIDs.includes(String(r.gameID)));
+    let roomVisitTotals = {};
+    userRooms.forEach(r => {
+        let rid = Number(r.roomID);
+        roomVisitTotals[rid] = (roomVisitTotals[rid] || 0) + Number(r.timesVisited);
+    });
+    let mostVisitedRoomID = Object.keys(roomVisitTotals).sort((a, b) => roomVisitTotals[b] - roomVisitTotals[a])[0];
+    let mostVisitedRoom = mostVisitedRoomID ? (roomNames[Number(mostVisitedRoomID)] || 'N/A') : 'N/A';
+
+    document.getElementById("lost").textContent = gamesLost;
+    document.getElementById("won").textContent = gamesWon;
+    document.getElementById("abandoned").textContent = gamesAbandoned;
+    document.getElementById("totalGamesPlayed").textContent = totalGames;
+    document.getElementById("avgRepairAttempts").textContent = avgRepairAttempts;
+    document.getElementById("mostVisitedRoom").textContent = mostVisitedRoom;
 }
 
 
-//calculates and retrieves stats bertween all users and games for comparision
+//calculates and retrieves stats from localStorage for comparison
 async function getGlobalStats() {
+    /*
+    // database version (commented out)
     let query = `SELECT IFNULL(SEC_TO_TIME(ROUND(AVG(CASE WHEN tblGameSave.status = 1 THEN TIME_TO_SEC(tblGameSave.timePlayed) END))),'N/A') AS globalTimeToComplete,
  COUNT(CASE WHEN status = 1 THEN tblGameSave.gameID END) AS completedCount,
  COUNT(*) AS totalCount
@@ -617,6 +777,34 @@ FROM tblGameSave;`;
         }
     } catch (error) {
         console.error("Error occurred while retrieving the global stats",error);
+    }
+    */
+
+    // localStorage version (uses all saves in localStorage as "global")
+    let timeToSeconds = function(t) {
+        let parts = (t || '00:00:00').split(':').map(Number);
+        return (parts[0] * 3600) + (parts[1] * 60) + (parts[2] || 0);
+    };
+    let secondsToTime = function(s) {
+        let h = Math.floor(s / 3600);
+        let m = Math.floor((s % 3600) / 60);
+        let sec = s % 60;
+        return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+    };
+
+    let gameSaves = lsGet('ls_gameSaves');
+    let totalCount = gameSaves.length;
+    let completedGames = gameSaves.filter(g => Number(g.status) === 1);
+    let completedCount = completedGames.length;
+
+    let globalCompletionPercentage = totalCount > 0 ? (completedCount / totalCount * 100) : 0;
+    document.getElementById('globalCompletion').textContent = globalCompletionPercentage.toFixed(2) + "%";
+
+    if (completedGames.length > 0) {
+        let avgSecs = Math.round(completedGames.reduce((sum, g) => sum + timeToSeconds(g.timePlayed), 0) / completedGames.length);
+        document.getElementById('globalAvergeTime').textContent = secondsToTime(avgSecs);
+    } else {
+        document.getElementById('globalAvergeTime').textContent = 'N/A';
     }
 }
 

@@ -418,6 +418,8 @@ function selectInventoryItem(event) {
 //award user an achievement
 async function awardAchievement(achievementID, userID, achievementIconAddress) {
     
+    /*
+    // database version (commented out)
     //add user achievement to database
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
@@ -474,20 +476,37 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
         console.log("Error setting achievement");
         console.log(error);
     }
+    */
 
+    // localStorage version
+    let newAchievement = { "achievementID": achievementID };
+    userAchievementIDs.push(newAchievement);
+    sessionStorage.setItem("achievementIDs", JSON.stringify(userAchievementIDs));
+
+    let userAchievements = lsGet('ls_userAchievements');
+    userAchievements.push({ userID: userID, achievementID: achievementID });
+    lsSave('ls_userAchievements', userAchievements);
+
+    let achievement = lsAchievements.find(a => a.achievementID == achievementID);
+    if (achievement) {
+        displayAchievement(achievementIconAddress, achievement.name, achievement.description);
+        console.log(`achievement ${achievementID} added`);
+    }
 
 
 }
 
 
 
-// adds the clue ID to the database table tblGameNotebook with the current game ID
+// adds the clue to the notebook using localStorage
 async function addClue(clueID) {
 
     if (clueList.length == 0 && userAchievementIDs.some(achievement => achievement.achievementID == 5) == false) {
         awardAchievement(5, userID, "Images/readableLetter.png");
     }
 
+    /*
+    // database version (commented out)
     let selectQuery = `SELECT * FROM tblClue WHERE clueID = ${clueID}`;
 
     dbConfig.set('query', selectQuery);
@@ -535,6 +554,27 @@ async function addClue(clueID) {
     } catch (error) {
         console.error("An error has occurred while adding the clues to the notebook", error);
     }
+    */
+
+    // localStorage version
+    let clueDef = lsClues.find(c => c.clueID == clueID);
+    if (clueDef) {
+        let clueToAdd = new Clue(clueDef.clueID, clueDef.clueText);
+
+        let gameNotebook = lsGet('ls_gameNotebook');
+        gameNotebook.push({ gameID: gameID, clueID: clueToAdd.clueID });
+        lsSave('ls_gameNotebook', gameNotebook);
+
+        clueList.push(clueToAdd);
+        sessionStorage.setItem('clueList', JSON.stringify(clueList));
+        updateClueNotebook();
+        console.log("Clue successfully added and saved");
+
+        noteBookButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
+    }
+    else {
+        console.error("An error has occurred while retrieving the clue");
+    }
 
 
 
@@ -552,10 +592,11 @@ function updateClueNotebook() {
 }
 
 
-// adds the item ID to the database table tblGameInventory with the current game ID 
+// adds the item to the inventory using localStorage
 async function addItem(itemID) {
 
-
+    /*
+    // database version (commented out)
     let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
 
     dbConfig.set('query', query);
@@ -602,6 +643,26 @@ async function addItem(itemID) {
         console.log("Error adding the item to your inventory");
         console.log(error);
     }
+    */
+
+    // localStorage version
+    let itemDef = lsItems.find(i => i.itemID == itemID);
+    if (itemDef) {
+        let newItem = new Item(itemDef.itemID, itemDef.itemName, itemDef.itemHREF);
+        newItem.itemUsed = false;
+
+        let gameInventory = lsGet('ls_gameInventory');
+        gameInventory.push({ gameID: sessionStorage.getItem("gameID"), itemID: itemID, itemUsed: false });
+        lsSave('ls_gameInventory', gameInventory);
+
+        inventory.push(newItem);
+        sessionStorage.setItem("inventory", JSON.stringify(inventory));
+        UpdateInventory();
+        console.log("Inventory Updated Successfully");
+    }
+    else {
+        console.error("Error saving the item to the inventory");
+    }
 
 
     inventoryButton.querySelector('i').style.animation = 'toolBarIconNotification 2s';
@@ -610,7 +671,7 @@ async function addItem(itemID) {
 
 
 
-//UPDATE GAMESAVE IN DATABASE
+//UPDATE GAMESAVE IN LOCALSTORAGE
 async function saveGame() {
     sessionStorage.setItem('gameSessionEndTime', Date.now());
     let totalTime = calculateGameSessionTime();
@@ -628,7 +689,8 @@ async function saveGame() {
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
 
-
+    /*
+    // database version (commented out)
     let updateQuery = `UPDATE tblGameSave SET
                         electricityOn = ${electricityOn},
                         frontDoorUnlocked = ${frontDoorUnlocked},
@@ -661,7 +723,29 @@ async function saveGame() {
             console.error("error saving the game")
         }
     } catch (error) {
-        onsole.error("error saving the game")
+        console.error("error saving the game")
+    }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let idx = gameSaves.findIndex(g => String(g.gameID) === String(gameID));
+    if (idx !== -1) {
+        gameSaves[idx].electricityOn = electricityOn;
+        gameSaves[idx].frontDoorUnlocked = frontDoorUnlocked;
+        gameSaves[idx].currentRoom = currentRoom;
+        gameSaves[idx].atticLightingOn = atticLightingOn;
+        gameSaves[idx].currentState = currentStateID;
+        gameSaves[idx].lightingOn = lightingOn;
+        gameSaves[idx].noGeneratorRepairAttempts = noGeneratorRepairAttempts;
+        gameSaves[idx].timesOnSofa = timesOnSofa;
+        gameSaves[idx].timePlayed = addTimeStrings(gameSaves[idx].timePlayed, totalTime);
+        gameSaves[idx].status = status;
+        lsSave('ls_gameSaves', gameSaves);
+        console.log("game successfully saved");
+    }
+    else {
+        console.error("error saving the game");
     }
 
     sessionStorage.setItem("gameSessionStartTime", Date.now());
@@ -670,7 +754,7 @@ async function saveGame() {
 }
 
 
-// increments the number of times a user visits a room and updates the database - tblGameRoom
+// increments the number of times a user visits a room and updates localStorage
 async function updateRoomVisits() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let visitedRoomID = '';
@@ -715,7 +799,8 @@ async function updateRoomVisits() {
         return;
     }
 
-
+    /*
+    // database version (commented out)
     let insertQuery = `UPDATE tblGameRoom SET timesVisited = timesVisited + 1 WHERE gameID = ${gameID} AND roomID = ${visitedRoomID}`;
     dbConfig.set('query', insertQuery);
 
@@ -734,6 +819,18 @@ async function updateRoomVisits() {
         }
     } catch (error) {
         console.error("Error while updating room visit count", error);
+    }
+    */
+
+    // localStorage version
+    let gameRooms = lsGet('ls_gameRooms');
+    let idx = gameRooms.findIndex(r => String(r.gameID) === String(gameID) && Number(r.roomID) === Number(visitedRoomID));
+    if (idx !== -1) {
+        gameRooms[idx].timesVisited++;
+        lsSave('ls_gameRooms', gameRooms);
+        console.log("Room visit count updated successfully");
+    } else {
+        console.error("Error updating room visit count");
     }
 
 
@@ -772,7 +869,7 @@ fontSlider.oninput = function () {
 
 savePreferencesBtn.addEventListener('click', savePreferences);
 
-//Saves input preferences to user in database
+//Saves input preferences to user in localStorage
 async function savePreferences() {
     let easyReadOn = easyReadCheckBox.checked;
     sessionStorage.setItem("fontSize", fontSlider.value);
@@ -787,6 +884,8 @@ async function savePreferences() {
     }
     document.documentElement.style.fontSize = `${fontSlider.value}px`;
 
+    /*
+    // database version (commented out)
     let saveQuery = `UPDATE tblUser SET fontSize = ${fontSlider.value},easyReadOn = ${easyReadOn}`;
     dbConfig.set('query', saveQuery);
 
@@ -807,6 +906,20 @@ async function savePreferences() {
 
     } catch (error) {
         console.error("Error while saving the font size and easy read", error);
+    }
+    */
+
+    // localStorage version
+    let users = lsGet('ls_users');
+    let idx = users.findIndex(u => String(u.userID) === String(userID));
+    if (idx !== -1) {
+        users[idx].fontSize = fontSlider.value;
+        users[idx].easyReadOn = easyReadOn;
+        lsSave('ls_users', users);
+        console.log("Font size and easy read updated and saved");
+    }
+    else {
+        console.error("Error occurred while saving the font size and easy read");
     }
 
 }
@@ -885,7 +998,7 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
     }
 
 
-    // if the item is used up it is updated in the database
+    // if the item is used up it is updated in localStorage
     if (selectedItemID == ringID) {
         validItemUse = true;
         setResponse("You have tried on the ring... for investigative purposes of course!");
@@ -893,6 +1006,9 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         inventory[ringIndex].itemUsed = true;
         sessionStorage.setItem("inventory", JSON.stringify(inventory));
         UpdateInventory();
+
+        /*
+        // database version (commented out)
         let updateQuery = `UPDATE tblGameInventory SET itemUsed = 1 WHERE gameID = ${gameID} AND itemID = ${ringID}`;
         dbConfig.set('query', updateQuery);
 
@@ -913,6 +1029,16 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         } catch (error) {
             console.error("Error updating item usage in the database", error);
         }
+        */
+
+        // localStorage version
+        let gameInventory = lsGet('ls_gameInventory');
+        let invIdx = gameInventory.findIndex(i => String(i.gameID) === String(gameID) && Number(i.itemID) === Number(ringID));
+        if (invIdx !== -1) {
+            gameInventory[invIdx].itemUsed = 1;
+            lsSave('ls_gameInventory', gameInventory);
+            console.log("Item usage updated successfully");
+        }
 
         if (userAchievementIDs.some(achievement => achievement.achievementID == 3) == false) {
             awardAchievement(3, userID, "Images/ring.png");
@@ -925,6 +1051,9 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
         inventory[batteryIndex].itemUsed = true;
         sessionStorage.setItem("inventory", JSON.stringify(inventory));
         UpdateInventory();
+
+        /*
+        // database version (commented out)
         let updateQuery = `UPDATE tblGameInventory SET itemUsed = 1 WHERE gameID = ${gameID} AND itemID = ${batteriesID}`;
         dbConfig.set('query', updateQuery);
 
@@ -946,6 +1075,17 @@ document.getElementById('useItemBtn').addEventListener('click', async function (
             }
         } catch (error) {
             console.error("Error updating item usage in the database", error);
+        }
+        */
+
+        // localStorage version
+        validItemUse = true;
+        let gameInventory2 = lsGet('ls_gameInventory');
+        let invIdx2 = gameInventory2.findIndex(i => String(i.gameID) === String(gameID) && Number(i.itemID) === Number(batteriesID));
+        if (invIdx2 !== -1) {
+            gameInventory2[invIdx2].itemUsed = 1;
+            lsSave('ls_gameInventory', gameInventory2);
+            console.log("Item usage updated successfully");
         }
     }
     else if (selectedItemID == batteriesID) {

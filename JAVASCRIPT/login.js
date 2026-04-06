@@ -40,6 +40,9 @@ async function validateLogin(event) {
     let enteredUsername = document.getElementById('username').value;
     let enteredPassword = document.getElementById('password').value;
     enteredPassword = await hashPassword(enteredPassword);
+
+    /*
+    // database version (commented out)
     let loginQuery = `SELECT userID, username, displayName, fontSize,easyReadOn FROM tblUser WHERE BINARY username ='${enteredUsername}' AND BINARY userPassword ='${enteredPassword}'`;
     dbConfig.set("query", loginQuery);
     try {
@@ -68,13 +71,35 @@ async function validateLogin(event) {
             const headerElement = document.getElementById('messageHeader');
             document.getElementById('messageHeader').textContent = header;
             messageContainer.style.display = 'flex';
-
         }
     } catch (error) {
         console.error("Error occurred while checking database for the entered login details", error);
         let message = '<p>An error has occurred while checking the login details you have entered.';
         let header = 'ERROR';
         document.getElementById('messageContent').innerHTML = message;
+        document.getElementById('messageHeader').textContent = header;
+        messageContainer.style.display = 'flex';
+    }
+    */
+
+    // localStorage version
+    let users = lsGet('ls_users');
+    let user = users.find(u => u.username === enteredUsername && u.userPassword === enteredPassword);
+
+    if (user) {
+        sessionStorage.setItem("username", user.username);
+        sessionStorage.setItem("displayName", user.displayName);
+        sessionStorage.setItem("userID", user.userID);
+        sessionStorage.setItem("fontSize", user.fontSize || "16");
+        sessionStorage.setItem("easyReadOn", user.easyReadOn || false);
+
+        window.location.href = "mainMenu.html";
+    }
+    else {
+        let message = '<p>Invalid login details.';
+        let header = 'INVALID';
+        document.getElementById('messageContent').innerHTML = message;
+        const headerElement = document.getElementById('messageHeader');
         document.getElementById('messageHeader').textContent = header;
         messageContainer.style.display = 'flex';
     }

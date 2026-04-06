@@ -31,6 +31,9 @@ document.getElementById('yesBtn').addEventListener('click', async function (even
 //Developed by Callum and Fintan
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
+
+    /*
+    // database version (commented out)
     let selectQuery = `SELECT gameID, timePlayed, DATE_FORMAT(lastPlayedDate, '%d/%m/%Y') AS 'dateLastPlayed', DATE_FORMAT(lastPlayedDate, '%H:%i') AS 'timeLastPlayed', gameName 
                         FROM tblGameSave WHERE userID = ${userID}  AND status = ${activeGame} ORDER BY lastPlayedDate DESC LIMIT 5;`;
 
@@ -108,6 +111,63 @@ async function displayGameSaves() {
         }
     } catch (error) {
         console.error("Error while displaying saved games", error);
+    }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let userGames = gameSaves.filter(g => String(g.userID) === String(userID) && Number(g.status) === activeGame);
+    userGames.sort((a, b) => new Date(b.lastPlayedDate) - new Date(a.lastPlayedDate));
+    let latestGames = userGames.slice(0, 5);
+
+    let saveWrapper = document.getElementById('saveSlotWrapper');
+    saveWrapper.innerHTML = '';
+
+    if (latestGames.length < 1) {
+        saveWrapper.innerHTML = '<h2>No active games</h2>';
+    }
+    else {
+        latestGames.forEach(gameSave => {
+            let saveSlotBtn = document.createElement('button');
+            saveSlotBtn.value = gameSave.gameID;
+
+            let dateObj = new Date(gameSave.lastPlayedDate);
+            let lastPlayedDate = dateObj.toLocaleDateString('en-GB');
+            let lastPlayedTime = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            let timePlayed = gameSave.timePlayed || '00:00:00';
+            let gameName = gameSave.gameName;
+
+            saveSlotBtn.innerHTML = `<h3 id='saveName'>
+                                        ${gameName}
+                                    </h3>
+                                    <div class = 'statRowWrapper'>
+                                        <p class = 'gameStat' style='font-size:1rem'>Last Played: ${lastPlayedTime} ${lastPlayedDate}</p>
+                                        <p class = 'gameStat' style='font-size:1rem'>Playtime: ${timePlayed}</p>
+                                    </div> `;
+
+            // loads the game save when clicked
+            saveSlotBtn.addEventListener('click', function (event) {
+                loadGame(event.currentTarget.value);
+            });
+            saveSlotBtn.classList.add('saveSlotBtn');
+
+            let deleteSaveBtn = document.createElement('button');
+            deleteSaveBtn.innerHTML = `<i class="fa-solid fa-trash deleteSaveIcon"></i>`;
+            deleteSaveBtn.classList.add('deleteSaveBtn');
+            deleteSaveBtn.value = gameSave.gameID;
+            // deletes the game save when clicked
+            deleteSaveBtn.addEventListener('click', async function (event) {
+                document.getElementById('confirmationMessage').textContent = 'Are you sure you want to delete this save slot';
+                document.getElementById('yesBtn').value = event.currentTarget.value;
+                document.getElementById('deletePopUp').style.display = 'flex';
+            });
+
+            let saveSlotDiv = document.createElement('div');
+            saveSlotDiv.classList.add('saveSlot');
+            saveSlotDiv.appendChild(saveSlotBtn);
+            saveSlotDiv.appendChild(deleteSaveBtn);
+            saveWrapper.appendChild(saveSlotDiv);
+        });
     }
 
 }
