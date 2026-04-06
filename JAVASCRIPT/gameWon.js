@@ -28,8 +28,10 @@ function hideAchievement() {
     achievementContainer.classList.remove('achExpanded')
 }
 
-//add achievement to the database
+//add achievement to localStorage
 async function awardAchievement(achievementID, userID, achievementIconAddress) {
+    /*
+    // database version (commented out)
     //add user achievement to database
     let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
         VALUES (${achievementID}, ${userID});`;
@@ -83,6 +85,21 @@ async function awardAchievement(achievementID, userID, achievementIconAddress) {
     } catch (error) {
         console.log("Error setting achievement");
         console.log(error);
+    }
+    */
+
+    // localStorage version
+    let newAchievement = { "achievementID": achievementID };
+    userAchievementIDs.push(newAchievement);
+    sessionStorage.setItem("achievementIDs", JSON.stringify(userAchievementIDs));
+
+    let userAchievements = lsGet('ls_userAchievements');
+    userAchievements.push({ userID: userID, achievementID: achievementID });
+    lsSave('ls_userAchievements', userAchievements);
+
+    let achievement = lsAchievements.find(a => a.achievementID == achievementID);
+    if (achievement) {
+        displayAchievement(achievementIconAddress, achievement.name, achievement.description);
     }
         
     

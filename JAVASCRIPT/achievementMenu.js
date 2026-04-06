@@ -22,9 +22,11 @@ function highlightUnlockedAchievements() {
     });
 }
 
-// Displays all the achievements from the database
+// Displays all the achievements from localStorage static data
 async function displayAllAchievements() {
 
+    /*
+    // database version (commented out)
     let query = `SELECT * FROM tblAchievement`;
     dbConfig.set("query", query);
     try {
@@ -57,4 +59,18 @@ async function displayAllAchievements() {
     } catch (error) {
         console.error("Error fetching achievements", error);
     }
+    */
+
+    // localStorage version - uses hardcoded achievement data
+    const achievementsContainer = document.querySelector(".achievements-container");
+    achievementsContainer.innerHTML = "";
+
+    lsAchievements.forEach(achievement => {
+        let achievementHTML = `<div class="achievement-wrapper">
+            <div id="achievement${achievement.achievementID}" class="achievement">
+                <h3>${achievement.name}</h3>
+                <span class="description">${achievement.description}</span>
+            </div>`;
+        achievementsContainer.innerHTML += achievementHTML;
+    });
 }

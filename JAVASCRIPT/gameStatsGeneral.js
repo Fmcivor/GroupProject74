@@ -35,6 +35,8 @@ async function loadStats() {
 
 //get stats for number of rooms visited
 async function getRooms() {
+    /*
+    // database version (commented out)
     let timeAndRoomsQuery = `SELECT timesVisited FROM tblGameRoom WHERE gameID = ${gameID};`;
 
     dbConfig.set('query', timeAndRoomsQuery);
@@ -68,10 +70,26 @@ async function getRooms() {
     } catch (error) {
         console.error("An error has occurred while retrieving stats form the database", error);
     }
+    */
+
+    // localStorage version
+    let gameRooms = lsGet('ls_gameRooms');
+    let myRooms = gameRooms.filter(r => String(r.gameID) === String(gameID));
+    roomsVisited = myRooms.filter(r => r.timesVisited > 0).length;
+
+    if (roomsVisited > 0) {
+        completion = ((5 * roomsVisited) + (8 * itemsCollected) + (7 * cluesCollected)) / ((5 * numOfRooms) + (8 * numOfItems) + (7 * numOfClues));
+        completion = completion * 100;
+        completion = Math.round(completion * 10) / 10;
+        completionDisplay.textContent = `${completion}%`;
+        roomsVisitedDisplay.textContent = `${roomsVisited}/${numOfRooms}`;
+    }
 }
 
 //get stats for items and clues collected
 async function getItemsAndClues() {
+    /*
+    // database version (commented out)
     //items stats retrieved
     let itemQuery = `SELECT COUNT(itemID) AS 'noItemsCollected' FROM tblGameInventory WHERE gameID = ${gameID};`;
 
@@ -121,10 +139,22 @@ async function getItemsAndClues() {
     } catch (error) {
         console.error("An error has occurred while retrieving stats form the database", error);
     }
+    */
+
+    // localStorage version
+    let gameInventory = lsGet('ls_gameInventory');
+    itemsCollected = gameInventory.filter(i => String(i.gameID) === String(gameID)).length;
+    itemsCollectedDisplay.textContent = `${itemsCollected}/${numOfItems}`;
+
+    let gameNotebook = lsGet('ls_gameNotebook');
+    cluesCollected = gameNotebook.filter(c => String(c.gameID) === String(gameID)).length;
+    cluesFoundDisplay.textContent = `${cluesCollected}/${numOfClues}`;
 }
 
 //get stats for user play time
 async function getplayTime() {
+    /*
+    // database version (commented out)
     let timeAndRoomsQuery = `SELECT  timePlayed AS 'timeToComplete', DATE_FORMAT(startDate, '%d/%m/%Y') AS 'startDate', DATE_FORMAT(startDate, '%H:%i') AS 'startTime'
      FROM tblGameSave WHERE gameID = ${gameID};`;
 
@@ -152,5 +182,23 @@ async function getplayTime() {
         }
     } catch (error) {
         console.error("An error has occurred while retrieving stats form the database", error);
+    }
+    */
+
+    // localStorage version
+    let gameSaves = lsGet('ls_gameSaves');
+    let gameSave = gameSaves.find(g => String(g.gameID) === String(gameID));
+
+    if (gameSave) {
+        timeToComplete = gameSave.timePlayed || '00:00:00';
+        let dateObj = new Date(gameSave.startDate);
+        startDate = dateObj.toLocaleDateString('en-GB');
+        startTime = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+        playTimeDisplay.textContent = `${timeToComplete}`;
+        saveStartedDisplay.textContent = `${startTime}, ${startDate}`;
+    }
+    else {
+        console.error("Unable to retrieve stats");
     }
 }

@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 async function addRoomVisit() {
+    /*
+    // database version (commented out)
     let insertQuery = `UPDATE tblGameRoom SET timesVisited = timesVisited + 1 WHERE gameID = ${gameID} AND roomID = ${nextRoomID}`;
     dbConfig.set('query', insertQuery);
  
@@ -47,5 +49,17 @@ async function addRoomVisit() {
         }
     } catch (error) {
         console.error("Error while updating room visit count", error);
+    }
+    */
+
+    // localStorage version
+    let gameRooms = lsGet('ls_gameRooms');
+    let idx = gameRooms.findIndex(r => String(r.gameID) === String(gameID) && Number(r.roomID) === Number(nextRoomID));
+    if (idx !== -1) {
+        gameRooms[idx].timesVisited++;
+        lsSave('ls_gameRooms', gameRooms);
+        console.log("Room visit count updated successfully");
+    } else {
+        console.error("Error updating room visit count");
     }
 }
