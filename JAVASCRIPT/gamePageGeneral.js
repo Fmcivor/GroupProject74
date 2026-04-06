@@ -723,7 +723,7 @@ async function saveGame() {
             console.error("error saving the game")
         }
     } catch (error) {
-        onsole.error("error saving the game")
+        console.error("error saving the game")
     }
     */
 
