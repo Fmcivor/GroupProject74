@@ -32,20 +32,29 @@ document.getElementById("registerBtn").addEventListener("click", async function 
    let validConfirmPassword = validateConfirmPassword(password, confirmPassword);
 
    if (validUsername && validDisplayName && validPassword && validConfirmPassword) {
-      console.log("All validations passed. Submitting form...")
-      let insertQuery = `INSERT INTO tblUser (username, userPassword, displayName,iconHREF)
-   VALUES ('${username}', '${password}','${displayName}','placeholder')`;
-      dbConfig.set('query', insertQuery);
+      console.log("All validations passed. Submitting form...");
+
+      let postBody = {
+         username: username,
+         password: password,
+         displayName: displayName
+      }
+
+
+
       try {
-         let insertResponse = await fetch(dbConnectorUrl, {
+         let insertResponse = await fetch("http://localhost:5257/api/Users/register", {
             method: "POST",
-            body: dbConfig
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postBody)
          });
 
          let insertResult = await insertResponse.json();
 
-         if (insertResult.success) {
-            
+         if (insertResult == true) {
+
             alert("success");
 
 
@@ -88,37 +97,38 @@ async function validateUsername(enteredUsername) {
       return false;
    }
 
-   let selectQuery = `SELECT username FROM tblUser WHERE BINARY username = '${enteredUsername}'`;
-   dbConfig.set('query', selectQuery);
+   // let selectQuery = `SELECT username FROM tblUser WHERE BINARY username = '${enteredUsername}'`;
+   // dbConfig.set('query', selectQuery);
 
-   try {
-      let checkResponse = await fetch(dbConnectorUrl, {
-         method: "POST",
-         body: dbConfig
-      });
+   // try {
+   //    let checkResponse = await fetch(dbConnectorUrl, {
+   //       method: "POST",
+   //       body: dbConfig
+   //    });
 
 
-      let checkResult = await checkResponse.json();
-      //username already exists in the database
-      if (checkResult.success && checkResult.data.length > 0) {
-         errorMessage += `<li>Username already exists.</li>`;
-         return false;
-      }
+   //    let checkResult = await checkResponse.json();
+   //    //username already exists in the database
+   //    if (checkResult.success && checkResult.data.length > 0) {
+   //       errorMessage += `<li>Username already exists.</li>`;
+   //       return false;
+   //    }
 
-      // Username is valid and doesn't exist
-      return true;
+   //    // Username is valid and doesn't exist
+   //    return true;
 
-   } catch (error) {
-      console.error("Error checking for existing accounts:", error);
-      errorMessage = '<p></p>';
-      document.getElementById('messageContent').innerHTML = errorMessage;
-      const headerElement = document.getElementById('messageHeader');
-      headerElement.textContent = "ERROR";
+   // } catch (error) {
+   //    console.error("Error checking for existing accounts:", error);
+   //    errorMessage = '<p></p>';
+   //    document.getElementById('messageContent').innerHTML = errorMessage;
+   //    const headerElement = document.getElementById('messageHeader');
+   //    headerElement.textContent = "ERROR";
 
-      messageContainer.style.display = 'flex';
+   //    messageContainer.style.display = 'flex';
 
-      return false;
-   }
+   //    return false;
+   // }
+   return true;
 }
 
 
@@ -130,7 +140,7 @@ function validateDisplayName(enteredDisplayName) {
 
    let displayNameRegex = /^[a-zA-Z-\s]{1,15}$/;
    if (!enteredDisplayName) {
-      errorMessage +=`<li>Display name cannot be blank.</li>`;
+      errorMessage += `<li>Display name cannot be blank.</li>`;
 
       return false;
    }
@@ -139,7 +149,7 @@ function validateDisplayName(enteredDisplayName) {
 
 function validatePassword(enteredPassword) {
    let passwordRegex = /^(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
-   
+
    if (!enteredPassword) {
       errorMessage += `<li>Password cannot be empty.</li>`;
       return false;

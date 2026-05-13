@@ -41,22 +41,28 @@ async function validateLogin(event) {
     let enteredUsername = document.getElementById('username').value;
     let enteredPassword = document.getElementById('password').value;
 
-    let loginQuery = `SELECT userID, username, displayName, fontSize FROM tblUser WHERE BINARY username ='${enteredUsername}' AND BINARY userPassword ='${enteredPassword}'`;
-    dbConfig.set("query", loginQuery);
+    let postBody = {
+        username: enteredUsername,
+        password: enteredPassword
+    }
+    
     try {
-        let response = await fetch(dbConnectorUrl, {
+        let response = await fetch("http://localhost:5257/api/Users/login", {
             method: "POST",
-            body: dbConfig
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postBody)
         });
 
         let result = await response.json();
 
-        if (result.success && result.data.length > 0) {
-            let user = result.data[0];
+        if (result != null) {
+            let user = result;
 
             sessionStorage.setItem("username", user.username);
             sessionStorage.setItem("displayName", user.displayName);
-            sessionStorage.setItem("userID", user.userID);
+            sessionStorage.setItem("userID", user.id);
             sessionStorage.setItem("fontSize",user.fontSize);
 
             window.location.href = "mainMenu.html";

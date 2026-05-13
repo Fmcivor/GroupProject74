@@ -36,34 +36,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // font size
     document.documentElement.style.fontSize = `${sessionStorage.getItem("fontSize")}px`;
-    
+
 
 });
 
-async function checkTotalActiveGames(){
+async function checkTotalActiveGames() {
 
-    let query = `SELECT COUNT(*) as activeGames FROM tblGameSave WHERE userID =${userID} AND complete = 0`;
-
-    dbConfig.set('query',query);
 
     try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let response = await fetch("http://localhost:5257/api/Users/" + userID + "/activeGameCount", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
         });
 
-        let result = await response.json();
+        if (response.ok) {
+            let result = await response.json();
 
-        if (result.success) {
-            let activeGameCount = result.data[0].activeGames;
-            if (activeGameCount <3) {
+            if (result < 3) {
                 document.getElementById('playBtn').removeAttribute('disabled');
             }
-            else if(activeGameCount){
-                document.getElementById('playBtn').setAttribute('disabled',true);
+            else if (result) {
+                document.getElementById('playBtn').setAttribute('disabled', true);
             }
-
         }
+
     } catch (error) {
         console.log('error with checking the number of active games this user has');
         console.log(error);
@@ -73,55 +71,43 @@ async function checkTotalActiveGames(){
 
 
 //Start new game
-document.getElementById('playBtn').addEventListener('click',async function(){
+document.getElementById('playBtn').addEventListener('click', async function () {
 
-    let insertQuery = `INSERT INTO tblGameSave(userID,currentRoom,currentState) VALUES(${userID},"outsideHouse.html",1)`;
-    dbConfig.set('query',insertQuery);
+   
 
     try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let response = await fetch("http://localhost:5257/api/Users/" + userID + "/createNewGame", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify()
         });
 
-        let result = await response.json();
+        if (response.ok) {
+            let result = await response.json();
 
-        if (!result.success) {
+            let gameSave = result;
+            sessionStorage.setItem('gameID', gameSave.gameId);
+            sessionStorage.setItem('electricityOn', gameSave.electricityOn);
+            sessionStorage.setItem('frontDoorUnlocked', gameSave.frontDoorUnlocked);
+            sessionStorage.setItem('currentRoom', gameSave.currentRoom);
+            sessionStorage.setItem('currentState', gameSave.currentState);
+            sessionStorage.setItem('inventory', JSON.stringify([]));
+            sessionStorage.setItem('clueList', JSON.stringify([]));
+            sessionStorage.setItem('noGeneratorRepairAttempts', gameSave.noGeneratorRepairAttempts);
+            sessionStorage.setItem('timesOnSofa', gameSave.timesOnSofa);
+            sessionStorage.setItem('lightingOn', gameSave.lightingOn);
+            console.log("game save id retrieved:", gameSave.gameID);
+            window.location.href = 'OutsideHouse.html';
+        }
+        else{
             console.error('Error creating a new game session');
             return;
         }
 
-        let selectQuery = `SELECT * FROM tblGameSave WHERE userID =${userID} ORDER BY startDate DESC LIMIT 1`;
-        dbConfig.set('query',selectQuery);
-
-        let selectResponse = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
-        });
-
-        let selectResult = await selectResponse.json();
-
-        if (selectResult.success && selectResult.data.length>0) {
-            let gameSave = selectResult.data[0];
-            sessionStorage.setItem('gameID',gameSave.gameID);
-            sessionStorage.setItem('electricityOn',gameSave.electricityOn);
-            sessionStorage.setItem('frontDoorUnlocked',gameSave.frontDoorUnlocked);
-            sessionStorage.setItem('currentRoom',gameSave.currentRoom);
-            sessionStorage.setItem('currentState',gameSave.currentState);
-            sessionStorage.setItem('inventory',JSON.stringify([]));
-            sessionStorage.setItem('clueList',JSON.stringify([]));
-            sessionStorage.setItem('noGeneratorRepairAttempts',gameSave.noGeneratorRepairAttempts);
-            sessionStorage.setItem('timesOnSofa',gameSave.timesOnSofa);
-            sessionStorage.setItem('lightingOn',gameSave.lightingOn);
-            console.log("game save id retrieved:",gameSave.gameID);
-            window.location.href = 'OutsideHouse.html';
-        }
-        else{
-            console.error("failed to retrieve latest game save ID:",selectResult)
-        }
-
     } catch (error) {
-        console.error("error creating a new game:",error);
+        console.error("error creating a new game:", error);
     }
 })
 
@@ -137,31 +123,32 @@ function signOut() {
 
 
 
-async function getUserAchievements(){
-    let query = `SELECT achievementID FROM tblUserAchievements WHERE userID = ${userID}`;
-    dbConfig.set("query",query);
+async function getUserAchievements() {
 
     try {
-        let response = await fetch(dbConnectorUrl,{
-            method:"POST",
-            body:dbConfig
+        let response = await fetch("http://localhost:5257/api/Users/" + userID + "/achievementIds", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
         });
-    
-        let result = await response.json();
-    
-        if (result.success) {
-            let achievementIDs = result.data;
-            sessionStorage.setItem("achievementIDs",JSON.stringify(achievementIDs));
+
+
+        if (response.ok) {
+            let result = await response.json();
+
+            let achievementIDs = result;
+            sessionStorage.setItem("achievementIDs", JSON.stringify(achievementIDs));
             return true;
         }
-        else{
+        else {
             console.error("Error occurred while fetching the user achievements");
             return false;
         }
     } catch (error) {
-        console.error("Error occurred while fetching the user achievements",error);
+        console.error("Error occurred while fetching the user achievements", error);
         return false;
     }
 
-    
+
 }

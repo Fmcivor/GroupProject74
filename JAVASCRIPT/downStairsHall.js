@@ -168,7 +168,7 @@ async function searchDrawers(){
     }
     else{
         hasWeddingRingClue = true;
-        await addClue(3);
+        await addClue(WEDDING_RING_ID);
         updateClueNotebook();
         setResponse("You have found an engagement ring on the table and Victor has no known past relationships. You take note of this in your notebook as a clue");
 

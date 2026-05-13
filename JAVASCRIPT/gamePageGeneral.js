@@ -46,13 +46,42 @@ let inventory = JSON.parse(sessionStorage.getItem("inventory"));
 let clueList = JSON.parse(sessionStorage.getItem("clueList"));
 let userAchievementIDs = JSON.parse(sessionStorage.getItem("achievementIDs"));
 
+
+//ACHIEVEMENTID CONSTANTS
+const CRIME_DOESNT_REST_BUT_I_DO_ID = "6a0495d8147b125a84564fe1";
+const ONE_HIT_WONDER_ID = "6a0495d8147b125a84564fe2";
+const GLAMOUROUS_JOB_ID = "6a0495d8147b125a84564fe3";
+const WINNING_WAYS_ID = "6a0495d8147b125a84564fe4";
+const GETTING_THINGS_STARTED_ID = "6a0495d8147b125a84564fe5";
+const COMPLETIONIST_ID = "6a0495d8147b125a84564fe6";
+const BEHIND_CLOSED_DRAWERS_ID = "6a0495d8147b125a84564fe7";
+
+//clue constants
+const POSTCARD_FROM_MARGARET_CLUE_ID = "69fe61dc933941371baba799";
+const VICTOR_LETTER_CLUE_ID = "69fe62cbb236ccb9df244332";
+const WEDDING_RING_CLUE_ID = "69fe62d0b236ccb9df244333";
+const LUNA_DIED_CLUE_ID = "69fe62ecb236ccb9df244334";
+const BLOODY_KNIFE_CLUE_ID = "69fe62fbb236ccb9df244335";
+const MISSING_GLASS_PIECE_CLUE_ID = "69fe6302b236ccb9df244336";
+
+
+//item constants
+const KEY_ID = "69fe6454b236ccb9df24433c";
+const LOCKPICK_ID = "69fe6454b236ccb9df24433d";
+const BATTERIES_ID = "69fe6454b236ccb9df24433e";
+const PILL_BOTTLE_ID = "69fe6454b236ccb9df24433f";
+const SECRET_CODE_ID = "69fe6454b236ccb9df244340";
+const FLASHLIGHT_ID = "69fe6454b236ccb9df244341";
+const BLOODY_KNIFE_ID = "69fe6454b236ccb9df244342";
+const WEDDING_RING_ID = "69fe6454b236ccb9df244343";
+
 //EVENT LISTENERS
 inventoryButton.addEventListener('click', showInventory);
 noteBookButton.addEventListener('click', showNoteBook);
 hideToolBarButton.addEventListener('click', hideToolBar);
 settingsButton.addEventListener('click', toggleSettings);
 exitAndSaveBtn.addEventListener('click', async function () {
-    sessionStorage.setItem("currentState",currentState.ID);
+    sessionStorage.setItem("currentState", currentState.ID);
     await saveGame();
     window.location.href = "mainMenu.html";
 });
@@ -63,7 +92,7 @@ deleteAndExit.addEventListener('click', async function () {
 
 });
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     checkLogin();
 
     let easyReadOn = JSON.parse(sessionStorage.getItem("easyReadOn"));
@@ -185,7 +214,7 @@ function updateState() {
     const descLength = descText.length;
     let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(5500, totalTime);
-    let intervalTime = totalTime/descLength;
+    let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
     let typingIndex = 0;
     // let totalTypingTime = currentState.description.length * 20;
@@ -202,10 +231,10 @@ function updateState() {
 
     //background image
     document.querySelector('.rightColumn').style.backgroundImage = `url("${stateImageHref}")`;
-    
-    
 
-    
+
+
+
     //dynamic buttons
 
     currentState.interactions.forEach(interaction => {
@@ -243,9 +272,9 @@ function setResponse(responseText) {
     const responseLength = responseText.length;
     let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(6000, totalTime)
-    let intervalTime = totalTime/responseLength;
+    let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
-    
+
     let typingIndex = 0;
     clearInterval(typingInterval);
     typingInterval = setInterval(() => {
@@ -267,7 +296,7 @@ function setDescriptionAndResponse(responseText) {
     const descLength = descText.length;
     let totalTime = (2.26 * (Math.log(descLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(5500, totalTime);
-    let intervalTime = totalTime/descLength;
+    let intervalTime = totalTime / descLength;
     intervalTime.toFixed(1);
     let typingIndex = 0;
     // let totalTypingTime = currentState.description.length * 20;
@@ -289,9 +318,9 @@ function setResponseAfterDescription(responseText) {
     const responseLength = responseText.length;
     let totalTime = (2.26 * (Math.log(responseLength)).toFixed(2) - 8.48) * 1000;
     totalTime = Math.min(6000, totalTime)
-    let intervalTime = totalTime/responseLength;
+    let intervalTime = totalTime / responseLength;
     intervalTime = Math.max(20, intervalTime)
-    
+
     let typingIndex = 0;
     typingInterval = setInterval(() => {
         responseBox.textContent += responseText[typingIndex];
@@ -341,38 +370,45 @@ function selectInventoryItem(event) {
 }
 
 
-async function awardAchievement(achievementID, userID, achievementIconAddress){
-    let insertQuery = `INSERT INTO tblUserAchievements (achievementID, userID) 
-        VALUES (${achievementID}, ${userID});`;
+async function awardAchievement(achievementID, userID, achievementIconAddress) {
 
-    dbConfig.set('query', insertQuery);
+    let postBody = achievementID;
 
     try {
-        response = await fetch(dbConnectorUrl, {
+        response = await fetch("http://localhost:5257/api/Users/" + userID + "/addAchievement", {
             method: "POST",
-            body: dbConfig
-        });    
-        
-        
-        let selectQuery = `SELECT name, description FROM tblAchievement
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postBody),
+        });
 
-        WHERE  achievementID = ${achievementID};`;
 
-    
-        dbConfig.set('query', selectQuery);
+
+
+
+
         try {
-            response = await fetch(dbConnectorUrl, {
-                method: "POST",
-                body: dbConfig
+            response = await fetch("http://localhost:5257/api/Users/achievement/" + achievementID, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
 
-            let result = await response.json();
+            if (response.ok) {
+                let result = await response.json();
+                if (result != null) {
+                    let achievement = result;
+                    displayAchievement(achievementIconAddress, achievement.name, achievement.description)
+                }
+            }
 
             if (result.success && result.data.length > 0) {
                 let achievement = result.data[0];
                 displayAchievement(achievementIconAddress, achievement.name, achievement.description)
             }
-            
+
         } catch (error) {
             console.log("Error retrieving achievement data");
             console.log(error);
@@ -385,41 +421,38 @@ async function awardAchievement(achievementID, userID, achievementIconAddress){
 }
 
 async function addClue(clueID) {
-    let selectQuery = `SELECT * FROM tblClue WHERE clueID = ${clueID}`;
 
-    dbConfig.set('query', selectQuery);
 
     try {
-        let response = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
+        let response = await fetch("http://localhost:5257/api/Users/clues/" + clueID, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
-        let result = await response.json();
+        if (response.ok) {
+            let result = await response.json();
+            let clue = result;
 
-        if (result.success && result.data.length > 0) {
-            let clue = result.data[0];
-            let clueToAdd = new Clue(clue.clueID, clue.clueText);
-            clueList.push(clueToAdd);
+            clueList.push(clue);
             sessionStorage.setItem('clueList', JSON.stringify(clueList));
 
-
-            let insertQuery = `INSERT INTO tblGameNotebook (gameID,clueID) VALUES(${gameID},${clueToAdd.clueID})`;
-
-            dbConfig.set('query', insertQuery);
-
-            let insertResponse = await fetch(dbConnectorUrl, {
+            let insertResponse = await fetch("http://localhost:5257/api/Users/" + userID + "/" + gameID + "/clues/" + clueID, {
                 method: "POST",
-                body: dbConfig
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify()
             });
 
-            let insertResult = await insertResponse.json();
-            if (insertResult.success) {
+            if (response.ok) {
                 console.log("Clue successfully added and saved");
             }
             else {
                 console.error("An error has occurred while recording the clue in the database");
             }
+
         }
         else {
             console.error("An error has occurred while retrieving the clue form the database");
@@ -434,12 +467,12 @@ async function addClue(clueID) {
             noteBookButton.style.color = 'rgb(228, 140, 68)';
             alternateColour = true;
         }
-        else{
+        else {
             noteBookButton.style.color = 'black';
             alternateColour = false
         }
     }, 400);
-    
+
 
     setTimeout(() => {
         clearInterval(notificationTimer);
@@ -452,50 +485,54 @@ function updateClueNotebook() {
     document.getElementById('clueList').innerHTML = '';
     for (let i = 0; i < clueList.length; i++) {
         let clueElement = document.createElement("li");
-        clueElement.textContent = clueList[i].clueText;
+        clueElement.textContent = clueList[i].text;
         document.getElementById('clueList').appendChild(clueElement);
     }
 }
 
 
 async function addItem(itemID) {
-    let query = `SELECT * FROM tblItem WHERE itemID = '${itemID}'`;
 
-    dbConfig.set('query', query);
 
     try {
-        response = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
+        response = await fetch("http://localhost:5257/api/Users/item/" + itemID, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
-        let result = await response.json();
 
-        if (result.success && result.data.length > 0) {
+        if (response.ok) {
+            let result = await response.json();
+
             let newItem = new Item();
-            Object.assign(newItem, result.data[0]);
+            Object.assign(newItem, result);
             newItem.itemUsed = false;
             inventory.push(newItem);
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
             UpdateInventory();
 
-            let saveItemQuery = `INSERT INTO tblGameInventory (GameID,itemID)
-                                VALUES(${sessionStorage.getItem("gameID")},${itemID})`;
-            dbConfig.set("query", saveItemQuery);
 
-            let saveItemResponse = await fetch(dbConnectorUrl, {
+
+
+
+
+            let saveItemResponse = await fetch("http://localhost:5257/api/Users/" + userID + "/" + gameID + "/items/" + itemID, {
                 method: "POST",
-                body: dbConfig
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify()
             });
 
-            let saveItemResult = await saveItemResponse.json();
-
-            if (saveItemResult.success) {
-                console.log("Inventory Updated Successfully");
+            if (saveItemResponse.ok) {
+                console.log("Item successfully added and saved");
             }
             else {
-                console.error("Error saving the item to the inventory");
+                console.error("Error occurred while saving the item to the inventory");
             }
+
         }
         else {
             console.error("Error saving the item to the inventory");
@@ -511,12 +548,12 @@ async function addItem(itemID) {
             inventoryButton.style.color = 'rgb(228, 140, 68)';
             alternateColour = true;
         }
-        else{
+        else {
             inventoryButton.style.color = 'black';
             alternateColour = false
         }
     }, 400);
-    
+
 
     setTimeout(() => {
         clearInterval(notificationTimer);
@@ -535,14 +572,14 @@ async function saveGame() {
     let currentRoom = sessionStorage.getItem("currentRoom");
     let currentStateID = currentState.ID;
 
-    
+
 
     let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
     let noGeneratorRepairAttempts = sessionStorage.getItem("noGeneratorRepairAttempts");
     let timesOnSofa = sessionStorage.getItem("timesOnSofa");
-  
 
-  
+
+
 
 
     let updateQuery = `UPDATE tblGameSave SET
@@ -559,24 +596,37 @@ async function saveGame() {
 
                         WHERE gameID = ${gameID}`;
 
-    dbConfig.set("query", updateQuery);
+    let postBody = {
+        gameId = gameID,
+        electricityOn = electricityOn,
+        frontDoorUnlocked = frontDoorUnlocked,
+        currentRoom = currentRoom,
+        currentStateID = currentStateID,
+        lightingOn = lightingOn,
+        noGeneratorRepairAttempts = noGeneratorRepairAttempts,
+        timesOnSofa = timesOnSofa
+    }
+
+    
 
     try {
-        let updateResponse = await fetch(dbConnectorUrl, {
+        let updateResponse = await fetch("http://localhost:5257/api/Users/" + userID + "/game/" + gameID, {
             method: "POST",
-            body: dbConfig
+            body: JSON.stringify(postBody),
+            headers: {
+                "Content-Type": "application/json"
+            }   
         });
 
-        let updateResult = await updateResponse.json();
+        if (updateResponse.ok) {
+            console.log("Game save successful");
+        }
+        else{
+            console.error("Error occurred while saving the game");
+        }
 
-        if (updateResult.success) {
-            console.log("game successfully saved");
-        }
-        else {
-            console.error("error saving the game")
-        }
     } catch (error) {
-        onsole.error("error saving the game")
+        console.error("error saving the game", error);
     }
 
 }

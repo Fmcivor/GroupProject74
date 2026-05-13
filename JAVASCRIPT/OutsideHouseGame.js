@@ -8,7 +8,7 @@ let doorUnlocked = JSON.parse(sessionStorage.getItem("frontDoorUnlocked"));
 let lightingOn = JSON.parse(sessionStorage.getItem("lightingOn"));
 
 let hasKey = inventory.some(item => item.itemID == keyID);
-let hasRubbishClue = clueList.some(clue => clue.clueID == rubbishClueID);
+let hasRubbishClue = clueList.some(clue => clue.clueID == POSTCARD_FROM_MARGARET_CLUE_ID);
 let hasGeneratorAchievement = userAchievementIDs.some(achievement =>achievement.achievementID == 2);
 
 
@@ -392,7 +392,7 @@ repairButton.addEventListener('click', async function () {
             setResponse("You have successfully repaired the generator.");
             
             if (remainingRepairMisses == 2 && noGeneratorRepairAttempts == 1 && hasGeneratorAchievement == false) {
-                awardAchievement(2, userID, "Images/generatorAchievement.png");
+                awardAchievement(ONE_HIT_WONDER_ID, userID, "Images/generatorAchievement.png");
                 hasGeneratorAchievement = true;
             }
 
@@ -454,7 +454,7 @@ clue1Btn.addEventListener('click', async function () {
     rightColumn.style.backgroundImage = 'URL("Images/rubbishNoNote.jpg")';
     clue1Btn.style.visibility = 'collapse';
     hasRubbishClue = true;
-    await addClue(rubbishClueID);
+    await addClue(POSTCARD_FROM_MARGARET_CLUE_ID);
     updateClueNotebook();
     setResponse('You have found a letter check your notebook to see its content');
 

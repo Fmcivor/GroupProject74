@@ -6,71 +6,93 @@ document.addEventListener('DOMContentLoaded', async function(){
 
 async function loadGame(gameID) {
 
-    let inventoryLoaded = await loadInventory(gameID);
-    let clueListLoaded = await loadClueList(gameID);
-    let gameSaveDataLoaded = await loadGameSaveData(gameID);
+    let gameLoaded = await loadGameSaveData(gameID);
 
-    if (inventoryLoaded && clueListLoaded && gameSaveDataLoaded) {
+    if (gameLoaded) {
         window.location.href = sessionStorage.getItem("currentRoom");
 
+        // TODO: update last played time stamp in database
+        // let updateQuery = `UPDATE tblGameSave SET lastPlayedDate = CURRENT_TIMESTAMP WHERE gameID =${gameID}`;
 
-        let updateQuery = `UPDATE tblGameSave SET lastPlayedDate = CURRENT_TIMESTAMP WHERE gameID =${gameID}`;
-
-        dbConfig.set('query', updateQuery);
+        // dbConfig.set('query', updateQuery);
 
 
-        try {
-            let response = await fetch(dbConnectorUrl, {
-                method: "POST",
-                body: dbConfig
-            });
+        // try {
+        //     let response = await fetch(dbConnectorUrl, {
+        //         method: "POST",
+        //         body: dbConfig
+        //     });
 
-            let result = await response.json();
+        //     let result = await response.json();
 
-            if (result.success) {
-                console.log("Last played time stamp updated successfully");
-            }
-            else {
-                console.error("Error occurrred while updating the last played time stamp");
+        //     if (result.success) {
+        //         console.log("Last played time stamp updated successfully");
+        //     }
+        //     else {
+        //         console.error("Error occurrred while updating the last played time stamp");
 
-            }
-        } catch (error) {
-            console.error("Error occurrred while updating the last played time stamp", error);
-        }
+        //     }
+        // } catch (error) {
+        //     console.error("Error occurrred while updating the last played time stamp", error);
+        // }
     }
 
 
 
 }
 
-async function loadInventory(gameID) {
-    let inventoryQuery = `SELECT tblItem.itemID, tblItem.itemName, tblItem.itemHREF 
-            FROM tblGameInventory JOIN tblItem on tblGameInventory.itemID = tblItem.itemID 
-            WHERE tblGameInventory.gameID = ${gameID}`;
-    dbConfig.set("query", inventoryQuery);
-
+async function loadGameSaveData(gameID) {
+    userId = sessionStorage.getItem("userID");
     try {
-        let inventoryResponse = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
+        let gameResponse = await fetch("http://localhost:3000/api/Users/"+userId+"/game/"+gameID, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
-        let inventoryResult = await inventoryResponse.json();
+        let inventoryResult = await gameResponse.json();
+        if (gameResponse.ok) {
+            let game = await gameResponse.json();
 
-        if (inventoryResult.success) {
-            let inventoryArray = inventoryResult.data;
+            let inventoryArray = game.gameItems;
             let inventory = [];
             if (inventoryArray.length > 0) {
                 inventoryArray.forEach(item => {
                     let existingItem = new Item(item.itemID, item.itemName, item.itemHREF);
+                    existingItem.itemUsed = item.itemUsed;
                     inventory.push(existingItem);
                 });
             }
             sessionStorage.setItem("inventory", JSON.stringify(inventory));
+
+            let clueList = [];
+            if (game.clues > 0) {
+                let clueListArray = game.clues;
+
+
+                clueListArray.forEach(clue => {
+                    let exisitingClue = new Clue(clue.id, clue.text);
+                    clueList.push(exisitingClue);
+                });
+
+            }
+            sessionStorage.setItem("clueList", JSON.stringify(clueList));
+
+
+
+            sessionStorage.setItem('gameID', game.gameId);
+            sessionStorage.setItem('electricityOn', game.electricityOn);
+            sessionStorage.setItem('frontDoorUnlocked', game.frontDoorUnlocked);
+            sessionStorage.setItem('currentRoom', game.currentRoom);
+            sessionStorage.setItem('currentState', game.currentState);
+            sessionStorage.setItem('noGeneratorRepairAttempts', game.noGeneratorRepairAttempts);
+            sessionStorage.setItem('timesOnSofa', game.timesOnSofa);
+            sessionStorage.setItem('lightingOn', game.lightingOn);
             return true;
         }
         else {
-            console.error("Error loading the inventory");
+            console.error("Error loading the game save ");
             return false;
         }
     } catch (error) {
@@ -165,20 +187,19 @@ async function loadGameSaveData(gameID) {
 
 async function displayGameSaves() {
     let userID = sessionStorage.getItem("userID");
-    let selectQuery = `SELECT * FROM tblGameSave WHERE userID = ${userID} ORDER BY lastPlayedDate DESC LIMIT 3`;
-
-    dbConfig.set('query', selectQuery);
 
     try {
-        let response = await fetch(dbConnectorUrl, {
-            method: "POST",
-            body: dbConfig
+        let response = await fetch("http://localhost:5257/api/Users/" + userID + "/allGames", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
-        let result = await response.json();
-
-
-        if (result.success) {
+        if (response.ok) {
+            let result = await response.json();
+    
+    
 
             let saveContainer = document.querySelector('.saveContainer');
             saveContainer.innerHTML = '<h1>Select Save</h1>';
@@ -188,8 +209,8 @@ async function displayGameSaves() {
 
             latestGames.forEach(gameSave => {
                 let saveSlotBtn = document.createElement('button');
-                saveSlotBtn.value = gameSave.gameID;
-                saveSlotBtn.textContent = `bjhgjhgjhgjhghsaveSlot${slotCounter}`;
+                saveSlotBtn.value = gameSave.gameId;
+                saveSlotBtn.textContent = `saveSlot${slotCounter}`;
                 slotCounter++;
                 saveSlotBtn.addEventListener('click', function (event) {
                     loadGame(event.target.value);
@@ -201,7 +222,7 @@ async function displayGameSaves() {
                 deleteSaveBtn.classList.add('fa-trash');
                 deleteSaveBtn.classList.add('deleteSaveBtn');
                 deleteSaveBtn.style.color = 'red';
-                deleteSaveBtn.value = gameSave.gameID;
+                deleteSaveBtn.value = gameSave.gameId;
                 deleteSaveBtn.addEventListener('click', async function(event){
                     await deleteSave(event.target.value);
                     await displayGameSaves();
